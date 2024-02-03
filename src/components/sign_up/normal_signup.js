@@ -3,8 +3,8 @@ import { setEmail, setPassword, setConfpass, setPic } from '../../state/userSlic
 import {useRef} from 'react'
 
 export default function Fields() {
-    //getting userData from store
-    const userData = useSelector((state) => state.user_data )
+    //getting userData from the store
+    const userData = useSelector((state) => state.userData )
 
     //the image reference
     const picRef = useRef(null)
@@ -44,16 +44,35 @@ export default function Fields() {
         }
     }
 
-    console.log(userData)
+    //clicking to set the image
+    const handleImageClick = () => {
+        picRef.current.click()
+    }
+
+    //displaying selected image
+    const handleSelectedImage = () => {
+        if (userData?.pic !== "" && userData?.pic !== null) {
+            return <img 
+            src={userData?.pic} 
+            alt="pfp" 
+            className="h-14 w-14 object-cover cursor pointer rounded-full" 
+        />;
+        } else {
+            return <img 
+            src="user.png" 
+            alt="pfp" 
+            className="h-14 w-14 object-cover cursor pointer rounded-full" 
+        />
+        }
+    }
+
     return(
         <div className="w-full flex flex-col space-y-5 items-center">
-            <div onClick= {() => picRef.current.click()} className="flex flex-col items-center cursor-pointer">
-                <img 
-                    src={userData?.pic !== "" && userData?.pic !== null ? userData?.pic : "logo192.png"} 
-                    alt="profilepic" 
-                    className="h-14 w-14 object-cover cursor pointer rounded-full" 
-                />
-                <span className="text-darkg text-sm">Choose your profile picture</span>
+            <div onClick= {handleImageClick} className="flex flex-col items-center cursor-pointer">
+                {
+                    handleSelectedImage()
+                }
+                <span className="text-darkg text-sm font-semibold">Upload your profile picture</span>
                 <input className="hidden" type="file" ref={picRef} accept="image/*" onChange={handleImageChange}></input>
             </div>
             <div className="flex w-full justify-between">
@@ -84,6 +103,7 @@ export default function Fields() {
                         className="shadow text-sm appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         type="password"
                         value = {userData?.confpass}
+                        pattern= {userData?.password}
                         onChange={handleConfirmPasswordChange}
                         placeholder="Confirm Password"
                     />

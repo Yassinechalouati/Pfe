@@ -1,7 +1,7 @@
 import Buttn from "./thirdstep_button"
 
 export default function Third() {
-    //lsit of goals
+    //list of goals
     const goals = [
         "Grow your career", 
         "Thrive at university",
@@ -36,7 +36,7 @@ export default function Third() {
             <div className="grid grid-cols-4 self-start gap-5">
                 {
                     goals.map((goal, index) => {
-                        return <Buttn key={index} text={goal}></Buttn>
+                        return <Buttn key={index} text={goal} type="goals"></Buttn>
                     })
                 }
             </div>
@@ -46,8 +46,8 @@ export default function Third() {
             </span>
             <div className="grid grid-cols-7 self-start gap-3">
                 {
-                    topics.map((goal, index) => {
-                        return <Buttn key={index} text={goal}></Buttn>
+                    topics.map((topic, index) => {
+                        return <Buttn key={index} text={topic} type="topics"></Buttn>
                     })
                 }
             </div>

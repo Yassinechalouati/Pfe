@@ -11,8 +11,9 @@ import {useSelector} from 'react-redux'
 export default function Card() {
     //step index
     const [step, setStep] = useState(0)
+
     //getting elements from redux store
-    const userData = useSelector((state) => state.user_data)
+    const userData = useSelector((state) => state.userData)
 
     //steps
     const content = [
@@ -33,8 +34,45 @@ export default function Card() {
         setStep(prevValue => prevValue>0 ?prevValue - 1: prevValue)
     }
 
+    //handling the opacity of the next button if it's disabled
+    const handleButtonDisabilityOpacity = () => {
+        if(step === 0 ) {
+            if ((userData?.email === "" || userData?.password === "" || userData?.confpass === "" || userData?.pic === "")){
+                return "opacity-60"
+            }
+            else {
+                return "cursor-pointer"
+            }
+        }
+        else if(step === 1) {
+            if(userData?.proficiency === "") {
+                return "opacity-60"
+            }
+            else {
+                return "cursor-pointer"
+            }
+        }
+        else if(step === 3) {
+            
+        }
+    }
+
+    //setting the button disabled if the user didn't provide the data of the form
+    const handleButtonDisability = () => {
+        if(step === 0) {
+            if ((userData?.email === "" || userData?.password === "" || userData?.confpass === "" || userData?.pic === "")){
+                return true
+            }
+        }
+        else if(step ===1){
+            if(userData?.proficiency === "") {
+                return true
+            }
+        }
+    }
+
     return(
-        <form className="bg-white px-10 py-4 w-[60%] space-y-4 rounded-3xl h-[93%] flex flex-col items-center">
+        <form onSubmit={handleNext} className="bg-white px-10 py-4 w-[60%] space-y-4 rounded-3xl h-[93%] flex flex-col items-center">
             <Progress step={step}></Progress>
             <hr className="h-1 w-full"></hr>
             {
@@ -45,7 +83,7 @@ export default function Card() {
                         <GrFormPreviousLink  size="25"></GrFormPreviousLink>
                         <span className="text-base">Back</span>
                 </button>
-                <button type="submit" onClick={handleNext} className="bg-button space-x-2 border border-button flex justify-center items-center w-[15%] self-end h-10 text-center font-semibold text-lg px-4 py-2 rounded-full text-white cursor-pointer hover:shadow">
+                <button type="submit" disabled={handleButtonDisability()} className={`bg-button ${handleButtonDisabilityOpacity()} space-x-2 border border-button flex justify-center items-center w-[15%] self-end h-10 text-center font-semibold text-lg px-4 py-2 rounded-full text-white hover:shadow`}>
                         <span className="text-base">Next</span>
                         <GrFormNextLink size="25"></GrFormNextLink>
                 </button>
