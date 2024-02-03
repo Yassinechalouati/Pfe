@@ -9,7 +9,8 @@ module.exports = {
         'elements' : '#B7E5B4',
         'button2' : '#F28585',
         'darkg' : '#767676',
-        'lightg': '#E5E5E5'
+        'lightg': '#E5E5E5',
+        'lightbutton': '#FFF2E5'
       }
     },
   },

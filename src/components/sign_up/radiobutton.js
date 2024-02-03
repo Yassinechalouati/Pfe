@@ -5,7 +5,7 @@ export default function RadioButton({title, infos}) {
 
 
     return (
-        <div className="flex flex-wrap gap-2 self-start">
+        <div className="flex flex-wrap gap-2 self-start ">
             <label  className="flex items-center space-x-2 h-7">
                 <div className=" rounded-full w-6 h-6  flex flex-shrink-0 justify-center items-center relative">
                     <input aria-labelledby="label1" type="radio" name="radio" className="checkbox  border-button appearance-none  focus:outline-none border-2 rounded-full absolute cursor-pointer w-full h-full checked:border-none" />

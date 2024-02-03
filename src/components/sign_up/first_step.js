@@ -6,7 +6,7 @@ import Fields from './normal_signup'
 export default function First() {
     return (
         <>
-            <span className="font-bold self-start text-lg text-[#000]">
+            <span className="font-bold self-start text-lg text-[#000] flex-grow">
                 Welcome! Choose how to sign up
             </span>
             <span className="text-darkg self-start text-sm">
