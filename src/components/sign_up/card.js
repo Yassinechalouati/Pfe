@@ -45,15 +45,20 @@ export default function Card() {
             }
         }
         else if(step === 1) {
-            if(userData?.proficiency === "") {
+            if(userData?.proficiency === ""){
                 return "opacity-60"
             }
             else {
                 return "cursor-pointer"
             }
         }
-        else if(step === 3) {
-            
+        else if(step === 2) {
+            if(userData?.goals.length === 0 || userData?.topics.length === 0){
+                return "opacity-60"
+            }
+            else{
+                return "cursor-pointer"
+            }
         }
     }
 
@@ -63,10 +68,24 @@ export default function Card() {
             if ((userData?.email === "" || userData?.password === "" || userData?.confpass === "" || userData?.pic === "")){
                 return true
             }
+            else {
+                return false
+            }
         }
         else if(step ===1){
             if(userData?.proficiency === "") {
                 return true
+            }
+            else {
+                return false
+            }
+        }
+        else if(step === 2) {
+            if(userData?.goals.length === 0 || userData?.topics.length === 0){
+                return true
+            }
+            else {
+                return false 
             }
         }
     }
