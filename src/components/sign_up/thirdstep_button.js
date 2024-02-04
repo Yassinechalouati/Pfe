@@ -1,5 +1,5 @@
 import {useState} from 'react'
-import {useDispatch, useSelector} from 'react-redux'
+import {useDispatch} from 'react-redux'
 import {setGoals, setTopics} from '../../state/userSlice';
 
 export default function Buttn({text, type}) {
@@ -8,12 +8,6 @@ export default function Buttn({text, type}) {
 
     //initializing the tool to change the user data on the redux store
     const dispatch = useDispatch()
-    
-    //getting the goals from the store 
-    const goals = useSelector((state) => state.userData.goals)
-    
-    //getting the topics from the store
-    const topics = useSelector((state) => state.userData.topics)
 
     //alternating between colors when clicking buttons 
     const handleClick = () => {
@@ -25,13 +19,9 @@ export default function Buttn({text, type}) {
         }
     }
 
-
-
-
-
     return(
         <div 
-            className={`rounded-3xl p-3 text-center border flex justify-center items-center ${color==="bg-[#f0f0f0]"? "border-lightg": "border-transparent text-white"} ${color} cursor-pointer `}
+            className={`rounded-full h-14  p-3 text-sm text-center border flex justify-center items-center ${color==="bg-[#f0f0f0]"? "border-lightg": "border-transparent text-white"} ${color} cursor-pointer `}
             onClick={handleClick}>
             {text}
         </div>

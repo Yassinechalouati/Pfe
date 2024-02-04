@@ -33,7 +33,7 @@ export default function Third() {
             <span className="font-bold self-start text-lg text-[#000]">
                 What are your learning goals?
             </span>
-            <div className="grid grid-cols-4 self-start gap-5">
+            <div className="grid grid-cols-2 xs:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols4 self-start gap-5">
                 {
                     goals.map((goal, index) => {
                         return <Buttn key={index} text={goal} type="goals"></Buttn>
@@ -44,7 +44,7 @@ export default function Third() {
             <span className="font-bold self-start text-lg text-[#000]">
                 Which topics would you like to focus on?
             </span>
-            <div className="grid grid-cols-7 self-start gap-3">
+            <div className="grid sm:gird-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 grid-cols-3  self-start gap-3">
                 {
                     topics.map((topic, index) => {
                         return <Buttn key={index} text={topic} type="topics"></Buttn>

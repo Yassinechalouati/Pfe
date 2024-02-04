@@ -75,8 +75,8 @@ export default function Fields() {
                 <span className="text-darkg text-sm font-semibold">Upload your profile picture</span>
                 <input className="hidden" type="file" ref={picRef} accept="image/*" onChange={handleImageChange}></input>
             </div>
-            <div className="flex w-full justify-between">
-                <div className="w-[30%]">
+            <div className="grid grid-cols-1 gap-4 sm:grid sm:grid-cols-3 md:grid md:grid-cols-3 lg:grid lg:grid-cols-3 xl:grid xl:grid-cols-3 w-full">
+                <div className="">
                     <label className="block text-[#000] text-sm font-semibold mb-2">Email</label>
                     <input
                         className="shadow text-sm appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -87,7 +87,7 @@ export default function Fields() {
                         placeholder="Email"
                     />
                 </div>
-                <div className="w-[30%]">
+                <div className="">
                     <label className="block text-[#000] text-sm font-semibold mb-2">Password</label>
                     <input
                         className="shadow text-sm rounded-lg appearance-none border  w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -97,7 +97,7 @@ export default function Fields() {
                         placeholder="Password"
                     />
                 </div>
-                <div className="w-[30%]">   
+                <div className="">   
                     <label className="block text-[#000] text-sm font-semibold mb-2">Confirm Password</label>
                     <input
                         className="shadow text-sm appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
