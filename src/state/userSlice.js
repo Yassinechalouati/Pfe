@@ -2,9 +2,10 @@ import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
   email: '',
+  googleToken:'',
   password: '',
   confpass: '',
-  pic: '',
+  pic: 'user.png',
   proficiency:'',
   goals: [],
   topics: []
@@ -51,10 +52,13 @@ export const userSlice = createSlice({
         // If the topic doesn't exist, add it to the array
         state.topics.push(action.payload)
       }
+    },
+    setGoogleToken: (state, action) => {
+      state.googleToken = action.payload
     }
   },
 })
 
 
-export const { setEmail, setPassword, setConfpass, setPic, setProficiency, setGoals, setTopics } = userSlice.actions
+export const { setEmail, setPassword, setConfpass, setPic, setProficiency, setGoals, setTopics, setGoogleToken } = userSlice.actions
 export default userSlice.reducer
