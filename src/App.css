@@ -16,3 +16,13 @@
 .myDIV:hover + .hide {
   display: block;
 }
+
+.scrollbar-hide {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE 10+ */
+}
+
+/* Hide scrollbar for Webkit/Blink */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
