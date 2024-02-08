@@ -1,24 +1,37 @@
 import { FcGoogle } from "react-icons/fc";
 import { useGoogleLogin } from '@react-oauth/google';
 import axios from 'axios'
-import {setGoogleToken} from '../../state/userSlice'
+import {setSignUpStep} from '../../state/userSlice'
+import {useDispatch} from 'react-redux'
+import { useSelector } from 'react-redux'
 
 
 export default function Mail() {
+    //step index
+    const step = useSelector((state) => state.userData.signupStep)
+
+    //initializing the tool to change the user data on the redux store
+    const dispatch = useDispatch()
     
     //handle sign up via google
     const handleLogin = useGoogleLogin({
         onSuccess: async (response) => {
             try{
-                setGoogleToken(response.access_token)
-                const res = await axios.get(
-                    "https://www.googleapis.com/oauth2/v3/userinfo", {
+                //send post request 
+                const resp = await axios.post(
+                    'http://localhost:5000/googlesignup',
+                    {},
+                    {
                         headers: {
-                            Authorization: `Bearer ${response.access_token}`
+                            token: response.access_token
                         }
                     }
                 )
-                console.log(res)
+                console.log(resp.status)
+                //if the server responds with success move to the next step
+                if(resp.status>= 200 && resp.status<300){
+                    dispatch(setSignUpStep(step<2? step + 1: step))
+                }
             }catch(err) {
                 console.log(err)
             }
