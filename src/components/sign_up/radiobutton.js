@@ -1,6 +1,6 @@
 import { IoMdInformationCircleOutline } from "react-icons/io";
 import {useDispatch, useSelector} from 'react-redux'
-import {setProficiency} from '../../state/userSlice';
+import {setProficiency} from '../../state/slices/userSlice';
 
 
 export default function RadioButton({title, infos, index}) {

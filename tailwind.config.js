@@ -10,7 +10,9 @@ module.exports = {
         'button2' : '#F28585',
         'darkg' : '#767676',
         'lightg': '#E5E5E5',
-        'lightbutton': '#FFF2E5'
+        'lightbutton': '#FFF2E5',
+        'errorbg' : '#ecc8c5',
+        'errortext': '#c03b3a'
       }
     },
   },

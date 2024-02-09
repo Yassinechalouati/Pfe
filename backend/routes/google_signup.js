@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router()
-//const bcrypt = require('bcrypt');
 const mysql= require('../helpers/Sql_connection')
 const verifyGoogleToken = require('../helpers/googleTokenverif')
 
@@ -16,9 +15,9 @@ router.post('/googlesignup', async (req, res) => {
                 //verifying if the email already exists in the Database
                 mysql.query('SELECT * FROM learner where email = ? ', [payload.email], (err, result) =>{
                     if(err) {
-                        //if there is error in data base return error 
+                        //if there is error in database return error 
                         console.log(err)
-                        res.status(404).json({message:"Database Error"})
+                        res.status(500).json({message:"Internal Server Error"})
                     }else {
                         //if the email doesn't exist insert it
                         if (result.length <= 0){
@@ -27,18 +26,18 @@ router.post('/googlesignup', async (req, res) => {
                                 if(err) {
                                     //if there is error in data base return error 
                                     console.log(err)
-                                    res.status(404).json({message:"Database Error"})
+                                    res.status(500).json({message:"Internal Server Error"})
                                 }
                                 else{
                                     //if the operation was succesful return success
-                                    res.status(200).json({message:"Sign up succesfully"})
+                                    res.status(201).json({message:"Signed up succesfully"})
                                 }
                             })
                         }
                         else {
                             //if the email exists return Error
                             console.log("user exists")
-                            res.status(404).json({message:"Email already Signed up"})
+                            res.status(409).json({message:"Email Already Signed Up"})
                             //besh ngued el partie taa sign in lahne
                         }
                     }
@@ -46,18 +45,18 @@ router.post('/googlesignup', async (req, res) => {
             } else {
                 // if the token is invalid return error
                 console.log('Token verification failed');
-                res.status(404).json({message: "Token verification failed"})
+                res.status(400).json({message: "Token verification failed"})
             }
         })
         .catch((error) => {
             // if the token is invalid return error
             console.error('Error verifying Google token:', error)
-            res.status(404).json({message:"Error verifying Google token"})
+            res.status(400).json({message:"Error verifying Google token"})
         });
     }else {
         //if the token is null return error
         console.log("no token given")
-        res.status(404).json({message:"token error"})
+        res.status(400).json({message:"no token given"})
     }
 
 })

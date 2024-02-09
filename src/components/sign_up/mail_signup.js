@@ -1,9 +1,10 @@
 import { FcGoogle } from "react-icons/fc";
 import { useGoogleLogin } from '@react-oauth/google';
 import axios from 'axios'
-import {setSignUpStep} from '../../state/userSlice'
+import {setSignUpStep} from '../../state/slices/userSlice'
 import {useDispatch} from 'react-redux'
 import { useSelector } from 'react-redux'
+import { setError } from "../../state/slices/errorSlice";
 
 
 export default function Mail() {
@@ -17,7 +18,7 @@ export default function Mail() {
     const handleLogin = useGoogleLogin({
         onSuccess: async (response) => {
             try{
-                //send post request 
+                //send post request with google token in header
                 const resp = await axios.post(
                     'http://localhost:5000/googlesignup',
                     {},
@@ -33,6 +34,7 @@ export default function Mail() {
                     dispatch(setSignUpStep(step<2? step + 1: step))
                 }
             }catch(err) {
+                dispatch(setError(err.response.data.message))
                 console.log(err)
             }
 

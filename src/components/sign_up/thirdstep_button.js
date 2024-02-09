@@ -1,6 +1,6 @@
 import {useState} from 'react'
 import {useDispatch} from 'react-redux'
-import {setGoals, setTopics} from '../../state/userSlice';
+import {setGoals, setTopics} from '../../state/slices/userSlice';
 
 export default function Buttn({text, type}) {
     //color changer

@@ -1,5 +1,5 @@
 import {useDispatch, useSelector} from 'react-redux'
-import { setEmail, setPassword, setConfpass } from '../../state/userSlice';
+import { setEmail, setPassword, setConfpass } from '../../state/slices/userSlice';
 
 export default function Fields() {
     //getting userData from the store
