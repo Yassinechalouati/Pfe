@@ -37,7 +37,7 @@ export default function Card() {
                 pword: userData.password,
                 pfp: userData.pic
             })
-            console.log(response);
+            console.log(response.headers['refreshtoken'], response.headers['accesstoken']);
             dispatch(setSignUpStep(step<2? step + 1: step))
         }catch(err) {
             dispatch(setError(err.response.data.message))

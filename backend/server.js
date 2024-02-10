@@ -1,10 +1,11 @@
+require('dotenv').config()
 const express = require('express')
 const app = express()
 var cors = require('cors')
 const bodyParser = require('body-parser');
 
-//server port
-const port = 5000
+//port
+const port = process.env.PORT || 4000
 
 //specifying the limit of requests
 app.use(express.urlencoded({ extended: true }))
@@ -27,12 +28,12 @@ app.use(
 //getting exported routers 
 const googleSignupRouter = require('./routes/google_signup')
 const regularSignupRouter = require('./routes/regular_signup')
+const refreshTokenRouter = require('./routes/refreshToken')
 
 //apis
 app.use('/', googleSignupRouter)
 app.use('/', regularSignupRouter)
-
-
+app.use('/api/refreshToken', refreshTokenRouter)
 
 
 app.listen(port, () => {
