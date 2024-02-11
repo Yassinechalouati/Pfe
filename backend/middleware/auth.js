@@ -1,9 +1,10 @@
 const jwt = require('jsonwebtoken')
 
 
-
+//testing the validity of the token using this middleware
 const auth = async (req, res, next) => {
-    const token = req.header("x-access-token")
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
     if(!token) 
         return res
             .status(403)
@@ -12,7 +13,7 @@ const auth = async (req, res, next) => {
     try {
         const tokenDetails = jwt.verify(
             token, 
-            process.env.ACESS_TOKEN_SECRET
+            process.env.ACCESS_TOKEN_SECRET
         )
         req.user = tokenDetails
         next()

@@ -29,11 +29,13 @@ app.use(
 const googleSignupRouter = require('./routes/google_signup')
 const regularSignupRouter = require('./routes/regular_signup')
 const refreshTokenRouter = require('./routes/refreshToken')
+const detailsRouter = require('./routes/learnerDetails')
 
 //apis
 app.use('/', googleSignupRouter)
 app.use('/', regularSignupRouter)
 app.use('/api/refreshToken', refreshTokenRouter)
+app.use('/', detailsRouter)
 
 
 app.listen(port, () => {

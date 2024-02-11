@@ -7,6 +7,7 @@ const generateAccessToken = require('../helpers/generateAccessToken')
 
 
 router.post('/regular_signup', (req, res) => {
+    //to see the token in the headers
     res.setHeader('Access-Control-Expose-Headers', 'refreshToken, accessToken');
 
     const email = req.body.email
@@ -43,7 +44,7 @@ router.post('/regular_signup', (req, res) => {
                                 res.status(500).json({message: "Internal Server Error"})
                             }
                             else {
-                                //if the operation was succesful return success
+                                //if the operation was succesful return tokens
                                 const userId = result.insertId
                                 const user = {id: userId, role: "Learner"}
 

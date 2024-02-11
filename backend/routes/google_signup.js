@@ -2,10 +2,14 @@ const express = require('express');
 const router = express.Router()
 const mysql= require('../helpers/Sql_connection')
 const verifyGoogleToken = require('../helpers/googleTokenverif')
+const generateRefreshToken = require('../helpers/generateRefreshToken')
+const generateAccessToken = require('../helpers/generateAccessToken')
 
 
 router.post('/googlesignup', async (req, res) => {
-    res.header('Referrer-Policy', 'no-referrer-when-downgrade')
+    //to see the token in the headers
+    res.setHeader('Access-Control-Expose-Headers', 'refreshToken, accessToken');
+
     const token = req.headers.token
     if(token) {
         verifyGoogleToken(token)
@@ -33,8 +37,9 @@ router.post('/googlesignup', async (req, res) => {
                                     const userId = result.insertId
                                     const user = {id: userId, role: "Learner"}
 
-                                    const accessToken = await generateAccessToken(user)
-                                    const refreshToken = await generateRefreshToken(user)
+                                    const {accessToken} = await generateAccessToken(user)
+                                    const {refreshToken} = await generateRefreshToken(user)
+                                    console.log(accessToken, refreshToken);
                                     res.set('refreshToken', refreshToken)
                                     res.set('accessToken', accessToken)
                                     res.status(201).json({message:"Signed up succesfully"})

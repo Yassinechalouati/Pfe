@@ -28,11 +28,9 @@ export default function Mail() {
                         }
                     }
                 )
-                console.log(resp.status)
-                //if the server responds with success move to the next step
-                if(resp.status>= 200 && resp.status<300){
-                    dispatch(setSignUpStep(step<2? step + 1: step))
-                }
+                localStorage.setItem('refreshtoken', resp.headers['refreshtoken'])
+                localStorage.setItem('accesstoken', resp.headers['accesstoken'])
+                dispatch(setSignUpStep(step<2? step + 1: step))
             }catch(err) {
                 dispatch(setError(err.response.data.message))
                 console.log(err)
