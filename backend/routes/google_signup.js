@@ -7,10 +7,7 @@ const generateAccessToken = require('../helpers/generateAccessToken')
 
 
 router.post('/googlesignup', async (req, res) => {
-    //to see the token in the headers
-    res.setHeader('Access-Control-Expose-Headers', 'refreshToken, accessToken');
-
-    const token = req.headers.token
+    const token = req.headers.authorization && req.headers.authorization.split(' ')[1]
     if(token) {
         verifyGoogleToken(token)
         .then((payload) => {
@@ -39,10 +36,8 @@ router.post('/googlesignup', async (req, res) => {
 
                                     const {accessToken} = await generateAccessToken(user)
                                     const {refreshToken} = await generateRefreshToken(user)
-                                    console.log(accessToken, refreshToken);
-                                    res.set('refreshToken', refreshToken)
-                                    res.set('accessToken', accessToken)
-                                    res.status(201).json({message:"Signed up succesfully"})
+                                    
+                                    res.status(201).json({message:"Signed up succesfully", refreshToken: refreshToken, accessToken: accessToken})
                                 }
                             })
                         }
@@ -50,7 +45,6 @@ router.post('/googlesignup', async (req, res) => {
                             //if the email exists return Error
                             console.log("user exists")
                             res.status(409).json({message:"Email Already Signed Up"})
-                            //besh ngued el partie taa sign in lahne
                         }
                     }
                 }) 

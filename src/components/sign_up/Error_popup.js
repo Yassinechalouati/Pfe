@@ -7,7 +7,7 @@ export default function Errorpop({error}) {
     const [isVisible, setIsVisible] = useState(false);
 
     //animation duration 
-    const duration = "400"
+    const duration = "700"
 
     //initializing the tool to change the user data on the redux store
     const dispatch = useDispatch()
@@ -31,8 +31,8 @@ export default function Errorpop({error}) {
 
     return(
         <div
-            className={`fixed bottom-0 flex border-errortext border-[1px] justify-center items-center left-1/2 transform -translate-x-1/2 bg-errorbg text-white p-3 text-center w-auto rounded-xl text-sm transition-transform duration-${duration} ${
-                isVisible ? 'translate-y-0' : 'translate-y-full'}`}>
+            className={`fixed bottom-0 flex border-errortext border-[1px] justify-center items-center left-1/2 transform -translate-x-1/2 bg-errorbg text-white p-3 text-center w-auto rounded-xl text-sm transition-transform duration-300 ${
+                isVisible ? '-translate-y-6' : 'translate-y-full'}`}>
             <span className="text-errortext text-sm font-bold w-full h-full">Error: {error}</span>
        </div> 
     )

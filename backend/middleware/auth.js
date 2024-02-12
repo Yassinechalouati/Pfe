@@ -7,7 +7,7 @@ const auth = async (req, res, next) => {
     const token = authHeader && authHeader.split(' ')[1];
     if(!token) 
         return res
-            .status(403)
+            .status(401)
             .json({message:"Access Denied: No token provided"})
 
     try {
@@ -20,7 +20,7 @@ const auth = async (req, res, next) => {
 
     }catch (err) {
         res
-            .status(403)
+            .status(401)
             .json({message:"Access Denied: Invalid token"})
     }
 }

@@ -7,9 +7,6 @@ const generateAccessToken = require('../helpers/generateAccessToken')
 
 
 router.post('/regular_signup', (req, res) => {
-    //to see the token in the headers
-    res.setHeader('Access-Control-Expose-Headers', 'refreshToken, accessToken');
-
     const email = req.body.email
     const pword = req.body.pword
     const pfp = req.body.pfp
@@ -30,7 +27,7 @@ router.post('/regular_signup', (req, res) => {
             else {
                 //checking whether the user already signed up or not 
                 if (result.length > 0 ) {
-                    res.status(409).json({message: "Email already Signed Up"})
+                    res.status(409).json({message: "Email Already Signed Up"})
                 }else{
                     //creating account if there's no user with the same email
                     //hashing the password before the insertion in the database
@@ -51,9 +48,7 @@ router.post('/regular_signup', (req, res) => {
                                 const {accessToken} = await generateAccessToken(user)
                                 const {refreshToken} = await generateRefreshToken(user)
 
-                                res.set('refreshToken', refreshToken)
-                                res.set('accessToken', accessToken)
-                                res.status(201).json({message:"Signed up succesfully"})
+                                res.status(201).json({message:"Signed up succesfully", refreshToken: refreshToken, accessToken: accessToken})
                             }
                         })
                     })

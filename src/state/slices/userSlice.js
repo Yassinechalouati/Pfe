@@ -9,7 +9,8 @@ const initialState = {
   proficiency:'',
   goals: [],
   topics: [],
-  signupStep: 0 //indicates the user is currently at in the sign up process
+  isLoading: false, 
+  signupStep: 0 //indicates the user is currently at which step in the sign up process
 }
 
 //slice that contains all the sign_up user informations
@@ -56,10 +57,25 @@ export const userSlice = createSlice({
     },
     setSignUpStep: (state, action) => {
       state.signupStep = action.payload
+    },
+    setIsLoading: (state, action) => {
+      state.isLoading = action.payload
+    }
+    ,
+    resetUserData: (state, action) => {
+      state.email = ''
+      state.googleToken = ''
+      state.password = ''
+      state.confpass = ''
+      state.proficiency = ''
+      state.goals= []
+      state.topics= []
+      state.signupStep = 0
+      state.isLoading = false
     }
   },
 })
 
 
-export const { setEmail, setPassword, setConfpass, setPic, setProficiency, setGoals, setTopics, setSignUpStep } = userSlice.actions
+export const { setEmail, setPassword, setConfpass, setPic, setProficiency, setGoals, setTopics, setSignUpStep, resetUserData, setIsLoading } = userSlice.actions
 export default userSlice.reducer

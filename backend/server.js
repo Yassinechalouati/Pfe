@@ -5,7 +5,7 @@ var cors = require('cors')
 const bodyParser = require('body-parser');
 
 //port
-const port = process.env.PORT || 4000
+const port = process.env.PORT || 5000
 
 //specifying the limit of requests
 app.use(express.urlencoded({ extended: true }))
@@ -30,12 +30,16 @@ const googleSignupRouter = require('./routes/google_signup')
 const regularSignupRouter = require('./routes/regular_signup')
 const refreshTokenRouter = require('./routes/refreshToken')
 const detailsRouter = require('./routes/learnerDetails')
+const personalizeRouter = require('./routes/presonalize')
+const beginRouter = require('./routes/begin')
 
 //apis
 app.use('/', googleSignupRouter)
 app.use('/', regularSignupRouter)
 app.use('/api/refreshToken', refreshTokenRouter)
 app.use('/', detailsRouter)
+app.use('/', personalizeRouter)
+app.use('/', beginRouter)
 
 
 app.listen(port, () => {

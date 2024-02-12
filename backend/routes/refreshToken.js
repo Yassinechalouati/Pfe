@@ -5,9 +5,10 @@ const verifyRefreshToken = require('../helpers/verifyRefreshToken')
 
 //creating new access token when the previous one expires
 router.post('/', async (req, res)=> {
-    if(req.headers.refreshtoken) {
+    if(req.headers.authorization) {
+        const refreshtoken = req.headers.authorization.split(' ')[1]
         //verifying the refresh token sent from the user 
-        verifyRefreshToken(req.headers.refreshtoken)
+        verifyRefreshToken(refreshtoken)
         .then(({tokenDetails}) => {
             //if it's valid sign new access token and return it to the client
             const payload = {id: tokenDetails.id, role: tokenDetails.role}

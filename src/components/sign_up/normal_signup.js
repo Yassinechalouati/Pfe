@@ -45,6 +45,10 @@ export default function Fields() {
                         type="password"
                         value = {userData?.password}
                         onChange={handlePasswordChange}
+                        minLength="8"
+                        maxLength="30"
+                        pattern="^(?=.*[A-Z])(?=.*[0-9])[A-Za-z0-9]+$" // assuring the password contains at least one uppercase letter and one digit
+                        title={`${userData?.password.length<8? `Contains at least 8 characters (currently at ${userData.password.length} characters), `:""}Contains at least an UpperCase letter and a digit`}
                         placeholder="Password"
                     />
                 </div>
@@ -57,6 +61,7 @@ export default function Fields() {
                         pattern= {userData?.password}
                         onChange={handleConfirmPasswordChange}
                         placeholder="Confirm Password"
+                        title="Passwords do not match"
                     />
                 </div>
             </div>
