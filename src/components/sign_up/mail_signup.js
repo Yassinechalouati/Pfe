@@ -18,6 +18,7 @@ export default function Mail() {
     const handleLogin = useGoogleLogin({
         onSuccess: async (response) => {
             try{
+                dispatch(setIsLoading(true))
                 //send post request with google token in header
                 const resp = await axios.post(
                     'http://localhost:5000/googlesignup',
@@ -37,17 +38,15 @@ export default function Mail() {
             }finally{
                 dispatch(setIsLoading(false))
             }
-
         },
-        onFailure: () => {
+        onError: (err) => {
+            console.log(err);
             dispatch(setIsLoading(false))
+            dispatch(setError("Service Unavailable"))
         }
       });
     return(
-        <div onClick={() => {
-            dispatch(setIsLoading(true))
-            handleLogin()
-        }} className="w-full cursor-pointer p-2 flex justify-center hover:shadow items-center space-x-3 border border-[#E5E5E5] rounded-xl">
+        <div onClick={handleLogin} className="w-full cursor-pointer p-2 flex justify-center hover:shadow items-center space-x-3 border border-[#E5E5E5] rounded-xl">
                 <FcGoogle size="23" />
                 <span className="font-semibold text-sm">Sign up with Google</span>
         </div> 

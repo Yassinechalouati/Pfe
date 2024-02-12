@@ -75,7 +75,7 @@ export default function Card() {
         } catch (err) {
             if (err.response && err.response.status === 401) {
                 // Handle 401 error (token expired or unauthorized)
-                navigate('/signin');
+                navigate('/learner/signin');
             } else {
                 dispatch(setError(err.response.data.message))
                 console.log(err);
