@@ -2,7 +2,6 @@ import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
   email: '',
-  googleToken:'',
   password: '',
   confpass: '',
   pic: 'user.png',
@@ -64,7 +63,6 @@ export const userSlice = createSlice({
     ,
     resetUserData: (state, action) => {
       state.email = ''
-      state.googleToken = ''
       state.password = ''
       state.confpass = ''
       state.proficiency = ''

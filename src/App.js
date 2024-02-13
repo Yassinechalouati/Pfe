@@ -3,6 +3,7 @@ import Signin from './pages/signin';
 import Signup from './pages/signup'
 import TutorSignUp from './pages/tutorSignUp';
 import {Route, BrowserRouter as Router, Routes} from 'react-router-dom'
+import React from 'react';
 
 function App() {
   return (

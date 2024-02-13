@@ -12,7 +12,7 @@ import { setError } from '../../state/slices/errorSlice'
 import axios from 'axios'
 import axiosInstance from '../../interceptors/axiosInterceptor';
 import {useNavigate} from 'react-router-dom'
-import ReactLoading from 'react-loading';
+import Loading from '../Global/Loading'
 
 export default function Card() {
     //step index
@@ -194,11 +194,7 @@ export default function Card() {
     //handle loading ui
     const handleLoading = () => {
         if(userData.isLoading)
-            return <div className="flex flex-col space-y-2 items-center justify-center h-full w-full">
-            <ReactLoading type="spin" color="#FFA447" height={'40px'} width={'40px'} />
-            <span className="text-button font-bold text-base">Hang tight, we're working...</span>
-            <span className="text-button text-sm">We're double-checking your informations</span>
-        </div>
+            return <Loading></Loading>
         return content[step]
     }
 

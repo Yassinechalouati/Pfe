@@ -1,6 +1,7 @@
 
 import Mail from './mail_signup'
 import Fields from './normal_signup'
+import Orline from '../Global/Or_line'
 
 
 export default function First() {
@@ -15,11 +16,7 @@ export default function First() {
             </span> 
             <span className="text-darkg self-start text-sm"> Already have an account? <span className="underline cursor-pointer">Log in</span> </span>
             <Mail></Mail>
-            <div className="flex w-full justify-center items-center">
-                <hr className="h-1 w-[47%] "></hr>
-                <span className="w-[6%] text-center text-darkg">OR</span>
-                <hr className="h-1 w-[47%]"></hr>
-            </div>
+            <Orline width="6%"></Orline>
             <Fields></Fields>
         </>
     )
