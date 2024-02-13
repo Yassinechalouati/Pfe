@@ -11,14 +11,13 @@ function MailSignup() {
     const dispatch = useDispatch()
     
     //handle sign up via google
-    //handle sign up via google
     const handleSignUp = useGoogleLogin({
         onSuccess: async (response) => {
             try{
                 dispatch(setIsLoading(true))
                 //send post request with google token in header
                 const resp = await axios.post(
-                    'http://localhost:5000/googlesignup',
+                    'http://localhost:5000/tutor/signupgoogle',
                     {},
                     {
                         headers: {

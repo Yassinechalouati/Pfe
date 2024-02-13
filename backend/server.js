@@ -32,6 +32,7 @@ const refreshTokenRouter = require('./routes/refreshToken')
 const detailsRouter = require('./routes/learnerDetails')
 const personalizeRouter = require('./routes/presonalize')
 const beginRouter = require('./routes/begin')
+const tutorGoogleSignUp = require('./routes/tutor_google_signup')
 
 //apis
 app.use('/', googleSignupRouter)
@@ -40,6 +41,7 @@ app.use('/api/refreshToken', refreshTokenRouter)
 app.use('/', detailsRouter)
 app.use('/', personalizeRouter)
 app.use('/', beginRouter)
+app.use('/tutor', tutorGoogleSignUp)
 
 
 app.listen(port, () => {
