@@ -14,7 +14,7 @@ router.post('/signupgoogle', async (req, res) => {
             if (payload) {
                 console.log('Token verified successfully');
                 //verifying if the email already exists in the Database
-                mysql.query('SELECT * FROM Tutor where email = ? ', [payload.email], (err, result) =>{
+                mysql.query('select email from learner where email = ? UNION select email from Tutor where email = ? ', [payload.email, payload.email], (err, result) =>{
                     if(err) {
                         //if there is error in database return error 
                         console.log(err)
@@ -22,7 +22,7 @@ router.post('/signupgoogle', async (req, res) => {
                     }else {
                         //if the email doesn't exist insert it
                         if (result.length <= 0){
-                            const query = "INSERT INTO Tutor(firstname, lastname, email, pword, pfp) VALUES (?, ?, ?, ?, ?)"
+                            const query = "INSERT INTO Tutor(firstname, lastname, email, pword, pfp, isVerified) VALUES (?, ?, ?, ?, ?, 1)"
                             mysql.query(query, [payload.given_name, payload.family_name, payload.email, '', payload.picture], async (err, result)=> {
                                 if(err) {
                                     //if there is error in data base return error 

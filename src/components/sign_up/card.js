@@ -7,8 +7,7 @@ import Third from './third_step'
 import {useSelector} from 'react-redux'
 import { useDispatch } from 'react-redux'
 import {setSignUpStep, setIsLoading} from '../../state/slices/userSlice'
-import Errorpop from './Error_popup'
-import { setError } from '../../state/slices/errorSlice'
+import { setError } from '../../state/slices/userSlice'
 import axios from 'axios'
 import axiosInstance from '../../interceptors/axiosInterceptor';
 import {useNavigate} from 'react-router-dom'
@@ -217,7 +216,6 @@ export default function Card() {
                         <GrFormNextLink size="25"></GrFormNextLink>
                 </button>
             </div>
-            <Errorpop></Errorpop>
         </form>
     );
 }

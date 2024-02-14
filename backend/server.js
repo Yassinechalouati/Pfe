@@ -33,6 +33,7 @@ const detailsRouter = require('./routes/learnerDetails')
 const personalizeRouter = require('./routes/presonalize')
 const beginRouter = require('./routes/begin')
 const tutorGoogleSignUp = require('./routes/tutor_google_signup')
+const tutorRegularSignupRouter = require('./routes/tutor_Regular_signup')
 
 //apis
 app.use('/', googleSignupRouter)
@@ -42,6 +43,7 @@ app.use('/', detailsRouter)
 app.use('/', personalizeRouter)
 app.use('/', beginRouter)
 app.use('/tutor', tutorGoogleSignUp)
+app.use('/tutor', tutorRegularSignupRouter)
 
 
 app.listen(port, () => {

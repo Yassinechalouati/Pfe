@@ -4,16 +4,16 @@ const mysql= require('../helpers/Sql_connection')
 const bcrypt = require('bcrypt');
 const generateRefreshToken = require('../helpers/generateRefreshToken')
 const generateAccessToken = require('../helpers/generateAccessToken')
+const generateVerificationToken= require('../helpers/generateVerificationToken')
 const sendEmail = require('../helpers/sendEmail')
 
 
-router.post('/regular_signup', (req, res) => {
+router.post('/regsignup', (req, res) => {
     const email = req.body.email
     const pword = req.body.pword
-    const pfp = req.body.pfp
     
     //checking if fields are not empty
-    if(!email || !pword || !pfp) {
+    if(!email || !pword) {
         res.status(400).json({message: "one or more fields are empty. Please fill our the whole form"})
     }
     else {
@@ -34,22 +34,31 @@ router.post('/regular_signup', (req, res) => {
                     //hashing the password before the insertion in the database
                     bcrypt.hash(pword, 10)
                     .then(hash => {
-                        const insertionQuery = 'INSERT INTO LEARNER(email, pword, pfp, isVerified) VALUES(?, ?, ?, 0)'
-                        mysql.query(insertionQuery, [email, hash, pfp], async (err, result)=> {
+                        const insertionQuery = 'INSERT INTO Tutor(email, pword, isVerified) VALUES(?, ?, 0)'
+                        mysql.query(insertionQuery, [email, hash], async (err, result)=> {
                             //Checking whether there's an error in database or not 
                             if (err) {
                                 console.log("query error: ", err)
                                 res.status(500).json({message: "Internal Server Error"})
                             }
                             else {
+                                
                                 //if the operation was succesful return tokens
                                 const userId = result.insertId
-                                const user = {id: userId, role: "Learner"}
-
-                                const {accessToken} = await generateAccessToken(user)
+                                const user = {id: userId, role: "Tutor"}
+                                
+                                //making verification token
+                                const verificationToken = generateVerificationToken(user)
+                                
+                                //sending verification email to user 
+                                const url = `${process.env.BASE_URL}users/verify/${verificationToken}`
+                                await sendEmail(email, "Email Verification", url)
+                                
+                                /*const {accessToken} = await generateAccessToken(user)
                                 const {refreshToken} = await generateRefreshToken(user)
 
-                                res.status(201).json({message:"Signed up succesfully", refreshToken: refreshToken, accessToken: accessToken})
+                                res.status(201).json({message:"Signed up succesfully", refreshToken: refreshToken, accessToken: accessToken})*/
+                                res.status(201).json({message: "Email sent"})
                             }
                         })
                     })

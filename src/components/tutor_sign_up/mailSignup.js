@@ -1,7 +1,7 @@
 import { FcGoogle } from "react-icons/fc";
 import { useDispatch } from "react-redux";
 import axios from "axios";
-import { setError } from "../../state/slices/errorSlice";
+import { setError } from "../../state/slices/tutorSlice";
 import { setIsLoading } from "../../state/slices/tutorSlice";
 import { useGoogleLogin } from '@react-oauth/google';
 

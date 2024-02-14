@@ -11,6 +11,7 @@ const auth = async (req, res, next) => {
             .json({message:"Access Denied: No token provided"})
 
     try {
+        //verifying access token
         const tokenDetails = jwt.verify(
             token, 
             process.env.ACCESS_TOKEN_SECRET

@@ -4,7 +4,7 @@ import axios from 'axios'
 import {setSignUpStep, setIsLoading} from '../../state/slices/userSlice'
 import {useDispatch} from 'react-redux'
 import { useSelector } from 'react-redux'
-import { setError } from "../../state/slices/errorSlice";
+import { setError } from "../../state/slices/userSlice";
 
 //learner mail sign up
 export default function Mail() {

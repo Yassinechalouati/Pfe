@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
 import {useDispatch} from 'react-redux'
-import { setError } from "../../state/slices/errorSlice";
 
-export default function Errorpop({error}) {
+export default function Errorpop({error, setError}) {
     //controlling the visibility or the error popup
     const [isVisible, setIsVisible] = useState(false);
 
@@ -22,12 +21,12 @@ export default function Errorpop({error}) {
             // after the popup is removed reset the error value 
             setTimeout(() => {
                 dispatch(setError(""))
-            }, parseInt(duration, 10)+100)
+            }, parseInt(duration, 10)+200)
         }, 2500)
 
         // Clear the timeout on component unmount to avoid memory leaks
         return () => clearTimeout(timeoutId);
-    }, [error, dispatch]);
+    }, [error, dispatch, setError]);
 
     return(
         <div

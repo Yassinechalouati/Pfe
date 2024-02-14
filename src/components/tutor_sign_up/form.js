@@ -3,7 +3,11 @@ import MailSignup from "./mailSignup";
 import Title from "./title";
 import { useDispatch } from "react-redux"; 
 import { useSelector } from "react-redux";
-import { setEmail, setPassword, setConfpass } from '../../state/slices/tutorSlice'
+import { setEmail, setPassword, setConfpass, setError, setIsLoading } from '../../state/slices/tutorSlice'
+import Loading from '../Global/Loading'
+import axios from "axios";
+
+
 export default function Form() {
     //getting tutor Data from store 
     const tutorData = useSelector(state => state.tutorData)
@@ -26,52 +30,81 @@ export default function Form() {
         dispatch(setConfpass(e.target.value))
     }
 
+    //sign up 
+    const handleRegularSignup = async (e) => {
+        e.preventDefault()
+        try {
+            dispatch(setIsLoading(true))
+            const response = await axios.post('http://localhost:5000/tutor/regsignup', {
+                email: tutorData.email, 
+                pword: tutorData.password
+            })
+            //saving tokens in localStorage
+            localStorage.setItem('refreshtoken', response.data.refreshToken)
+            localStorage.setItem('accesstoken', response.data.accessToken)
+            
+        }catch(err) {
+            dispatch(setError(err.response.data.message))
+            console.log(err);
+        }finally{
+            dispatch(setIsLoading(false))
+        }
+    }
+
+
     return (
-        <form className="h-full flex flex-col justify-center space-y-4 items-center w-full sm:w-[50%] md:w-[50%] lg:w-[30%] xl:w-[30%] 2xl:w-[30%] px-10">
-            <Title></Title> 
-            <MailSignup></MailSignup>
-            <Orline width="10%"></Orline>
-            <div className="flex flex-col w-full">
-                    <label className="block text-[#000] text-sm font-semibold mb-2">Email</label>
-                    <input
-                        className="shadow text-sm appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        type="email"
-                        value = {tutorData?.email}
-                        onChange={handleEmailChange}
-                        pattern="[^\s@]+@[^\s@]+\.[^\s@]+"
-                        placeholder="Email"
-                    />
-            </div>
-            <div className="flex flex-col w-full">
-                    <label className="block text-[#000] text-sm font-semibold mb-2">Password</label>
-                    <input
-                        className="shadow text-sm rounded-lg appearance-none border  w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        type="password"
-                        value = {tutorData?.password}
-                        onChange={handlePasswordChange}
-                        minLength="8"
-                        maxLength="30"
-                        pattern="^(?=.*[A-Z])(?=.*[0-9])[A-Za-z0-9]+$" // assuring the password contains at least one uppercase letter and one digit
-                        title={`${tutorData?.password.length<8? `Contains at least 8 characters (currently at ${tutorData.password.length} characters), `:""}Contains at least an UpperCase letter and a digit`}
-                        placeholder="Password"
-                    />
-            </div>
-            <div className="flex flex-col w-full">   
-                <label className="block text-[#000] text-sm font-semibold mb-2">Confirm Password</label>
-                <input
-                    className="shadow text-sm appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    type="password"
-                    value = {tutorData?.confpass}
-                    pattern= {tutorData?.password}
-                    onChange={handleConfirmPasswordChange}
-                    placeholder="Confirm Password"
-                    title="Passwords do not match"
-                />
-            </div>
-            <button type="submit" className={`bg-button border flex justify-center items-center w-full py-2 px-3 h-10 rounded-lg text-center font-semibold text-lg text-white hover:shadow`}>
-                <span className="text-base sm:block md:block lg:block xl:block">SIGN UP</span>
-            </button>
-            <span className="text-darkg text-base">Already have an account? <span className="cursor-pointer text-button"> Log in</span></span>
+        <form onSubmit={handleRegularSignup} className="h-full flex flex-col justify-center space-y-4 items-center w-full sm:w-[50%] md:w-[50%] lg:w-[30%] xl:w-[30%] 2xl:w-[30%] px-10">
+            {
+                tutorData.isLoading? 
+                <Loading></Loading>
+                :
+                <>
+                    <Title></Title> 
+                    <MailSignup></MailSignup>
+                    <Orline width="10%"></Orline>
+                    <div className="flex flex-col w-full">
+                            <label className="block text-[#000] text-sm font-semibold mb-2">Email</label>
+                            <input
+                                className="shadow text-sm appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                type="email"
+                                value = {tutorData?.email}
+                                onChange={handleEmailChange}
+                                pattern="[^\s@]+@[^\s@]+\.[^\s@]+"
+                                placeholder="Email"
+                            />
+                    </div>
+                    <div className="flex flex-col w-full">
+                            <label className="block text-[#000] text-sm font-semibold mb-2">Password</label>
+                            <input
+                                className="shadow text-sm rounded-lg appearance-none border  w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                type="password"
+                                value = {tutorData?.password}
+                                onChange={handlePasswordChange}
+                                minLength="8"
+                                maxLength="30"
+                                pattern="^(?=.*[A-Z])(?=.*[0-9])[A-Za-z0-9]+$" // assuring the password contains at least one uppercase letter and one digit
+                                title={`${tutorData?.password.length<8? `Contains at least 8 characters (currently at ${tutorData.password.length} characters), `:""}Contains at least an UpperCase letter and a digit`}
+                                placeholder="Password"
+                            />
+                    </div>
+                    <div className="flex flex-col w-full">   
+                        <label className="block text-[#000] text-sm font-semibold mb-2">Confirm Password</label>
+                        <input
+                            className="shadow text-sm appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            type="password"
+                            value = {tutorData?.confpass}
+                            pattern= {tutorData?.password}
+                            onChange={handleConfirmPasswordChange}
+                            placeholder="Confirm Password"
+                            title="Passwords do not match"
+                        />
+                    </div>
+                    <button type="submit" className={`bg-button border flex justify-center items-center w-full py-2 px-3 h-10 rounded-lg text-center font-semibold text-lg text-white hover:shadow`}>
+                        <span className="text-base sm:block md:block lg:block xl:block">SIGN UP</span>
+                    </button>
+                    <span className="text-darkg text-base">Already have an account? <span className="cursor-pointer text-button"> Log in</span></span>
+                </>
+            }
         </form >
     );
     

@@ -4,7 +4,8 @@ const initialState = {
   email: '',
   password: '',
   confpass: '',
-  isLoading: false
+  isLoading: false,
+  error: ''
 }
 
 //slice that contains all the sign_up tutor informations
@@ -24,6 +25,9 @@ export const userSlice = createSlice({
     setIsLoading: (state, action) => {
       state.isLoading = action.payload
     },
+    setError: (state, action) => {
+      state.error = action.payload
+    },
     resetUserData: (state, action) => {
       state.email = ''
       state.password = ''
@@ -34,5 +38,5 @@ export const userSlice = createSlice({
 })
 
 
-export const { setEmail, setPassword, setConfpass, setIsLoading, resetUserData} = userSlice.actions
+export const { setEmail, setPassword, setConfpass, setIsLoading, resetUserData, setError} = userSlice.actions
 export default userSlice.reducer
