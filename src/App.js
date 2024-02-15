@@ -4,6 +4,7 @@ import Signup from './pages/signup'
 import TutorSignUp from './pages/tutorSignUp';
 import {Route, BrowserRouter as Router, Routes} from 'react-router-dom'
 import React from 'react';
+import Verification from './pages/EmailVerif'
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         </Route>
         <Route path='/tutor/signup' element={<TutorSignUp></TutorSignUp>}></Route>
         <Route path='/learner/signin' element={<Signin></Signin>}></Route>
+        <Route path='/users/verify/:token' element={<Verification></Verification>}></Route>
       </Routes>
     </Router>
   );

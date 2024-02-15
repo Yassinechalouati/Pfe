@@ -2,8 +2,6 @@ const express = require('express');
 const router = express.Router()
 const mysql= require('../helpers/Sql_connection')
 const bcrypt = require('bcrypt');
-const generateRefreshToken = require('../helpers/generateRefreshToken')
-const generateAccessToken = require('../helpers/generateAccessToken')
 const generateVerificationToken= require('../helpers/generateVerificationToken')
 const sendEmail = require('../helpers/sendEmail')
 
@@ -48,16 +46,11 @@ router.post('/regsignup', (req, res) => {
                                 const user = {id: userId, role: "Tutor"}
                                 
                                 //making verification token
-                                const verificationToken = generateVerificationToken(user)
+                                const {verificationToken} = await generateVerificationToken(user)
                                 
                                 //sending verification email to user 
                                 const url = `${process.env.BASE_URL}users/verify/${verificationToken}`
                                 await sendEmail(email, "Email Verification", url)
-                                
-                                /*const {accessToken} = await generateAccessToken(user)
-                                const {refreshToken} = await generateRefreshToken(user)
-
-                                res.status(201).json({message:"Signed up succesfully", refreshToken: refreshToken, accessToken: accessToken})*/
                                 res.status(201).json({message: "Email sent"})
                             }
                         })

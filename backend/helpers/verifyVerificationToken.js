@@ -8,12 +8,12 @@ const verifyVerificationToken = (verificationToken) => {
         jwt.verify(verificationToken, privateKey, (err, tokenDetails) => {
             if (err) {
                 //if the refresh token isn't valid, return error
-                return reject({message: "Invalid Refresh Token"})
+                return reject({message: "Invalid verification Token"})
             }else {
                 //if the token is valid return Valid
                 resolve({
                     tokenDetails, 
-                    message:"Valid refresh Token"
+                    message:"Valid verification Token"
                 })
             }
         })

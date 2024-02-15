@@ -5,6 +5,7 @@ const initialState = {
   password: '',
   confpass: '',
   isLoading: false,
+  isVerified: 0,
   error: ''
 }
 
@@ -28,6 +29,9 @@ export const userSlice = createSlice({
     setError: (state, action) => {
       state.error = action.payload
     },
+    setIsVerified: (state, action) => {
+      state.isVerified = action.payload
+    },
     resetUserData: (state, action) => {
       state.email = ''
       state.password = ''
@@ -38,5 +42,5 @@ export const userSlice = createSlice({
 })
 
 
-export const { setEmail, setPassword, setConfpass, setIsLoading, resetUserData, setError} = userSlice.actions
+export const { setEmail, setPassword, setConfpass, setIsLoading, resetUserData, setError, setIsVerified} = userSlice.actions
 export default userSlice.reducer
