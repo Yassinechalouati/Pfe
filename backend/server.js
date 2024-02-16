@@ -1,8 +1,26 @@
-require('dotenv').config()
-const express = require('express')
-const app = express()
-var cors = require('cors')
+require('dotenv').config();
+const express = require('express');
+const cors = require('cors');
 const bodyParser = require('body-parser');
+const http = require('http');
+const socketIo = require('socket.io');
+
+
+const app = express();
+const server = http.createServer(app);
+const io = socketIo(server, {
+  cors: { 
+    origin: 'http://localhost:3000',
+    methods: ['GET', 'POST'],
+    allowedHeaders: ['Authorization', 'Content-Type'],
+    credentials: true
+  }
+});
+
+
+app.use(cors({
+    origin: "http://localhost:3000"
+}))
 
 //port
 const port = process.env.PORT || 5000
@@ -12,9 +30,6 @@ app.use(express.urlencoded({ extended: true }))
 app.use(express.json({ limit: '10mb' }))
 
 
-app.use(cors({
-    origin: "http://localhost:3000"
-}))
 
 
 //assure that we get the body from the api calls 
@@ -34,7 +49,7 @@ const personalizeRouter = require('./routes/presonalize')
 const beginRouter = require('./routes/begin')
 const tutorGoogleSignUp = require('./routes/tutor_google_signup')
 const tutorRegularSignupRouter = require('./routes/tutor_Regular_signup')
-const emailVerificationRourter = require('./routes/verification')
+const emailVerificationRouter = require('./routes/verification')
 
 //apis
 app.use('/', googleSignupRouter)
@@ -45,9 +60,12 @@ app.use('/', personalizeRouter)
 app.use('/', beginRouter)
 app.use('/tutor', tutorGoogleSignUp)
 app.use('/tutor', tutorRegularSignupRouter)
-app.use('/', emailVerificationRourter)
+app.use('/', emailVerificationRouter)
 
 
-app.listen(port, () => {
+// Socket.io logic
+require('./helpers/socketHandler')(io);
+
+server.listen(port, () => {
     console.log(`Server running on port ${port}`)
-  });
+  }); 

@@ -12,10 +12,15 @@ import axios from 'axios'
 import axiosInstance from '../../interceptors/axiosInterceptor';
 import {useNavigate} from 'react-router-dom'
 import Loading from '../Global/Loading'
+import {useRef} from 'react'
+import io from 'socket.io-client'
 
-export default function Card() {
+export default function Card() { 
     //step index
     const step = useSelector((state) => state.userData.signupStep)
+
+
+    const socket = useRef(null)
 
     //getting elements from redux store
     const userData = useSelector((state) => state.userData)
@@ -44,10 +49,13 @@ export default function Card() {
                 pfp: userData.pic
             })
             //saving tokens in localStorage
-            localStorage.setItem('refreshtoken', response.data.refreshToken)
-            localStorage.setItem('accesstoken', response.data.accessToken)
-            
-            dispatch(setSignUpStep(step<2? step + 1: step))
+            console.log(response.data.roomId); 
+            socket.current = io('http://localhost:5000') 
+            socket.current.emit('createRoom', 'users') 
+            socket.current.on('emailVerified', (data) => {
+                console.log('Email verification status:', data); 
+                dispatch(setSignUpStep(step<2? step + 1: step))
+            }); 
         }catch(err) {
             dispatch(setError(err.response.data.message))
             console.log(err);

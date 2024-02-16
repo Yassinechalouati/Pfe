@@ -1,12 +1,8 @@
-import React from 'react';
-
-
-function Signin(props) {
+import Card_ from "../components/sign_in/card"
+export default function Signin() {
     return (
-        <div>
-            HLLOEOOOO
+        <div className="bg-backg w-screen h-screen flex justify-center items-center overflow-hidden">
+            <Card_></Card_>
         </div>
-    );
+    )
 }
-
-export default Signin;

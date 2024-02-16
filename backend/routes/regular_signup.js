@@ -51,7 +51,7 @@ router.post('/regular_signup', (req, res) => {
                                 //sending verification email to user 
                                 const url = `${process.env.BASE_URL}users/verify/${verificationToken}`
                                 await sendEmail(email, "Email Verification", url)
-                                res.status(201).json({message: "Email sent"})
+                                res.status(201).json({message: "Email sent", roomId: `users_${email}`}) 
                             }
                         })
                     })

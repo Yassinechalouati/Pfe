@@ -1,34 +1,20 @@
-import axios from 'axios'
 import {useEffect, useState} from 'react'
 import {useParams} from 'react-router-dom'
-import { useSelector } from "react-redux";
+import io from 'socket.io-client'
 
 function EmailVerif() {
     //getting the token from the url
     const param = useParams()
     const [isValid, setIsValid] = useState(false)
 
-    const tutorData = useSelector(state => state.tutorData)
-
-    console.log(tutorData)
     
     const  Verification = async () => {
-        try {
-            const response = await axios.post(
-                'http://localhost:5000/verify',
-                {},
-                {
-                    headers: {
-                        Authorization: `Bearer ${param.token}`
-                    }
-                }
-                )
-                console.log(response.data.message);
-                setIsValid(true)
+        const socket = io('http://localhost:5000')
+        socket.emit('verifyEmail', param.token, 'users')
 
-        }catch(err) {
-            console.log(err);
-        }
+        return () => {
+            socket.disconnect();
+        };
     }
 
     useEffect(()=> {
