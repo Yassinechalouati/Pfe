@@ -42,13 +42,13 @@ export default function Normal() {
                 />
             </div>
             <div className="mb-4 text-sm">
-                <a href="#" className="text-blue-500">Forgot your password?</a>
+                <button className="text-blue-500 underline">Forgot your password?</button>
             </div>
             <button className="w-full bg-button hover:bg-orange-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
                 Sign In
             </button>
             <div className="mt-4 text-sm">
-                <p>Don't have an account? <a href="#" className="text-blue-500">Sign up</a></p>
+                <p>Don't have an account? <button className="text-blue-500 underline">Sign up</button></p>
             </div>
         </div>
     );

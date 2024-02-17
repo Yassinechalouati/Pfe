@@ -1,12 +1,10 @@
 import Progress from './progress_bar'
 import First from './first_step'
-import { GrFormNextLink } from "react-icons/gr"
-import { GrFormPreviousLink } from "react-icons/gr"
 import Second from './second_step'
 import Third from './third_step'
 import {useSelector} from 'react-redux'
 import { useDispatch } from 'react-redux'
-import {setSignUpStep, setIsLoading} from '../../state/slices/userSlice'
+import {setSignUpStep, setIsLoading, setIsVerified} from '../../state/slices/userSlice'
 import { setError } from '../../state/slices/userSlice'
 import axios from 'axios'
 import axiosInstance from '../../interceptors/axiosInterceptor';
@@ -14,12 +12,16 @@ import {useNavigate} from 'react-router-dom'
 import Loading from '../Global/Loading'
 import {useRef} from 'react'
 import io from 'socket.io-client'
+import NextButton from './nextButton'
+import BackButton from './backButton'
+import {useState} from 'react'
+import VerifEmail from '../Global/VerifEmail'
 
 export default function Card() { 
     //step index
     const step = useSelector((state) => state.userData.signupStep)
 
-
+    //using socket io
     const socket = useRef(null)
 
     //getting elements from redux store
@@ -28,9 +30,11 @@ export default function Card() {
     //initializing the tool to change the user data on the redux store
     const dispatch = useDispatch()
 
+    const [verificationPlaceHolder, setVerificationPlaceHolder] = useState(false)
+
     //steps
     const content = [
-        <First></First>,
+        verificationPlaceHolder? <VerifEmail></VerifEmail>:<First></First>,
         <Second></Second>,
         <Third></Third>
     ]
@@ -48,14 +52,31 @@ export default function Card() {
                 pword: userData.password,
                 pfp: userData.pic
             })
-            //saving tokens in localStorage
-            console.log(response.data.roomId); 
+            console.log(response);
+            setVerificationPlaceHolder(true)
+            //using websocket to detect when the user pressed the verification link sent to his email 
             socket.current = io('http://localhost:5000') 
-            socket.current.emit('createRoom', 'users') 
+            socket.current.emit('createRoom', `users_${userData.email}`) //joining room 
+
+            //setting listener for when the user verified his email
             socket.current.on('emailVerified', (data) => {
-                console.log('Email verification status:', data); 
-                dispatch(setSignUpStep(step<2? step + 1: step))
-            }); 
+                console.log('Email verification status:', data);  
+                dispatch(setSignUpStep(step<2? step + 1: step)) //moving to next sign up step  
+                setVerificationPlaceHolder(false) //remove verification placeholder
+                dispatch(setIsVerified(true))
+                
+                //saving tokens in localstorage
+                localStorage.setItem('accesstoken', data.accessToken)
+                localStorage.setItem('refreshToken', data.refreshToken)
+                socket.current.disconnect(); // Disconnect the socket to avoid memory leaks
+            })
+
+            //listening for errors in the verification process
+            socket.current.on('emailVerificationFailed', (error) => {
+                dispatch(setError(error.message))
+                setVerificationPlaceHolder(false) //remove verification placeholder
+                socket.current.disconnect(); // Disconnect the socket
+            })
         }catch(err) {
             dispatch(setError(err.response.data.message))
             console.log(err);
@@ -136,68 +157,6 @@ export default function Card() {
         }
     }
 
-    //Back Button logic going backwards through the steps
-    const handlePrevious =(e) => {
-        e.preventDefault()
-        dispatch(setSignUpStep(step>0 ?step - 1: step))
-    }
-
-    //handling the opacity of the next button if it's disabled
-    const handleButtonDisabilityOpacity = () => {
-        if(step === 0 ) {
-            if ((userData?.email === "" || userData?.password === "" || userData?.confpass === "" || userData?.pic === "")){
-                return "opacity-60"
-            }
-            else {
-                return "cursor-pointer"
-            }
-        }
-        else if(step === 1) {
-            if(userData?.proficiency === ""){
-                return "opacity-60"
-            }
-            else {
-                return "cursor-pointer"
-            }
-        }
-        else if(step === 2) {
-            if(userData?.goals.length === 0 || userData?.topics.length === 0){
-                return "opacity-60"
-            }
-            else{
-                return "cursor-pointer"
-            }
-        }
-    }
-
-    //setting the button disabled if the user didn't provide the data of the form
-    const handleButtonDisability = () => {
-        if(step === 0) {
-            if ((userData?.email === "" || userData?.password === "" || userData?.confpass === "" || userData?.pic === "")){
-                return true
-            }
-            else {
-                return false
-            }
-        }
-        else if(step ===1){
-            if(userData?.proficiency === "") {
-                return true
-            }
-            else {
-                return false
-            }
-        }
-        else if(step === 2) {
-            if(userData?.goals.length === 0 || userData?.topics.length === 0){
-                return true
-            }
-            else {
-                return false 
-            }
-        }
-    }
-
     //handle loading ui
     const handleLoading = () => {
         if(userData.isLoading)
@@ -215,14 +174,8 @@ export default function Card() {
             }
            </div>
             <div className={`flex ${step<2? "justify-end": "justify-between"} w-full flex-grow items-center`}>
-                <button type="button" onClick={handlePrevious} className={`text-button bg-lightbutton border-button  border space-x-2 ${step<2? "hidden": ""} sm:space-x-2 md:space-x-2 lg:space-x-2 xl:space-x-2 flex justify-center items-center sm:w-[15%] md:w-[15%] lg:w-[15%] xl:w-[15%] w-[20%] self-end h-10 text-center font-semibold text-lg px-4 py-2 rounded-full cursor-pointer hover:shadow`}>
-                        <GrFormPreviousLink  size="25"></GrFormPreviousLink>
-                        <span className="text-base hidden sm:block md:block lg:block xl:block">Back</span>
-                </button>
-                <button type="submit" disabled={handleButtonDisability()} className={`bg-button ${handleButtonDisabilityOpacity()} sm:space-x-2 md:space-x-2 lg:space-x-2 xl:space-x-2 border border-button flex justify-center items-center w-[20%] sm:w-[15%] md:w-[15%] lg:w-[15%] xl:w-[15%] self-end h-10 text-center font-semibold text-lg px-4 py-2 rounded-full text-white hover:shadow`}>
-                        <span className="text-base hidden sm:block md:block lg:block xl:block">Next</span>
-                        <GrFormNextLink size="25"></GrFormNextLink>
-                </button>
+                <BackButton></BackButton>
+                <NextButton></NextButton>
             </div>
         </form>
     );

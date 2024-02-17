@@ -3,9 +3,13 @@ import MailSignup from "./mailSignup";
 import Title from "./title";
 import { useDispatch } from "react-redux"; 
 import { useSelector } from "react-redux";
-import { setEmail, setPassword, setConfpass, setError, setIsLoading } from '../../state/slices/tutorSlice'
+import { setError, setIsLoading, setIsVerified } from '../../state/slices/tutorSlice'
 import Loading from '../Global/Loading'
 import axios from "axios";
+import io from 'socket.io-client'
+import {useRef} from 'react'
+import TutorFields from './fields'
+import SignUpButton from "./SignUpButton";
 
 
 export default function Form() {
@@ -15,20 +19,9 @@ export default function Form() {
     //initializing the tool to change the tutor data on the redux store
     const dispatch = useDispatch()
 
-    //handling the email field when typing
-    const handleEmailChange =(e) => {
-        dispatch(setEmail(e.target.value))
-    }
-    
-    //handling the password field when typing
-    const handlePasswordChange = (e) => {
-        dispatch(setPassword(e.target.value))
-    }
+    //using socket io
+    const socket = useRef(null)
 
-    //handling the confirm password field when typing 
-    const handleConfirmPasswordChange = (e) => {
-        dispatch(setConfpass(e.target.value))
-    }
 
     //sign up 
     const handleRegularSignup = async (e) => {
@@ -39,9 +32,27 @@ export default function Form() {
                 email: tutorData.email, 
                 pword: tutorData.password
             })
-            //saving tokens in localStorage
-            localStorage.setItem('refreshtoken', response.data.refreshToken)
-            localStorage.setItem('accesstoken', response.data.accessToken)
+            console.log(response)
+
+            //using websocket to detect when the user pressed the verification link sent to his email 
+            socket.current = io('http://localhost:5000') 
+            socket.current.emit('createRoom', `users_${tutorData.email}`) //joining room 
+
+            //setting listener for when the user verified his email
+            socket.current.on('emailVerified', (data) => {
+                console.log('Email verification status:', data);  
+                dispatch(setIsVerified(true))
+                //saving tokens in localstorage
+                localStorage.setItem('accesstoken', data.accessToken)
+                localStorage.setItem('refreshToken', data.refreshToken)
+                socket.current.disconnect(); // Disconnect the socket to avoid memory leaks
+            })
+
+            //listening for errors in the verification process
+            socket.current.on('emailVerificationFailed', (error) => {
+                dispatch(setError(error.message))
+                socket.current.disconnect(); // Disconnect the socket
+            })
             
         }catch(err) {
             dispatch(setError(err.response.data.message))
@@ -62,46 +73,8 @@ export default function Form() {
                     <Title></Title> 
                     <MailSignup></MailSignup>
                     <Orline width="10%"></Orline>
-                    <div className="flex flex-col w-full">
-                            <label className="block text-[#000] text-sm font-semibold mb-2">Email</label>
-                            <input
-                                className="shadow text-sm appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                type="email"
-                                value = {tutorData?.email}
-                                onChange={handleEmailChange}
-                                pattern="[^\s@]+@[^\s@]+\.[^\s@]+"
-                                placeholder="Email"
-                            />
-                    </div>
-                    <div className="flex flex-col w-full">
-                            <label className="block text-[#000] text-sm font-semibold mb-2">Password</label>
-                            <input
-                                className="shadow text-sm rounded-lg appearance-none border  w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                type="password"
-                                value = {tutorData?.password}
-                                onChange={handlePasswordChange}
-                                minLength="8"
-                                maxLength="30"
-                                pattern="^(?=.*[A-Z])(?=.*[0-9])[A-Za-z0-9]+$" // assuring the password contains at least one uppercase letter and one digit
-                                title={`${tutorData?.password.length<8? `Contains at least 8 characters (currently at ${tutorData.password.length} characters), `:""}Contains at least an UpperCase letter and a digit`}
-                                placeholder="Password"
-                            />
-                    </div>
-                    <div className="flex flex-col w-full">   
-                        <label className="block text-[#000] text-sm font-semibold mb-2">Confirm Password</label>
-                        <input
-                            className="shadow text-sm appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                            type="password"
-                            value = {tutorData?.confpass}
-                            pattern= {tutorData?.password}
-                            onChange={handleConfirmPasswordChange}
-                            placeholder="Confirm Password"
-                            title="Passwords do not match"
-                        />
-                    </div>
-                    <button type="submit" className={`bg-button border flex justify-center items-center w-full py-2 px-3 h-10 rounded-lg text-center font-semibold text-lg text-white hover:shadow`}>
-                        <span className="text-base sm:block md:block lg:block xl:block">SIGN UP</span>
-                    </button>
+                    <TutorFields></TutorFields>
+                    <SignUpButton></SignUpButton>
                     <span className="text-darkg text-base">Already have an account? <span className="cursor-pointer text-button"> Log in</span></span>
                 </>
             }
