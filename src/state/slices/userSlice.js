@@ -11,7 +11,8 @@ const initialState = {
   isLoading: false, 
   signupStep: 0, //indicates the user is currently at which step in the sign up process
   isVerified: false,
-  error: ''
+  error: '',
+  verificationPlaceholder: false
 }
 
 //slice that contains all the sign_up user informations
@@ -69,6 +70,9 @@ export const userSlice = createSlice({
     setIsVerified: (state, action) => {
       state.isVerified = action.payload
     },
+    setVerificationLearner: (state, action) => {
+      state.verificationPlaceholder = action.payload
+    },
     resetUserData: (state, action) => {
       state.email = ''
       state.password = ''
@@ -83,5 +87,5 @@ export const userSlice = createSlice({
 })
 
 
-export const { setEmail, setPassword, setConfpass, setPic, setProficiency, setGoals, setTopics, setSignUpStep, resetUserData, setError, setIsLoading, setIsVerified} = userSlice.actions
+export const { setEmail, setPassword, setConfpass, setPic, setProficiency, setGoals, setTopics, setSignUpStep, resetUserData, setError, setIsLoading, setIsVerified, setVerificationLearner} = userSlice.actions
 export default userSlice.reducer

@@ -6,7 +6,8 @@ const initialState = {
   confpass: '',
   isLoading: false,
   isVerified: 0,
-  error: ''
+  error: '',
+  verificationPlaceholder: false
 }
 
 //slice that contains all the sign_up tutor informations
@@ -32,6 +33,9 @@ export const userSlice = createSlice({
     setIsVerified: (state, action) => {
       state.isVerified = action.payload
     },
+    setVerificationTutor: (state, action) => {
+      state.verificationPlaceholder = action.payload
+    },
     resetUserData: (state, action) => {
       state.email = ''
       state.password = ''
@@ -42,5 +46,5 @@ export const userSlice = createSlice({
 })
 
 
-export const { setEmail, setPassword, setConfpass, setIsLoading, resetUserData, setError, setIsVerified} = userSlice.actions
+export const { setEmail, setPassword, setConfpass, setIsLoading, resetUserData, setError, setIsVerified, setVerificationTutor} = userSlice.actions
 export default userSlice.reducer

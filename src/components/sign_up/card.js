@@ -4,7 +4,7 @@ import Second from './second_step'
 import Third from './third_step'
 import {useSelector} from 'react-redux'
 import { useDispatch } from 'react-redux'
-import {setSignUpStep, setIsLoading, setIsVerified} from '../../state/slices/userSlice'
+import {setSignUpStep, setIsLoading, setIsVerified, setVerificationLearner} from '../../state/slices/userSlice'
 import { setError } from '../../state/slices/userSlice'
 import axios from 'axios'
 import axiosInstance from '../../interceptors/axiosInterceptor';
@@ -14,7 +14,6 @@ import {useRef} from 'react'
 import io from 'socket.io-client'
 import NextButton from './nextButton'
 import BackButton from './backButton'
-import {useState} from 'react'
 import VerifEmail from '../Global/VerifEmail'
 
 export default function Card() { 
@@ -30,11 +29,10 @@ export default function Card() {
     //initializing the tool to change the user data on the redux store
     const dispatch = useDispatch()
 
-    const [verificationPlaceHolder, setVerificationPlaceHolder] = useState(false)
 
     //steps
     const content = [
-        verificationPlaceHolder? <VerifEmail></VerifEmail>:<First></First>,
+        userData.verificationPlaceholder? <VerifEmail role="learner"></VerifEmail>:<First></First>, //showing the email sent ui after sign up
         <Second></Second>,
         <Third></Third>
     ]
@@ -53,7 +51,7 @@ export default function Card() {
                 pfp: userData.pic
             })
             console.log(response);
-            setVerificationPlaceHolder(true)
+            dispatch(setVerificationLearner(true))
             //using websocket to detect when the user pressed the verification link sent to his email 
             socket.current = io('http://localhost:5000') 
             socket.current.emit('createRoom', `users_${userData.email}`) //joining room 
@@ -62,7 +60,7 @@ export default function Card() {
             socket.current.on('emailVerified', (data) => {
                 console.log('Email verification status:', data);  
                 dispatch(setSignUpStep(step<2? step + 1: step)) //moving to next sign up step  
-                setVerificationPlaceHolder(false) //remove verification placeholder
+                dispatch(setVerificationLearner(false)) //remove verification placeholder
                 dispatch(setIsVerified(true))
                 
                 //saving tokens in localstorage
@@ -74,7 +72,7 @@ export default function Card() {
             //listening for errors in the verification process
             socket.current.on('emailVerificationFailed', (error) => {
                 dispatch(setError(error.message))
-                setVerificationPlaceHolder(false) //remove verification placeholder
+                dispatch(setVerificationLearner(false)) //remove verification placeholder
                 socket.current.disconnect(); // Disconnect the socket
             })
         }catch(err) {
@@ -175,7 +173,12 @@ export default function Card() {
            </div>
             <div className={`flex ${step<2? "justify-end": "justify-between"} w-full flex-grow items-center`}>
                 <BackButton></BackButton>
-                <NextButton></NextButton>
+                {
+                    !userData.verificationPlaceholder && !userData.isLoading? //if it's loading or we're in verification part, the button doesn't show up
+                    <NextButton></NextButton>
+                    :
+                    null
+                }
             </div>
         </form>
     );

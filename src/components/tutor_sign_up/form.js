@@ -3,13 +3,14 @@ import MailSignup from "./mailSignup";
 import Title from "./title";
 import { useDispatch } from "react-redux"; 
 import { useSelector } from "react-redux";
-import { setError, setIsLoading, setIsVerified } from '../../state/slices/tutorSlice'
+import { setError, setIsLoading, setIsVerified, setVerificationTutor} from '../../state/slices/tutorSlice'
 import Loading from '../Global/Loading'
 import axios from "axios";
 import io from 'socket.io-client'
 import {useRef} from 'react'
 import TutorFields from './fields'
 import SignUpButton from "./SignUpButton";
+import VerifEmail from "../Global/VerifEmail";
 
 
 export default function Form() {
@@ -23,6 +24,7 @@ export default function Form() {
     const socket = useRef(null)
 
 
+
     //sign up 
     const handleRegularSignup = async (e) => {
         e.preventDefault()
@@ -33,6 +35,7 @@ export default function Form() {
                 pword: tutorData.password
             })
             console.log(response)
+            dispatch(setVerificationTutor(true))
 
             //using websocket to detect when the user pressed the verification link sent to his email 
             socket.current = io('http://localhost:5000') 
@@ -41,6 +44,7 @@ export default function Form() {
             //setting listener for when the user verified his email
             socket.current.on('emailVerified', (data) => {
                 console.log('Email verification status:', data);  
+                dispatch(setVerificationTutor(false))
                 dispatch(setIsVerified(true))
                 //saving tokens in localstorage
                 localStorage.setItem('accesstoken', data.accessToken)
@@ -50,6 +54,7 @@ export default function Form() {
 
             //listening for errors in the verification process
             socket.current.on('emailVerificationFailed', (error) => {
+                dispatch(setVerificationTutor(false))
                 dispatch(setError(error.message))
                 socket.current.disconnect(); // Disconnect the socket
             })
@@ -69,14 +74,18 @@ export default function Form() {
                 tutorData.isLoading? 
                 <Loading></Loading>
                 :
-                <>
-                    <Title></Title> 
-                    <MailSignup></MailSignup>
-                    <Orline width="10%"></Orline>
-                    <TutorFields></TutorFields>
-                    <SignUpButton></SignUpButton>
-                    <span className="text-darkg text-base">Already have an account? <span className="cursor-pointer text-button"> Log in</span></span>
-                </>
+                    tutorData.verificationPlaceholder?
+                    <VerifEmail role="tutor"></VerifEmail>
+                    :
+                    <>
+                        <Title></Title> 
+                        <MailSignup></MailSignup>
+                        <Orline width="10%"></Orline>
+                        <TutorFields></TutorFields>
+                        <SignUpButton></SignUpButton>
+                        <span className="text-darkg text-base">Already have an account? <span className="cursor-pointer text-button"> Log in</span></span>
+                    </>
+
             }
         </form >
     );

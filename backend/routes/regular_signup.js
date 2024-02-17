@@ -48,8 +48,9 @@ router.post('/regular_signup', (req, res) => {
                                 //making verification token
                                 const {verificationToken} = await generateVerificationToken(user)
                                 
-                                const url = `${process.env.BASE_URL}users/verify/${verificationToken}`
                                 //sending verification email to user 
+                                const url = `${process.env.BASE_URL}users/verify/${verificationToken}`
+                                //making the email beautiful
                                 const emailHtml = `<body style="font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px; font-family: 'Nunito'; background-color: #F9F4F0;">
                                 <table style="max-width: 600px; margin: 0 auto; background-color: #fff; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
                                     <tr>
