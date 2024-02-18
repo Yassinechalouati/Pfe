@@ -1,7 +1,7 @@
-import Form from "../components/tutor_sign_up/form"
-import Errorpop from "../components/Global/Error_popup";
+import Form from "../../components/tutor_sign_up/form"
+import Errorpop from "../../components/Global/Error_popup";
 import { useSelector } from "react-redux";
-import { setError } from "../state/slices/tutorSlice"
+import { setError } from "../../state/slices/tutorSlice"
 
 export default function TutorSignUp() {
     //Signup Error from store

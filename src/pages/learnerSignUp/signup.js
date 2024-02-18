@@ -1,7 +1,7 @@
-import Card from '../components/sign_up/card'
-import Errorpop from '../components/Global/Error_popup'
+import Card from '../../components/sign_up/card'
+import Errorpop from '../../components/Global/Error_popup'
 import { useSelector } from "react-redux"
-import { setError } from "../state/slices/userSlice";
+import { setError } from "../../state/slices/userSlice";
 
 export default function Signup() {
     //Signup Error from store
