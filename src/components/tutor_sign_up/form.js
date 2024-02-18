@@ -75,7 +75,7 @@ export default function Form() {
                 <Loading></Loading>
                 :
                     tutorData.verificationPlaceholder?
-                    <VerifEmail role="tutor"></VerifEmail>
+                    <VerifEmail role="Tutor" user= {tutorData}></VerifEmail>
                     :
                     <>
                         <Title></Title> 

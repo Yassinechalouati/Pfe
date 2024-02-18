@@ -4,6 +4,7 @@ const mysql= require('../helpers/Sql_connection')
 const bcrypt = require('bcrypt');
 const generateVerificationToken = require('../helpers/generateVerificationToken')
 const sendEmail = require('../helpers/sendEmail')
+const {generateLearnerEmailHtml } = require('../helpers/emailContent')
 
 
 router.post('/regular_signup', (req, res) => {
@@ -48,24 +49,10 @@ router.post('/regular_signup', (req, res) => {
                                 //making verification token
                                 const {verificationToken} = await generateVerificationToken(user)
                                 
-                                //sending verification email to user 
                                 const url = `${process.env.BASE_URL}users/verify/${verificationToken}`
                                 //making the email beautiful
-                                const emailHtml = `<body style="font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px; font-family: 'Nunito'; background-color: #F9F4F0;">
-                                <table style="max-width: 600px; margin: 0 auto; background-color: #fff; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
-                                    <tr>
-                                        <td style="background-color: #F28585; height: 85px; font-weight: bold; color: white; border-top-left-radius: 10px; border-top-right-radius: 10px; font-size: 25px; text-align: center;">Welcome to Elearning!</td>
-                                    </tr>
-                                    <tr>
-                                        <td style="background-color: white; padding: 20px; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px;">
-                                            <img src="https://i.imgur.com/n85QHTn.png" alt="confettis" style="display: block; margin: 0 auto; width: 200px; height: 200px;">
-                                            <p style="margin-top: 50px; font-size: 19px; font-weight: bold; text-align: left;">Hey Knowledge Seeker,</p>
-                                            <p style="margin-top: 10px; color: #767676; font-size: 16px; text-align: left;">Congratulations on taking the first step towards mastering a new language! 🎉 Get ready to embark on an exciting journey filled with words, culture, and connections. Your language adventure starts now! Happy learning! 🚀</p>
-                                            <p style="margin-top: 35px; font-size: 16px; text-align: center;"><a href="${url}" target="_blank" style="padding: 10px 20px; background-color: #F28585; border-radius: 10px; text-decoration: none; color: white;">Verify Email</a></p>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </body>`
+                                const emailHtml = generateLearnerEmailHtml(url)
+                                //sending verification email to user 
                                 await sendEmail(email, "Email Verification", emailHtml)
                                 res.status(201).json({message: "Email sent", roomId: `users_${email}`}) 
                             }

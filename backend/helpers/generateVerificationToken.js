@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken')
 
-// Function to generate a token with expiration
+// Function to generate a verification token with expiration
 const generateVerificationToken = async(user) => {
     try{
         const payload = {id: user.id, role: user.role}

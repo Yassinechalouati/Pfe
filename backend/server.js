@@ -49,6 +49,7 @@ const personalizeRouter = require('./routes/presonalize')
 const beginRouter = require('./routes/begin')
 const tutorGoogleSignUp = require('./routes/tutor_google_signup')
 const tutorRegularSignupRouter = require('./routes/tutor_Regular_signup')
+const resendVerificationRouter = require('./routes/resendVerification')
 
 //apis
 app.use('/', googleSignupRouter)
@@ -59,6 +60,7 @@ app.use('/', personalizeRouter)
 app.use('/', beginRouter)
 app.use('/tutor', tutorGoogleSignUp)
 app.use('/tutor', tutorRegularSignupRouter)
+app.use('/resend', resendVerificationRouter)
 
 // Socket.io logic
 require('./helpers/socketHandler')(io);

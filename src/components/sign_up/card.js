@@ -32,7 +32,7 @@ export default function Card() {
 
     //steps
     const content = [
-        userData.verificationPlaceholder? <VerifEmail role="learner"></VerifEmail>:<First></First>, //showing the email sent ui after sign up
+        userData.verificationPlaceholder? <VerifEmail role="Learner" user= {userData}></VerifEmail>:<First></First>, //showing the email sent ui after sign up
         <Second></Second>,
         <Third></Third>
     ]
