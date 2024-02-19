@@ -62,9 +62,6 @@ function VerifEmail({role, user}) {
                     dispatch(setLearnerVerified(true))
                     dispatch(setVerificationLearner(false))//handling the email sent ui 
                     console.log(user.isVerified)
-                    //saving tokens in localstorage
-                    localStorage.setItem('accesstoken', data.accessToken)
-                    localStorage.setItem('refreshToken', data.refreshToken)
                     socket.current.disconnect(); // Disconnect the socket to avoid memory leaks
                 })
     
@@ -80,9 +77,7 @@ function VerifEmail({role, user}) {
                 socket.current.on('emailVerified', (data) => {
                     dispatch(setTutorVerified(true))
                     dispatch(setVerificationTutor(false))//handling the email sent ui 
-                    //saving tokens in localstorage
-                    localStorage.setItem('accesstoken', data.accessToken)
-                    localStorage.setItem('refreshToken', data.refreshToken)
+                    
                     socket.current.disconnect(); // Disconnect the socket to avoid memory leaks
                 })
     

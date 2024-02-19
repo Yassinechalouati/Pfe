@@ -48,7 +48,7 @@ export default function Form() {
                 dispatch(setIsVerified(true))
                 //saving tokens in localstorage
                 localStorage.setItem('accesstoken', data.accessToken)
-                localStorage.setItem('refreshToken', data.refreshToken)
+                localStorage.setItem('refreshtoken', data.refreshToken)
                 socket.current.disconnect(); // Disconnect the socket to avoid memory leaks
             })
 

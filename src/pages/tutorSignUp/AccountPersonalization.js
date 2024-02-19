@@ -8,6 +8,7 @@ function AccountPersonalization() {
     return (
         <form className="h-screen w-screen flex flex-col bg-backg">
             <StepBar></StepBar>
+            <SecondPhase></SecondPhase>
         </form>
     );
 }

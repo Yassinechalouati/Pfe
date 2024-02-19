@@ -1,34 +1,27 @@
-/*import { useState, useEffect } from 'react';
-import * as faceapi from 'face-api.js';
+import { useState} from 'react';
+import axiosInstance from '../../interceptors/axiosInterceptor';
 
 function ProfilePictureUploader() {
     const [errorMessage, setErrorMessage] = useState('');
 
-    useEffect(() => {
-        console.log("here");
-        // Load face detection model when component mounts
-        async function loadFaceDetectionModel() {
-            await faceapi.nets.ssdMobilenetv1.loadFromUri('/models')
-        }
-        loadFaceDetectionModel();
-    }, []); // Empty dependency array ensures this effect runs only once
-
     const handleImageUpload = async (event) => {
-        const imageFile = event.target.files[0];
-        
-        if (imageFile) {
-            const image = await faceapi.bufferToImage(imageFile)
-            console.log("Before detections");
-            const detections = await faceapi.detectAllFaces(image)
-            console.log("detections: ", detections);
-            if (detections.length === 0) {
-                setErrorMessage('Error: No face detected in the image. Please upload a picture with your face visible.');
-            } else {
-                setErrorMessage('');
-                // Proceed with profile picture submission
-            }
+        const imageFile = event.target.files[0]
+        console.log(imageFile)
+        const formData = new FormData()
+        formData.append('image', imageFile)
+    
+        try {
+            const response = await axiosInstance.post('http://localhost:5000/imageFaceDetection', formData, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('accesstoken')}`
+                }
+            });
+            console.log(response);
+        } catch (err) {
+            console.log(err);
         }
-    };
+    }
+    
     
     console.log(errorMessage);
     return (
@@ -40,4 +33,3 @@ function ProfilePictureUploader() {
 }
 
 export default ProfilePictureUploader;
-*/

@@ -65,7 +65,7 @@ export default function Card() {
                 
                 //saving tokens in localstorage
                 localStorage.setItem('accesstoken', data.accessToken)
-                localStorage.setItem('refreshToken', data.refreshToken)
+                localStorage.setItem('refreshtoken', data.refreshToken)
                 socket.current.disconnect(); // Disconnect the socket to avoid memory leaks
             })
 
@@ -93,7 +93,7 @@ export default function Card() {
             }, 
             {
                 headers: {
-                    Authorization: `Bearer ${localStorage.getItem('accessToken')}`
+                    Authorization: `Bearer ${localStorage.getItem('accesstoken')}`
                 }
             })
             console.log(response);
@@ -122,7 +122,7 @@ export default function Card() {
             }, 
             {
                 headers: {
-                    Authorization: `Bearer ${localStorage.getItem('accessToken')}`
+                    Authorization: `Bearer ${localStorage.getItem('accesstoken')}`
                 }
             })
             console.log(response);
