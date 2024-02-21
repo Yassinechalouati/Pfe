@@ -5,7 +5,7 @@
 /.pnp
 .pnp.js
 .env
-/Service/models
+/Service/Service
 
 # testing
 /coverage
