@@ -26,7 +26,7 @@ export default function Errorpop({error, setError}) {
 
         // Clear the timeout on component unmount to avoid memory leaks
         return () => clearTimeout(timeoutId);
-    }, [error, dispatch, setError]);
+    }, [error, dispatch]);
 
     return(
         <div

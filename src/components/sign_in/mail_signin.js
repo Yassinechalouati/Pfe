@@ -1,11 +1,68 @@
 import { FcGoogle } from "react-icons/fc";
+import { setLearnerError, setTutorError } from "../../state/slices/loginSlice"
+import { useGoogleLogin } from '@react-oauth/google';
+import { useDispatch } from "react-redux";
+import axios from 'axios'
 
 
 export default function MailSignIn() {
+    //knowing whether it's a tutor or learner signing up
+    const path = window.location.pathname;
+
+    // Split the path by "/"
+    const segments = path.split('/');
+
+    // Get the value of the first segment
+    const firstSegment = segments[1]; 
+
+    const dispatch = useDispatch()
+
+    //handle sign in via google
+    const handleLogin = useGoogleLogin({
+        onSuccess: async (response) => {
+            try{
+                //send post request with google token in header
+                const resp = await axios.post(
+                    'http://localhost:5000/GoogleLogin',
+                    {
+                        information: firstSegment //specifying if it's a tutor or a learner
+                    },
+                    {
+                        headers: {
+                            Authorization: `Bearer ${response.access_token}`
+                        }
+                    }
+                )
+                console.log(resp);
+                localStorage.clear();
+                localStorage.setItem('refreshtoken', resp.data.refreshToken)
+                localStorage.setItem('accesstoken', resp.data.accessToken)
+            }catch(err) {
+                const error = err.response.data.message
+                if(firstSegment === 'tutor') {
+                    dispatch(setTutorError(error))
+                }else {
+                    dispatch(setLearnerError(error))
+                }
+                console.log(err)
+            }finally{
+                //manage loading here
+            }
+        },
+        onError: (err) => {
+            const error = "Service Unavailable"
+            console.log(err);
+            if(firstSegment === 'tutor') {
+                dispatch(setTutorError(error))
+            }else {
+                dispatch(setLearnerError(error))
+            }
+        }
+      });
     return(
-        <div className="w-full h-14 cursor-pointer p-2 flex justify-center hover:shadow items-center space-x-3 border border-[#E5E5E5] rounded-xl">
+        <div onClick={handleLogin} className="w-full h-14 cursor-pointer p-2 flex justify-center hover:shadow items-center space-x-3 border border-[#E5E5E5] rounded-xl">
                 <FcGoogle size="23" />
-                <span className="font-semibold text-sm">Sign in with Google</span>
+                <span className="font-semibold text-sm">Continue with Google</span>
         </div> 
     );
 

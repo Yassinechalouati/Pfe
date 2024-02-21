@@ -1,17 +1,23 @@
-from django.shortcuts import render
-from django.http import JsonResponse
+import logging
+from django.http import JsonResponse, HttpResponseBadRequest
 from django.views.decorators.csrf import csrf_exempt
 from face_recognition import load_image_file, face_locations
 
-@csrf_exempt #besh taaml api call maghir token 
-def detectface(request) : 
-    if(request.method == 'POST' and request.FILES.get('image')):
-        imageFile = request.FILES['image']
-        image = load_image_file(imageFile)
-        face_encodings_list = face_locations(image)
-        if face_encodings_list:
-            return JsonResponse({"faces":True})
-        else:
-            return JsonResponse({"faces":False})
+logger = logging.getLogger(__name__)
 
-#nkhaddem server bel command adhika python manage.py runserver
+@csrf_exempt
+def detectface(request):
+    if request.method == 'POST':
+        try:
+            imageFile = request.FILES['image']
+            image = load_image_file(imageFile)
+            face_encodings_list = face_locations(image)
+            if face_encodings_list:
+                return JsonResponse({"faces": True})
+            else:
+                return JsonResponse({"faces": False})
+        except Exception as e:
+            logger.error(f"Error processing image: {e}")
+            return HttpResponseBadRequest("Error processing image")
+    else:
+        return HttpResponseBadRequest("Image file not provided or invalid method")

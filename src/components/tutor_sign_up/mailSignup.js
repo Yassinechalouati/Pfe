@@ -25,6 +25,8 @@ function MailSignup() {
                         }
                     }
                 )
+                console.log(resp);
+                localStorage.clear();
                 localStorage.setItem('refreshtoken', resp.data.refreshToken)
                 localStorage.setItem('accesstoken', resp.data.accessToken)
 
@@ -45,7 +47,7 @@ function MailSignup() {
     return (
         <div onClick={handleSignUp} className="w-full cursor-pointer p-2 flex bg-white justify-center hover:shadow items-center space-x-3 border border-[#E5E5E5] rounded-xl">
                 <FcGoogle size="23" />
-                <span className="font-semibold text-sm">Sign up with Google</span>
+                <span className="font-semibold text-sm">Continue with Google</span>
         </div> 
     );
 }

@@ -3,24 +3,32 @@ const router = express.Router()
 const auth = require('../middleware/auth')
 const roleCheck = require('../middleware/roleCheck')
 const axios = require('axios')
+const FormData = require('form-data');
 
 
 router.post('/imageFaceDetection', auth, roleCheck(["Tutor"]), async (req, res) => {
-    console.log(req);
+    //checking whether the image is sent or not
     if (!req.files || !req.files.image) {
         console.log("error fichier server 1");
         return res.status(400).json({ error: 'Image file not provided' });
     }
 
     const imageFile = req.files.image;
+    console.log(req.files.image);
 
     try {
-        const formData = new FormData(); // Create a Blob from image file data
-        formData.append('image', new Blob(imageFile.data, { type: 'application/octet-stream' }), {filename: imageFile.name});
-        const response = await axios.post('http://localhost:4000/service/image/detect-face', formData,
-        )
+        //send the image to the django server 
+        const formData = new FormData();
+        formData.append('image', imageFile.data, {
+            filename: imageFile.name,
+            contentType: imageFile.mimetype,
+            knownLength: imageFile.size
+        });
+        const response = await axios.post('http://127.0.0.1:8000/service/recognize/',
+         formData
+         );
         console.log(response);
-        res.status(200).json({message: response.data.message})
+        res.status(200).json({message: response.data.faces})
     }catch(err) {
         console.log("service server error: ",err)
         res.status(500).json({message: "Internal Server Error"})

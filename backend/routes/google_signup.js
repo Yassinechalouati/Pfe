@@ -3,7 +3,8 @@ const router = express.Router()
 const mysql= require('../helpers/Sql_connection')
 const verifyGoogleToken = require('../helpers/googleTokenverif')
 const generateRefreshToken = require('../helpers/generateRefreshToken')
-const generateAccessToken = require('../helpers/generateAccessToken')
+const generateAccessToken = require('../helpers/generateAccessToken');
+const insertLearner = require('../helpers/learnerInsertion');
 
 
 router.post('/googlesignup', async (req, res) => {
@@ -22,24 +23,7 @@ router.post('/googlesignup', async (req, res) => {
                     }else {
                         //if the email doesn't exist insert it
                         if (result.length <= 0){
-                            const query = "INSERT INTO learner(firstname, lastname, email, pword, pfp, isVerified) VALUES (?, ?, ?, ?, ?, 1)"
-                            mysql.query(query, [payload.given_name, payload.family_name, payload.email, '', payload.picture], async (err, result)=> {
-                                if(err) {
-                                    //if there is error in data base return error 
-                                    console.log(err)
-                                    res.status(500).json({message:"Internal Server Error"})
-                                }
-                                else{
-                                    //if the operation was succesful return tokens
-                                    const userId = result.insertId
-                                    const user = {id: userId, role: "Learner"}
-
-                                    const {accessToken} = await generateAccessToken(user)
-                                    const {refreshToken} = await generateRefreshToken(user)
-                                    
-                                    res.status(201).json({message:"Signed up succesfully", refreshToken: refreshToken, accessToken: accessToken})
-                                }
-                            })
+                            insertLearner(payload, res)
                         }
                         else {
                             //if the email exists return Error

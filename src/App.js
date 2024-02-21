@@ -1,11 +1,11 @@
 import './App.css';
+import React from 'react';
 import Signin from './pages/signin';
 import Signup from './pages/learnerSignUp/signup'
 import TutorSignUp from './pages/tutorSignUp/Signup';
 import AccountPersonalization from './pages/tutorSignUp/AccountPersonalization';
 import Verification from './pages/EmailVerif'
 import {Route, BrowserRouter as Router, Routes} from 'react-router-dom'
-import React from 'react';
 
 function App() {
   return (
@@ -17,6 +17,7 @@ function App() {
         </Route>
         <Route path='/tutor/signup' element={<TutorSignUp></TutorSignUp>}></Route>
         <Route path='/learner/signin' element={<Signin></Signin>}></Route>
+        <Route path='/tutor/signin' element={<Signin></Signin>}></Route>
         <Route path='/users/verify/:token' element={<Verification></Verification>}></Route>
         <Route path='/tutor/signup/personalization' element={<AccountPersonalization></AccountPersonalization>}></Route>
       </Routes>

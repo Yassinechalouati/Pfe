@@ -64,6 +64,7 @@ export default function Card() {
                 dispatch(setIsVerified(true))
                 
                 //saving tokens in localstorage
+                localStorage.clear();
                 localStorage.setItem('accesstoken', data.accessToken)
                 localStorage.setItem('refreshtoken', data.refreshToken)
                 socket.current.disconnect(); // Disconnect the socket to avoid memory leaks

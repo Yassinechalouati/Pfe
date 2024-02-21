@@ -54,6 +54,8 @@ const tutorGoogleSignUp = require('./routes/tutor_google_signup')
 const tutorRegularSignupRouter = require('./routes/tutor_Regular_signup')
 const resendVerificationRouter = require('./routes/resendVerification')
 const imageFaceDetectionCallRouter = require('./routes/imageFaceDetectionCall')
+const regularLoginRouter = require('./routes/regular_login')
+const googleLoginRouter = require('./routes/googleLogin')
 
 //apis
 app.use('/', googleSignupRouter)
@@ -66,6 +68,8 @@ app.use('/tutor', tutorGoogleSignUp)
 app.use('/tutor', tutorRegularSignupRouter)
 app.use('/resend', resendVerificationRouter)
 app.use('/', imageFaceDetectionCallRouter )
+app.use('/', regularLoginRouter)
+app.use('/', googleLoginRouter)
 
 // Socket.io logic
 require('./helpers/socketHandler')(io);

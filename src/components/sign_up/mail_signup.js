@@ -29,6 +29,7 @@ export default function Mail() {
                         }
                     }
                 )
+                localStorage.clear();
                 localStorage.setItem('refreshtoken', resp.data.refreshToken)
                 localStorage.setItem('accesstoken', resp.data.accessToken)
                 dispatch(setSignUpStep(step<2? step + 1: step))
@@ -48,7 +49,7 @@ export default function Mail() {
     return(
         <div onClick={handleLogin} className="w-full cursor-pointer p-2 flex justify-center hover:shadow items-center space-x-3 border border-[#E5E5E5] rounded-xl">
                 <FcGoogle size="23" />
-                <span className="font-semibold text-sm">Sign up with Google</span>
+                <span className="font-semibold text-sm">Continue with Google</span>
         </div> 
     );
 
