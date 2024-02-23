@@ -1,12 +1,19 @@
 import Phase from './Phase'
 
 function StepBar() {
+    const steps = [
+        'Welcome!',
+        'Intro',
+        'Profile',
+        'Connection Test'
+    ]
     return (
         <div className="w-full justify-between h-[10%] flex ">
-            <Phase label='Welcome!'></Phase>
-            <Phase label='Intro'></Phase>
-            <Phase label='Profile'></Phase>
-            <Phase label='Connection Test'></Phase>
+            {
+                steps.map((phase, index) => {
+                    return <Phase key={index} index={index} label={phase} ></Phase>
+                })
+            }
         </div>
     );
 }

@@ -12,7 +12,7 @@ export default function Second() {
 
     return(
         <>
-             <span className="font-bold self-start text-lg text-[#000]">
+            <span className="font-bold self-start text-lg text-[#000]">
                 How would you like to describe your English proficiency?
             </span>
             {
