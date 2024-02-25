@@ -1,49 +1,46 @@
-import { IoIosArrowDown } from "react-icons/io";
-
+import {useEffect, useRef} from 'react'
+import { setListOfLanguagesVisibility, setListOfWorkExperienceVisibility } from '../../state/slices/listSlice';
+import { useDispatch } from 'react-redux';
 function Modal(props) {
-    const languages = [
-        'English',
-        'French',
-        'Arabic',
-    ]
+    const modalRef = useRef(null)
+
+    const dispatch = useDispatch()
+
+    //when clicking outside of the modal we hide it 
+    const handleOutsideClick = (event) => {
+        if (modalRef.current && !modalRef.current.contains(event.target)) {
+            if(props.title === 'Languages') {
+                dispatch(setListOfLanguagesVisibility(false))
+            }
+            else if (props.title === 'Work Experience') {
+                dispatch(setListOfWorkExperienceVisibility(false))
+            }
+        }
+      };
+
+    //control the visibility of the modal
+    useEffect(() => {
+        document.addEventListener('mousedown', handleOutsideClick);
+    
+        // Cleanup the event listener when the component unmounts
+        return () => {
+          document.removeEventListener('mousedown', handleOutsideClick);
+        };
+      }, []);
+
+    
     return (
     <div className="fixed inset-0 bg-black bg-opacity-30 backdrop-blur-[1px] z-50 flex justify-center items-center">
-        <div className={`bg-backg w-[90%] px-5 py-3 md:w-[50%] lg:w-[35%] xl:w-[35%] max-h-[80%] min-h-[50%] flex flex-col justify-between rounded-md `} >
+        <div ref={modalRef} className={`bg-backg w-[90%] px-5 py-3 md:w-[50%] lg:w-[35%] xl:w-[35%] max-h-[80%] min-h-[50%] flex flex-col justify-between rounded-md `} >
             <div className="flex space-x-2 py-3 items-center">
                 {
                     props.icon
                 }
-                <span className="text-black">{props.title}</span>
+                <span className="text-black text-xl">{props.title}</span>
             </div>
-            <div className="h-full w-full flex flex-col overflow-y-auto space-y-5">
-                <div className="relative flex flex-col w-[70%]">
-                    <select
-                        className="block appearance-none w-full bg-white border border-gray-300 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
-                        name="languages"
-                    >
-                        {
-                            languages.map((language, index)=> {
-                                return <option key={index} value={language}>{language}</option>
-                            })
-                        }
-                    </select>
-                    <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                        <IoIosArrowDown></IoIosArrowDown>
-                    </div>
-                </div>
-                <hr className="h-1 w-full"></hr>
-            </div>
-            <button type="button" className="text-button self-start px-4 py-2">
-                ADD LANGUAGE
-            </button>
-            <div className="flex justify-end space-x-4">
-                <button type="button" className="text-button  px-4 py-2">
-                    CANCEL
-                </button>
-                <button type="button" className=" bg-button px-4 py-2 rounded-lg text-white hover:shadow">
-                    Save
-                </button>
-            </div>
+            {
+                props.content
+            }
         </div>
     </div>
     );

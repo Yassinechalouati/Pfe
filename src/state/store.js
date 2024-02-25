@@ -3,6 +3,7 @@ import userReducer from './slices/userSlice'
 import errorReducer from './slices/errorSlice'
 import tutorReducer from './slices/tutorSlice'
 import loginReducer from './slices/loginSlice'
+import listReducer from './slices/listSlice'
 
 //store that contains a global state
 export const store = configureStore({
@@ -11,5 +12,6 @@ export const store = configureStore({
     Error: errorReducer, // contains Errors to show
     tutorData: tutorReducer, //contains tutor signup Data
     loginData: loginReducer, //contains user login Data
+    listData: listReducer, //contains the lists of the tutor personalization part
   }
 })

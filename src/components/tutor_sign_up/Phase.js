@@ -7,7 +7,6 @@ import { useSelector } from "react-redux";
 const Phase = ({label, index}) => {
     const tutorData = useSelector(state => state.tutorData)
 
-    console.log(tutorData.steps===index);
     return (
         <div className={`flex justify-center items-center space-x-1 w-[25%] border`}>
             {

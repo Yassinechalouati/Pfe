@@ -3,12 +3,10 @@ import { FcAbout } from "react-icons/fc";
 import { MdLanguage } from "react-icons/md";
 import { MdWork } from "react-icons/md";
 import { RiGraduationCapFill } from "react-icons/ri";
-import { AiFillSafetyCertificate } from "react-icons/ai";
 import AboutMe from './AboutMe'
 import Languages from './Languages'
 import WorkExperience from './WorkExperience'
 import Education from './Education'
-import TeachingCertificates from './TeachingCertificates'
 import TeachingStyle from './TeachingStyle'
 
 
@@ -26,7 +24,7 @@ function ThirdPhase() {
         },
         {
            icon: <MdLanguage color="#767676" size="17"></MdLanguage>,
-           placeholder: 'Kindly choose your preferred English accent and indicate any additional languages you speak...',
+           placeholder: 'Kindly indicate languages you speak.',
            title: 'Languages'
         },
         {
@@ -39,11 +37,6 @@ function ThirdPhase() {
            placeholder: '',
            title: 'Education'
         },
-        {
-           icon: <AiFillSafetyCertificate color="#767676" size="17"></AiFillSafetyCertificate>,
-           placeholder: '',
-           title: 'Teaching Certificates'
-        },
     ]
     return (
         <div className="w-full h-[80%] space-y-2 py-3 overflow-y-auto"> 
@@ -52,7 +45,6 @@ function ThirdPhase() {
             <Languages {...element[2]}></Languages>
             <WorkExperience {...element[3]}></WorkExperience>
             <Education {...element[4]}></Education>
-            <TeachingCertificates {...element[5]}></TeachingCertificates>
         </div>
     );
 }
