@@ -13,5 +13,11 @@ export const store = configureStore({
     tutorData: tutorReducer, //contains tutor signup Data
     loginData: loginReducer, //contains user login Data
     listData: listReducer, //contains the lists of the tutor personalization part
-  }
+  },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: ['tutor_data/setIntroductionVideo'],
+      },
+    }),
 })

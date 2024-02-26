@@ -7,9 +7,14 @@ const initialState = {
   isLoading: false,
   isVerified: 0,
   description: '',
+  displayableImage: '',
+  introductionVideo:'',
   error: '',
   steps:0,
-  verificationPlaceholder: false
+  verificationPlaceholder: false,
+  TeachingStyle: '',
+  AboutMe: '',
+
 }
 
 //slice that contains all the sign_up tutor informations
@@ -41,8 +46,20 @@ export const userSlice = createSlice({
     setDescription: (state, action) => {
       state.description = action.payload
     },
+    setTeachingStyle: (state, action) => {
+      state.TeachingStyle = action.payload
+    },
+    setAboutMe: (state, action) => {
+      state.AboutMe= action.payload
+    },
     setSteps: (state, action) => {
       state.steps = action.payload
+    },
+    setDisplayableImage: (state, action) => {
+      state.displayableImage = action.payload
+    },
+    setIntroductionVideo: (state, action) => {
+      state.introductionVideo = action.payload
     },
     resetUserData: (state, action) => {
       state.email = ''
@@ -54,5 +71,20 @@ export const userSlice = createSlice({
 })
 
 
-export const { setEmail, setPassword, setConfpass, setIsLoading, resetUserData, setError, setIsVerified, setVerificationTutor, setDescription, setSteps} = userSlice.actions
+export const { 
+  setEmail, 
+  setPassword, 
+  setConfpass, 
+  setIsLoading, 
+  resetUserData, 
+  setError, 
+  setIsVerified, 
+  setVerificationTutor, 
+  setDescription, 
+  setSteps, 
+  setTeachingStyle, 
+  setAboutMe,
+  setDisplayableImage,
+  setIntroductionVideo
+} = userSlice.actions
 export default userSlice.reducer

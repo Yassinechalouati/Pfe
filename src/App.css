@@ -27,3 +27,20 @@
   display: none;
 }
 
+/* CustomScrollbar.css */
+
+/* Target all scrollbars */
+::-webkit-scrollbar {
+  width: 12px; /* Set the width of the scrollbar */
+}
+
+/* Define scrollbar track */
+::-webkit-scrollbar-track {
+  background-color: #E5E5E5; /* Set the background color of the scrollbar track */
+}
+
+/* Define scrollbar thumb */
+::-webkit-scrollbar-thumb {
+  background-color: #FFA447; /* Set the color of the scrollbar thumb */
+  border-radius: 6px; /* Add rounded corners to the scrollbar thumb */
+}

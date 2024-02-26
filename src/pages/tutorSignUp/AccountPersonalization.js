@@ -6,8 +6,8 @@ import FourthPhase from "../../components/tutor_sign_up/FourthPhase";
 import {setSteps} from '../../state/slices/tutorSlice'
 import { GrFormNextLink, GrFormPreviousLink } from "react-icons/gr";
 import { useDispatch, useSelector } from "react-redux";
-
-
+import { setError } from "../../state/slices/tutorSlice"
+import Errorpop from "../../components/Global/Error_popup"
 
 function AccountPersonalization() {
     const dispatch = useDispatch()
@@ -32,7 +32,7 @@ function AccountPersonalization() {
     }
 
     return (
-        <form className="h-screen w-screen flex flex-col bg-backg">
+        <form className="h-screen relative w-screen flex flex-col bg-backg">
             <StepBar></StepBar>
             {
                 content[tutorData.steps]
@@ -47,6 +47,7 @@ function AccountPersonalization() {
                     <GrFormNextLink size="25"></GrFormNextLink>
                 </button>
             </div>
+            <Errorpop error={tutorData.error} setError={setError}></Errorpop>
         </form>
     );
 }

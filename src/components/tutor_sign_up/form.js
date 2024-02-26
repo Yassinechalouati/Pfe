@@ -11,6 +11,7 @@ import {useRef} from 'react'
 import TutorFields from './fields'
 import SignUpButton from "./SignUpButton";
 import VerifEmail from "../Global/VerifEmail";
+import { useNavigate } from "react-router-dom";
 
 
 export default function Form() {
@@ -22,6 +23,8 @@ export default function Form() {
 
     //using socket io
     const socket = useRef(null)
+
+    const navigate = useNavigate()
 
 
 
@@ -50,6 +53,7 @@ export default function Form() {
                 localStorage.clear()
                 localStorage.setItem('accesstoken', data.accessToken)
                 localStorage.setItem('refreshtoken', data.refreshToken)
+                navigate('/tutor/signup/personalization')
                 socket.current.disconnect(); // Disconnect the socket to avoid memory leaks
             })
 
@@ -69,6 +73,10 @@ export default function Form() {
     }
 
 
+    const handleLoginRoute = () => {
+        navigate('/tutor/signin')
+    }
+
     return (
         <form onSubmit={handleRegularSignup} className="h-full flex flex-col justify-center space-y-4 items-center w-full sm:w-[50%] md:w-[50%] lg:w-[30%] xl:w-[30%] 2xl:w-[30%] px-10">
             {
@@ -84,7 +92,7 @@ export default function Form() {
                         <Orline width="10%"></Orline>
                         <TutorFields></TutorFields>
                         <SignUpButton></SignUpButton>
-                        <span className="text-darkg text-base">Already have an account? <span className="cursor-pointer text-button"> Log in</span></span>
+                        <span onClick={handleLoginRoute} className="text-darkg text-base">Already have an account? <span className="cursor-pointer text-button"> Log in</span></span>
                     </>
 
             }

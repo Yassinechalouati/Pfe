@@ -1,5 +1,5 @@
 import { FaChalkboardTeacher } from "react-icons/fa";
-import { FcAbout } from "react-icons/fc";
+import { IoIosInformationCircle } from "react-icons/io";
 import { MdLanguage } from "react-icons/md";
 import { MdWork } from "react-icons/md";
 import { RiGraduationCapFill } from "react-icons/ri";
@@ -11,6 +11,18 @@ import TeachingStyle from './TeachingStyle'
 
 
 function ThirdPhase() {
+   //list of tags
+   const Tags = [
+      'Education',
+      'It',
+      'Advertising',
+      'Agriculture',
+      'Entrepreneurship',
+      'Government',
+      'Law',
+      'Customer Support',
+  ]
+
     const element = [
         {
            icon: <FaChalkboardTeacher color="#767676" size="17"></FaChalkboardTeacher>,
@@ -18,7 +30,10 @@ function ThirdPhase() {
            title: 'Teaching Style'
         },
         {
-           icon: <FcAbout color="#767676" size="17"></FcAbout>,
+           icon: <IoIosInformationCircle
+           color="#767676" 
+           size="17" 
+           ></IoIosInformationCircle>,
            placeholder: 'Feel free to share more about yourself here. Adding details about your hobbies, interests, and travel experiences can help connect with students who share similar interests...',
            title: 'About Me'
         },
@@ -43,8 +58,8 @@ function ThirdPhase() {
             <TeachingStyle {...element[0]} ></TeachingStyle>
             <AboutMe {...element[1]}></AboutMe>
             <Languages {...element[2]}></Languages>
-            <WorkExperience {...element[3]}></WorkExperience>
-            <Education {...element[4]}></Education>
+            <WorkExperience Tags={Tags} {...element[3]}></WorkExperience>
+            <Education Tags={Tags} {...element[4]}></Education>
         </div>
     );
 }

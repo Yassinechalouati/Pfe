@@ -65,7 +65,7 @@ function Languages(props) {
                 :
                 null
             }
-            <div className="w-[80%] md:w-[50%] h-auto flex-col m-auto flex space-y-2 p-[13px] shadow bg-lightg rounded-xl">
+            <div className="w-[80%] md:w-[50%] h-auto flex-col m-auto flex space-y-2 p-[13px] bg-lightg rounded-xl">
                     
                 <div className="w-full h-[15%] flex items-center space-x-2 ">
                     {props.icon}

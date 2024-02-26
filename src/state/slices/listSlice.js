@@ -6,9 +6,13 @@ const initialState ={
     ],
     listOfLanguagesVisibility: false,
     listOfWorkExperience: [
-        {id: 0, title:'', tag:'', description:''}
+        {id:0, title:'', tag:'Advertising', description:''}
     ],
     listOfWorkExperienceVisibility: false,
+    listOfEducation : [
+        {id:0, title:'', tag:'Advertising', description:''}
+    ],
+    listOfEducationVisibility: false,
 
 
 }
@@ -54,9 +58,6 @@ export const listSlice = createSlice({
             if (existingWorkIndex !== -1) {
                 // If the work with the given id exists, update its value
                 state.listOfWorkExperience[existingWorkIndex].title = title
-            } else {
-                // If the work with the given id doesn't exist, add it to the list
-                state.listOfWorkExperience.push(action.payload);
             }
         },
         setWorkExperienceTag: (state, action) => {
@@ -66,10 +67,7 @@ export const listSlice = createSlice({
             if (existingWorkIndex !== -1) {
                 // If the work with the given id exists, update its value
                 state.listOfWorkExperience[existingWorkIndex].tag = tag
-            } else {
-                // If the work with the given id doesn't exist, add it to the list
-                state.listOfWorkExperience.push(action.payload);
-            }
+            } 
         },
         setWorkExperienceDescription: (state, action) => {
             const { id, description } = action.payload;
@@ -78,17 +76,87 @@ export const listSlice = createSlice({
             if (existingWorkIndex !== -1) {
                 // If the work with the given id exists, update its value
                 state.listOfWorkExperience[existingWorkIndex].description = description
-            } else {
-                // If the work with the given id doesn't exist, add it to the list
-                state.listOfWorkExperience.push(action.payload);
-            }
+            } 
         },
         addWorkExperience: (state, action) => {
             state.listOfWorkExperience.push(action.payload)
-        }
+        },
+        removeWorkExperienceItem: (state, action) => {
+            const {id} = action.payload
+            // Filter out the workexperience with the specified id
+            state.listOfWorkExperience = state.listOfWorkExperience.filter(item => item.id !== id);
+        },
+        resetListOfWorkExperience: (state, action ) => {
+            state.listOfWorkExperience = [
+                {id:0, title:'', tag:'Advertising', description:''}
+            ]
+        },
+        setListOfEducationVisibility: (state, action ) => {
+            state.listOfEducationVisibility = action.payload
+        },
+        setEducationTitle: (state, action) => {
+            const { id, title } = action.payload;
+            const existingEducationIndex = state.listOfEducation.findIndex(item => item.id === id);
+            
+            if (existingEducationIndex !== -1) {
+                // If the education with the given id exists, update its value
+                state.listOfEducation[existingEducationIndex].title = title
+            }
+        },
+        setEducationTag: (state, action) => {
+            const { id, tag } = action.payload;
+            const existingEducationIndex = state.listOfEducation.findIndex(item => item.id === id);
+            
+            if (existingEducationIndex !== -1) {
+                // If the education with the given id exists, update its value
+                state.listOfEducation[existingEducationIndex].tag = tag
+            }
+        },
+        setEducationDescription: (state, action) => {
+            const { id, description } = action.payload;
+            const existingEducationIndex = state.listOfEducation.findIndex(item => item.id === id);
+            
+            if (existingEducationIndex !== -1) {
+                // If the education with the given id exists, update its value
+                state.listOfEducation[existingEducationIndex].description = description
+            }
+        },
+        addEducation: (state, action) => {
+            state.listOfEducation.push(action.payload)
+        },
+        removeEducationItem: (state, action) => {
+            const {id} = action.payload
+            // Filter out the education with the specified id
+            state.listOfEducation = state.listOfEducation.filter(item => item.id !== id);
+        },
+        resetListOfEducation: (state, action ) => {
+            state.listOfEducation = [ 
+                {id:0, title:'', tag:'Advertising', description:''}
+            ]
+        },
     }
 })
 
 
-export const { setListOfLanguages, deleteLanguageItem, resetLanguageList, setListOfLanguagesVisibility, setListOfWorkExperienceVisibility, setWorkExperienceDescription, setWorkExperienceTitle, setWorkExperienceTag, addWorkExperience} = listSlice.actions
+export const { 
+    setListOfLanguages, 
+    deleteLanguageItem, 
+    resetLanguageList, 
+    setListOfLanguagesVisibility, 
+    setListOfWorkExperienceVisibility, 
+    setWorkExperienceDescription, 
+    setWorkExperienceTitle, 
+    setWorkExperienceTag, 
+    addWorkExperience, 
+    removeWorkExperienceItem, 
+    resetListOfWorkExperience, 
+    setListOfEducationVisibility,
+    setEducationTitle,
+    setEducationTag,
+    setEducationDescription,
+    addEducation,
+    removeEducationItem,
+    resetListOfEducation,
+
+} = listSlice.actions
 export default listSlice.reducer

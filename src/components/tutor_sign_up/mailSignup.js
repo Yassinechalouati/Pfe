@@ -4,11 +4,14 @@ import axios from "axios";
 import { setError } from "../../state/slices/tutorSlice";
 import { setIsLoading } from "../../state/slices/tutorSlice";
 import { useGoogleLogin } from '@react-oauth/google';
+import {useNavigate} from 'react-router-dom'
 
 //tutor mail sign up
 function MailSignup() {
     //initializing the tool to change the user data on the redux store
     const dispatch = useDispatch()
+
+    const navigate = useNavigate()
     
     //handle sign up via google
     const handleSignUp = useGoogleLogin({
@@ -29,7 +32,7 @@ function MailSignup() {
                 localStorage.clear();
                 localStorage.setItem('refreshtoken', resp.data.refreshToken)
                 localStorage.setItem('accesstoken', resp.data.accessToken)
-
+                navigate('/tutor/signup/personalization')
             }catch(err) {
                 dispatch(setError(err.response.data.message))
                 console.log(err)

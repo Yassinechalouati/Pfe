@@ -12,7 +12,8 @@ module.exports = {
         'lightg': '#E5E5E5',
         'lightbutton': '#FFF2E5',
         'errorbg' : '#ecc8c5',
-        'errortext': '#c03b3a'
+        'errortext': '#c03b3a',
+        'successbg': '#def2d6'
       }
     },
   },

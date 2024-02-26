@@ -1,5 +1,5 @@
 import {useEffect, useRef} from 'react'
-import { setListOfLanguagesVisibility, setListOfWorkExperienceVisibility } from '../../state/slices/listSlice';
+import { setListOfEducationVisibility, setListOfLanguagesVisibility, setListOfWorkExperienceVisibility } from '../../state/slices/listSlice';
 import { useDispatch } from 'react-redux';
 function Modal(props) {
     const modalRef = useRef(null)
@@ -14,6 +14,9 @@ function Modal(props) {
             }
             else if (props.title === 'Work Experience') {
                 dispatch(setListOfWorkExperienceVisibility(false))
+            }
+            else if(props.title === 'Education') {
+                dispatch(setListOfEducationVisibility(false))
             }
         }
       };
