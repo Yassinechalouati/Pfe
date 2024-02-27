@@ -64,7 +64,7 @@ function WorkExperience(props) {
                     <span className="text-black font-bold h-full text-sm">{props.title}</span>
                 </div>
                 <span className="text-darkg h-full text-sm">{props.placeholder}</span>
-                <button onClick={handleWorkExperienceModal} className=" bg-button2 text-sm text-white w-48 h-10 rounded-lg">
+                <button onClick={handleWorkExperienceModal} className=" bg-elements text-sm text-white w-48 h-10 rounded-lg">
                     ADD WORK EXPERIENCE
                 </button>
             </div>

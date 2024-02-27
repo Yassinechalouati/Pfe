@@ -108,14 +108,14 @@ function ProfilePictureUploader() {
                         'Please ensure your face is visible.'
                     }</span>
                 </div>
-                <img onClick={handleSelectedImage} src={tutorData.displayableImage? tutorData.displayableImage: '/user.png'} alt="user" className="absolute shadow cursor-pointer bg-button2 top-1/2 object-cover border-2 border-backg left-3 transform -translate-y-1/2 h-20 w-20 rounded-full "></img>
+                <img onClick={handleSelectedImage} src={tutorData.displayableImage? tutorData.displayableImage: '/user.png'} alt="user" className="absolute shadow cursor-pointer bg-elements top-1/2 object-cover border-2 border-backg left-3 transform -translate-y-1/2 h-20 w-20 rounded-full "></img>
                 <input type="file" onChange={handleImageChange} ref={pictureRef} accept="image/*" className="hidden"/>
             </div>
             <div className="rounded-xl h-[75%] m-auto flex flex-col space-y-3 p-[13px] bg-lightg w-[80%] md:w-[50%]">
                 {
                     tutorData.introductionVideo?
                     <video
-                    className="w-[100%] h-[100%]"
+                    className="w-full h-[85%] rounded-xl"
                     loop
                     autoPlay
                     controls

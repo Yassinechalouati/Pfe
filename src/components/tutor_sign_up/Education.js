@@ -63,7 +63,7 @@ function Education(props) {
                 <span className="text-black font-bold h-full text-sm">{props.title}</span>
             </div>
             <span className="text-darkg h-full text-sm">{props.placeholder}</span>
-            <button onClick={handleAddEducationModal} className=" bg-button2 text-sm text-white w-36 h-10 rounded-lg">
+            <button onClick={handleAddEducationModal} className=" bg-elements text-sm text-white w-36 h-10 rounded-lg">
                 ADD EDUCATION
             </button>
         </div>

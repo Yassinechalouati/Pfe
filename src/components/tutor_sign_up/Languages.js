@@ -72,7 +72,7 @@ function Languages(props) {
                     <span className="text-black font-bold h-full text-sm">{props.title}</span>
                 </div>
                 <span className="text-darkg h-full text-sm">{props.placeholder}</span>
-                <button onClick={handleLanguageModal} className=" bg-button2 text-sm text-white w-36 h-10 rounded-lg">
+                <button onClick={handleLanguageModal} className=" bg-elements text-sm text-white w-36 h-10 rounded-lg">
                     ADD LANGUAGES
                 </button>
             </div>

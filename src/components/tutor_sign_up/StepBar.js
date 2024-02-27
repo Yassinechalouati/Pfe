@@ -5,7 +5,7 @@ function StepBar() {
         'Welcome!',
         'Intro',
         'Profile',
-        'Connection Test'
+        'Wifi Test'
     ]
     return (
         <div className="w-full justify-between h-[10%] flex ">
