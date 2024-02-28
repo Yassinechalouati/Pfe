@@ -1,14 +1,18 @@
 import { useSelector } from "react-redux"
 import { useDispatch } from "react-redux"
-import { setListOfWorkExperienceVisibility, resetListOfWorkExperience } from "../../state/slices/listSlice"
+import { setListOfWorkExperienceVisibility, resetListOfWorkExperience, setListOfWorkExperienceSaved } from "../../state/slices/listSlice"
 import { MdWork } from "react-icons/md"
 import ModalContent from "./ModalCotent"
 import Modal from "../Global/modal"
 import { addWorkExperience } from "../../state/slices/listSlice"
+import List from "./List"
+import { MdEdit } from "react-icons/md";
+
 
 function WorkExperience(props) {
-    const listOfWorkExperienceVisibility = useSelector(state => state.listData.listOfWorkExperienceVisibility)
+    const listOfWorkExperienceVisibility = useSelector(state => state.listData.listOfWorkExperienceVisibility)//controls the visibility of the modal
     const listOfWorkExperience = useSelector(state => state.listData.listOfWorkExperience)
+    const listOfWorkExperienceSaved = useSelector(state => state.listData.listOfWorkExperienceSaved) //controls if the changes are saved in the workExperience or not
 
     const dispatch = useDispatch()
 
@@ -22,6 +26,7 @@ function WorkExperience(props) {
     }
     
     const handleSave = () => {
+        dispatch(setListOfWorkExperienceSaved(true))
         dispatch(setListOfWorkExperienceVisibility(false))
     }
 
@@ -51,22 +56,43 @@ function WorkExperience(props) {
 
     return (
         <>
-            {
-                listOfWorkExperienceVisibility?
-                <Modal content={content} title={props.title} icon={<MdWork size="22" color="#FFA447"></MdWork>}></Modal>
-                :
-                null
-            }
-            <div className="w-[80%] md:w-[50%] h-auto flex-col m-auto flex space-y-2 p-[13px] bg-lightg rounded-xl">
-                    
-                <div className="w-full h-[15%] flex items-center space-x-2 ">
-                    {props.icon}
-                    <span className="text-black font-bold h-full text-sm">{props.title}</span>
+            <div className="w-[80%] md:w-[50%] h-auto flex-col m-auto flex space-y-2 p-[13px] bg-lightg rounded-xl">    
+                <div className="w-full h-[15%] flex items-center">
+                {
+                    listOfWorkExperienceVisibility?
+                    <Modal content={content} title={props.title} icon={<MdWork size="22" color="#FFA447"></MdWork>}></Modal>
+                    :
+                    null
+                }
+                    <div className="flex items-center space-x-2">
+                        {props.icon}
+                        <span className="text-black font-bold text-sm">{props.title}</span>
+                    </div>
+                    {
+                        listOfWorkExperienceSaved?
+                        <div onClick={handleWorkExperienceModal} className="ml-auto h-6 w-6 cursor-pointer bg-darkg opacity-75 rounded-full flex justify-center items-center">
+                            <MdEdit size="17" color="#ffffff"></MdEdit>
+                        </div>
+                        :
+                        null
+                    }
                 </div>
-                <span className="text-darkg h-full text-sm">{props.placeholder}</span>
-                <button onClick={handleWorkExperienceModal} className=" bg-elements text-sm text-white w-48 h-10 rounded-lg">
-                    ADD WORK EXPERIENCE
-                </button>
+                {
+                    listOfWorkExperienceSaved?
+                    listOfWorkExperience.map((item, index) => {
+                        return <List key={index} title={item.title} description={item.description} tag={item.tag}></List>
+                    })
+                    :
+                    null
+                }
+                {
+                    !listOfWorkExperienceSaved?
+                    <button onClick={handleWorkExperienceModal} className=" bg-elements text-sm text-white w-48 h-10 rounded-lg">
+                        ADD WORK EXPERIENCE
+                    </button>
+                    :
+                    null
+                }
             </div>
         </>
     );

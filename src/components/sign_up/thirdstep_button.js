@@ -29,7 +29,7 @@ export default function Buttn({text, type}) {
 
     return(
         <div 
-            className={`rounded-full h-14  p-3 text-sm text-center border flex justify-center items-center ${color==="bg-[#f0f0f0]"? "border-lightg": "border-transparent text-white"} ${color} cursor-pointer `}
+            className={`rounded-full h-14 p-3 text-sm text-center border flex justify-center items-center ${color==="bg-[#f0f0f0]"? "border-lightg": "border-transparent text-white"} ${color} cursor-pointer `}
             onClick={handleClick}>
             {text}
         </div>

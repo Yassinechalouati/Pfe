@@ -1,8 +1,21 @@
 import {useEffect, useRef} from 'react'
-import { setListOfEducationVisibility, setListOfLanguagesVisibility, setListOfWorkExperienceVisibility } from '../../state/slices/listSlice';
-import { useDispatch } from 'react-redux';
+import { 
+    setListOfEducationVisibility, 
+    setListOfLanguagesVisibility, 
+    setListOfWorkExperienceVisibility,
+    resetLanguageList,
+    resetListOfEducation,
+    resetListOfWorkExperience
+} from '../../state/slices/listSlice';
+import { getListOfLanguages } from '../../state/slices/listSlice';
+import { useDispatch, useSelector } from 'react-redux';
 function Modal(props) {
     const modalRef = useRef(null)
+
+    const listOfLanguagesSaved = useSelector(state => state.listData.listOfLanguagesSaved)
+    const listOfEducationSaved = useSelector(state => state.listData.listOfEducationSaved)
+    const listOfWorkExperienceSaved = useSelector(state => state.listData.listOfWorkExperienceSaved)
+    const languages = useSelector(state => state.tutorData.languages)
 
     const dispatch = useDispatch()
 
@@ -11,12 +24,23 @@ function Modal(props) {
         if (modalRef.current && !modalRef.current.contains(event.target)) {
             if(props.title === 'Languages') {
                 dispatch(setListOfLanguagesVisibility(false))
+                if(!listOfLanguagesSaved){
+                    dispatch(resetLanguageList())
+                }else {
+                    dispatch(getListOfLanguages(languages))
+                }
             }
             else if (props.title === 'Work Experience') {
                 dispatch(setListOfWorkExperienceVisibility(false))
+                if(!listOfWorkExperienceSaved){
+                    dispatch(resetListOfWorkExperience())
+                }
             }
             else if(props.title === 'Education') {
                 dispatch(setListOfEducationVisibility(false))
+                if(!listOfEducationSaved) {
+                    dispatch(resetListOfEducation())
+                }
             }
         }
       };

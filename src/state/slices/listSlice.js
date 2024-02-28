@@ -5,15 +5,17 @@ const initialState ={
         {id:0, language: 'English'}
     ],
     listOfLanguagesVisibility: false,
+    listOfLanguagesSaved: false,
     listOfWorkExperience: [
         {id:0, title:'', tag:'Advertising', description:''}
     ],
     listOfWorkExperienceVisibility: false,
+    listOfWorkExperienceSaved: false,
     listOfEducation : [
         {id:0, title:'', tag:'Advertising', description:''}
     ],
     listOfEducationVisibility: false,
-
+    listOfEducationSaved: false
 
 }
 
@@ -124,6 +126,15 @@ export const listSlice = createSlice({
         addEducation: (state, action) => {
             state.listOfEducation.push(action.payload)
         },
+        setListOfLanguagesSaved: (state, action) => {
+            state.listOfLanguagesSaved = action.payload
+        },
+        setListOfEducationSaved: (state, action) => {
+            state.listOfEducationSaved = action.payload
+        },
+        setListOfWorkExperienceSaved: (state, action) => {
+            state.listOfWorkExperienceSaved = action.payload
+        }, 
         removeEducationItem: (state, action) => {
             const {id} = action.payload
             // Filter out the education with the specified id
@@ -134,6 +145,9 @@ export const listSlice = createSlice({
                 {id:0, title:'', tag:'Advertising', description:''}
             ]
         },
+        getListOfLanguages: ( state, action) => {
+            state.listOfLanguages = action.payload
+        }
     }
 })
 
@@ -157,6 +171,9 @@ export const {
     addEducation,
     removeEducationItem,
     resetListOfEducation,
-
+    setListOfWorkExperienceSaved,
+    setListOfLanguagesSaved,
+    setListOfEducationSaved,
+    getListOfLanguages
 } = listSlice.actions
 export default listSlice.reducer

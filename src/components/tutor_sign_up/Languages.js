@@ -3,13 +3,21 @@ import { MdLanguage } from "react-icons/md";
 import Language from '../tutor_sign_up/Language';
 import {useSelector} from 'react-redux'
 import { useDispatch } from 'react-redux';
-import { setListOfLanguages, resetLanguageList, setListOfLanguagesVisibility } from '../../state/slices/listSlice';
+import { setListOfLanguages, resetLanguageList, setListOfLanguagesVisibility, setListOfLanguagesSaved, getListOfLanguages } from '../../state/slices/listSlice';
+import { MdEdit } from "react-icons/md"
+import { listUnicityChecker } from '../Global/ListUnicityChecker';
+import { setLanguages } from '../../state/slices/tutorSlice';
 
 function Languages(props) {
     const listOfLanguages = useSelector(state => state.listData.listOfLanguages)
 
     const listOfLanguagesVisibility = useSelector(state => state.listData.listOfLanguagesVisibility)
     
+    const listOfLanguagesSaved = useSelector(state => state.listData.listOfLanguagesSaved)
+
+    const languages = useSelector(state => state.tutorData.languages)
+
+    console.log(languages);
     
     const dispatch = useDispatch()
     
@@ -21,13 +29,19 @@ function Languages(props) {
     //reset the list of languages and remove the modal
     const handleCancel = () => {
         dispatch(setListOfLanguagesVisibility(false))
-        dispatch(resetLanguageList())
+        dispatch(getListOfLanguages(languages))
+
     }
+
 
     //exiting modal and saving
     const handleSave = (e) => {
         e.preventDefault()
-        dispatch(setListOfLanguagesVisibility(false))
+        if(!listUnicityChecker(listOfLanguages)) {
+            dispatch(setListOfLanguagesVisibility(false))
+            dispatch(setListOfLanguagesSaved(true))   
+            dispatch(setLanguages(listOfLanguages))
+        }
     }
     
     
@@ -35,7 +49,14 @@ function Languages(props) {
     const content = [
         <div key="0" className="h-full w-full flex flex-col justify-between overflow-y-auto space-y-5">
             {listOfLanguages.map((field, index) => {
-                return <Language key={index} index={field.id} ></Language>
+                //checking whether the language selected is already picked or not 
+                const language = listOfLanguages.filter(item => item.language === field.language && item.id !== field.id)
+                var err = ''
+                if(language.length>0){
+                    console.log(field.id, language[0].id);
+                    err = 'Please remove duplicate fields'
+                }
+                return <Language key={index} index={field.id} error={err} ></Language>
             })}
         </div>,
         <button key="1" onClick={handleAddLanguage} type="button" className="text-button self-start px-4 py-2">
@@ -45,7 +66,7 @@ function Languages(props) {
             <button onClick={handleCancel} type="button" className="text-button  px-4 py-2">
                 CANCEL
             </button>
-            <button onClick={handleSave} type="button" className=" bg-button px-4 py-2 rounded-lg text-white hover:shadow">
+            <button onClick={handleSave} type="button" className={`bg-button px-4 py-2 rounded-lg text-white ${listUnicityChecker(listOfLanguages)? 'opacity-60 cursor-default': 'cursor-pointer hover:shadow'}`}>
                 Save
             </button>
         </div>
@@ -54,27 +75,55 @@ function Languages(props) {
     //show the languages modal
     const handleLanguageModal = (e) => {
         e.preventDefault()
+        dispatch(getListOfLanguages(languages))
         dispatch(setListOfLanguagesVisibility(true))
     }
  
+
     return (
         <>
-            {
-                listOfLanguagesVisibility?
-                <Modal content={content} title={props.title} icon={<MdLanguage size="22" color="#FFA447"></MdLanguage>}></Modal>
-                :
-                null
-            }
             <div className="w-[80%] md:w-[50%] h-auto flex-col m-auto flex space-y-2 p-[13px] bg-lightg rounded-xl">
-                    
-                <div className="w-full h-[15%] flex items-center space-x-2 ">
-                    {props.icon}
-                    <span className="text-black font-bold h-full text-sm">{props.title}</span>
+                <div className="w-full h-[15%] flex items-center">
+                {
+                    listOfLanguagesVisibility?
+                    <Modal content={content} title={props.title} icon={<MdLanguage size="22" color="#FFA447"></MdLanguage>}></Modal>
+                    :
+                    null
+                }
+                    <div className="flex items-center space-x-2">
+                        {props.icon}
+                        <span className="text-black font-bold text-sm">{props.title}</span>
+                    </div>
+                    {
+                        listOfLanguagesSaved?
+                        <div onClick={handleLanguageModal} className="ml-auto h-6 w-6 cursor-pointer bg-darkg opacity-75 rounded-full flex justify-center items-center">
+                            <MdEdit size="17" color="#ffffff"></MdEdit>
+                        </div>
+                        :
+                        null
+                    }
                 </div>
-                <span className="text-darkg h-full text-sm">{props.placeholder}</span>
-                <button onClick={handleLanguageModal} className=" bg-elements text-sm text-white w-36 h-10 rounded-lg">
-                    ADD LANGUAGES
-                </button>
+                    <span className="text-darkg h-full text-sm">{props.placeholder}</span>
+                    {
+                            listOfLanguagesSaved?
+                            <div className="rounded-2xl h-auto flex flex-wrap">
+                                {
+                                    listOfLanguages.map((item, index) => {
+                                        return <span key={index} className="bg-white rounded-2xl border mr-2 mb-2 border-button2 px-2 py-1 text-sm">{item.language}</span>
+                                    })
+                                }
+                            </div>
+                            :
+                            null
+                        }
+                    {
+                        !listOfLanguagesSaved?
+                        <button onClick={handleLanguageModal} className=" bg-elements text-sm text-white w-36 h-10 rounded-lg">
+                            ADD LANGUAGES
+                        </button>
+                        :
+                        null
+                    }
             </div>
         </>
     );

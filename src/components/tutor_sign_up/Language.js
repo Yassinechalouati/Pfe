@@ -51,6 +51,12 @@ function Language(props) {
 
                 }
             </div>
+            {
+                props.error?
+                <span className="text-sm px-4 -translate-y-3 text-errortext">{props.error}</span>
+                :
+                null
+            }
             <hr className="h-1 w-full"></hr>
         </>
     );

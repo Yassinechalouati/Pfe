@@ -3,6 +3,7 @@ import { IoIosInformationCircle } from "react-icons/io";
 import { MdLanguage } from "react-icons/md";
 import { MdWork } from "react-icons/md";
 import { RiGraduationCapFill } from "react-icons/ri";
+import { useSelector } from "react-redux";
 import AboutMe from './AboutMe'
 import Languages from './Languages'
 import WorkExperience from './WorkExperience'
@@ -11,6 +12,14 @@ import TeachingStyle from './TeachingStyle'
 
 
 function ThirdPhase() {
+
+   //indicators for the completion of the fields
+   const listOfEducationSaved = useSelector(state => state.listData.listOfEducationSaved)
+   const listOfLanguagesSaved = useSelector(state => state.listData.listOfLanguagesSaved)
+   const listOfWorkExperienceSaved = useSelector(state => state.listData.listOfWorkExperienceSaved)
+   const TeachingStylee = useSelector(state => state.tutorData.TeachingStyle)
+   const AboutMee = useSelector(state => state.tutorData.AboutMe)
+   
    //list of tags
    const Tags = [
       'Education',
@@ -25,30 +34,30 @@ function ThirdPhase() {
 
     const element = [
         {
-           icon: <FaChalkboardTeacher color="#767676" size="17"></FaChalkboardTeacher>,
+           icon: <FaChalkboardTeacher color={`${TeachingStylee.length>0? "#FFA447": "#767676"}`} size="20"></FaChalkboardTeacher>,
            placeholder: 'Give students a glimpse into what to expect from your class...',
            title: 'Teaching Style'
         },
         {
            icon: <IoIosInformationCircle
-           color="#767676" 
-           size="17" 
+           color={`${AboutMee.length>0? "#FFA447": "#767676"}`} 
+           size="20" 
            ></IoIosInformationCircle>,
            placeholder: 'Feel free to share more about yourself here. Adding details about your hobbies, interests, and travel experiences can help connect with students who share similar interests...',
            title: 'About Me'
         },
         {
-           icon: <MdLanguage color="#767676" size="17"></MdLanguage>,
+           icon: <MdLanguage color={`${listOfLanguagesSaved? "#FFA447": "#767676"}`} size="20"></MdLanguage>,
            placeholder: 'Kindly indicate languages you speak.',
            title: 'Languages'
         },
         {
-           icon: <MdWork color="#767676" size="17"></MdWork>,
+           icon: <MdWork color={`${listOfWorkExperienceSaved? "#FFA447": "#767676"}`} size="20"></MdWork>,
            placeholder: '',
            title: 'Work Experience'
         },
         {
-           icon: <RiGraduationCapFill color="#767676" size="17"></RiGraduationCapFill>,
+           icon: <RiGraduationCapFill color={`${listOfEducationSaved? "#FFA447": "#767676"}`} size="20"></RiGraduationCapFill>,
            placeholder: '',
            title: 'Education'
         },

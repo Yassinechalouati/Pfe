@@ -7,8 +7,11 @@ const initialState = {
   isLoading: false,
   isVerified: 0,
   description: '',
+  serverImage: '',
   displayableImage: '',
   introductionVideo:'',
+  displayableVideo: '',
+  languages: [{id:0, language:'English'}],
   error: '',
   steps:0,
   verificationPlaceholder: false,
@@ -61,6 +64,15 @@ export const userSlice = createSlice({
     setIntroductionVideo: (state, action) => {
       state.introductionVideo = action.payload
     },
+    setServerImage: (state, action) => {
+      state.serverImage = action.payload
+    },
+    setDisplayableVideo: (state, action) => {
+      state.displayableVideo = action.payload
+    },
+    setLanguages: (state, action) => {
+      state.languages = action.payload
+    },
     resetUserData: (state, action) => {
       state.email = ''
       state.password = ''
@@ -85,6 +97,9 @@ export const {
   setTeachingStyle, 
   setAboutMe,
   setDisplayableImage,
-  setIntroductionVideo
+  setIntroductionVideo,
+  setDisplayableVideo,
+  setServerImage,
+  setLanguages
 } = userSlice.actions
 export default userSlice.reducer

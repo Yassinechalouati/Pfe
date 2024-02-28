@@ -28,7 +28,7 @@ function ModalContent(props) {
             dispatch(setWorkExperienceTitle({id: props.index, title: e.target.value, description:listOfWorkExperience[props.index].description, tag: listOfWorkExperience[props.index].tag}))
         }
         else if (props.type === 'education'){
-            dispatch(setEducationTitle({id: props.index, title: e.target.value, description:listOfWorkExperience[props.index].description, tag: listOfWorkExperience[props.index].tag}))
+            dispatch(setEducationTitle({id: props.index, title: e.target.value, description:listOfEducation[props.index].description, tag: listOfEducation[props.index].tag}))
         }
     }
     
@@ -37,7 +37,7 @@ function ModalContent(props) {
         if(props.type === 'work experience'){
             dispatch(setWorkExperienceTag({id: props.index, title: listOfWorkExperience[props.index].title, description:listOfWorkExperience[props.index].description, tag: e.target.value}))
         }else if( props.type === 'education') {
-            dispatch(setEducationTag({id: props.index, title: listOfWorkExperience[props.index].title, description:listOfWorkExperience[props.index].description, tag: e.target.value}))
+            dispatch(setEducationTag({id: props.index, title: listOfEducation[props.index].title, description:listOfEducation[props.index].description, tag: e.target.value}))
         }
     }
 
@@ -46,7 +46,7 @@ function ModalContent(props) {
         if(props.type === 'work experience') {
             dispatch(setWorkExperienceDescription({id: props.index, title: listOfWorkExperience[props.index].title, description: e.target.value, tag: listOfWorkExperience[props.index].tag}))
         } else if (props.type ==='education') {
-            dispatch(setEducationDescription({id: props.index, title: listOfWorkExperience[props.index].title, description: e.target.value, tag: listOfWorkExperience[props.index].tag}))
+            dispatch(setEducationDescription({id: props.index, title: listOfEducation[props.index].title, description: e.target.value, tag: listOfEducation[props.index].tag}))
         }
     }
 
