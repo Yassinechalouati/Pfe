@@ -1,21 +1,27 @@
 import { useSelector } from "react-redux"
 import { useDispatch } from "react-redux"
-import { setListOfWorkExperienceVisibility, resetListOfWorkExperience, setListOfWorkExperienceSaved } from "../../state/slices/listSlice"
+import { setListOfWorkExperienceVisibility, setListOfWorkExperienceSaved, getListOfWorkExperience } from "../../state/slices/listSlice"
 import { MdWork } from "react-icons/md"
 import ModalContent from "./ModalCotent"
 import Modal from "../Global/modal"
 import { addWorkExperience } from "../../state/slices/listSlice"
 import List from "./List"
 import { MdEdit } from "react-icons/md";
+import {setWorkExperience} from '../../state/slices/tutorSlice'
+import { listEmptinessChecker } from '../Global/listEmptinessChecker';
 
 
 function WorkExperience(props) {
     const listOfWorkExperienceVisibility = useSelector(state => state.listData.listOfWorkExperienceVisibility)//controls the visibility of the modal
-    const listOfWorkExperience = useSelector(state => state.listData.listOfWorkExperience)
+    const listOfWorkExperience = useSelector(state => state.listData.listOfWorkExperience) //list of workexperience given by the user 
     const listOfWorkExperienceSaved = useSelector(state => state.listData.listOfWorkExperienceSaved) //controls if the changes are saved in the workExperience or not
+
+    //final list of workexperience
+    const workExperience = useSelector(state => state.tutorData.workExperience)
 
     const dispatch = useDispatch()
 
+    //controlling modal visibility
     const handleWorkExperienceModal = (e) => {
         e.preventDefault()
         dispatch(setListOfWorkExperienceVisibility(true))
@@ -24,15 +30,22 @@ function WorkExperience(props) {
     const handleAddWorkExperience = () => {
         dispatch(addWorkExperience({id: listOfWorkExperience.length, title:'', description:'', tag: props.Tags.sort()[0]}))
     }
+
     
+    
+    //in case of saving with correct fields, we remove the modal and the save the final list
     const handleSave = () => {
-        dispatch(setListOfWorkExperienceSaved(true))
-        dispatch(setListOfWorkExperienceVisibility(false))
+        if(!listEmptinessChecker(listOfWorkExperience)) {
+            dispatch(setListOfWorkExperienceVisibility(false))
+            dispatch(setWorkExperience(listOfWorkExperience))
+            dispatch(setListOfWorkExperienceSaved(true))
+        }
     }
 
+    //in case of canceling we remove the modal and remove new changes
     const handleCancel = () => {
         dispatch(setListOfWorkExperienceVisibility(false))
-        dispatch(resetListOfWorkExperience())
+        dispatch(getListOfWorkExperience(workExperience))
     }
     
     const content = [
@@ -48,7 +61,7 @@ function WorkExperience(props) {
             <button onClick={handleCancel} type="button" className="text-button  px-4 py-2">
                 CANCEL
             </button>
-            <button onClick={handleSave} type="button" className=" bg-button px-4 py-2 rounded-lg text-white hover:shadow">
+            <button onClick={handleSave} type="button" className={`bg-button ${listEmptinessChecker(listOfWorkExperience)? 'opacity-60 cursor-default': 'cursor-pointer hover:shadow'} px-4 py-2 rounded-lg text-white`}>
                 Save
             </button>
         </div>
@@ -79,7 +92,7 @@ function WorkExperience(props) {
                 </div>
                 {
                     listOfWorkExperienceSaved?
-                    listOfWorkExperience.map((item, index) => {
+                    workExperience.map((item, index) => {
                         return <List key={index} title={item.title} description={item.description} tag={item.tag}></List>
                     })
                     :

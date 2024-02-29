@@ -1,11 +1,14 @@
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
-import { setListOfEducationVisibility, addEducation, resetListOfEducation, setListOfEducationSaved } from "../../state/slices/listSlice";
+import { setListOfEducationVisibility, addEducation, setListOfEducationSaved, getListOfEducation } from "../../state/slices/listSlice";
 import Modal from "../Global/modal";
 import { MdLanguage } from "react-icons/md";
 import ModalContent from "./ModalCotent";
 import List from "./List";
 import { MdEdit } from "react-icons/md";
+import { listEmptinessChecker } from '../Global/listEmptinessChecker';
+import { setEducation } from "../../state/slices/tutorSlice";
+
 
 
 
@@ -17,19 +20,24 @@ function Education(props) {
     const listOfEducation = useSelector(state => state.listData.listOfEducation)
     const listOfEducationSaved = useSelector(state => state.listData.listOfEducationSaved) 
 
+    const education = useSelector(state => state.tutorData.education)
+
     const handleAddEducation = (e) => {
         e.preventDefault()
         dispatch(addEducation({id: listOfEducation.length, title:'', tag: props.Tags.sort()[0], description:''}))
     }
 
     const handleSave = () => {
-        dispatch(setListOfEducationVisibility(false))
-        dispatch(setListOfEducationSaved(true))
+        if(!listEmptinessChecker(listOfEducation)){
+            dispatch(setListOfEducationVisibility(false))
+            dispatch(setEducation(listOfEducation))
+            dispatch(setListOfEducationSaved(true))
+        }
     }
 
     const handleCancel = () => {
         dispatch(setListOfEducationVisibility(false))
-        dispatch(resetListOfEducation())
+        dispatch(getListOfEducation(education))
     }
 
     const content = [
@@ -45,7 +53,7 @@ function Education(props) {
             <button onClick={handleCancel} type="button" className="text-button  px-4 py-2">
                 CANCEL
             </button>
-            <button onClick={handleSave} type="button" className=" bg-button px-4 py-2 rounded-lg text-white hover:shadow">
+            <button onClick={handleSave} type="button" className={`bg-button ${listEmptinessChecker(listOfEducation)? 'opacity-60 cursor-default': 'cursor-pointer hover:shadow'} px-4 py-2 rounded-lg text-white`}>
                 Save
             </button>
         </div>
@@ -80,7 +88,7 @@ function Education(props) {
             </div>
             {
                 listOfEducationSaved?
-                listOfEducation.map((item, index) => {
+                education.map((item, index) => {
                     return <List key={index} title={item.title} description={item.description} tag={item.tag}></List>
                 })
                 :

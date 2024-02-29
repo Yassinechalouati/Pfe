@@ -145,9 +145,17 @@ export const listSlice = createSlice({
                 {id:0, title:'', tag:'Advertising', description:''}
             ]
         },
-        getListOfLanguages: ( state, action) => {
+        //these reducers are responsible for setting the list of languages with the true list 
+        getListOfLanguages: ( state, action) => { 
             state.listOfLanguages = action.payload
+        },
+        getListOfWorkExperience: (state, action )=> {
+            state.listOfWorkExperience= action.payload
+        },
+        getListOfEducation: (state, action) => {
+            state.listOfEducation = action.payload
         }
+
     }
 })
 
@@ -174,6 +182,8 @@ export const {
     setListOfWorkExperienceSaved,
     setListOfLanguagesSaved,
     setListOfEducationSaved,
-    getListOfLanguages
+    getListOfLanguages,
+    getListOfEducation,
+    getListOfWorkExperience
 } = listSlice.actions
 export default listSlice.reducer

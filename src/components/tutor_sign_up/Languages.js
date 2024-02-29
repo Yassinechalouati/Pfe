@@ -5,7 +5,6 @@ import {useSelector} from 'react-redux'
 import { useDispatch } from 'react-redux';
 import { setListOfLanguages, resetLanguageList, setListOfLanguagesVisibility, setListOfLanguagesSaved, getListOfLanguages } from '../../state/slices/listSlice';
 import { MdEdit } from "react-icons/md"
-import { listUnicityChecker } from '../Global/ListUnicityChecker';
 import { setLanguages } from '../../state/slices/tutorSlice';
 
 function Languages(props) {
@@ -17,8 +16,6 @@ function Languages(props) {
 
     const languages = useSelector(state => state.tutorData.languages)
 
-    console.log(languages);
-    
     const dispatch = useDispatch()
     
     //add item into the language array
@@ -26,21 +23,39 @@ function Languages(props) {
         dispatch(setListOfLanguages({id:listOfLanguages.length, language:'English'}));
     }
     
-    //reset the list of languages and remove the modal
+    //remove new changes and remove the modal
     const handleCancel = () => {
         dispatch(setListOfLanguagesVisibility(false))
         dispatch(getListOfLanguages(languages))
 
     }
+    
+    //checking wether the list is unique or not 
+    const listUnicityChecker = (list) => {
+        // Use a Set to store unique language names
+        const uniqueLanguages = new Set();
+    
+        // Use the some method to iterate over each object in the array
+        const isLanguageRepeated = list.some(obj => {
+        // If the language is already in the Set, return true to indicate repetition
+        if (uniqueLanguages.has(obj.language)) {
+            return true;
+        } else {
+            // Otherwise, add the language to the Set and continue iteration
+            uniqueLanguages.add(obj.language);
+            return false;
+        }
+        });
+        return isLanguageRepeated
+    }
 
-
-    //exiting modal and saving
+    //in case of saving with correct fields, we remove the modal and save the final list 
     const handleSave = (e) => {
         e.preventDefault()
         if(!listUnicityChecker(listOfLanguages)) {
             dispatch(setListOfLanguagesVisibility(false))
-            dispatch(setListOfLanguagesSaved(true))   
             dispatch(setLanguages(listOfLanguages))
+            dispatch(setListOfLanguagesSaved(true))   
         }
     }
     
@@ -53,7 +68,6 @@ function Languages(props) {
                 const language = listOfLanguages.filter(item => item.language === field.language && item.id !== field.id)
                 var err = ''
                 if(language.length>0){
-                    console.log(field.id, language[0].id);
                     err = 'Please remove duplicate fields'
                 }
                 return <Language key={index} index={field.id} error={err} ></Language>
@@ -108,7 +122,7 @@ function Languages(props) {
                             listOfLanguagesSaved?
                             <div className="rounded-2xl h-auto flex flex-wrap">
                                 {
-                                    listOfLanguages.map((item, index) => {
+                                    languages.map((item, index) => {
                                         return <span key={index} className="bg-white rounded-2xl border mr-2 mb-2 border-button2 px-2 py-1 text-sm">{item.language}</span>
                                     })
                                 }

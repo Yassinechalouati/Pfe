@@ -5,7 +5,9 @@ import {
     setListOfWorkExperienceVisibility,
     resetLanguageList,
     resetListOfEducation,
-    resetListOfWorkExperience
+    resetListOfWorkExperience,
+    getListOfWorkExperience,
+    getListOfEducation
 } from '../../state/slices/listSlice';
 import { getListOfLanguages } from '../../state/slices/listSlice';
 import { useDispatch, useSelector } from 'react-redux';
@@ -16,10 +18,12 @@ function Modal(props) {
     const listOfEducationSaved = useSelector(state => state.listData.listOfEducationSaved)
     const listOfWorkExperienceSaved = useSelector(state => state.listData.listOfWorkExperienceSaved)
     const languages = useSelector(state => state.tutorData.languages)
+    const workExperience = useSelector(state => state.tutorData.workExperience)
+    const education = useSelector(state => state.tutorData.education)
 
     const dispatch = useDispatch()
 
-    //when clicking outside of the modal we hide it 
+    //when clicking outside of the modal we check if the list is saved or not, if it's saved w return the state of the final correct list else we reset the list
     const handleOutsideClick = (event) => {
         if (modalRef.current && !modalRef.current.contains(event.target)) {
             if(props.title === 'Languages') {
@@ -34,12 +38,17 @@ function Modal(props) {
                 dispatch(setListOfWorkExperienceVisibility(false))
                 if(!listOfWorkExperienceSaved){
                     dispatch(resetListOfWorkExperience())
+                }else {
+                    dispatch(getListOfWorkExperience(workExperience))
                 }
             }
             else if(props.title === 'Education') {
                 dispatch(setListOfEducationVisibility(false))
                 if(!listOfEducationSaved) {
                     dispatch(resetListOfEducation())
+                }
+                else {
+                    dispatch(getListOfEducation(education))
                 }
             }
         }

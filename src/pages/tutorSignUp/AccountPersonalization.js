@@ -11,14 +11,16 @@ import Errorpop from "../../components/Global/Error_popup"
 
 function AccountPersonalization() {
     const dispatch = useDispatch()
+
     const tutorData = useSelector(state=> state.tutorData)
+    const listData = useSelector(state => state.listData)
 
     //steps
     const content = [
         <FirstPhase></FirstPhase>, //Welcome page
         <SecondPhase></SecondPhase>, //Intro
         <ThirdPhase></ThirdPhase>, //Profile
-        <FourthPhase></FourthPhase>, //Connection test
+        <FourthPhase></FourthPhase>, //Wifi test
     ]
     
 
@@ -31,6 +33,27 @@ function AccountPersonalization() {
         dispatch(setSteps(tutorData.steps>0? tutorData.steps-1 : tutorData.steps))
     }
 
+    //this is the condition that should be true in order to disable the next button in the intro phase
+    const introDisabledCondition = !tutorData.serverImage || !tutorData.displayableImage || !tutorData.displayableVideo || !tutorData.introductionVideo || !tutorData.description
+
+    //this is the condition that should be true in order to disable the next button in the Profile phase
+    const profileDisabledCondition = !tutorData.TeachingStyle || !tutorData.AboutMe || !listData.listOfLanguagesSaved || !listData.listOfWorkExperienceSaved || !listData.listOfEducationSaved
+
+    const handleDisabled = () => {
+        if (tutorData.steps ===1){
+            if (introDisabledCondition) {
+                return true
+            }else {
+                return false
+            }
+        }else if(tutorData.steps === 2) {
+            if(profileDisabledCondition) {
+                return true
+            }else{
+                return false
+            }
+        }
+    }
     return (
         <form className="h-screen relative w-screen flex flex-col bg-backg">
             <StepBar></StepBar>
@@ -42,7 +65,7 @@ function AccountPersonalization() {
                     <GrFormPreviousLink  size="25"></GrFormPreviousLink>
                     <span className="text-base hidden sm:block md:block lg:block xl:block">Back</span>
                 </button>
-                <button onClick={handleNextButton} type="submit" className={`bg-button sm:space-x-2 md:space-x-2 lg:space-x-2 xl:space-x-2 border border-button flex justify-center items-center w-[20%] sm:w-[15%] md:w-[15%] lg:w-[10%] xl:w-[10%] self-end h-10 text-center font-semibold text-lg px-4 py-2 rounded-full text-white hover:shadow`}>
+                <button disabled={handleDisabled()} onClick={handleNextButton} type="submit" className={`bg-button ${(introDisabledCondition && tutorData.steps === 1) || (profileDisabledCondition && tutorData.steps === 2)? 'opacity-60' :'hover:shadow'} sm:space-x-2 md:space-x-2 lg:space-x-2 xl:space-x-2 border border-button flex justify-center items-center w-[20%] sm:w-[15%] md:w-[15%] lg:w-[10%] xl:w-[10%] self-end h-10 text-center font-semibold text-lg px-4 py-2 rounded-full text-white`}>
                     <span className="text-base hidden sm:block md:block lg:block xl:block">Next</span>
                     <GrFormNextLink size="25"></GrFormNextLink>
                 </button>

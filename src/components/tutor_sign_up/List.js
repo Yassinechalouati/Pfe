@@ -7,7 +7,7 @@ function List(props) {
                 <span className="text-black text-sm"> {title}</span>
                 <span className="text-darkg text-sm"> {tag}</span>
             </div>
-            <span className="text-black text-sm"> {description}</span>
+            <span className="text-black text-[13px]"> {description}</span>
         </div>
     );
 }

@@ -32,36 +32,38 @@ function ThirdPhase() {
       'Customer Support',
   ]
 
-    const element = [
-        {
-           icon: <FaChalkboardTeacher color={`${TeachingStylee.length>0? "#FFA447": "#767676"}`} size="20"></FaChalkboardTeacher>,
-           placeholder: 'Give students a glimpse into what to expect from your class...',
-           title: 'Teaching Style'
-        },
-        {
-           icon: <IoIosInformationCircle
-           color={`${AboutMee.length>0? "#FFA447": "#767676"}`} 
-           size="20" 
-           ></IoIosInformationCircle>,
-           placeholder: 'Feel free to share more about yourself here. Adding details about your hobbies, interests, and travel experiences can help connect with students who share similar interests...',
-           title: 'About Me'
-        },
-        {
-           icon: <MdLanguage color={`${listOfLanguagesSaved? "#FFA447": "#767676"}`} size="20"></MdLanguage>,
-           placeholder: 'Kindly indicate languages you speak.',
-           title: 'Languages'
-        },
-        {
-           icon: <MdWork color={`${listOfWorkExperienceSaved? "#FFA447": "#767676"}`} size="20"></MdWork>,
-           placeholder: '',
-           title: 'Work Experience'
-        },
-        {
-           icon: <RiGraduationCapFill color={`${listOfEducationSaved? "#FFA447": "#767676"}`} size="20"></RiGraduationCapFill>,
-           placeholder: '',
-           title: 'Education'
-        },
-    ]
+    
+   //icons and placeholders and titles for the fields
+   const element = [
+      {
+         icon: <FaChalkboardTeacher color={`${TeachingStylee.length>0? "#FFA447": "#767676"}`} size="20"></FaChalkboardTeacher>,
+         placeholder: 'Give students a glimpse into what to expect from your class...',
+         title: 'Teaching Style'
+      },
+      {
+         icon: <IoIosInformationCircle
+         color={`${AboutMee.length>0? "#FFA447": "#767676"}`} 
+         size="20" 
+         ></IoIosInformationCircle>,
+         placeholder: 'Feel free to share more about yourself here. Adding details about your hobbies, interests, and travel experiences can help connect with students who share similar interests...',
+         title: 'About Me'
+      },
+      {
+         icon: <MdLanguage color={`${listOfLanguagesSaved? "#FFA447": "#767676"}`} size="20"></MdLanguage>,
+         placeholder: 'Kindly indicate languages you speak.',
+         title: 'Languages'
+      },
+      {
+         icon: <MdWork color={`${listOfWorkExperienceSaved? "#FFA447": "#767676"}`} size="20"></MdWork>,
+         placeholder: '',
+         title: 'Work Experience'
+      },
+      {
+         icon: <RiGraduationCapFill color={`${listOfEducationSaved? "#FFA447": "#767676"}`} size="20"></RiGraduationCapFill>,
+         placeholder: '',
+         title: 'Education'
+      },
+   ]
     return (
         <div className="w-full h-[80%] space-y-2 py-3 overflow-y-auto"> 
             <TeachingStyle {...element[0]} ></TeachingStyle>

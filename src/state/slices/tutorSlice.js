@@ -12,6 +12,8 @@ const initialState = {
   introductionVideo:'',
   displayableVideo: '',
   languages: [{id:0, language:'English'}],
+  workExperience: [{id:0, title:'', tag:'Advertising', description:''}],
+  education: [{id:0, title:'', tag:'Advertising', description:''}],
   error: '',
   steps:0,
   verificationPlaceholder: false,
@@ -73,6 +75,12 @@ export const userSlice = createSlice({
     setLanguages: (state, action) => {
       state.languages = action.payload
     },
+    setWorkExperience: (state, action) => {
+      state.workExperience = action.payload
+    },
+    setEducation: (state, action) => {
+      state.education = action.payload
+    },
     resetUserData: (state, action) => {
       state.email = ''
       state.password = ''
@@ -100,6 +108,8 @@ export const {
   setIntroductionVideo,
   setDisplayableVideo,
   setServerImage,
-  setLanguages
+  setLanguages,
+  setEducation, 
+  setWorkExperience
 } = userSlice.actions
 export default userSlice.reducer
