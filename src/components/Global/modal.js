@@ -66,7 +66,7 @@ function Modal(props) {
 
     
     return (
-    <div className="fixed inset-0 bg-black bg-opacity-30 backdrop-blur-[1px] z-50 flex justify-center items-center">
+    <div className="fixed inset-0 bg-black bg-opacity-30 backdrop-blur-[1px] sm:backdrop-blur-[1px] z-50 flex justify-center items-center">
         <div ref={modalRef} className={`bg-backg w-[90%] px-5 py-3 md:w-[50%] lg:w-[35%] xl:w-[35%] max-h-[80%] min-h-[50%] flex flex-col justify-between rounded-md `} >
             <div className="flex space-x-2 py-3 items-center">
                 {
