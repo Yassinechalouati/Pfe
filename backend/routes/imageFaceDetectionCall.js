@@ -4,7 +4,9 @@ const auth = require('../middleware/auth')
 const roleCheck = require('../middleware/roleCheck')
 const axios = require('axios')
 const FormData = require('form-data');
+const fileUpload = require('express-fileupload');
 
+router.use('/imageFaceDetection', fileUpload());
 
 router.post('/imageFaceDetection', auth, roleCheck(["Tutor"]), async (req, res) => {
     //checking whether the image is sent or not

@@ -123,7 +123,7 @@ function Languages(props) {
                             <div className="rounded-2xl h-auto flex flex-wrap">
                                 {
                                     languages.map((item, index) => {
-                                        return <span key={index} className="bg-white rounded-2xl border mr-2 mb-2 border-button2 px-2 py-1 text-sm">{item.language}</span>
+                                        return <span key={index} className="bg-white rounded-2xl border mr-2 mb-2 border-darkg px-2 py-1 text-sm">{item.language}</span>
                                     })
                                 }
                             </div>

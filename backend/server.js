@@ -4,7 +4,6 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const http = require('http');
 const socketIo = require('socket.io');
-const fileUpload = require('express-fileupload');
 
 
 const app = express();
@@ -20,7 +19,6 @@ const io = socketIo(server, {
 
 
 // Middleware for parsing multipart/form-data
-app.use(fileUpload());
 app.use(cors({
     origin: "http://localhost:3000"
 }))
@@ -56,6 +54,7 @@ const resendVerificationRouter = require('./routes/resendVerification')
 const imageFaceDetectionCallRouter = require('./routes/imageFaceDetectionCall')
 const regularLoginRouter = require('./routes/regular_login')
 const googleLoginRouter = require('./routes/googleLogin')
+const speedTestRouter = require('./routes/speedTest')
 
 //apis
 app.use('/', googleSignupRouter)
@@ -70,6 +69,7 @@ app.use('/resend', resendVerificationRouter)
 app.use('/', imageFaceDetectionCallRouter )
 app.use('/', regularLoginRouter)
 app.use('/', googleLoginRouter)
+app.use('/', speedTestRouter)
 
 // Socket.io logic
 require('./helpers/socketHandler')(io);
