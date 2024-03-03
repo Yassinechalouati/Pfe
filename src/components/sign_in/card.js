@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import { setTutorError, setLearnerError } from "../../state/slices/loginSlice";
 import { useDispatch } from "react-redux";
 import Errorpop from "../Global/Error_popup";
+import Logo from "./logo_welcome_text";
 
 function CardSignIn(){
     //knowing whether it's a tutor or learner signing up
@@ -64,7 +65,8 @@ function CardSignIn(){
     }
     
     return (
-        <form onSubmit={handleLogin} className="bg-white relative rounded-lg shadow-lg px-6 py-2 justify-center flex flex-col space-y-7 w-[97%] md:w-[30%] lg:w-[25%] h-[90%]">
+        <form onSubmit={handleLogin} className="bg-white relative rounded-3xl shadow-lg px-6 py-2 justify-center flex flex-col space-y-7 w-[97%] md:w-[30%] lg:w-[25%] h-[90%]">
+            <Logo></Logo>
             <MailSignIn></MailSignIn>
             <div className="flex w-full justify-center items-center">
                 <hr className="h-1 w-[47%] "></hr>

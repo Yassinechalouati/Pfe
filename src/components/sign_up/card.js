@@ -164,7 +164,7 @@ export default function Card() {
     }
 
     return(
-        <form onSubmit={handleNext} className="bg-white px-10 py-4 w-[97%] h-[95%] sm:w-[80%] sm:h-[93%] md:w-[60%] md:h-[93%] lg:w-[60%] lg:h-[93%] xl:w-[60%] xl:h-[93%] space-y-4 rounded-3xl flex flex-col items-center">
+        <form onSubmit={handleNext} className="bg-white shadow-lg px-10 py-4 w-[97%] h-[95%] sm:w-[80%] sm:h-[93%] md:w-[60%] md:h-[93%] lg:w-[60%] lg:h-[93%] xl:w-[60%] xl:h-[93%] space-y-4 rounded-3xl flex flex-col items-center">
             <Progress></Progress>
             <hr className="h-1 w-full"></hr>
             <div className={`flex flex-col w-full overflow-y-scroll scrollbar-hide h-full ${step === 0? "space-y-2": "space-y-4  "}`}>
