@@ -6,6 +6,7 @@ import TutorSignUp from './pages/tutorSignUp/Signup';
 import AccountPersonalization from './pages/tutorSignUp/AccountPersonalization';
 import Verification from './pages/EmailVerif'
 import {Route, BrowserRouter as Router, Routes} from 'react-router-dom'
+import TutorProfile from './pages/tutorProfile/TutorProfile';
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
         <Route path='/tutor/signin' element={<Signin></Signin>}></Route>
         <Route path='/users/verify/:token' element={<Verification></Verification>}></Route>
         <Route path='/tutor/signup/personalization' element={<AccountPersonalization></AccountPersonalization>}></Route>
+        <Route path='/tutor/profile' element={<TutorProfile></TutorProfile>}></Route>
       </Routes>
     </Router>
   );

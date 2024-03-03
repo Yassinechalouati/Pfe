@@ -55,6 +55,7 @@ const imageFaceDetectionCallRouter = require('./routes/imageFaceDetectionCall')
 const regularLoginRouter = require('./routes/regular_login')
 const googleLoginRouter = require('./routes/googleLogin')
 const speedTestRouter = require('./routes/speedTest')
+const personalizationRouter = require('./routes/saveTutorPersonalization')
 
 //apis
 app.use('/', googleSignupRouter)
@@ -70,6 +71,7 @@ app.use('/', imageFaceDetectionCallRouter )
 app.use('/', regularLoginRouter)
 app.use('/', googleLoginRouter)
 app.use('/', speedTestRouter)
+app.use('/tutor', personalizationRouter)
 
 // Socket.io logic
 require('./helpers/socketHandler')(io);

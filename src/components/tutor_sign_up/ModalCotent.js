@@ -116,6 +116,7 @@ function ModalContent(props) {
                     className="block appearance-none w-full bg-white border border-gray-300 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
                     name="languages" value={props.type==='work experience'? listOfWorkExperience[props.index]?.tag: listOfEducation[props.index]?.tag} onChange={handleTagChange}
                 >
+                    <option value="" disabled selected>Select Tag</option>
                     {
                         Tags.sort().map((Tag, index)=> {
                             return <option key={index} value={Tag}>{Tag}</option>
