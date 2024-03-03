@@ -13,6 +13,7 @@ function FourthPhase() {
     const [isLoading, setIsLoading] = useState(false)
 
     const wifiQuality = useSelector(state => state.tutorData.wifiQuality)
+    const tutorData = useSelector(state => state.tutorData)
     const dispatch = useDispatch()
 
     const handleSpeedTest = async (e) => {
@@ -117,7 +118,7 @@ function FourthPhase() {
                             </button>
                         </>
                     :
-                        isLoading?
+                        isLoading || tutorData.isLoading?
                         <Loading></Loading>
                         :
                         wifiStatus[wifiQuality.connectionQuality]

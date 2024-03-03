@@ -223,7 +223,7 @@ function FirstPhase() {
                         className="block appearance-none w-full bg-white border border-gray-300 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
                         name="Country" value={country} onChange={handleCountryChange}
                     >
-                        <option value="" disabled selected>Select your country</option>
+                        <option disabled value="">Select your country</option>
                         {
                             countries.sort().map((country, index)=> {
                                 return <option key={index} value={country}>{country}</option>

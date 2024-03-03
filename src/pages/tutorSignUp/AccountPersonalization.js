@@ -9,12 +9,17 @@ import { useDispatch, useSelector } from "react-redux";
 import { setError } from "../../state/slices/tutorSlice"
 import Errorpop from "../../components/Global/Error_popup"
 import {useNavigate} from 'react-router-dom'
+import axiosInstance from "../../interceptors/axiosInterceptor";
+import { setIsLoading } from "../../state/slices/tutorSlice";
+import {useState} from 'react'
 
 function AccountPersonalization() {
     const dispatch = useDispatch()
 
     const tutorData = useSelector(state=> state.tutorData)
     const listData = useSelector(state => state.listData)
+
+    const [isClicked, setIsClicked] = useState(false)
 
     const navigate = useNavigate()
 
@@ -27,14 +32,46 @@ function AccountPersonalization() {
     ]
     
 
-    const handleNextButton = (e) => {
-        e.preventDefault()
-        if(tutorData.steps === 3) {
+    const handleNextButton = async (e) => {
+        e.preventDefault();
+        //at the end of the form, send the data to the server to save it in the DB
+        if (tutorData.steps === 3) {
+            dispatch(setIsLoading(true))
+            setIsClicked(true)
+            const formData = new FormData();
+            formData.append('userFiles', tutorData.serverImage);
+            formData.append('userFiles', tutorData.introductionVideo);
+            
+            // Append JSON data to FormData
+            formData.append('Country', tutorData.Country);
+            formData.append('description', tutorData.description);
+            formData.append('TeachingStyle', tutorData.TeachingStyle);
+            formData.append('AboutMe', tutorData.AboutMe);
+            formData.append('languages', JSON.stringify(tutorData.languages));
+            formData.append('workExperience', JSON.stringify(tutorData.workExperience));
+            formData.append('education', JSON.stringify(tutorData.education));
 
-            navigate('/tutor/profile')
+
+            axiosInstance.post('http://localhost:5000/tutor/personalization', formData, {
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('accesstoken')}`,
+                    'Content-Type': 'multipart/form-data' // Set the content type to multipart/form-data
+                }
+            })
+            .then((response) => {
+                console.log(response);
+                navigate('/tutor/profile');
+            })
+            .catch((error) => {
+                console.log(error);
+            })
+            .finally(() => {
+                dispatch(setIsLoading(false));
+            });
+        }else {
+            dispatch(setSteps(tutorData.steps <= 2 ? tutorData.steps + 1 : tutorData.steps));
         }
-        dispatch(setSteps(tutorData.steps<3? tutorData.steps+1 : tutorData.steps))
-    }
+    };    
 
     const handleBackButton = () => {
         dispatch(setSteps(tutorData.steps>0? tutorData.steps-1 : tutorData.steps))
@@ -50,7 +87,7 @@ function AccountPersonalization() {
     const profileDisabledCondition = !tutorData.TeachingStyle || !tutorData.AboutMe || !listData.listOfLanguagesSaved || !listData.listOfWorkExperienceSaved || !listData.listOfEducationSaved
 
     //this is the condition that should be true in order to disable the next button in the wifi test phase
-    const wifiTestDisabledCondition = !tutorData.wifiQuality
+    const wifiTestDisabledCondition = !tutorData.wifiQuality || isClicked
 
     const handleDisabled = () => {
         let conditionComponent;
