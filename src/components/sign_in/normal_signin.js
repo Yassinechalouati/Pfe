@@ -1,11 +1,15 @@
 import { useSelector } from 'react-redux'
 import { useDispatch } from 'react-redux';
-import {setEmail, setPassword} from '../../state/slices/loginSlice'
+import {setEmail, setPassword, setRecaptchaToken} from '../../state/slices/loginSlice'
+import { useRef} from 'react'
+import ReCAPTCHA from 'react-google-recaptcha';
 
-export default function Normal() {
+
+export default function Normal({recaptchaRef}) {
     const loginData = useSelector(state => state.loginData)
 
     const dispatch = useDispatch()
+    
 
     //handling the email field when typing
     const handleEmailChange = (e) => {
@@ -17,6 +21,9 @@ export default function Normal() {
         dispatch(setPassword(e.target.value))
     };
 
+    const handleRecaptchaChange = (value) => {
+        dispatch(setRecaptchaToken(value))
+    }
     
 
     return(
@@ -44,10 +51,20 @@ export default function Normal() {
                     placeholder="Password"
                 />
             </div>
+            <div className="m-auto w-full scale-110 md:scale-x-[.60] md:scale-y-[.90] lg:scale-x-[.85] xl:scale-95 transform origin-top-left" >
+                <ReCAPTCHA
+                    ref={recaptchaRef}
+                    sitekey="6LdxbokpAAAAAKKHEv8T-O4geuCKWcFGMZC_BtGl"
+                    onChange={handleRecaptchaChange}
+                />
+            </div>
             <div className="mb-4 text-sm">
                 <button className="text-blue-500 underline">Forgot your password?</button>
             </div>
-            <button type="submit" className="w-full bg-button hover:bg-orange-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+            <button 
+            disabled={!(loginData.email && loginData.password && loginData.recaptchaToken)} 
+            type="submit" 
+            className={`w-full ${loginData.email && loginData.password && loginData.recaptchaToken? 'hover:bg-orange-600 opacity-100': 'opacity-60'} bg-button text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline`}>
                 Sign In
             </button>
             <div className="mt-4 text-sm">

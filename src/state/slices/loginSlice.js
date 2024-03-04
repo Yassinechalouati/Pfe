@@ -4,7 +4,9 @@ const initialState ={
     email: '',
     password: '',
     tutorError: '',
-    learnerError: ''
+    recaptchaRef: '',
+    learnerError: '',
+    recaptchaToken: '',
 }
 
 
@@ -23,9 +25,15 @@ export const loginSlice = createSlice({
         },
         setLearnerError: (state, action) => {
             state.learnerError = action.payload
+        },
+        setRecaptchaToken: (state, action) => {
+            state.recaptchaToken = action.payload
+        },
+        setRecaptchaRef: (state, action) => {
+            
         }
     }
 })
 
-export const { setEmail, setPassword, setLearnerError, setTutorError} = loginSlice.actions
+export const { setEmail, setPassword, setLearnerError, setTutorError, setRecaptchaToken} = loginSlice.actions
 export default loginSlice.reducer

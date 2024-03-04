@@ -2,12 +2,15 @@ import MailSignIn from "./mail_signin";
 import Normal from "./normal_signin";
 import axios from 'axios'
 import { useSelector } from "react-redux";
-import { setTutorError, setLearnerError } from "../../state/slices/loginSlice";
+import { setTutorError, setLearnerError, setRecaptchaToken } from "../../state/slices/loginSlice";
 import { useDispatch } from "react-redux";
 import Errorpop from "../Global/Error_popup";
 import Logo from "./logo_welcome_text";
+import { useRef} from 'react'
 
 function CardSignIn(){
+
+
     //knowing whether it's a tutor or learner signing up
     const path = window.location.pathname;
 
@@ -21,18 +24,28 @@ function CardSignIn(){
     
     const dispatch = useDispatch()
 
+    const recaptchaRef = useRef(null)
+
+
     //sending request to the api to login with user's credentials
     const handleLogin = async (e) => {
         e.preventDefault()
-        if(loginData.email && loginData.password) {
+        if(loginData.email && loginData.password && loginData.recaptchaToken) {
             try {
+                //resetting the recaptcha after attempt to login
+                recaptchaRef.current.reset()
+                dispatch(setRecaptchaToken(''))
+                
+                //sending request to the server in order to login
                 const response = await axios.post('http://localhost:5000/regularLogin', {
                     email: loginData.email, 
                     password: loginData.password, 
-                    information: firstSegment //telling whether it's a learner or tutor
+                    information: firstSegment, //telling whether it's a learner or tutor
+                    recaptchaToken: loginData.recaptchaToken //verifying the recaptcha
                 })
                 console.log(response);
             }catch(err) {
+                console.log(err.response.data.message);
                 if(firstSegment === 'learner'){
                     dispatch(setLearnerError(err.response.data.message))
                 }
@@ -65,15 +78,16 @@ function CardSignIn(){
     }
     
     return (
-        <form onSubmit={handleLogin} className="bg-white relative rounded-3xl shadow-lg px-6 py-2 justify-center flex flex-col space-y-7 w-[97%] md:w-[30%] lg:w-[25%] h-[90%]">
+        <form onSubmit={handleLogin} className="bg-white m-auto relative rounded-3xl shadow-lg px-6 py-2 flex flex-col space-y-7 w-[97%] md:w-[30%] lg:w-[25%] min-h-[90%]">
             <Logo></Logo>
             <MailSignIn></MailSignIn>
             <div className="flex w-full justify-center items-center">
                 <hr className="h-1 w-[47%] "></hr>
                 <span className="w-[6%] text-center text-darkg">OR</span>
                 <hr className="h-1 w-[47%]"></hr>
+                
             </div>
-            <Normal></Normal>
+            <Normal recaptchaRef={recaptchaRef}></Normal>
             <Errorpop error={handleErrorValue()} setError={handleSetError()}></Errorpop>
         </form>
     )
