@@ -10,14 +10,32 @@ function NavBar() {
                 <div className="flex justify-center items-center h-full w-auto space-x-2">
                     <img src="/e-learningLogo.png" alt="logo" className="w-12 h-12 object-cover"></img>
                     <div className="font-bold text-xl ">LINGUIFY</div>
-                    
                 </div>
                 <div className="flex justify-center items-center w-auto h-full space-x-6">
-                    <div className="text-darkg cursor-pointer">Courses</div>
-                    <div className="text-darkg cursor-pointer">Classrooms</div>
+                    <div className="flex justify-center cursor-pointer items-center space-x-2">
+                        <div className="relative h-full cursor-pointer">
+                            <span className="text-darkg">Tutors</span>
+                            <div className="absolute left-1/2 right-1/2 w-2 h-2 bg-button rounded-full"></div>
+                        </div>
+                    </div>
+                    <div className="flex justify-center cursor-pointer items-center space-x-2">
+                        <div className="relative h-full cursor-pointer">
+                            <span className="text-darkg">Courses</span>
+                            <div className="absolute left-1/2 right-1/2 w-2 h-2 bg-button rounded-full"></div>
+                        </div>
+                    </div>
+                    <div className="flex justify-center cursor-pointer items-center space-x-2">
+                        <div className="relative h-full cursor-pointer">
+                            <span className="text-darkg">Classrooms</span>
+                            <div className="absolute left-1/2 right-1/2 w-2 h-2 bg-button rounded-full"></div>
+                        </div>
+                    </div>
                     <div className="flex justify-center cursor-pointer items-center space-x-2">
                         <BsRobot color="#F28585" size="22"></BsRobot>
-                        <div className="text-darkg cursor-pointer">LinguaBuddy</div>
+                        <div className="relative h-full cursor-pointer">
+                            <span className="text-darkg">LinguaBuddy</span>
+                            <div className="absolute left-1/2 right-1/2 w-2 h-2 bg-button rounded-full"></div>
+                        </div>
                     </div>
                 </div>
                 <div className="flex-grow"></div>
