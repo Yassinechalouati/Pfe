@@ -1,6 +1,10 @@
 import Card from "./Card";
 import GroupeLessonsCard from "./GroupeLessonsCard";
-import ChatLessonCard from "./chatLessonCard";
+import ChatLessonCard from "./aichatLessonCard";
+import StudyBuddyCard from "./StudyBuddyCard";
+import StartedCard from "./StartedCard";
+import TutorsCard from "./TutorsCard";
+import CoursesCard from "./CoursesCard";
 
 function Body() {
 
@@ -10,17 +14,17 @@ function Body() {
     ]
 
     return (
-        <div className="grid grid-cols-3 w-full overflow-y-auto px-28 py-7 gap-5">
+        <div className="grid grid-cols-3 w-full h-[90%] overflow-y-auto px-28 py-7 gap-5">
             <div className="flex flex-col col-span-1 h-auto space-y-5">
                 <Card content={welcomeContent}></Card>
-                <GroupeLessonsCard></GroupeLessonsCard>      
+                <GroupeLessonsCard></GroupeLessonsCard>   
+                <StudyBuddyCard></StudyBuddyCard>   
                 <ChatLessonCard></ChatLessonCard>
             </div>
-            <div className="flex flex-col col-span-2 h-auto">
-                <div className="rounded-2xl py-5 h-auto flex-col flex justify-center items-center shadow bg-white">
-                    <img src="/user.png" alt="profilepicture"  className="w-14 h-14 object-cover"></img>
-                    <span>yoyo</span>
-                </div>            
+            <div className="flex flex-col col-span-2 h-auto space-y-5">
+                <StartedCard></StartedCard>  
+                <TutorsCard></TutorsCard>
+                <CoursesCard></CoursesCard>
             </div>
         </div>
     );

@@ -13,7 +13,8 @@ module.exports = {
         'lightbutton': '#FFF2E5',
         'errorbg' : '#ecc8c5',
         'errortext': '#c03b3a',
-        'successbg': '#def2d6'
+        'successbg': '#def2d6',
+        'lightGreen': '#F1FAF0'
       }
     },
   },
