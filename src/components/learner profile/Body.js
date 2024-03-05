@@ -14,14 +14,14 @@ function Body() {
     ]
 
     return (
-        <div className="grid grid-cols-3 w-full h-[90%] overflow-y-auto px-28 py-7 gap-5">
+        <div className="grid grid-cols-1 md:grid-cols-3 w-full h-[90%] overflow-y-auto px-2 sm:px-15 lg:px-28 py-7 gap-5">
             <div className="flex flex-col col-span-1 h-auto space-y-5">
                 <Card content={welcomeContent}></Card>
                 <GroupeLessonsCard></GroupeLessonsCard>   
                 <StudyBuddyCard></StudyBuddyCard>   
                 <ChatLessonCard></ChatLessonCard>
             </div>
-            <div className="flex flex-col col-span-2 h-auto space-y-5">
+            <div className="flex flex-col col-span-1 md:col-span-2 h-auto space-y-5">
                 <StartedCard></StartedCard>  
                 <TutorsCard></TutorsCard>
                 <CoursesCard></CoursesCard>

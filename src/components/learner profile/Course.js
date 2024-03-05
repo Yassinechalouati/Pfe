@@ -1,7 +1,7 @@
 import {MdOutlineNavigateNext} from 'react-icons/md'
 function Course() {
     return (
-        <div className="flex flex-col space-y-6 w-[30%] pb-3 rounded-3xl border hover:bg-lightg ">
+        <div className="flex flex-col space-y-6 pb-3 rounded-3xl border hover:bg-lightg">
             <img src="/teach.jpg" alt="tutorvideo" className="w-full h-36 object-cover rounded-t-3xl"></img> 
             <div className="flex flex-col space-y-3 px-5 w-full cursor-pointer">
                 <div className="self-start">
