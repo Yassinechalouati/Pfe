@@ -2,6 +2,8 @@ import { FcGoogle } from "react-icons/fc";
 import { setLearnerError, setTutorError } from "../../state/slices/loginSlice"
 import { useGoogleLogin } from '@react-oauth/google';
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { resetFields } from "../../state/slices/loginSlice";
 import axios from 'axios'
 
 
@@ -16,6 +18,8 @@ export default function MailSignIn() {
     const firstSegment = segments[1]; 
 
     const dispatch = useDispatch()
+
+    const navigate = useNavigate()
 
     //handle sign in via google
     const handleLogin = useGoogleLogin({
@@ -37,6 +41,12 @@ export default function MailSignIn() {
                 localStorage.clear();
                 localStorage.setItem('refreshtoken', resp.data.refreshToken)
                 localStorage.setItem('accesstoken', resp.data.accessToken)
+                dispatch(resetFields())
+                if(firstSegment === 'tutor'){
+                    navigate('/tutor/learner')
+                }else {
+                    navigate('/tutor/profile')
+                }
             }catch(err) {
                 const error = err.response.data.message
                 if(firstSegment === 'tutor') {

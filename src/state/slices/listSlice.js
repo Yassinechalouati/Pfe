@@ -154,7 +154,8 @@ export const listSlice = createSlice({
         },
         getListOfEducation: (state, action) => {
             state.listOfEducation = action.payload
-        }
+        },
+        resetLists: () => initialState
 
     }
 })
@@ -184,6 +185,7 @@ export const {
     setListOfEducationSaved,
     getListOfLanguages,
     getListOfEducation,
-    getListOfWorkExperience
+    getListOfWorkExperience,
+    resetLists
 } = listSlice.actions
 export default listSlice.reducer

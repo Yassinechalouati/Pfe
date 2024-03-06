@@ -5,11 +5,15 @@ import { BsRobot } from "react-icons/bs";
 import { IoMenu } from "react-icons/io5";
 import { useState } from "react";
 import Drawer from "./Drawer";
+import { useSelector } from "react-redux";
 
 
+ 
 
 function NavBar() {
     const [isOpen, setIsOpen] =useState(false)
+
+    const learnerData = useSelector(state => state.userData)
 
     const handleDrawer = () => {
         setIsOpen(true)
@@ -59,7 +63,7 @@ function NavBar() {
                         <IoChatbubbles className="cursor-pointer hidden lg:block" color="#767676" size="22"></IoChatbubbles>
                         <IoNotifications className="cursor-pointer hidden lg:block" color="#767676" size="22"></IoNotifications>
                         <IoMdCalendar className="cursor-pointer hidden lg:block" color="#767676" size="22"></IoMdCalendar>
-                        <img src="/user.png" alt="prolfiepicture" className="cursor-pointer hidden lg:block rounded-full w-12 h-12 object-cover"></img>
+                        <img src={`${learnerData.pic? learnerData.pic : "/user.png"}`} alt="prolfiepicture" className="cursor-pointer hidden lg:block rounded-full w-12 h-12 object-cover"></img>
                     </div>
                 </div>
                 <Drawer isOpen={isOpen} closeDrawer={() => setIsOpen(!isOpen)}/>

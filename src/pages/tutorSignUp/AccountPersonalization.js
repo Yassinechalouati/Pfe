@@ -10,7 +10,8 @@ import { setError } from "../../state/slices/tutorSlice"
 import Errorpop from "../../components/Global/Error_popup"
 import {useNavigate} from 'react-router-dom'
 import axiosInstance from "../../interceptors/axiosInterceptor";
-import { setIsLoading } from "../../state/slices/tutorSlice";
+import { setIsLoading, resetUserData } from "../../state/slices/tutorSlice";
+import { resetLists } from "../../state/slices/listSlice";
 import {useState} from 'react'
 
 function AccountPersonalization() {
@@ -59,8 +60,11 @@ function AccountPersonalization() {
                 }
             })
             .then((response) => {
-                console.log(response);
-                navigate('/tutor/profile');
+                console.log(response)
+                //clearing state at the end of sign up process
+                dispatch(resetUserData())
+                dispatch(resetLists())
+                navigate('/tutor/profile')
             })
             .catch((error) => {
                 console.log(error);

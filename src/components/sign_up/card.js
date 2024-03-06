@@ -4,7 +4,7 @@ import Second from './second_step'
 import Third from './third_step'
 import {useSelector} from 'react-redux'
 import { useDispatch } from 'react-redux'
-import {setSignUpStep, setIsLoading, setIsVerified, setVerificationLearner} from '../../state/slices/userSlice'
+import {setSignUpStep, setIsLoading, setIsVerified, setVerificationLearner, resetUserData} from '../../state/slices/userSlice'
 import { setError } from '../../state/slices/userSlice'
 import axios from 'axios'
 import axiosInstance from '../../interceptors/axiosInterceptor';
@@ -127,6 +127,8 @@ export default function Card() {
                 }
             })
             console.log(response);
+            dispatch(resetUserData())
+            navigate('/learner/profile')
         } catch (err) {
             if (err.response && err.response.status === 401) {
                 // Handle 401 error (token expired or unauthorized)

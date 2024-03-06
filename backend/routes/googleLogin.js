@@ -20,7 +20,7 @@ router.post('/GoogleLogin', async (req, res) => {
             if (payload) {
                 console.log('Token verified successfully');
                 //verifying if the email already exists in the Database
-                const test =`SELECT email, 'tutor' as source FROM tutor WHERE email = ? UNION SELECT email, 'learner' as source FROM learner WHERE email = ?`
+                const test =`SELECT id, email, 'tutor' as source FROM tutor WHERE email = ? UNION SELECT id, email, 'learner' as source FROM learner WHERE email = ?`
                 mysql.query(test, [payload.email, payload.email], async (err, result) => {
                     if (err) {
                         console.log(err);
@@ -36,8 +36,8 @@ router.post('/GoogleLogin', async (req, res) => {
                     }else {
                         //if he's logging in as tutor and we find him in tutor table or he logs in as learner and we find him in learner table we grant him access
                         if((information === 'tutor' &&  result[0].source === 'tutor') || (information === 'learner' && result[0].source === 'learner')) {
-                            const {refreshToken} = await generateRefreshToken(process.env.REFRESH_TOKEN_SECRET)
-                            const {accessToken} = await generateAccessToken(process.env.ACCESS_TOKEN_SECRET)
+                            const {refreshToken} = await generateRefreshToken({id: result[0].id, role:information ==='learner'? "Learner": "Tutor"})
+                            const {accessToken} = await generateAccessToken({id: result[0].id, role:information ==='learner'? "Learner": "Tutor"})
                             res.status(200).json({role:information, refreshToken: refreshToken, accessToken: accessToken})
                         }else {
                             res.status(409).json({message: `Not a ${information} account`})

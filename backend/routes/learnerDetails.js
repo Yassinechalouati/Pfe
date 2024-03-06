@@ -2,10 +2,41 @@ const express = require('express');
 const router = express.Router()
 const auth = require('../middleware/auth')
 const roleCheck = require('../middleware/roleCheck')
+const mysql = require('../helpers/Sql_connection')
 
 
 router.post('/details', auth, roleCheck(["Learner"]), (req, res) => {
-    res.status(200).json({message:"details!"})
+    console.log(req.user.id);
+    const userId = req.user.id
+    const query ='select * from learner where id = ?'
+    mysql.query(query, [userId] , (err, result) => {
+        if(err) {
+            console.log(err)
+            res.status(500).json({message: 'Internal Server Error'})
+        }else if(result.length ===0) {
+            console.log("no user with this id");
+            res.status(400).json({message: "user doesn't exist"})
+        }else {
+            const data = {
+                firstname: result[0].firstname,
+                lastname: result[0].lastname,
+                email: result[0].email,
+                hasPassword: result[0].pword !== '',
+                pfp: result[0].pfp,
+                country: result[0].Country,
+                tel: result[0].tel,
+                language_proficiency: result[0].language_proficiency,
+                learning_goals: result[0].learning_goals,
+                goals: result[0].goals, 
+                focus_themes: result[0].focus_themes,
+                interested_topics: result[0].interested_topics,
+                comfortlevel: result[0].comfortlevel,
+                Birthday: result[0].Birthday
+            }
+            res.status(200).json({message: data})
+        }
+    })  
+
 })
 
 module.exports = router

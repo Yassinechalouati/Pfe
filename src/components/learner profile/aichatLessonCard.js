@@ -7,7 +7,7 @@ function ChatLessonCard() {
             <span className="font-bold text-xl text-left self-start">Session with LinguaBuddy</span>
             <span className="text-sm self-start text-left"> Practice speaking with our ai for free today!</span>
         </div>,
-        <button className="border border-button text-button rounded-2xl h-10 bg-lightbutton flex justify-center items-center text-sm font-bold w-full">Start a chat with LinguaBuddy</button>
+        <button key="button" className="border border-button text-button rounded-2xl h-10 bg-lightbutton flex justify-center items-center text-sm font-bold w-full">Start a chat with LinguaBuddy</button>
     ]
 
     return (

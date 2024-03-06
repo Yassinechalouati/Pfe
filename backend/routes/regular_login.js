@@ -21,7 +21,7 @@ router.post('/regularLogin', async (req, res) => {
         }
         if(email && password) { // checking whether the user sent his credentials or not
             //assuring that the email exists
-            const query = `SELECT pword FROM ${mysql.escapeId(information)} where email = ?`
+            const query = `SELECT id, pword FROM ${mysql.escapeId(information)} where email = ?`
             mysql.query(query, [email], (err, result) => {
                 if(err) {
                     console.log(err);
@@ -35,8 +35,8 @@ router.post('/regularLogin', async (req, res) => {
                             res.status(401).json({message: 'Invalid Password'})//not matching case
                         }else {//matching case
                             //return tokenn
-                            const {refreshToken} = await generateRefreshToken(process.env.REFRESH_TOKEN_SECRET)
-                            const {accessToken} = await generateAccessToken(process.env.ACCESS_TOKEN_SECRET)
+                            const {refreshToken} = await generateRefreshToken({id: user.id, role:information ==='learner'? "Learner": "Tutor"})
+                            const {accessToken} = await generateAccessToken({id: user.id, role:information ==='learner'? "Learner": "Tutor"})
                             res.status(200).json({refreshToken: refreshToken, accessToken: accessToken})
                         }
                     })

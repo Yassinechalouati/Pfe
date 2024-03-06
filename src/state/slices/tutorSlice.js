@@ -89,12 +89,7 @@ export const userSlice = createSlice({
     setCountry: (state, action )=> {
       state.Country = action.payload
     },
-    resetUserData: (state, action) => {
-      state.email = ''
-      state.password = ''
-      state.confpass = ''
-      state.isLoading = false
-    }
+    resetUserData: () => initialState
   },
 })
 

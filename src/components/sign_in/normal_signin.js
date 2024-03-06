@@ -1,14 +1,25 @@
 import { useSelector } from 'react-redux'
 import { useDispatch } from 'react-redux';
 import {setEmail, setPassword, setRecaptchaToken} from '../../state/slices/loginSlice'
-import { useRef} from 'react'
 import ReCAPTCHA from 'react-google-recaptcha';
+import { useNavigate } from 'react-router-dom';
 
 
 export default function Normal({recaptchaRef}) {
     const loginData = useSelector(state => state.loginData)
 
     const dispatch = useDispatch()
+    
+    const navigate = useNavigate()
+
+    //knowing whether it's a tutor or learner signing up
+    const path = window.location.pathname;
+
+    // Split the path by "/"
+    const segments = path.split('/');
+
+    // Get the value of the first segment
+    const firstSegment = segments[1]; 
     
 
     //handling the email field when typing
@@ -25,6 +36,10 @@ export default function Normal({recaptchaRef}) {
         dispatch(setRecaptchaToken(value))
     }
     
+    const handleSignUp = (e) => {
+        e.preventDefault()
+        navigate(`/${firstSegment}/signup`)
+    }
 
     return(
         <div className="w-full flex flex-col space-y-5 items-center">
@@ -59,7 +74,7 @@ export default function Normal({recaptchaRef}) {
                 />
             </div>
             <div className="mb-4 text-sm">
-                <button className="text-blue-500 underline">Forgot your password?</button>
+                <button type="button" className="text-blue-500 underline">Forgot your password?</button>
             </div>
             <button 
             disabled={!(loginData.email && loginData.password && loginData.recaptchaToken)} 
@@ -68,7 +83,7 @@ export default function Normal({recaptchaRef}) {
                 Sign In
             </button>
             <div className="mt-4 text-sm">
-                <p>Don't have an account? <button className="text-blue-500 underline">Sign up</button></p>
+                <p>Don't have an account? <button onClick={handleSignUp} className="text-blue-500 underline">Sign up</button></p>
             </div>
         </div>
     );

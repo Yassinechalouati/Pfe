@@ -3,6 +3,7 @@
 const roleCheck = (roles) => {
     return (req, res, next) => {
         roles.push("user")
+        console.log(req.user.role);
         if(req.user.role.includes(...roles)) {
             next()
         }else {

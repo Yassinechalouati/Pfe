@@ -1,6 +1,15 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
+  firstname: '',
+  lastname: '',
+  hasPassword: '', // this indicates whether the learner is signed up using gmail or not
+  country:'', 
+  tel: '', 
+  life_goals: '',
+  focus_themes: '',
+  comfortlevel: '',
+  Birthday: '',
   email: '',
   password: '',
   confpass: '',
@@ -73,19 +82,37 @@ export const userSlice = createSlice({
     setVerificationLearner: (state, action) => {
       state.verificationPlaceholder = action.payload
     },
-    resetUserData: (state, action) => {
-      state.email = ''
-      state.password = ''
-      state.confpass = ''
-      state.proficiency = ''
-      state.goals= []
-      state.topics= []
-      state.signupStep = 0
-      state.isLoading = false
-    }
+    setFirstName: (state, action) => {
+      state.firstname= action.payload
+    },
+    setLastName: (state, action) => {
+      state.lastname = action.payload
+    },
+    setCountry: (state, action) => {
+      state.country = action.payload
+    },
+    setTel: (state, action) => {
+      state.tel = action.payload
+    },
+    setLife_Goals: (state, action) => {
+      state.life_goals = action.payload
+    },
+    setFocusThemes: (state, action) => {
+      state.focus_themes = action.payload
+    },
+    setComfortLevel: (state, action) => {
+      state.comfortlevel = action.payload
+    },
+    setBirthday: (state, action) => {
+      state.Birthday = action.payload
+    },
+    setHasPassword: (state, action) => {
+      state.hasPassword = action.payload
+    },
+    resetUserData: () => initialState
   },
 })
 
 
-export const { setEmail, setPassword, setConfpass, setPic, setProficiency, setGoals, setTopics, setSignUpStep, resetUserData, setError, setIsLoading, setIsVerified, setVerificationLearner} = userSlice.actions
+export const { setEmail, setPassword, setConfpass, setPic, setProficiency, setGoals, setTopics, setSignUpStep, resetUserData, setError, setIsLoading, setIsVerified, setVerificationLearner, setBirthday,setComfortLevel,setCountry,setFirstName,setFocusThemes,setHasPassword,setLastName,setLife_Goals,setTel} = userSlice.actions
 export default userSlice.reducer

@@ -2,8 +2,6 @@ const express = require('express');
 const router = express.Router()
 const mysql= require('../helpers/Sql_connection')
 const verifyGoogleToken = require('../helpers/googleTokenverif')
-const generateRefreshToken = require('../helpers/generateRefreshToken')
-const generateAccessToken = require('../helpers/generateAccessToken');
 const insertLearner = require('../helpers/learnerInsertion');
 
 

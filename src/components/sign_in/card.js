@@ -2,11 +2,12 @@ import MailSignIn from "./mail_signin";
 import Normal from "./normal_signin";
 import axios from 'axios'
 import { useSelector } from "react-redux";
-import { setTutorError, setLearnerError, setRecaptchaToken } from "../../state/slices/loginSlice";
+import { setTutorError, setLearnerError, setRecaptchaToken, resetFields } from "../../state/slices/loginSlice";
 import { useDispatch } from "react-redux";
 import Errorpop from "../Global/Error_popup";
 import Logo from "./logo_welcome_text";
 import { useRef} from 'react'
+import { useNavigate } from "react-router-dom";
 
 function CardSignIn(){
 
@@ -26,6 +27,8 @@ function CardSignIn(){
 
     const recaptchaRef = useRef(null)
 
+    const navigate = useNavigate()
+
 
     //sending request to the api to login with user's credentials
     const handleLogin = async (e) => {
@@ -44,6 +47,12 @@ function CardSignIn(){
                     recaptchaToken: loginData.recaptchaToken //verifying the recaptcha
                 })
                 console.log(response);
+                dispatch(resetFields())
+                if(firstSegment === 'tutor'){
+                    navigate('/tutor/learner')
+                }else {
+                    navigate('/tutor/profile')
+                }
             }catch(err) {
                 console.log(err.response.data.message);
                 if(firstSegment === 'learner'){
