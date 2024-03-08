@@ -56,6 +56,7 @@ const regularLoginRouter = require('./routes/regular_login')
 const googleLoginRouter = require('./routes/googleLogin')
 const speedTestRouter = require('./routes/speedTest')
 const personalizationRouter = require('./routes/saveTutorPersonalization')
+const tutorSearchRouter = require('./routes/SearchTutors')
 
 //apis
 app.use('/', googleSignupRouter)
@@ -72,6 +73,7 @@ app.use('/', regularLoginRouter)
 app.use('/', googleLoginRouter)
 app.use('/', speedTestRouter)
 app.use('/tutor', personalizationRouter)
+app.use('/', tutorSearchRouter)
 
 // Socket.io logic
 require('./helpers/socketHandler')(io);

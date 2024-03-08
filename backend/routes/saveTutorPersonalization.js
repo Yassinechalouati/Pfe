@@ -8,15 +8,16 @@ const upload= require('../middleware/fileUploads')
 router.post('/personalization', auth, roleCheck(["Tutor"]), upload.fields([{ name: 'userFiles', maxCount: 20 }]), (req, res) => {
     console.log(req.files);
     const {
-        country,
-        Description,
+        Country,
+        description,
         TeachingStyle,
         AboutMe,
         education,
         languages,
-        workEperience
+        workExperience
     } = req.body;
 
+    console.log(req.body);
     /*const workExperience = JSON.parse(req.body.workExperience)
     const Languages = JSON.parse(req.body.languages)
     const Education = JSON.parse(req.body.education)*/
@@ -29,7 +30,7 @@ router.post('/personalization', auth, roleCheck(["Tutor"]), upload.fields([{ nam
 
     // Update the tutor information with the filenames
     const query = 'UPDATE tutor SET Country = ?, pfp = ?, introductionVideo = ?, description = ?, teachingStyle = ?, AboutMe = ?, Languages = ?, WorkExperience = ?, education = ? WHERE id = ?';
-    mysql.query(query, [country, pfpFileName, introductionVideoFileName, Description, TeachingStyle, AboutMe, languages, workEperience, education, id], (err, result) => {
+    mysql.query(query, [Country, pfpFileName, introductionVideoFileName, description, TeachingStyle, AboutMe, languages, workExperience, education, id], (err, result) => {
         if (err) {
             console.error('Error updating tutor:', err);
             res.status(500).json({ error: 'Error updating tutor' });

@@ -8,23 +8,31 @@ import Drawer from "./Drawer";
 import { useSelector } from "react-redux";
 import { NavLink } from 'react-router-dom';
 
+
  
 
 function NavBar() {
     const [isOpen, setIsOpen] =useState(false)
 
     const learnerData = useSelector(state => state.userData)
+    
 
     const handleDrawer = () => {
         setIsOpen(true)
     }
+
     return (
         <>
-            <div className="h-[10%] w-full bg-white shadow flex items-center space-x-8 px-10 ">
+            <div className="h-[10%] w-full bg-white shadow flex items-center space-x-8 pr-10 ">
+                    <NavLink to="/learner/profile"
+                        className="flex lg:hidden justify-center nav-link items-center h-full w-[150px] space-x-2"
+                    >
+                        <img src="/e-learningLogo.png" alt="logo" className="w-12 h-12 object-cover"></img>
+                        <div className="font-bold text-xl ">LINGUIFY</div>
+                    </NavLink>
                     <nav className="justify-center relative hidden lg:flex items-center w-auto h-full">
                         <NavLink to="/learner/profile"
                             className="flex justify-center nav-link items-center h-full w-[150px] space-x-2"
-                            activeClassName ="active"
                         >
                             <img src="/e-learningLogo.png" alt="logo" className="w-12 h-12 object-cover"></img>
                             <div className="font-bold text-xl ">LINGUIFY</div>
@@ -32,28 +40,24 @@ function NavBar() {
                         <NavLink
                             to="/learner/profile/Tutors"
                             className="flex nav-link w-[80px] h-full no-underline justify-center cursor-pointer items-center"
-                            activeClassName="active"
                         >
                             <span className="text-darkg">Tutors</span>
                         </NavLink>
                         <NavLink
                             to="/learner/profile/Courses"
                             className="flex nav-link w-[80px] h-full no-underline justify-center cursor-pointer items-center"
-                            activeClassName="active"
                         >
                             <span className="text-darkg">Courses</span>
                         </NavLink>
                         <NavLink
                             to="/learner/profile/Classrooms"
                             className="flex nav-link no-underline h-full w-[100px] justify-center cursor-pointer items-center"
-                            activeClassName="active"
                         >
                             <span className="text-darkg">Classrooms</span>
                         </NavLink>
                         <NavLink
                             to="/learner/profile/LinguaBuddy"
                             className="flex nav-link no-underline h-full w-[140px] justify-center cursor-pointer items-center space-x-2"
-                            activeClassName="active"
                         >
                             <BsRobot color="#F28585" size="22"></BsRobot>
                             <span className="text-darkg">LinguaBuddy</span>

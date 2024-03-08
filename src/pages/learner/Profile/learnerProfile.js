@@ -1,13 +1,16 @@
-import Body from "../../../components/learner profile/Body";
 import NavBar from "../../../components/learner profile/NavBar";
 import axiosInstance from "../../../interceptors/axiosInterceptor";
 import { useEffect } from "react";
 import { setIsLoading, setBirthday, setComfortLevel, setCountry, setEmail, setFirstName, setFocusThemes, setGoals, setHasPassword, setLastName, setLife_Goals, setPic, setTel, setTopics } from "../../../state/slices/userSlice";
 import { useDispatch } from "react-redux";
+import CoursesSearch from "./CoursesSearch";
+import TutorsSearch from "./TutorsSearch";
+import ClassroomsSearch from './ClassroomsSearch'
+import Body from '../../../components/learner profile/Body'
+import LinguaBuddy from "./LinguaBuddy";
 
 
 function LearnerProfile() {
-
     const dispatch = useDispatch()
 
     useEffect(() => {
@@ -42,19 +45,44 @@ function LearnerProfile() {
                 console.log(error);
                 dispatch(setIsLoading(false))
             }
-            finally {
-                
-            }
         };
-    
+        
         fetchData();
     }, []);
+
     
+    const bodyContent = {
+        CoursesSearch: <CoursesSearch></CoursesSearch>,
+        TutorsSearch: <TutorsSearch></TutorsSearch>,
+        Profile: <Body></Body>,
+        ClassroomsSearch: <ClassroomsSearch></ClassroomsSearch>,
+        ChatBot: <LinguaBuddy></LinguaBuddy>
+    }
+    //knowing whether it's a tutor or learner signing up
+    const path = window.location.pathname;
+
+
+
+    const handleBody = () => {
+        if (path === '/learner/profile') {
+            return bodyContent.Profile
+        }else if (path === '/learner/profile/Tutors') {
+            return bodyContent.TutorsSearch
+        }else if(path === '/learner/profile/LinguaBuddy'){
+            return bodyContent.ChatBot
+        }else if(path === '/learner/profile/Courses') {
+            return bodyContent.CoursesSearch
+        }else if(path === '/learner/profile/Classrooms') {
+            return bodyContent.ClassroomsSearch
+        }
+    }
 
     return (
         <div className="w-screen h-screen bg-backg flex flex-col">
             <NavBar></NavBar>
-            <Body></Body>
+            {
+                handleBody()
+            }
         </div>
     );
 }

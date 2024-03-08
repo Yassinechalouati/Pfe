@@ -12,9 +12,9 @@ function StartedCard(props) {
         <hr key="line2" className="h-1 w-full "></hr>,
         <StartedCardElement key="icon2" image='Subscribe.png' title="Subscribe and start learning" description="Choose a learning plan that works for you"></StartedCardElement>,
         <hr key="line 3" className="h-1 w-full "></hr>,
-        <StartedCardElement key="icon3" image='SearchTeacher.png' title="Browse our community of tutors" description="Find a friendly tutor to start practicing your English"></StartedCardElement>,
+        <StartedCardElement key="icon3" image='SearchTeacher.png' action="/learner/profile/Tutors" title="Browse our community of tutors" description="Find a friendly tutor to start practicing your English"></StartedCardElement>,
         <hr key="line 4" className="h-1 w-full "></hr>,
-        <StartedCardElement key="6" image='courses.png' title="Explore our courses" description="Discover tailored courses that fit your interests"></StartedCardElement>,
+        <StartedCardElement key="6" image='courses.png' action="/learner/profile/Courses" title="Explore our courses" description="Discover tailored courses that fit your interests"></StartedCardElement>,
     ]
 
     return (

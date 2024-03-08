@@ -1,4 +1,5 @@
 import {MdOutlineNavigateNext} from 'react-icons/md'
+import { NavLink } from 'react-router-dom';
 
 function StartedCardElement(props) {
     return (
@@ -13,9 +14,9 @@ function StartedCardElement(props) {
                 </span>
             </div>
             <div className="flex-grow"></div>
-            <div className="flex justify-center border cursor-pointer border-elements rounded-full bg-lightGreen items-center  w-10 h-10">
+            <NavLink to={props.action} className="flex justify-center border cursor-pointer border-elements rounded-full bg-lightGreen items-center  w-10 h-10">
                 <MdOutlineNavigateNext size="22" color="#87A922"></MdOutlineNavigateNext>
-            </div>
+            </NavLink>
         </div>
     );
 }

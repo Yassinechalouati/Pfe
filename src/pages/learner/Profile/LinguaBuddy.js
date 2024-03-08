@@ -1,13 +1,9 @@
-import NavBar from "../../../components/learner profile/NavBar";
 
 function LinguaBuddy(props) {
     return (
-        <div className="flex w-screen h-screen flex-col bg-backg ">
-            <NavBar></NavBar>
-            <div className="h-[10%]">
+            <div className="h-[90%]">
                 CHAT BOT
             </div>
-        </div>
     );
 }
 

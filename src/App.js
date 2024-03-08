@@ -8,11 +8,6 @@ import Verification from './pages/EmailVerif'
 import {Route, BrowserRouter as Router, Routes} from 'react-router-dom'
 import TutorProfile from './pages/tutorProfile/TutorProfile';
 import LearnerProfile from './pages/learner/Profile/learnerProfile';
-import TutorsSearch from './pages/learner/Profile/TutorsSearch';
-import LinguaBuddy from './pages/learner/Profile/LinguaBuddy';
-import CoursesSearch from './pages/learner/Profile/CoursesSearch';
-import ClassroomsSearch from './pages/learner/Profile/ClassroomsSearch';
-
 function App() {
   return (
     <Router>
@@ -28,10 +23,10 @@ function App() {
         <Route path='/tutor/signup/personalization' element={<AccountPersonalization></AccountPersonalization>}></Route>
         <Route path='/tutor/profile' element={<TutorProfile></TutorProfile>}></Route>
         <Route path='/learner/profile' element={<LearnerProfile></LearnerProfile>}></Route>
-        <Route path='/learner/profile/Tutors' element={<TutorsSearch></TutorsSearch>}></Route>
-        <Route path='/learner/profile/LinguaBuddy' element={<LinguaBuddy></LinguaBuddy>}></Route>
-        <Route path='/learner/profile/Courses' element={<CoursesSearch></CoursesSearch>}></Route>
-        <Route path='/learner/profile/Classrooms' element={<ClassroomsSearch></ClassroomsSearch>}></Route>
+        <Route path='/learner/profile/Tutors' element={<LearnerProfile></LearnerProfile>}></Route>
+        <Route path='/learner/profile/LinguaBuddy' element={<LearnerProfile></LearnerProfile>}></Route>
+        <Route path='/learner/profile/Courses' element={<LearnerProfile></LearnerProfile>}></Route>
+        <Route path='/learner/profile/Classrooms' element={<LearnerProfile></LearnerProfile>}></Route>
 
       </Routes>
     </Router>

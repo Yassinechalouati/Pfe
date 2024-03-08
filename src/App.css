@@ -127,6 +127,53 @@
   transition: all .5s ease 0s;
 }
 
+.animation2 {
+  position: absolute;
+  width: 5px;
+  height: 15px;
+  z-index: 0;
+  left: 0;
+  background-color: #FA4659;
+  transition: all .5s ease 0s;
+}
+
+.drawerNav.active:nth-of-type(1) ~ .animation2 {
+  top: 0;
+  height: 40px;
+
+}
+
+.drawerNav.active:nth-of-type(2) ~ .animation2 {
+  top: 40px;
+  height: 40px;
+}
+
+.drawerNav.active:nth-of-type(3) ~ .animation2 {
+  top: 80px;
+  height: 40px;
+}
+
+.drawerNav.active:nth-of-type(4) ~ .animation2 {
+  top: 120px;
+  height: 40px;
+
+}
+
+.drawerNav.active:nth-of-type(5) ~ .animation2 {
+  top: 228px;
+  height: 40px;
+}
+
+.drawerNav.active:nth-of-type(6) ~ .animation2 {
+  top: 268px;
+  height: 40px;
+}
+
+.drawerNav.active:nth-of-type(7) ~ .animation2 {
+  top: 308px;
+  height: 40px;
+}
+
 
 .nav-link.active:nth-of-type(1) ~ .animation {
   width: 0;
