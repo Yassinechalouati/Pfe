@@ -14,7 +14,7 @@ function StartedCardElement(props) {
             </div>
             <div className="flex-grow"></div>
             <div className="flex justify-center border cursor-pointer border-elements rounded-full bg-lightGreen items-center  w-10 h-10">
-                <MdOutlineNavigateNext size="22" color="#B7E5B4"></MdOutlineNavigateNext>
+                <MdOutlineNavigateNext size="22" color="#87A922"></MdOutlineNavigateNext>
             </div>
         </div>
     );

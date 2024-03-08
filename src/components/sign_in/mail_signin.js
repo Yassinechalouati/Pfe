@@ -45,7 +45,7 @@ export default function MailSignIn() {
                 if(firstSegment === 'tutor'){
                     navigate('/tutor/learner')
                 }else {
-                    navigate('/tutor/profile')
+                    navigate('/learner/profile')
                 }
             }catch(err) {
                 const error = err.response.data.message
