@@ -17,6 +17,7 @@ router.post('/SearchTutors', auth, roleCheck(["Learner"]), (req, res) => {
         }
         else {
             console.log("tutors exist")
+            console.log(result);
             res.status(200).json({message: result})
         }
     })

@@ -57,6 +57,10 @@ const googleLoginRouter = require('./routes/googleLogin')
 const speedTestRouter = require('./routes/speedTest')
 const personalizationRouter = require('./routes/saveTutorPersonalization')
 const tutorSearchRouter = require('./routes/SearchTutors')
+const getFiles = require('./middleware/Files')
+const forgotpassword = require('./routes/forgotPassword')
+const verifyForgotPassword = require('./routes/verifyForgotPasswordToken')
+const resetpassword = require('./routes/resetPassword')
 
 //apis
 app.use('/', googleSignupRouter)
@@ -74,9 +78,16 @@ app.use('/', googleLoginRouter)
 app.use('/', speedTestRouter)
 app.use('/tutor', personalizationRouter)
 app.use('/', tutorSearchRouter)
+app.use('/', getFiles)
+app.use('/', forgotpassword)
+app.use('/', verifyForgotPassword)
+app.use('/', resetpassword)
+
 
 // Socket.io logic
 require('./helpers/socketHandler')(io);
+
+
 
 server.listen(port, () => {
     console.log(`Server running on port ${port}`)

@@ -10,12 +10,13 @@ const storage = multer.diskStorage({
         // Get the user ID from the request object
         const userId = req.user.id;
 
+
         // Determine the directory based on file type
         let directory;
         if (file.mimetype.startsWith('image')) {
-            directory = `./uploads/images/${userId}`;
+            directory = `./uploads/images/${req.user.role}/${userId}`;
         } else if (file.mimetype.startsWith('video')) {
-            directory = `./uploads/videos/${userId}`;
+            directory = `./uploads/videos/${req.user.role}/${userId}`;
         } else {
             return cb({ message: 'Unsupported file type' }, false);
         }

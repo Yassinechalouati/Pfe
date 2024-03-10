@@ -2,7 +2,7 @@ import { useSelector } from 'react-redux'
 import { useDispatch } from 'react-redux';
 import {setEmail, setPassword, setRecaptchaToken} from '../../state/slices/loginSlice'
 import ReCAPTCHA from 'react-google-recaptcha';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, NavLink} from 'react-router-dom';
 
 
 export default function Normal({recaptchaRef}) {
@@ -74,7 +74,7 @@ export default function Normal({recaptchaRef}) {
                 />
             </div>
             <div className="mb-4 text-sm">
-                <button type="button" className="text-blue-500 underline">Forgot your password?</button>
+                <NavLink to={`/${firstSegment}/signin/forgotpassword`}  className="text-blue-500 underline">Forgot your password?</NavLink>
             </div>
             <button 
             disabled={!(loginData.email && loginData.password && loginData.recaptchaToken)} 

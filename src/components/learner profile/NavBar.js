@@ -23,7 +23,7 @@ function NavBar() {
 
     return (
         <>
-            <div className="h-[10%] w-full bg-white shadow flex items-center space-x-8 pr-10 ">
+            <div className="h-[10%] w-full bg-white shadow flex items-center space-x-8 pr-10 pl-10 md:pr-10 ">
                     <NavLink to="/learner/profile"
                         className="flex lg:hidden justify-center nav-link items-center h-full w-[150px] space-x-2"
                     >
@@ -77,7 +77,7 @@ function NavBar() {
                         <IoMdCalendar className="cursor-pointer hidden lg:block" color="#767676" size="22"></IoMdCalendar>
                         {
                             learnerData.isLoading?
-                            <div className="rounded-full animate-pulse bg-darkg w-12 h-12 self-center"></div>
+                            <div className="rounded-full hidden lg:block animate-pulse bg-darkg w-12 h-12 self-center"></div>
                             :
                             <img src={`${learnerData.pic? learnerData.pic : "/user.png"}`} alt="prolfiepicture" className="cursor-pointer hidden lg:block rounded-full w-12 h-12 object-cover"></img>
                         }

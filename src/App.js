@@ -8,6 +8,7 @@ import Verification from './pages/EmailVerif'
 import {Route, BrowserRouter as Router, Routes} from 'react-router-dom'
 import TutorProfile from './pages/tutorProfile/TutorProfile';
 import LearnerProfile from './pages/learner/Profile/learnerProfile';
+import ForgotPassword from './pages/ForgotPassword';
 function App() {
   return (
     <Router>
@@ -27,6 +28,9 @@ function App() {
         <Route path='/learner/profile/LinguaBuddy' element={<LearnerProfile></LearnerProfile>}></Route>
         <Route path='/learner/profile/Courses' element={<LearnerProfile></LearnerProfile>}></Route>
         <Route path='/learner/profile/Classrooms' element={<LearnerProfile></LearnerProfile>}></Route>
+        <Route path="/learner/signin/forgotpassword" element={<Signin></Signin>}></Route>
+        <Route path="/tutor/signin/forgotpassword" element={<Signin></Signin>}></Route>
+        <Route path="/users/ForgotPassword/:token" element={<ForgotPassword></ForgotPassword>}></Route>
 
       </Routes>
     </Router>

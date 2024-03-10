@@ -1,25 +1,33 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import TutorSearchCard from "../../../components/learner profile/TutorSearchCard";
-import { setIsLoading } from "../../../state/slices/userSlice";
+import { setTutorSearchList } from "../../../state/slices/userSlice";
 import axiosInstance from "../../../interceptors/axiosInterceptor";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import Loading from '../../../components/Global/Loading'
+
 
 function TutorsSearch(props) {
 
     const dispatch = useDispatch()
 
+    const [loading, setLoading] = useState(false)
+
+    const learnerData = useSelector(state => state.userData)
+
     async function fetchData () {
-        dispatch(setIsLoading(true))
-            try {
+        try {
+                setLoading(true)
                 const response = await axiosInstance.post('http://localhost:5000/SearchTutors', {}, {
                     headers: {
                         'Authorization': `Bearer ${localStorage.getItem('accesstoken')}`,
                         'Content-Type': 'multipart/form-data' // Set the content type to multipart/form-data
                     }
                 });
-                console.log(response);
+                dispatch(setTutorSearchList(response.data.message))
+                setLoading(false)
             }catch(err) {
                 console.log(err)
+                setLoading(false)
             }
     }
 
@@ -32,8 +40,8 @@ function TutorsSearch(props) {
                 <div className="flex w-full items-center space-x-8 ">
                     <span className="font-bold text-2xl text-center"> Find a Tutor</span>
                     <span className="cursor-pointer">All</span>
-                    <span className="  ">Online</span>
-                    <span className="  ">Favorites</span>
+                    <span className="cursor-pointer">Online</span>
+                    <span className="cursor-pointer">Favorites</span>
                 </div>
                 <input
                 type="search"
@@ -43,10 +51,19 @@ function TutorsSearch(props) {
                 <div className="w-full"> 
                     <span className="">Filter by:</span>
                 </div>
-                <div className="grid grid-cols-3 w-full gap-5 ">
-                    <TutorSearchCard></TutorSearchCard>
-                    <TutorSearchCard></TutorSearchCard>
-                </div>
+                {
+                    loading? 
+                    <Loading></Loading>
+                    :
+                    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 w-full gap-5 ">
+                        {
+                            learnerData.tutorSearchList.map((tutor, index) => {
+                                return <TutorSearchCard key={index} tutor={tutor}></TutorSearchCard>
+                            })
+                        }
+                    </div>
+
+                }
             </div>
     );
 }

@@ -43,7 +43,7 @@ export default function MailSignIn() {
                 localStorage.setItem('accesstoken', resp.data.accessToken)
                 dispatch(resetFields())
                 if(firstSegment === 'tutor'){
-                    navigate('/tutor/learner')
+                    navigate('/tutor/profile')
                 }else {
                     navigate('/learner/profile')
                 }

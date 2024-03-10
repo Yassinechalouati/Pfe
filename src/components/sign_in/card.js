@@ -1,13 +1,14 @@
-import MailSignIn from "./mail_signin";
-import Normal from "./normal_signin";
+
 import axios from 'axios'
-import { useSelector } from "react-redux";
 import { setTutorError, setLearnerError, setRecaptchaToken, resetFields } from "../../state/slices/loginSlice";
-import { useDispatch } from "react-redux";
-import Errorpop from "../Global/Error_popup";
+import { useDispatch, useSelector } from "react-redux";
 import Logo from "./logo_welcome_text";
 import { useRef} from 'react'
 import { useNavigate } from "react-router-dom";
+import NormalContent from './NormalContent';
+import ForgotPasswordContent from './ForgotPasswordContent';
+import Errorpop from "../Global/Error_popup";
+
 
 function CardSignIn(){
 
@@ -66,7 +67,7 @@ function CardSignIn(){
             }
         }
     }
-
+    
     //based on the page we send either the error of the learner page or the tutor page 
     const handleErrorValue = () => {
         if(firstSegment === 'learner') {
@@ -85,18 +86,23 @@ function CardSignIn(){
             return setTutorError
         }
     }
+
+    //controlling what to show
+    const handleContent = () => {
+        if (path === `/${firstSegment}/signin`) {
+            return <NormalContent recaptchaRef={recaptchaRef}></NormalContent>
+        }else if (path === `/${firstSegment}/signin/forgotpassword`) {
+            return <ForgotPasswordContent firstSegment={firstSegment}></ForgotPasswordContent>
+
+        }
+    }
     
     return (
-        <form onSubmit={handleLogin} className="bg-white m-auto relative rounded-3xl shadow-lg px-6 py-2 flex flex-col space-y-7 w-[97%] md:w-[30%] lg:w-[25%] min-h-[90%]">
+        <form onSubmit={handleLogin} className="bg-white m-auto relative rounded-3xl shadow-lg px-6 py-2 flex flex-col space-y-7 w-[97%] md:w-[30%] lg:w-[25%] ">
             <Logo></Logo>
-            <MailSignIn></MailSignIn>
-            <div className="flex w-full justify-center items-center">
-                <hr className="h-1 w-[47%] "></hr>
-                <span className="w-[6%] text-center text-darkg">OR</span>
-                <hr className="h-1 w-[47%]"></hr>
-                
-            </div>
-            <Normal recaptchaRef={recaptchaRef}></Normal>
+            {
+                handleContent()
+            }
             <Errorpop error={handleErrorValue()} setError={handleSetError()}></Errorpop>
         </form>
     )

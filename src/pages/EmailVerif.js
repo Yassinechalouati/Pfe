@@ -5,6 +5,7 @@ import io from 'socket.io-client'
 function EmailVerif() {
     //getting the token from the url
     const param = useParams()
+    
     const [isValid, setIsValid] = useState(false)
     const [isLoading, setIsLoading] = useState(true)//to assure that we got the answer from the socket before displaying the html code 
     const socket = useRef(null)

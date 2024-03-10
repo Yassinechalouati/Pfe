@@ -1,11 +1,11 @@
 const jwt = require('jsonwebtoken')
 
-//verifying the verification token sent by the client 
-const verifyVerificationToken = (verificationToken) => {
-    const privateKey = process.env.VERIFICATION_TOKEN_SECRET
+//verifying the forgotpassword token sent by the client 
+const verifyForgotPassword = (forgotPasswordToken) => {
+    const privateKey = process.env.FORGOTPASSWORD_TOKEN_SECRET
     
     return new Promise((resolve, reject) => {
-        jwt.verify(verificationToken, privateKey, (err, tokenDetails) => {
+        jwt.verify(forgotPasswordToken, privateKey, (err, tokenDetails) => {
             if (err) {
                 //if the refresh token isn't valid, return error
                 return reject({message: "Invalid verification Token"})
@@ -20,4 +20,4 @@ const verifyVerificationToken = (verificationToken) => {
     })
 }
 
-module.exports = verifyVerificationToken
+module.exports = verifyForgotPassword
