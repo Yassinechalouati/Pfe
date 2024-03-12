@@ -2,7 +2,8 @@ const express = require('express')
 const router = express.Router()
 const mysql = require('../helpers/Sql_connection')
 const generateForgotPasswordToken = require('../helpers/generateForgotPasswordToken')
-const generateForgotPasswordHtml = require('../helpers/emailContent')
+const {generateForgotPasswordHtml} = require('../helpers/emailContent')
+const sendEmail = require('../helpers/sendEmail')
 
 
 
@@ -14,9 +15,10 @@ router.post('/forgotpassword', (req, res) => {
         res.status(400).json({message: "Wrong!"})  //sending while not being a tutor nor a learner
     }
 
-    const query = `select id from ? where email = ?`
-    mysql.query(query, [role, email], async (error, result) => {
+    const query = `select id from ${mysql.escapeId(role)} where email = ?`
+    mysql.query(query, [email], async (error, result) => {
         if(error) {
+            console.log(error);
             res.status(500).json({message: "Internal Server Error"})
         }else if(result.length <=0) {
             console.log("no email");

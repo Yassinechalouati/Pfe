@@ -3,11 +3,11 @@ import axios from 'axios'
 import { setTutorError, setLearnerError, setRecaptchaToken, resetFields } from "../../state/slices/loginSlice";
 import { useDispatch, useSelector } from "react-redux";
 import Logo from "./logo_welcome_text";
-import { useRef} from 'react'
+import { useRef, useState } from 'react'
 import { useNavigate } from "react-router-dom";
 import NormalContent from './NormalContent';
-import ForgotPasswordContent from './ForgotPasswordContent';
 import Errorpop from "../Global/Error_popup";
+import Loading from '../Global/Loading';
 
 
 function CardSignIn(){
@@ -30,12 +30,15 @@ function CardSignIn(){
 
     const navigate = useNavigate()
 
+    const [isLoading, setIsLoading] = useState(false)
+
 
     //sending request to the api to login with user's credentials
     const handleLogin = async (e) => {
         e.preventDefault()
         if(loginData.email && loginData.password && loginData.recaptchaToken) {
             try {
+                setIsLoading(true)
                 //resetting the recaptcha after attempt to login
                 recaptchaRef.current.reset()
                 dispatch(setRecaptchaToken(''))
@@ -50,10 +53,11 @@ function CardSignIn(){
                 console.log(response);
                 dispatch(resetFields())
                 if(firstSegment === 'tutor'){
-                    navigate('/tutor/learner')
-                }else {
                     navigate('/tutor/profile')
+                }else {
+                    navigate('/learner/profile')
                 }
+                setIsLoading(false)
             }catch(err) {
                 console.log(err.response.data.message);
                 if(firstSegment === 'learner'){
@@ -62,7 +66,7 @@ function CardSignIn(){
                 else if (firstSegment === 'tutor') {
                     dispatch(setTutorError(err.response.data.message))
                 }
-
+                setIsLoading(false)
                 console.log(err)
             }
         }
@@ -87,21 +91,15 @@ function CardSignIn(){
         }
     }
 
-    //controlling what to show
-    const handleContent = () => {
-        if (path === `/${firstSegment}/signin`) {
-            return <NormalContent recaptchaRef={recaptchaRef}></NormalContent>
-        }else if (path === `/${firstSegment}/signin/forgotpassword`) {
-            return <ForgotPasswordContent firstSegment={firstSegment}></ForgotPasswordContent>
-
-        }
-    }
     
     return (
-        <form onSubmit={handleLogin} className="bg-white m-auto relative rounded-3xl shadow-lg px-6 py-2 flex flex-col space-y-7 w-[97%] md:w-[30%] lg:w-[25%] ">
+        <form onSubmit={handleLogin} className={`bg-white m-auto ${isLoading? "h-full": ""} relative rounded-3xl shadow-lg px-6 py-2 flex flex-col space-y-7 w-[97%] md:w-[30%] lg:w-[25%]`}>
             <Logo></Logo>
             {
-                handleContent()
+                isLoading?
+                <Loading></Loading>
+                :
+                <NormalContent recaptchaRef={recaptchaRef}></NormalContent>
             }
             <Errorpop error={handleErrorValue()} setError={handleSetError()}></Errorpop>
         </form>

@@ -1,6 +1,8 @@
 import axios from 'axios'
 import { useEffect, useState } from 'react';
 import {useParams, useNavigate} from 'react-router-dom'
+import Loading from '../components/Global/Loading';
+import { FaLessThanEqual } from 'react-icons/fa';
 
 
 function ForgotPassword() {
@@ -16,6 +18,8 @@ function ForgotPassword() {
     //handle loading
     const [isLoading, setIsloading] = useState(true)
     const [isValid, setIsValid] = useState(false)
+
+    const [loading, setLoading] = useState(false)
 
     const [notification, setNotification] = useState("")
 
@@ -52,7 +56,8 @@ function ForgotPassword() {
     const handleResetPassword = async (e) => {
         e.preventDefault()
         try {
-            const response = await axios.post('/resetpassword', {
+            setLoading(true)
+            const response = await axios.post('http://localhost:5000/resetpassword', {
                 password: password
             },
             { 
@@ -61,54 +66,65 @@ function ForgotPassword() {
             } 
             })
             setNotification("Password Changed Successfully!")
-            setTimeout(()=> {
-                navigate(`/${response.data.role}/signin`)
-            }, 3000)
+            setLoading(false)
+            navigate(`/${response.data.role}/signin`)
+
 
         }catch(err) {
             console.log(err)
+            setLoading(false)
             setNotification("Couldn't change password return back later!")
         }
     }
 
+    console.log(notification);
     return (
         <form onSubmit={handleResetPassword} className="bg-backg flex flex-col justify-center items-center w-screen h-screen">
             {
                 !isLoading?
                 (
                     isValid?
-                    <div className="p-8 flex flex-col justify-center rounded-2xl w-[90%] md:w-[30%] items-center space-y-4 bg-white">
+                    (<div className="p-8 flex flex-col justify-center rounded-2xl w-[90%] md:w-[30%]  items-center space-y-4 bg-white">
                         <img src="/Forgot password.png" alt="forgotpassword" className="w-36 h-36 self-center object-cover"></img>
-                        <span className="font-bold text-xl"> Reset Password</span>
-                        <span className=""> Enter your password below</span>
-                        <div className="flex flex-col w-full">
-                                <label className="block text-[#000] text-sm font-semibold mb-2">Password</label>
+                        {
+                            !loading?
+                            (
+                            <>
+                            <span className="font-bold text-xl"> Reset Password</span>
+                            <span className=""> Enter your password below</span>
+                            <div className="flex flex-col w-full">
+                                    <label className="block text-[#000] text-sm font-semibold mb-2">Password</label>
+                                    <input
+                                        className="shadow text-sm rounded-lg appearance-none border  w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                        type="password"
+                                        value = {password}
+                                        onChange={handlePasswordChange}
+                                        minLength="8"
+                                        maxLength="30"
+                                        pattern="^(?=.*[A-Z])(?=.*[0-9])[A-Za-z0-9]+$" // assuring the password contains at least one uppercase letter and one digit
+                                        title={`${password.length<8? `Contains at least 8 characters (currently at ${password.length} characters), `:""}Contains at least an UpperCase letter and a digit`}
+                                        placeholder="Password"
+                                    />
+                            </div>
+                            <div className="flex flex-col w-full">   
+                                <label className="block text-[#000] text-sm font-semibold mb-2">Confirm Password</label>
                                 <input
-                                    className="shadow text-sm rounded-lg appearance-none border  w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                    className="shadow text-sm appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                                     type="password"
-                                    value = {password}
-                                    onChange={handlePasswordChange}
-                                    minLength="8"
-                                    maxLength="30"
-                                    pattern="^(?=.*[A-Z])(?=.*[0-9])[A-Za-z0-9]+$" // assuring the password contains at least one uppercase letter and one digit
-                                    title={`${password.length<8? `Contains at least 8 characters (currently at ${password.length} characters), `:""}Contains at least an UpperCase letter and a digit`}
-                                    placeholder="Password"
+                                    value = {confPassword}
+                                    pattern= {password}
+                                    onChange={handleConfirmPasswordChange}
+                                    placeholder="Confirm Password"
+                                    title="Passwords do not match"
                                 />
-                        </div>
-                        <div className="flex flex-col w-full">   
-                            <label className="block text-[#000] text-sm font-semibold mb-2">Confirm Password</label>
-                            <input
-                                className="shadow text-sm appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                type="password"
-                                value = {confPassword}
-                                pattern= {password}
-                                onChange={handleConfirmPasswordChange}
-                                placeholder="Confirm Password"
-                                title="Passwords do not match"
-                            />
-                        </div> 
-                        <button type="submit" className={`bg-button border border-button flex justify-center items-center text-center font-semibold px-4 py-2 rounded-full text-white hover:shadow`}>Reset Password</button>
-                    </div>
+                            </div> 
+                            <span className={`${notification? (notification === "Password Changed Successfully!"? "text-elements": "text-errortext") :"hidden"}`}>{notification}</span>
+                            <button type="submit" className={`bg-button border border-button flex justify-center items-center text-center font-semibold px-4 py-2 rounded-full text-white hover:shadow`}>Reset Password</button>
+                            </>)
+                            :
+                            <Loading></Loading>
+                        }
+                    </div>)
                     :
                     <>
                     <img src="/erreur-404.png" alt="verified" className="object-cover h-44 w-44"></img>

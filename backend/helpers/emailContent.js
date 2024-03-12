@@ -36,7 +36,7 @@ const generateTutorEmailHtml = (verificationUrl) => {
 }
 
 const generateForgotPasswordHtml = (forgotPasswordUrl) => {
-    retun `<body style="font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px; font-family: 'Nunito'; background-color: #F9F4F0;">
+    return `<body style="font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px; font-family: 'Nunito'; background-color: #F9F4F0;">
     <table style="max-width: 600px; margin: 0 auto; background-color: #fff; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
         <tr>
             <td style="background-color: #F28585; height: 85px; font-weight: bold; color: white; border-top-left-radius: 10px; border-top-right-radius: 10px; font-size: 25px; text-align: center;">Welcome to Linguify!</td>
