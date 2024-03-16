@@ -10,6 +10,7 @@ import TutorProfile from './pages/tutorProfile/TutorProfile';
 import LearnerProfile from './pages/learner/Profile/learnerProfile';
 import ForgotPassword from './pages/ForgotPassword';
 import ForgotPasswordContent from './components/sign_in/ForgotPasswordContent';
+import Settings from './components/Global/Settings';
 function App() {
   return (
     <Router>
@@ -32,6 +33,7 @@ function App() {
         <Route path="/learner/signin/forgotpassword" element={<ForgotPasswordContent></ForgotPasswordContent>}></Route>
         <Route path="/tutor/signin/forgotpassword" element={<ForgotPasswordContent></ForgotPasswordContent>}></Route>
         <Route path="/users/ForgotPassword/:token" element={<ForgotPassword></ForgotPassword>}></Route>
+        <Route path="/learner/profile/Settings" element={<LearnerProfile></LearnerProfile>}></Route>
 
       </Routes>
     </Router>

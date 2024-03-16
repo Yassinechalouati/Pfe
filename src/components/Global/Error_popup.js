@@ -26,12 +26,12 @@ export default function Errorpop({error, setError}) {
 
         // Clear the timeout on component unmount to avoid memory leaks
         return () => clearTimeout(timeoutId);
-    }, []);
+    }, [error, setError]);
 
     return(
         <div
-            className={`fixed bottom-0 flex border-errortext border-[1px] justify-center items-center left-1/2 transform -translate-x-1/2 bg-errorbg text-white p-3 text-center w-auto rounded-xl text-sm transition-transform duration-300 ${
-                isVisible ? '-translate-y-6' : 'translate-y-full'}`}>
+            className={`fixed bottom-0 flex border-errortext z-50 border-[1px] justify-center items-center left-1/2 transform -translate-x-1/2 bg-errorbg text-white p-3 text-center w-auto rounded-xl text-sm transition-transform duration-300 ${
+                isVisible ? '-translate-y-8' : 'translate-y-full'}`}>
             <span className="text-errortext text-sm font-bold w-full h-full">Error: {error}</span>
        </div> 
     )

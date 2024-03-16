@@ -7,19 +7,32 @@ import { useState } from "react";
 import Drawer from "./Drawer";
 import { useSelector } from "react-redux";
 import { NavLink } from 'react-router-dom';
+import DropdownMenu from "./DropdownMenu";
 
 
  
 
 function NavBar() {
+    //handle drawer visibility
     const [isOpen, setIsOpen] =useState(false)
+    
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
     const learnerData = useSelector(state => state.userData)
     
-
+    
     const handleDrawer = () => {
         setIsOpen(true)
     }
+
+
+    //handle DropDown visibility
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
+
+  
+  console.log(learnerData.pic);
 
     return (
         <>
@@ -79,7 +92,16 @@ function NavBar() {
                             learnerData.isLoading?
                             <div className="rounded-full hidden lg:block animate-pulse bg-darkg w-12 h-12 self-center"></div>
                             :
-                            <img src={`${learnerData.pic? learnerData.pic : "/user.png"}`} alt="prolfiepicture" className="cursor-pointer hidden lg:block rounded-full w-12 h-12 object-cover"></img>
+                            <div className="relative">
+                                <img 
+                                    src={`${learnerData.pic ? learnerData.pic : "/user.png"}`} 
+                                    alt="profilepicture" 
+                                    className="cursor-pointer hidden lg:block rounded-full w-12 h-12 object-cover"
+                                    onClick={toggleDropdown}
+                                />
+                                <DropdownMenu isOpen={isDropdownOpen} onClose={() => setIsDropdownOpen(false)} />
+                            </div>
+                            
                         }
                     </div>
                 </div>

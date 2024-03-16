@@ -8,6 +8,7 @@ import TutorsSearch from "./TutorsSearch";
 import ClassroomsSearch from './ClassroomsSearch'
 import Body from '../../../components/learner profile/Body'
 import LinguaBuddy from "./LinguaBuddy";
+import Settings from "../../../components/Global/Settings";
 
 
 function LearnerProfile() {
@@ -56,7 +57,8 @@ function LearnerProfile() {
         TutorsSearch: <TutorsSearch></TutorsSearch>,
         Profile: <Body></Body>,
         ClassroomsSearch: <ClassroomsSearch></ClassroomsSearch>,
-        ChatBot: <LinguaBuddy></LinguaBuddy>
+        ChatBot: <LinguaBuddy></LinguaBuddy>,
+        Settings: <Settings></Settings>
     }
     //knowing whether it's a tutor or learner signing up
     const path = window.location.pathname;
@@ -74,6 +76,8 @@ function LearnerProfile() {
             return bodyContent.CoursesSearch
         }else if(path === '/learner/profile/Classrooms') {
             return bodyContent.ClassroomsSearch
+        }else if(path === '/learner/profile/Settings') {
+            return bodyContent.Settings
         }
     }
 
