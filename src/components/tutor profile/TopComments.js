@@ -5,7 +5,7 @@ function TopComments(props) {
 
     const content = [
         <span key="title" className="self-start text-lg font-bold mb-5">
-            Comments on your profile
+            FeedBack
         </span>,
         <hr key="line" className="w-full h-1"></hr>,
         <Comment key="comment1"></Comment>,

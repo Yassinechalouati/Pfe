@@ -40,7 +40,8 @@ function App() {
         <Route path="/tutor/signin/forgotpassword" element={<ForgotPasswordContent></ForgotPasswordContent>}></Route>
         <Route path="/users/ForgotPassword/:token" element={<ForgotPassword></ForgotPassword>}></Route>
         <Route path="/learner/profile/Settings" element={<LearnerProfile></LearnerProfile>}></Route>
-        <Route index path="/landingpage" element={<Landingpage></Landingpage>}></Route>
+        <Route path="/landingpage" element={<Landingpage></Landingpage>}></Route>
+        <Route index element={<Landingpage></Landingpage>}></Route>
       </Routes>
     </Router>
   );

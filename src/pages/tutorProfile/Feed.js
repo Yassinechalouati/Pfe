@@ -4,7 +4,7 @@ import Card from "../../components/learner profile/Card";
 import InformationalCard from "../../components/tutor profile/FollowersCard";
 import Calendar from "../../components/tutor profile/Calendar";
 import TopComments from "../../components/tutor profile/TopComments";
-import Revenue from "./Revenue";
+import Revenue from "../../components/tutor profile/Revenue"
 
 function Feed(props) {
 

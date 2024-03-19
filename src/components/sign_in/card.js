@@ -51,6 +51,9 @@ function CardSignIn(){
                     recaptchaToken: loginData.recaptchaToken //verifying the recaptcha
                 })
                 console.log(response);
+                localStorage.clear();
+                localStorage.setItem('refreshtoken', response.data.refreshToken)
+                localStorage.setItem('accesstoken', response.data.accessToken)
                 dispatch(resetFields())
                 if(firstSegment === 'tutor'){
                     navigate('/tutor/profile')

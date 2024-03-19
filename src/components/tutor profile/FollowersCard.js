@@ -11,7 +11,7 @@ function InformationalCard(props) {
     const content = [
             <div key="followers" className="flex justify-between w-full ">
                 <div className="flex items-center space-x-2">
-                    <RiUserFollowFill className="text-elements" size="25"></RiUserFollowFill>
+                    <RiUserFollowFill className="text-button2" size="25"></RiUserFollowFill>
                     <span className="font-bold">Followers</span>
                 </div>
                 <span>50</span>
@@ -19,7 +19,7 @@ function InformationalCard(props) {
             <hr key="line1" className="w-full h-1"></hr>,
             <div key="Likes" className="flex justify-between w-full ">
                 <div className="flex items-center space-x-2">
-                    <BiSolidHeartCircle className="text-red-500" size="25"></BiSolidHeartCircle>
+                    <BiSolidHeartCircle className="text-button2" size="25"></BiSolidHeartCircle>
                     <span className="font-bold">Likes</span>
                 </div>
                 <span>50</span>
@@ -27,7 +27,7 @@ function InformationalCard(props) {
             <hr key="line2" className="w-full h-1"></hr>,
             <div key="Chat" className="flex justify-between w-full ">
                 <div className="flex items-center space-x-2">
-                    <RiChat1Fill className="text-elements" size="25"></RiChat1Fill>
+                    <RiChat1Fill className="text-button2" size="25"></RiChat1Fill>
                     <span className="font-bold">Chats</span>
                 </div>
                 <span>50</span>
@@ -36,7 +36,7 @@ function InformationalCard(props) {
             <div key="stars" className="flex justify-between w-full ">
                 <div className="flex items-center space-x-2">
                     <FaStar className="text-star" size="25"></FaStar>
-                    <span className="font-bold">Ratings</span>
+                    <span className="font-bold">Rating</span>
                 </div>
                 <div className="flex items-center space-x-1">
                     <FaStar className="text-star" size="19"></FaStar>

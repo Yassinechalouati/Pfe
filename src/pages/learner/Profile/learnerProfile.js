@@ -24,7 +24,8 @@ function LearnerProfile() {
                         'Content-Type': 'multipart/form-data' // Set the content type to multipart/form-data
                     }
                 });
-    
+                
+                console.log(response.data.message);
                 // Dispatch actions sequentially
                 await Promise.all([
                     dispatch(setFirstName(response.data.message.firstname)),

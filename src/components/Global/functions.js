@@ -1,4 +1,5 @@
-import axiosInstance from "../../interceptors/axiosInterceptor";
+import axiosInstance from "../../interceptors/axiosInterceptor"
+
 //getting flag image with name of country
 export const fetchCountryData = async (countryName) => {
     try {
@@ -34,3 +35,7 @@ export const fetchFile = async (pfp, fileType, role, id, )=> {
         });
     });
 };
+
+export const LogOut = () => {
+    localStorage.clear()
+}

@@ -22,7 +22,7 @@ function Calendar(props) {
 
       // Determine the class name for styling based on the current date
       let className = 'text-darkg'; // Default styling for past days
-      if (i === 0) className = 'bg-button text-white'; // Highlight today's date
+      if (i === 0) className = 'text-button font-bold'; // Highlight today's date
       else if (date < today) className = 'text-darkg'; // Styling for past days
 
       datesForWeek.push({ day, dayOfMonth, className }); // Push the day, day of the month, and class name to the array
@@ -51,7 +51,7 @@ function Calendar(props) {
       ))}
       {
         contentArray.map((element, index)=> {
-            return  <span key={index} className="bg-elements text-sm flex justify-center items-center text-white rounded-full py-2 px-4 text-center">
+            return  <span key={index} className="border-elements border bg-lightGreen text-sm flex justify-center items-center text-elements rounded-full py-2 px-4 text-center">
             12:00
           </span>
         })

@@ -3,11 +3,35 @@ import { IoMdSettings } from "react-icons/io";
 import { IoChatbubbles } from "react-icons/io5";
 import { IoLogOut } from "react-icons/io5";
 import { NavLink } from "react-router-dom";
-
+import {LogOut} from  '../Global/functions'
+import { useDispatch } from "react-redux";
+import { resetUserData as resetTutor } from "../../state/slices/tutorSlice";
+import {resetUserData as resetLearner} from '../../state/slices/userSlice'
 
 
 //drop down menu when clicking the user profile
 const DropdownMenu = ({ isOpen, onClose }) => {
+
+  const dispatch = useDispatch()
+
+  //knowing whether it's a tutor or learner signing up
+  const path = window.location.pathname;
+
+  // Split the path by "/"
+  const segments = path.split('/');
+
+  // Get the value of the first segment
+  const firstSegment = segments[1]; 
+
+  const logout = () => {
+    LogOut()
+    if(firstSegment === "tutor") {
+      dispatch(resetTutor())
+    } else if (firstSegment === "learner") {
+      dispatch(resetLearner())
+    }
+  }
+
   return (
     <div 
       className={`absolute hidden lg:block right-0 mt-2 w-48 bg-white border border-lightg rounded-md shadow-lg z-10 ${isOpen ? 'opacity-100 scale-y-100' : 'opacity-0 scale-y-0'} transition-transform duration-300 transform origin-top-right`}
@@ -26,10 +50,10 @@ const DropdownMenu = ({ isOpen, onClose }) => {
             <a href="#" className="block px-4 py-2">Messages</a>
         </div>
         <hr className="w-full h-1"></hr>
-        <div className="flex items-center px-2 rounded-lg hover:bg-button2 transition-colors hover:text-white duration-300 text-darkg cursor-pointer">
+        <NavLink to={`/${firstSegment}/signin`} onClick={logout} className="flex items-center px-2 rounded-lg hover:bg-button2 transition-colors hover:text-white duration-300 text-darkg cursor-pointer">
             <IoLogOut size="20" color="red"></IoLogOut>
-            <a href="#" className="block px-4 py-2">Log out</a>
-        </div>
+            <div className="block px-4 py-2">Log out</div>
+        </NavLink>
       </div>
     </div>
   );

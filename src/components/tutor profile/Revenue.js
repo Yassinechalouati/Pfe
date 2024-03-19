@@ -1,5 +1,5 @@
 import React from 'react';
-import Card from '../../components/learner profile/Card';
+import Card from '../learner profile/Card';
 
 function Revenue(props) {
   // Function to generate random integer between min (inclusive) and max (exclusive)
@@ -19,13 +19,13 @@ function Revenue(props) {
   const content = (
     <>
       <h2 className="text-2xl font-bold mb-4">Revenue Statistics</h2>
-      <div className="flex">
-        <div className="flex-1 md:mr-4">
+      <div className="flex justify-between w-full">
+        <div className=" md:mr-4">
           <p className="text-darkg">Total Revenue:</p>
           <p className="text-3xl font-bold text-elements">${totalRevenue}</p>
         </div>
-        <div className="flex-1 md:mr-4">
-          <p className="text-darkg">Average Revenue per Month:</p>
+        <div className="md:mr-4">
+          <p className="text-darkg">Avg Revenue/Month:</p>
           <p className="text-3xl font-bold text-elements">${averageRevenuePerMonth}</p>
         </div>
       </div>

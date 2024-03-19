@@ -50,7 +50,7 @@ function TutorSearchCard(props) {
 
 
     return (
-        <div className="cursor-pointer min-h-72 max-h-72 rounded-2xl flex flex-col space-y-3 shadow-2xl px-5 py-2 bg-backg border-darkg border" >
+        <div className="cursor-pointer min-h-72 max-h-72 rounded-2xl flex flex-col space-y-3 shadow-lg px-5 py-2 bg-white border-darkg border" >
             <div className="flex w-full items-center space-x-3">
                 <img src={imageData} alt="prolfiepicture" className="rounded-3xl w-24 h-24 object-cover"></img>
                 <div className="flex flex-col space-y-2 w-full h-full truncate">
@@ -74,7 +74,7 @@ function TutorSearchCard(props) {
                 </div>
             </div>
             <hr key="1" className="h-1 w-full"></hr>
-            <div className="flex flex-col w-full h-full overflow-y-auto break-before-avoid">
+            <div className="flex flex-col w-full h-full overflow-y-auto break-before-avoid scrollbar-hidden"  style={{ scrollbarWidth: 'none',}}>
                 <span className="font-bold ">
                     Introduction:
                 </span>
@@ -82,10 +82,10 @@ function TutorSearchCard(props) {
             </div>
             <div className="flex space-x-3 self-end">
                     <button
-                    className={`bg-button border border-button flex justify-center items-center text-center font-semibold px-4 py-2 rounded-full text-white hover:shadow`}>
+                    className={`bg-button2 border border-button2 flex justify-center items-center text-center font-semibold px-4 py-2 rounded-full text-white hover:shadow`}>
                     Text</button>
                     <button 
-                    className={`bg-backg  border border-button flex justify-center items-center text-center font-semibold px-4 py-2 rounded-full text-button hover:shadow`}>
+                    className={`bg-backg  border border-button2 flex justify-center items-center text-center font-semibold px-4 py-2 rounded-full text-button2 hover:shadow`}>
                     Profile</button>
             </div>
         </div>

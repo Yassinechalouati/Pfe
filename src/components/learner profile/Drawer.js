@@ -7,6 +7,12 @@ import { BsRobot } from "react-icons/bs";
 import { IoChatbubbles } from "react-icons/io5";
 import { IoMdCalendar } from "react-icons/io";
 import { NavLink } from "react-router-dom";
+import {LogOut} from  '../Global/functions'
+import { useDispatch } from "react-redux";
+import { resetUserData as resetTutor } from "../../state/slices/tutorSlice";
+import {resetUserData as resetLearner} from '../../state/slices/userSlice'
+import { IoLogOut } from "react-icons/io5";
+
 
 
 
@@ -15,6 +21,26 @@ import { NavLink } from "react-router-dom";
 
 
 function Drawer(props) {
+    const dispatch = useDispatch()
+
+    //knowing whether it's a tutor or learner signing up
+    const path = window.location.pathname;
+  
+    // Split the path by "/"
+    const segments = path.split('/');
+  
+    // Get the value of the first segment
+    const firstSegment = segments[1]; 
+  
+    const logout = () => {
+      LogOut()
+      if(firstSegment === "tutor") {
+        dispatch(resetTutor())
+      } else if (firstSegment === "learner") {
+        dispatch(resetLearner())
+      }
+    }
+
     return (
         <>
             <div className={`${props.isOpen ? "opacity-30" : "opacity-0 pointer-events-none" } lg:hidden absolute inset-0 bg-black  z-20 transition-opacity ease-in-out duration-300  `}></div>
@@ -125,6 +151,11 @@ function Drawer(props) {
                             className="flex h-10 drawerNav items-center w-full space-x-4">
                             <IoMdCalendar size="25" color="#767676"></IoMdCalendar>
                             <span className="">Calendar</span>
+                        </NavLink>
+                        <NavLink to={`/${firstSegment}/signin`} onClick={logout}
+                            className="flex h-10 drawerNav items-center w-full space-x-4">
+                            <IoLogOut size="25" color="red"></IoLogOut>
+                            <div className="">Log out</div>
                         </NavLink>
                     </nav>
                 </div>

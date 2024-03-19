@@ -25,7 +25,7 @@ const Tutors = () => {
         {tutorRatings.map((tutor, index) => (
           <div key={index} className="bg-white p-4 rounded-lg shadow-md flex flex-col">
             <video controls className="w-full h-auto rounded-lg mb-2">
-              <source src={`vid2.mp4`} type="video/mp4" />
+              <source src={`vid${index+1}.mp4`} type="video/mp4" />
               Your browser does not support the video tag.
             </video>
             <div className="flex items-center justify-between">
