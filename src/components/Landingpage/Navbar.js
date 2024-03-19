@@ -1,13 +1,7 @@
-import { IoChatbubbles } from "react-icons/io5";
-import { IoNotifications } from "react-icons/io5";
-import { IoMdCalendar } from "react-icons/io";
 import { BsRobot } from "react-icons/bs";
 import { IoMenu } from "react-icons/io5";
 import { useState } from "react";
-import Drawer from "./Drawer";
-import { useSelector } from "react-redux";
 import { NavLink } from 'react-router-dom';
-import DropdownMenu from "./DropdownMenu";
 
 
  
@@ -18,7 +12,6 @@ function NavBar() {
     
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
-    const learnerData = useSelector(state => state.userData)
     
     
     const handleDrawer = () => {
@@ -31,12 +24,10 @@ function NavBar() {
     setIsDropdownOpen(!isDropdownOpen);
   };
 
-  
-  console.log(learnerData.pic);
 
     return (
         <>
-            <div className="h-[10%] w-full bg-white z-10 shadow flex items-center space-x-8 pr-10 pl-10 md:pr-10 ">
+            <div className="h-[10%] w-full bg-backg z-10 flex items-center space-x-8 pr-10 pl-10 md:pr-10 ">
                     <NavLink to="/learner/profile"
                         className="flex lg:hidden justify-center nav-link items-center h-full w-[150px] space-x-2"
                     >
@@ -79,35 +70,42 @@ function NavBar() {
                     </nav>
                     <div className="flex-grow"></div>
                     <div className=" ml-auto flex items-center w-auto h-full space-x-2 lg:space-x-6">
-                        <button className="bg-elements text-white font-bold py-2 px-8 rounded-full hover:shadow-md">
-                            Subscribe
-                        </button>
+                        {/* Language dropdown */}
+                        <div className="border relative  border-darkg rounded-full hover:shadow-md">
+                          <select className="appearance-none bg-transparent border-none text-darkg px-6 py-2 rounded-full focus:outline-none">
+                            <option value="english">English</option>
+                            <option value="french">French</option>
+                            <option value="italian">Italian</option>
+                            <option value="german">German</option>
+                            <option value="arabic">Spanish</option>
+                          </select>
+                          <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
+                            <svg className="h-4 w-4 fill-current text-darkg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                              <path d="M10 12l-7-7 1.5-1.5L10 9l5.5-5.5L17 5z" />
+                            </svg>
+                          </div>
+                        </div>
+
+
+                        {/* Buttons */}
+                        <div className="flex">
+                          <NavLink to="/learner/signin" className="text-elements font-bold py-2 px-8 mr-2 rounded-full border border-elements hover:shadow-md">
+                            Sign in
+                          </NavLink>
+                          <NavLink to="/learner/signup" className="bg-elements text-white font-bold py-2 px-8 rounded-full hover:shadow-md">
+                            Sign up
+                          </NavLink>
+                        </div>
                         <div className="py-2 lg:hidden cursor-pointer px-2 flex justify-center items-center bg-button rounded-full">
                             <IoMenu onClick={handleDrawer} size="22" color="white"></IoMenu>
                         </div>
-                        <IoChatbubbles className="cursor-pointer hidden lg:block" color="#767676" size="22"></IoChatbubbles>
-                        <IoNotifications className="cursor-pointer hidden lg:block" color="#767676" size="22"></IoNotifications>
-                        <IoMdCalendar className="cursor-pointer hidden lg:block" color="#767676" size="22"></IoMdCalendar>
-                        {
-                            learnerData.isLoading?
-                            <div className="rounded-full hidden lg:block animate-pulse bg-darkg w-12 h-12 self-center"></div>
-                            :
-                            <div className="relative">
-                                <img 
-                                    src={`${learnerData.pic ? learnerData.pic : "/user.png"}`} 
-                                    alt="profilepicture" 
-                                    className="cursor-pointer hidden lg:block rounded-full w-12 h-12 object-cover"
-                                    onClick={toggleDropdown}
-                                />
-                                <DropdownMenu isOpen={isDropdownOpen} onClose={() => setIsDropdownOpen(false)} />
-                            </div>
-                            
-                        }
                     </div>
                 </div>
-                <Drawer userData={learnerData} role="learner" isOpen={isOpen} closeDrawer={() => setIsOpen(!isOpen)}/>
         </>
     );
 }
 
 export default NavBar;
+
+      
+     

@@ -1,7 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
+  firstname: '',
+  lastname: '',
   email: '',
+  hasPassword: '',
+  tel: '',
+  Birthday: '',
   password: '',
   confpass: '',
   isLoading: false,
@@ -20,7 +25,8 @@ const initialState = {
   verificationPlaceholder: false,
   TeachingStyle: '',
   AboutMe: '',
-  Country: ''
+  Country: '',
+  countryFlag: ''
 
 }
 
@@ -31,6 +37,21 @@ export const userSlice = createSlice({
   reducers: {
     setEmail: (state, action) => {
       state.email = action.payload;
+    },
+    setFirstName: (state, action) => {
+      state.firstname = action.payload
+    },
+    setLastName: (state, action) => {
+      state.lastname = action.payload
+    },
+    setHasPassword: (state, action) => {
+      state.hasPassword = action.payload
+    },
+    setBirthday: (state, action) => {
+      state.Birthday = action.payload
+    },
+    setTel: (state, action) => {
+      state.tel = action.payload
     },
     setPassword: (state, action) => {
       state.password = action.payload
@@ -86,6 +107,9 @@ export const userSlice = createSlice({
     setWifiQuality: ( state, action )=> {
       state.wifiQuality = action.payload
     },
+    setCountryFlag: (state, action) => {
+      state.countryFlag = action.payload
+    },
     setCountry: (state, action )=> {
       state.Country = action.payload
     },
@@ -115,6 +139,12 @@ export const {
   setEducation, 
   setWorkExperience,
   setWifiQuality,
-  setCountry
+  setCountry,
+  setFirstName,
+  setLastName,
+  setBirthday, 
+  setHasPassword, 
+  setTel,
+  setCountryFlag
 } = userSlice.actions
 export default userSlice.reducer

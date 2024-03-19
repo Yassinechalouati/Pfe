@@ -81,8 +81,12 @@ function TutorSearchCard(props) {
                 <span className="text-darkg w-full h-full text-sm">{props.tutor.description}</span>
             </div>
             <div className="flex space-x-3 self-end">
-                    <button className={`bg-button border border-button flex justify-center items-center text-center font-semibold px-4 py-2 rounded-full text-white hover:shadow`}>Text</button>
-                    <button className={`bg-backg  border border-button flex justify-center items-center text-center font-semibold px-4 py-2 rounded-full text-button hover:shadow`}>Profile</button>
+                    <button
+                    className={`bg-button border border-button flex justify-center items-center text-center font-semibold px-4 py-2 rounded-full text-white hover:shadow`}>
+                    Text</button>
+                    <button 
+                    className={`bg-backg  border border-button flex justify-center items-center text-center font-semibold px-4 py-2 rounded-full text-button hover:shadow`}>
+                    Profile</button>
             </div>
         </div>
     );

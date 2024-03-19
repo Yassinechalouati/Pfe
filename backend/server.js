@@ -61,6 +61,7 @@ const getFiles = require('./middleware/Files')
 const forgotpassword = require('./routes/forgotPassword')
 const verifyForgotPassword = require('./routes/verifyForgotPasswordToken')
 const resetpassword = require('./routes/resetPassword')
+const tutorDetails = require('./routes/tutorDetails')
 
 //apis
 app.use('/', googleSignupRouter)
@@ -82,6 +83,7 @@ app.use('/', getFiles)
 app.use('/', forgotpassword)
 app.use('/', verifyForgotPassword)
 app.use('/', resetpassword)
+app.use('/tutor', tutorDetails)
 
 
 // Socket.io logic

@@ -4,10 +4,10 @@ import { IoMdCalendar } from "react-icons/io";
 import { BsRobot } from "react-icons/bs";
 import { IoMenu } from "react-icons/io5";
 import { useState } from "react";
-import Drawer from "./Drawer";
+import Drawer from "../learner profile/Drawer";
 import { useSelector } from "react-redux";
 import { NavLink } from 'react-router-dom';
-import DropdownMenu from "./DropdownMenu";
+import DropdownMenu from "../learner profile/DropdownMenu";
 
 
  
@@ -18,7 +18,7 @@ function NavBar() {
     
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
-    const learnerData = useSelector(state => state.userData)
+    const tutorData = useSelector(state => state.tutorData)
     
     
     const handleDrawer = () => {
@@ -32,44 +32,42 @@ function NavBar() {
   };
 
   
-  console.log(learnerData.pic);
-
     return (
         <>
             <div className="h-[10%] w-full bg-white z-10 shadow flex items-center space-x-8 pr-10 pl-10 md:pr-10 ">
-                    <NavLink to="/learner/profile"
+                    <NavLink to="/tutor/profile"
                         className="flex lg:hidden justify-center nav-link items-center h-full w-[150px] space-x-2"
                     >
                         <img src="/e-learningLogo.png" alt="logo" className="w-12 h-12 object-cover"></img>
                         <div className="font-bold text-xl ">LINGUIFY</div>
                     </NavLink>
                     <nav className="justify-center relative hidden lg:flex items-center w-auto h-full">
-                        <NavLink to="/learner/profile"
+                        <NavLink to="/tutor/profile"
                             className="flex justify-center nav-link items-center h-full w-[150px] space-x-2"
                         >
                             <img src="/e-learningLogo.png" alt="logo" className="w-12 h-12 object-cover"></img>
                             <div className="font-bold text-xl ">LINGUIFY</div>
                         </NavLink>
                         <NavLink
-                            to="/learner/profile/Tutors"
+                            to="/tutor/profile/Exams"
                             className="flex nav-link w-[80px] h-full no-underline justify-center cursor-pointer items-center"
                         >
-                            <span className="text-darkg">Tutors</span>
+                            <span className="text-darkg">Exams</span>
                         </NavLink>
                         <NavLink
-                            to="/learner/profile/Courses"
+                            to="/tutor/profile/Courses"
                             className="flex nav-link w-[80px] h-full no-underline justify-center cursor-pointer items-center"
                         >
                             <span className="text-darkg">Courses</span>
                         </NavLink>
                         <NavLink
-                            to="/learner/profile/Classrooms"
+                            to="/tutor/profile/Classrooms"
                             className="flex nav-link no-underline h-full w-[100px] justify-center cursor-pointer items-center"
                         >
                             <span className="text-darkg">Classrooms</span>
                         </NavLink>
                         <NavLink
-                            to="/learner/profile/LinguaBuddy"
+                            to="/tutor/profile/LinguaBuddy"
                             className="flex nav-link no-underline h-full w-[140px] justify-center cursor-pointer items-center space-x-2"
                         >
                             <BsRobot color="#F28585" size="22"></BsRobot>
@@ -79,9 +77,6 @@ function NavBar() {
                     </nav>
                     <div className="flex-grow"></div>
                     <div className=" ml-auto flex items-center w-auto h-full space-x-2 lg:space-x-6">
-                        <button className="bg-elements text-white font-bold py-2 px-8 rounded-full hover:shadow-md">
-                            Subscribe
-                        </button>
                         <div className="py-2 lg:hidden cursor-pointer px-2 flex justify-center items-center bg-button rounded-full">
                             <IoMenu onClick={handleDrawer} size="22" color="white"></IoMenu>
                         </div>
@@ -89,12 +84,12 @@ function NavBar() {
                         <IoNotifications className="cursor-pointer hidden lg:block" color="#767676" size="22"></IoNotifications>
                         <IoMdCalendar className="cursor-pointer hidden lg:block" color="#767676" size="22"></IoMdCalendar>
                         {
-                            learnerData.isLoading?
+                            tutorData.isLoading?
                             <div className="rounded-full hidden lg:block animate-pulse bg-darkg w-12 h-12 self-center"></div>
                             :
                             <div className="relative">
                                 <img 
-                                    src={`${learnerData.pic ? learnerData.pic : "/user.png"}`} 
+                                    src={tutorData.displayableImage}
                                     alt="profilepicture" 
                                     className="cursor-pointer hidden lg:block rounded-full w-12 h-12 object-cover"
                                     onClick={toggleDropdown}
@@ -105,7 +100,7 @@ function NavBar() {
                         }
                     </div>
                 </div>
-                <Drawer userData={learnerData} role="learner" isOpen={isOpen} closeDrawer={() => setIsOpen(!isOpen)}/>
+                <Drawer role="tutor" userData={tutorData} isOpen={isOpen} closeDrawer={() => setIsOpen(!isOpen)}/>
         </>
     );
 }

@@ -2,7 +2,7 @@
 
 export function ColumnLoading() {
     return (
-        <div className="border bg-white shadow rounded-2xl px-6 py-5 max-w-sm w-full mx-auto">
+        <div key="ColumnLoading" className="border bg-white shadow rounded-2xl px-6 py-5 max-w-sm w-full mx-auto">
             <div className="animate-pulse flex flex-col space-y-4">
                 <div className="rounded-full bg-darkg w-20 h-20 self-center"></div>
                 <div className="flex-1 space-y-6 py-1">
@@ -18,7 +18,7 @@ export function ColumnLoading() {
 
 export function RowLoading() {
     return (
-        <div className="border bg-white shadow rounded-2xl px-6 py-5 max-w-sm w-full mx-auto">
+        <div key="RowLOading" className="border bg-white shadow rounded-2xl px-6 py-5 max-w-sm w-full mx-auto">
             <div className="animate-pulse flex items-center space-x-4">
                 <div className="flex-1 space-y-6 py-1">
                     <div className="space-y-2">
@@ -36,7 +36,7 @@ export function RowLoading() {
 
 export function ColumnRowLoading () {
     return (
-        <div className="border bg-white shadow rounded-2xl space-y-4 flex flex-col px-6 py-5 w-full mx-auto">
+        <div key="ColumRowLoading" className="border bg-white shadow rounded-2xl space-y-4 flex flex-col px-6 py-5 w-full mx-auto">
             <div className="animate-pulse flex items-center space-x-4">
                 <div className="rounded-lg bg-darkg w-20 h-20 self-center"></div>
                 <div className="flex-1 space-y-6 py-1">
@@ -52,7 +52,7 @@ export function ColumnRowLoading () {
                 </div>
                 <div className="rounded-full bg-darkg w-10 h-10 self-center"></div>
             </div>
-            <hr key="line1" className="h-1 w-full"></hr>
+            <hr className="h-1 w-full"></hr>
             <div className="animate-pulse flex items-center space-x-4">
                 <div className="rounded-lg bg-darkg w-20 h-20 self-center"></div>
                 <div className="flex-1 space-y-6 py-1">
@@ -68,7 +68,7 @@ export function ColumnRowLoading () {
                 </div>
                 <div className="rounded-full bg-darkg w-10 h-10 self-center"></div>
             </div>
-            <hr key="line1" className="h-1 w-full"></hr>
+            <hr className="h-1 w-full"></hr>
             <div className="animate-pulse flex items-center space-x-4">
                 <div className="rounded-lg bg-darkg w-20 h-20 self-center"></div>
                 <div className="flex-1 space-y-6 py-1">
@@ -84,7 +84,7 @@ export function ColumnRowLoading () {
                 </div>
                 <div className="rounded-full bg-darkg w-10 h-10 self-center"></div>
             </div>
-            <hr key="line1" className="h-1 w-full"></hr>
+            <hr className="h-1 w-full"></hr>
             <div className="animate-pulse flex items-center space-x-4">
                 <div className="rounded-lg bg-darkg w-20 h-20 self-center"></div>
                 <div className="flex-1 space-y-6 py-1">
@@ -115,7 +115,7 @@ export function RowCardsLoading () {
                 </div>
                 <div className="rounded-2xl bg-darkg w-16 h-10 self-center"></div>
             </div>
-            <hr key="line1" className="h-1 w-full"></hr>
+            <hr className="h-1 w-full"></hr>
             <div className="flex w-full justify-between items-center">
                 <div className="flex flex-col space-y-6 pb-3 w-[30%] rounded-3xl border hover:bg-lightg">
                     <div className="w-full h-36 object-cover rounded-t-3xl bg-darkg"></div>

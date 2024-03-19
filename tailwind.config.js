@@ -14,7 +14,8 @@ module.exports = {
         'errorbg' : '#ecc8c5',
         'errortext': '#c03b3a',
         'successbg': '#def2d6',
-        'lightGreen': '#F1FAF0'
+        'lightGreen': '#F1FAF0',
+        'star' : '#FFCD3C'
       }
     },
   },
