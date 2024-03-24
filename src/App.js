@@ -31,6 +31,7 @@ function App() {
         <Route path='/tutor/profile/Classrooms' element={<TutorProfile></TutorProfile>}></Route>
         <Route path='/tutor/profile/Settings' element={<TutorProfile></TutorProfile>}></Route>
         <Route path='/tutor/profile/Exams' element={<TutorProfile></TutorProfile>}></Route>
+        <Route path='/tutor/profile/Calendar' element={<TutorProfile></TutorProfile>}></Route>
         <Route path='/learner/profile' element={<LearnerProfile></LearnerProfile>}></Route>
         <Route path='/learner/profile/Tutors' element={<LearnerProfile></LearnerProfile>}></Route>
         <Route path='/learner/profile/LinguaBuddy' element={<LearnerProfile></LearnerProfile>}></Route>

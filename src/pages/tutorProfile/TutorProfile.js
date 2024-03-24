@@ -30,6 +30,7 @@ import {
 
 } from '../../state/slices/tutorSlice'
 import { fetchFile } from "../../components/Global/functions";
+import BigCalendar from "../../components/tutor profile/BigCalendar";
 
 function TutorProfile() {
 
@@ -94,7 +95,8 @@ function TutorProfile() {
         Classrooms: <Classrooms></Classrooms>,
         ChatBot: <LinguaBuddy></LinguaBuddy>,
         Settings: <Settings></Settings>,
-        Exams: <Exams></Exams>
+        Exams: <Exams></Exams>,
+        calendar: <BigCalendar></BigCalendar>
     }
     //knowing whether it's a tutor or learner signing up
     const path = window.location.pathname;
@@ -114,6 +116,8 @@ function TutorProfile() {
             return bodyContent.Classrooms
         }else if(path === '/tutor/profile/Settings') {
             return bodyContent.Settings
+        }else if(path === '/tutor/profile/Calendar'){
+            return bodyContent.calendar
         }
     }
 

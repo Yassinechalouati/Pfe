@@ -15,6 +15,8 @@ module.exports = {
         'errortext': '#c03b3a',
         'successbg': '#def2d6',
         'lightGreen': '#F1FAF0',
+        'cellColor': '#FFD1A3',
+        'hoverOrange': 'orange-600',
         'star' : '#FFCD3C'
       }
     },

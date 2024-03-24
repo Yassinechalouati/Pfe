@@ -82,7 +82,9 @@ function NavBar() {
                         </div>
                         <IoChatbubbles className="cursor-pointer hidden lg:block" color="#767676" size="22"></IoChatbubbles>
                         <IoNotifications className="cursor-pointer hidden lg:block" color="#767676" size="22"></IoNotifications>
-                        <IoMdCalendar className="cursor-pointer hidden lg:block" color="#767676" size="22"></IoMdCalendar>
+                        <NavLink to="/tutor/profile/Calendar">
+                            <IoMdCalendar className="cursor-pointer hidden lg:block" color="#767676" size="22"></IoMdCalendar>
+                        </NavLink>
                         {
                             tutorData.isLoading?
                             <div className="rounded-full hidden lg:block animate-pulse bg-darkg w-12 h-12 self-center"></div>

@@ -227,3 +227,32 @@ nav .startprofile, .nav-link:nth-child(5):hover~.animation {
   width: 140px;
   left: 410px;
 }
+
+
+/* BigCalendar.css */
+@keyframes slide-left {
+  from {
+      transform: translateX(100%);
+  }
+  to {
+      transform: translateX(0%);
+  }
+}
+
+@keyframes slide-right {
+  from {
+      transform: translateX(-100%);
+  }
+  to {
+      transform: translateX(0%);
+  }
+}
+
+.slide-left {
+  animation: slide-left 0.5s ease;
+}
+
+.slide-right {
+  animation: slide-right 0.5s ease;
+}
+
