@@ -69,7 +69,7 @@ function BigCalendar() {
 
 
     return (
-        <div className={`bg-backg overflow-y-auto  overflow-x-hidden py-4 px-4 lg:px-36 rounded-lg h-full shadow-lg`}>
+        <div className={`bg-backg h-[90%] overflow-y-auto  overflow-x-hidden py-4 px-4 lg:px-36 rounded-lg shadow-lg`}>
             <div className="calendar-header relative w-full flex items-center lg:justify-center mb-4">
                 <div className="flex items-center space-x-7 lg:space-x-36">
                     <IoIosArrowDropleftCircle size="25" className="text-button hover:text-orange-600 cursor-pointer" onClick={prevMonth}></IoIosArrowDropleftCircle>

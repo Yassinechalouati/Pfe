@@ -1,9 +1,6 @@
 import { MdAddBox } from "react-icons/md";
-import { IoMdCalendar } from "react-icons/io";
-import { IoMdTime } from "react-icons/io";
-import { IoIosTimer } from "react-icons/io";
-import { FaChalkboardTeacher } from "react-icons/fa";
 import { useState, useRef } from "react";
+import Schedule from "./Schedule";
 
 const daysInMonth = (year, month) => {
     return new Date(year, month + 1, 0).getDate();
@@ -15,11 +12,21 @@ const GenerateCalendarGrid = (props) => {
     const totalDays = daysInMonth(props.year, props.month);
     const grid = [];
 
+    const [selectedDate, setSelectedDate] = useState(null);
     const [showOptions, setShowOptions] = useState(false);
     const clickedCellRef = useRef(null);
 
-    const handleCellClick = (event) => {
-        setShowOptions(!showOptions);
+    const handleCellClick = (event, day) => {
+        //upon clicking on a cell we show the specific clicked day
+        const currentDate = new Date(props.year, props.month, day);
+        const formattedDate = currentDate.toLocaleDateString("en-US", {
+            weekday: "long",
+            month: "long",
+            day: "numeric",
+            year: "numeric",
+        });
+        setSelectedDate(formattedDate);
+        setShowOptions(true);
         clickedCellRef.current = event.currentTarget; // Store reference to the clicked cell
     };
 
@@ -35,7 +42,7 @@ const GenerateCalendarGrid = (props) => {
             currentDate.getFullYear() === today.getFullYear()) {
                 cellClass += " bg-cellColor hover:bg-darkg transition-colors group text-white cursor-pointer";
                 grid.push(
-                    <div key={day} className={cellClass} onClick={handleCellClick}>
+                    <div key={day} className={cellClass} onClick={(event) => handleCellClick(event, day)}>
                         <MdAddBox size="25" className="absolute group-hover:flex hidden left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2" />
                         <span className=" rounded-full bg-button text-white p-1">
                             {day}
@@ -53,7 +60,7 @@ const GenerateCalendarGrid = (props) => {
         } else {
             cellClass += " bg-cellColor relative hover:bg-darkg transition-colors group text-white cursor-pointer";
             grid.push(
-                <div key={day} className={cellClass} onClick={handleCellClick}>
+                <div key={day} className={cellClass} onClick={(event) => handleCellClick(event, day)}>
                     <MdAddBox size="25" className="absolute group-hover:flex hidden left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2" />
                     {day}
                 </div>
@@ -65,29 +72,7 @@ const GenerateCalendarGrid = (props) => {
         <>
             {grid}
             {showOptions && (
-                <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white shadow-lg rounded-lg p-6 z-30">
-                    <span className="block text-center text-darkg text-lg mb-4">Schedule a Lesson</span>
-                    <div className="flex items-center space-x-2 mb-4"> 
-                        <IoMdCalendar size="25" className="text-darkg"></IoMdCalendar>
-                        <span className="text-darkg">Monday March 25, 2024</span>
-                    </div>
-                    <div className="flex items-center space-x-2 mb-4"> 
-                        <IoMdTime size="25" className="text-darkg"></IoMdTime>
-                        <span className="text-darkg">Select Time</span>
-                        <input type="time" className="border z-50 border-gray-300 px-2 py-1 rounded-md" />
-                    </div>
-                    <div className="flex items-center space-x-2 mb-4"> 
-                        <IoIosTimer size="25" className="text-darkg"></IoIosTimer>
-                        <span className="text-darkg">Lesson Length</span>
-                    </div>
-                    <div className="flex items-center space-x-2 mb-4"> 
-                        <FaChalkboardTeacher size="25" className="text-darkg"></FaChalkboardTeacher>
-                        <span className="text-darkg">Select Tutor</span>
-                    </div>
-                    <div className="flex justify-end"> 
-                        <button className="px-4 py-2 bg-button text-white rounded-lg ">Continue</button>
-                    </div>
-                </div>
+                <Schedule visibility={showOptions} setVisibility={setShowOptions} selectedDate={selectedDate} />
             )}
         </>
     );
