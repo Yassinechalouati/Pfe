@@ -58,6 +58,7 @@ function Drawer(props) {
                             :
                             <img 
                             src={`${props.userData.pic? props.userData.pic : "/user.png"}`} 
+                            referrerPolicy="no-referrer"
                             alt="prolfiepicture" 
                             className="cursor-pointer rounded-full w-20 h-20 object-cover"
                             ></img>
@@ -137,26 +138,54 @@ function Drawer(props) {
                         <div className="animation2"></div>
                     </nav>
                     <nav className="flex flex-col w-full px-4">
-                        <NavLink
-                            className="flex h-10 drawerNav items-center w-full space-x-4">
-                            <IoChatbubbles size="25" color="#767676"></IoChatbubbles>
-                            <span className="">Chat</span>
-                        </NavLink>
-                        <NavLink 
-                            className="flex h-10 drawerNav items-center w-full space-x-4">
-                            <IoNotifications size="25" color="#767676"></IoNotifications>
-                            <span className="">Notifications</span>
-                        </NavLink>
-                        <NavLink 
-                            className="flex h-10 drawerNav items-center w-full space-x-4">
-                            <IoMdCalendar size="25" color="#767676"></IoMdCalendar>
-                            <span className="">Calendar</span>
-                        </NavLink>
-                        <NavLink to={`/${firstSegment}/signin`} onClick={logout}
-                            className="flex h-10 drawerNav items-center w-full space-x-4">
-                            <IoLogOut size="25" color="red"></IoLogOut>
-                            <div className="">Log out</div>
-                        </NavLink>
+                        {props.role === "learner"? 
+                        <>
+                            <NavLink
+                                className="flex h-10 drawerNav items-center w-full space-x-4">
+                                <IoChatbubbles size="25" color="#767676"></IoChatbubbles>
+                                <span className="">Chat</span>
+                            </NavLink>
+                            <NavLink 
+                                className="flex h-10 drawerNav items-center w-full space-x-4">
+                                <IoNotifications size="25" color="#767676"></IoNotifications>
+                                <span className="">Notifications</span>
+                            </NavLink>
+                            <NavLink 
+                                to='/learner/profile/Calendar'
+                                className="flex h-10 drawerNav items-center w-full space-x-4">
+                                <IoMdCalendar size="25" color="#767676"></IoMdCalendar>
+                                <span className="">Calendar</span>
+                            </NavLink>
+                            <NavLink to={`/${firstSegment}/signin`} onClick={logout}
+                                className="flex h-10 drawerNav items-center w-full space-x-4">
+                                <IoLogOut size="25" color="red"></IoLogOut>
+                                <div className="">Log out</div>
+                            </NavLink>
+                        </>
+                        :
+                        <>
+                            <NavLink
+                                className="flex h-10 drawerNav items-center w-full space-x-4">
+                                <IoChatbubbles size="25" color="#767676"></IoChatbubbles>
+                                <span className="">Chat</span>
+                            </NavLink>
+                            <NavLink 
+                                className="flex h-10 drawerNav items-center w-full space-x-4">
+                                <IoNotifications size="25" color="#767676"></IoNotifications>
+                                <span className="">Notifications</span>
+                            </NavLink>
+                            <NavLink 
+                                className="flex h-10 drawerNav items-center w-full space-x-4">
+                                <IoMdCalendar size="25" color="#767676"></IoMdCalendar>
+                                <span className="">Calendar</span>
+                            </NavLink>
+                            <NavLink to={`/${firstSegment}/signin`} onClick={logout}
+                                className="flex h-10 drawerNav items-center w-full space-x-4">
+                                <IoLogOut size="25" color="red"></IoLogOut>
+                                <div className="">Log out</div>
+                            </NavLink>
+                        </>
+                        }
                     </nav>
                 </div>
             </div>

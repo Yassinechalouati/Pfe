@@ -1,6 +1,8 @@
 import { MdAddBox } from "react-icons/md";
 import { useState, useRef } from "react";
 import Schedule from "./Schedule";
+import { useDispatch, useSelector } from "react-redux";
+import { setSelectedDate as setDate, setVisibility } from "../../state/slices/Schedule";
 
 const daysInMonth = (year, month) => {
     return new Date(year, month + 1, 0).getDate();
@@ -11,22 +13,35 @@ const GenerateCalendarGrid = (props) => {
     const firstDayOfMonth = new Date(props.year, props.month, 1).getDay();
     const totalDays = daysInMonth(props.year, props.month);
     const grid = [];
+    const dispatch = useDispatch()
+
+    const showOptions = useSelector(state => state.scheduleData.visibility)
 
     const [selectedDate, setSelectedDate] = useState(null);
-    const [showOptions, setShowOptions] = useState(false);
     const clickedCellRef = useRef(null);
 
     const handleCellClick = (event, day) => {
         //upon clicking on a cell we show the specific clicked day
         const currentDate = new Date(props.year, props.month, day);
+
+
+        const timeStamp = currentDate.toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+          });
+
+        //this is responsible for saving the day that's been clicked in the redux reducer 
+        dispatch(setDate(timeStamp))
+
         const formattedDate = currentDate.toLocaleDateString("en-US", {
             weekday: "long",
             month: "long",
             day: "numeric",
             year: "numeric",
         });
-        setSelectedDate(formattedDate);
-        setShowOptions(true);
+        setSelectedDate(formattedDate)
+        dispatch(setVisibility(true))
         clickedCellRef.current = event.currentTarget; // Store reference to the clicked cell
     };
 
@@ -72,7 +87,7 @@ const GenerateCalendarGrid = (props) => {
         <>
             {grid}
             {showOptions && (
-                <Schedule visibility={showOptions} setVisibility={setShowOptions} selectedDate={selectedDate} />
+                <Schedule selectedDate={selectedDate} />
             )}
         </>
     );

@@ -12,8 +12,8 @@ function Body() {
     const learnerData = useSelector(state => state.userData)
 
     const welcomeContent = [
-            <img key="0"  src={`${learnerData.pic? learnerData.pic : "/user.png"}`}  alt="profilepicture"  className="w-20 h-20 object-cover rounded-full"></img>,
-            <span key="1"  className="font-bold text-2xl text-center">Welcome to Linguify, {learnerData.firstname+" "+learnerData.lastname}!</span>
+        <img key="0" referrerPolicy="no-referrer" src={`${learnerData.pic? learnerData.pic : "/user.png"}`}  alt="profilepicture"  className="w-20 h-20 object-cover rounded-full"></img>,
+        <span key="1"  className="font-bold text-2xl text-center">Welcome to Linguify, {learnerData.firstname+" "+learnerData.lastname}!</span>
     ]
 
 

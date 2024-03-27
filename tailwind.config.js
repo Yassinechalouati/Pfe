@@ -17,6 +17,8 @@ module.exports = {
         'lightGreen': '#F1FAF0',
         'cellColor': '#FFD1A3',
         'hoverOrange': 'orange-600',
+        'disabled': '#BBBBBB',
+        'active' : '#413F42',
         'star' : '#FFCD3C'
       }
     },

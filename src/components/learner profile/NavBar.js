@@ -31,9 +31,6 @@ function NavBar() {
     setIsDropdownOpen(!isDropdownOpen);
   };
 
-  
-  console.log(learnerData.pic);
-
     return (
         <>
             <div className="h-[10%] w-full bg-white z-10 shadow flex items-center space-x-8 pr-10 pl-10 md:pr-10 ">
@@ -87,7 +84,9 @@ function NavBar() {
                         </div>
                         <IoChatbubbles className="cursor-pointer hidden lg:block" color="#767676" size="22"></IoChatbubbles>
                         <IoNotifications className="cursor-pointer hidden lg:block" color="#767676" size="22"></IoNotifications>
-                        <IoMdCalendar className="cursor-pointer hidden lg:block" color="#767676" size="22"></IoMdCalendar>
+                        <NavLink to ="/learner/profile/Calendar">
+                            <IoMdCalendar className="cursor-pointer hidden lg:block" color="#767676" size="22"></IoMdCalendar>
+                        </NavLink>
                         {
                             learnerData.isLoading?
                             <div className="rounded-full hidden lg:block animate-pulse bg-darkg w-12 h-12 self-center"></div>
@@ -96,6 +95,7 @@ function NavBar() {
                                 <img 
                                     src={`${learnerData.pic ? learnerData.pic : "/user.png"}`} 
                                     alt="profilepicture" 
+                                    referrerPolicy="no-referrer"
                                     className="cursor-pointer hidden lg:block rounded-full w-12 h-12 object-cover"
                                     onClick={toggleDropdown}
                                 />

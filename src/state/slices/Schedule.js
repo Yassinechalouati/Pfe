@@ -5,7 +5,10 @@ const initialState ={
     selectedTutor: '',
     lessonTopic:'',
     lessonDifficulty: '',
-    step: 0
+    step: 0,
+    selectedDate: '',
+    visibility: false,
+    lessonLength: ''
 
 }
 
@@ -29,6 +32,16 @@ export const listSlice = createSlice({
         setSteps: (state, action) => {
             state.step = action.payload
         },
+        setSelectedDate: (state, action) => {
+            state.selectedDate = action.payload
+        },
+        setLessonLength: (state, action) => {
+            state.lessonLength = action.payload
+        }
+        ,
+        setVisibility: (state, action) => {
+            state.visibility = action.payload
+        },
         resetData: () => initialState
 
     }
@@ -41,6 +54,9 @@ export const {
     setLessonDifficulty, 
     setLessonTopic,
     resetData,
-    setSteps
+    setSteps,
+    setSelectedDate,
+    setVisibility,
+    setLessonLength
 } = listSlice.actions
 export default listSlice.reducer
