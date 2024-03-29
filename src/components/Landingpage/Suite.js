@@ -22,7 +22,7 @@ const CardList = ({ data }) => {
   };
 
   return (
-    <div className="flex overflow-y-hidden w-full px-4 overflow-x-auto py-4" style={{ scrollbarWidth: 'none', '-ms-overflow-style': 'none' }}>
+    <div className="flex overflow-y-hidden w-full px-4 overflow-x-auto py-4" style={{ scrollbarWidth: 'none' }}>
       {data.map((item, index) => (
         <Card key={index} {...item} rotation={getRandomRotation()} />
       ))}

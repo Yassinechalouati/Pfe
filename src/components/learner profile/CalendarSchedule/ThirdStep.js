@@ -1,8 +1,10 @@
 
 import { useSelector, useDispatch } from "react-redux"
-import { setLessonDifficulty, setLessonTopic, setSelectedDate, setVisibility } from "../../../state/slices/Schedule"
+import { resetData, setLessonDifficulty, setLessonTopic, setVisibility } from "../../../state/slices/Schedule"
 import { MdNavigateBefore } from "react-icons/md"
 import { IoMdCalendar } from "react-icons/io"
+import axiosInstance from "../../../interceptors/axiosInterceptor"
+
 
 
 function ThirdStep(props) {
@@ -18,7 +20,7 @@ function ThirdStep(props) {
         dispatch(setLessonDifficulty(e.target.value))
     }
 
-    const handleBookLesson = () => {
+    const handleBookLesson = async () => {
         if(scheduleData.lessonTopic && scheduleData.lessonDifficulty) {
             //converting the selected time to normal one 
             // Split the time string into hours, minutes, and AM/PM
@@ -34,16 +36,33 @@ function ThirdStep(props) {
             }
 
             // Format the hours and minutes
-            const formattedHours = hours24.toString().padStart(2, '0');
-            const formattedMinutes = minutes.padStart(2, '0');
+            const formattedHours = hours24.toString().padStart(2, '0')
+            const formattedMinutes = minutes.padStart(2, '0')
 
             // Construct the normal time string
-            const normalTime = `${formattedHours}:${formattedMinutes}`;
-            dispatch(setSelectedDate(scheduleData.selectedDate + " "+ normalTime))
+            const normalTime = `${formattedHours}:${formattedMinutes}`
+
 
             //we contact the api here that's responsible for scheduling lessons then we reset the fields after finish the transaction
-
-            dispatch(setVisibility(false))
+            try {
+                const response = await axiosInstance.post('http://localhost:5000/learner/scheduleLesson', {
+                    tutorId: scheduleData.selectedTutor,
+                    lessonTopic: scheduleData.lessonTopic,
+                    lessonDifficulty: scheduleData.lessonDifficulty,
+                    selectedDate: scheduleData.selectedDate + " "+ normalTime,
+                    lessonLength: scheduleData.lessonLength
+                }, {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('accesstoken')}`
+                    }
+                })
+                console.log("visible");
+                dispatch(setVisibility(false))
+                dispatch(resetData())
+                console.log("invisible");
+            }catch(err) {
+                console.log(err)
+            }
         }
     }
 

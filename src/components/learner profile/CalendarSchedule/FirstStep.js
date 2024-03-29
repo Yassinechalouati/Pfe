@@ -58,11 +58,11 @@ function FirstStep(props) {
                     ))}
                 </select>
             </div>
-            <div onClick={props.moveForward} className={`flex p-2 ${scheduleData.time? 'hover:bg-lightg cursor-pointer': ''} rounded-md items-center  space-x-6`}> 
-                <FaChalkboardTeacher size="25" className={`${scheduleData.time? 'text-active' : 'text-disabled'} `}></FaChalkboardTeacher>
-                <span className={`${scheduleData.time? 'text-active' : 'text-disabled'}`}>Select Tutor</span>
+            <div onClick={props.moveForward} className={`flex p-2 ${scheduleData.time && scheduleData.lessonLength? 'hover:bg-lightg cursor-pointer': ''} rounded-md items-center  space-x-6`}> 
+                <FaChalkboardTeacher size="25" className={`${scheduleData.time && scheduleData.lessonLength? 'text-active' : 'text-disabled'} `}></FaChalkboardTeacher>
+                <span className={`${scheduleData.time && scheduleData.lessonLength? 'text-active' : 'text-disabled'}`}>Select Tutor</span>
                 <div className="flex-grow"></div>
-                <MdNavigateNext size="25" className={`${scheduleData.time? 'text-elements' : 'text-disabled'}`}></MdNavigateNext>
+                <MdNavigateNext size="25" className={`${scheduleData.time && scheduleData.lessonLength? 'text-elements' : 'text-disabled'}`}></MdNavigateNext>
             </div>
             </>
     );
