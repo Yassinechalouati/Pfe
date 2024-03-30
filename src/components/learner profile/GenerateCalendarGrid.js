@@ -3,6 +3,10 @@ import { useState, useRef } from "react";
 import Schedule from "./Schedule";
 import { useDispatch, useSelector } from "react-redux";
 import { setSelectedDate as setDate, setVisibility } from "../../state/slices/Schedule";
+import { IoMdTime } from "react-icons/io"
+import { setVisibility as setVisible } from "../../state/slices/ShowMore";
+import ShowMore from "./CalendarSchedule/ShowMore";
+
 
 const daysInMonth = (year, month) => {
     return new Date(year, month + 1, 0).getDate();
@@ -14,35 +18,40 @@ const GenerateCalendarGrid = (props) => {
     const totalDays = daysInMonth(props.year, props.month);
     const grid = [];
     const dispatch = useDispatch()
+    const showMoreRef = useRef(null)
+    const visibility = useSelector(state => state.showMoreData.visibility)
 
     const showOptions = useSelector(state => state.scheduleData.visibility)
 
     const [selectedDate, setSelectedDate] = useState(null);
-    const clickedCellRef = useRef(null);
+
+    const handleShowMore = (event) => {
+        event.stopPropagation();
+        dispatch(setVisible(true))
+    }
 
     const handleCellClick = (event, day) => {
-        //upon clicking on a cell we show the specific clicked day
-        const currentDate = new Date(props.year, props.month, day);
-
-
-        const timeStamp = currentDate.toLocaleDateString('en-US', {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit',
-          });
-
-        //this is responsible for saving the day that's been clicked in the redux reducer 
-        dispatch(setDate(timeStamp))
-
-        const formattedDate = currentDate.toLocaleDateString("en-US", {
-            weekday: "long",
-            month: "long",
-            day: "numeric",
-            year: "numeric",
-        });
-        setSelectedDate(formattedDate)
-        dispatch(setVisibility(true))
-        clickedCellRef.current = event.currentTarget; // Store reference to the clicked cell
+            //upon clicking on a cell we show the specific clicked day
+            const currentDate = new Date(props.year, props.month, day);
+    
+    
+            const timeStamp = currentDate.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+              });
+    
+            //this is responsible for saving the day that's been clicked in the redux reducer 
+            dispatch(setDate(timeStamp))
+    
+            const formattedDate = currentDate.toLocaleDateString("en-US", {
+                weekday: "long",
+                month: "long",
+                day: "numeric",
+                year: "numeric",
+            });
+            setSelectedDate(formattedDate)
+            dispatch(setVisibility(true))
     };
 
     for (let i = 0; i < firstDayOfMonth; i++) {
@@ -77,7 +86,25 @@ const GenerateCalendarGrid = (props) => {
             grid.push(
                 <div key={day} className={cellClass} onClick={(event) => handleCellClick(event, day)}>
                     <MdAddBox size="25" className="absolute group-hover:flex hidden left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2" />
-                    {day}
+                    <div className="flex justify-between mb-2 items-center">
+                        <span className="text-white">{day}</span>
+                        <span ref={showMoreRef} onClick={handleShowMore} className="rounded-lg z-50 p-1 text-xs bg-lightbutton border border-button text-button">Show more</span>
+                    </div>
+                    <div className="flex flex-col items-center justify-center space-y-1">
+                        <img src="/teach.jpg" className="object-cover rounded-full h-14 w-14"></img>
+                        <div className="font-semibold text-center ">
+                            English Lesson
+                        </div>
+                        <div className="bg-lightGreen text-xs p-1 border border-elements text-elements rounded-xl">
+                            Advanced
+                        </div>
+                        <div className="flex items-center space-x-1">
+                            <IoMdTime className="text-darkg" size="15"></IoMdTime>
+                            <span className="text-darkg text-xs ">
+                                2:20 - 3:20
+                            </span>
+                        </div>
+                    </div>
                 </div>
             );
         }
@@ -89,6 +116,11 @@ const GenerateCalendarGrid = (props) => {
             {showOptions && (
                 <Schedule selectedDate={selectedDate} />
             )}
+            {
+                visibility && (
+                    <ShowMore selectedDate={selectedDate}></ShowMore>
+                )
+            }
         </>
     );
 };
