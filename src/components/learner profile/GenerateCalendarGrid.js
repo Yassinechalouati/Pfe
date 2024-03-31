@@ -1,4 +1,3 @@
-import { MdAddBox } from "react-icons/md";
 import { useState, useRef } from "react";
 import Schedule from "./Schedule";
 import { useDispatch, useSelector } from "react-redux";
@@ -64,11 +63,10 @@ const GenerateCalendarGrid = (props) => {
         if (currentDate.getDate() === today.getDate() &&
             currentDate.getMonth() === today.getMonth() &&
             currentDate.getFullYear() === today.getFullYear()) {
-                cellClass += " bg-cellColor hover:bg-darkg transition-colors group text-white cursor-pointer";
+                cellClass += " bg-cellColor text-white cursor-pointer";
                 grid.push(
-                    <div key={day} className={cellClass} onClick={(event) => handleCellClick(event, day)}>
-                        <MdAddBox size="25" className="absolute group-hover:flex hidden left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2" />
-                        <span className=" rounded-full bg-button text-white p-1">
+                    <div key={day} className={cellClass}>
+                        <span className="rounded-full bg-button text-white p-1">
                             {day}
                         </span>
                     </div>
@@ -77,21 +75,20 @@ const GenerateCalendarGrid = (props) => {
             cellClass += " bg-lightg text-darkg ";
             grid.push(
                 <div key={day} className={cellClass}>
-                    <MdAddBox size="25" className="absolute group-hover:flex hidden left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2" />
                     {day}
                 </div>
             );
         } else {
-            cellClass += " bg-cellColor relative hover:bg-darkg transition-colors group text-white cursor-pointer";
+            cellClass += " bg-cellColor hover:shadow-lg relative text-white";
             grid.push(
-                <div key={day} className={cellClass} onClick={(event) => handleCellClick(event, day)}>
-                    <MdAddBox size="25" className="absolute group-hover:flex hidden left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2" />
-                    <div className="flex justify-between mb-2 items-center">
+                <div key={day} className={cellClass}>
+                    <div className="flex mb-2 justify-between items-center">
                         <span className="text-white">{day}</span>
-                        <span ref={showMoreRef} onClick={handleShowMore} className="rounded-lg z-50 p-1 text-xs bg-lightbutton border border-button text-button">Show more</span>
                     </div>
-                    <div className="flex flex-col items-center justify-center space-y-1">
-                        <img src="/teach.jpg" className="object-cover rounded-full h-14 w-14"></img>
+                    <div className="flex flex-col items-center justify-center space-y-2">
+                        {
+                            //<img src="/teach.jpg" className="object-cover rounded-full h-14 w-14"></img>
+                        }
                         <div className="font-semibold text-center ">
                             English Lesson
                         </div>
@@ -104,6 +101,8 @@ const GenerateCalendarGrid = (props) => {
                                 2:20 - 3:20
                             </span>
                         </div>
+                        <button  onClick={(event) => handleCellClick(event, day)} className="rounded-lg cursor-pointer w-full text-center p-1 text-xs bg-lightbutton border border-button text-button">Add</button>
+                        <button ref={showMoreRef} onClick={handleShowMore} className="cursor-pointer underline text-xs text-darkg">Show more</button>
                     </div>
                 </div>
             );

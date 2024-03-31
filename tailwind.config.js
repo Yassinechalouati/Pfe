@@ -19,6 +19,7 @@ module.exports = {
         'hoverOrange': 'orange-600',
         'disabled': '#BBBBBB',
         'active' : '#413F42',
+        'lightButton2' : '#fbdcdc',
         'star' : '#FFCD3C'
       }
     },
