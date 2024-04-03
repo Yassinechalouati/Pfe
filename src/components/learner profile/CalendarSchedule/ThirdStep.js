@@ -4,11 +4,15 @@ import { resetData, setLessonDifficulty, setLessonTopic, setVisibility } from ".
 import { MdNavigateBefore } from "react-icons/md"
 import { IoMdCalendar } from "react-icons/io"
 import axiosInstance from "../../../interceptors/axiosInterceptor"
+import { Addlesson, appendLesson } from "../../../state/slices/lessonsList"
 
 
 
 function ThirdStep(props) {
 
+    const learnerId= useSelector(state => state.userData.id)
+
+    const lessonList = useSelector(state => state.lessonsList.firstlessonList)
     const scheduleData = useSelector(state => state.scheduleData )
     const dispatch = useDispatch()
 
@@ -45,17 +49,87 @@ function ThirdStep(props) {
 
             //we contact the api here that's responsible for scheduling lessons then we reset the fields after finish the transaction
             try {
+                
+                const selectedDate = scheduleData.selectedDate + " "+ normalTime
                 const response = await axiosInstance.post('http://localhost:5000/learner/scheduleLesson', {
                     tutorId: scheduleData.selectedTutor,
                     lessonTopic: scheduleData.lessonTopic,
                     lessonDifficulty: scheduleData.lessonDifficulty,
-                    selectedDate: scheduleData.selectedDate + " "+ normalTime,
+                    selectedDate: selectedDate,
                     lessonLength: scheduleData.lessonLength
                 }, {
                     headers: {
                         'Authorization': `Bearer ${localStorage.getItem('accesstoken')}`
                     }
                 })
+
+
+                //we're verifying if the we got a lesson on that date or not
+                let test =false
+
+                for (let i = 0; i < lessonList.length; i++) {
+                    const lesson = lessonList[i]
+                    const lessonDate = new Date(lesson.start_time)
+                    const options = { 
+                        day: '2-digit', 
+                        month: '2-digit',
+                        year: 'numeric'
+                    };
+
+                    const formattedDate = lessonDate.toLocaleDateString('en-GB', options)
+                    if (formattedDate === scheduleData.selectedDate){
+                        test = true
+                        break
+                    }
+                }
+                const date = scheduleData.selectedDate
+                const month = date.split('/')[0]
+                const day = date.split('/')[1]
+                const year = date.split('/')[2]
+                const [hours, minutes] = normalTime.split(':').map(Number);
+
+                const lessonDuration = parseInt(scheduleData.lessonLength.split(' ')[0]);
+
+
+                // Calculate adjusted hours and minutes
+                let adjustedHours = hours + Math.floor((minutes + lessonDuration) / 60);
+                let adjustedMinutes = (minutes + lessonDuration) % 60
+
+                // Adjust date if necessary
+                let endDate = new Date(Date.UTC(year, month - 1, day, adjustedHours, adjustedMinutes))
+
+                // Format the adjusted enddate to "YYYY-MM-DD HH:MM:SS" format for MySQL
+                const formattedEndDate = endDate.toISOString().slice(0, 19).replace('T', ' ')
+
+
+                // Format the adjusted startdate to "YYYY-MM-DD HH:MM:SS" format for MySQL
+                const formattedBeginDate = year+"-"+month+"-"+day+" "+hours+":"+minutes+":"+"00"
+
+                //current Date
+                const currentDate = new Date();
+                const currentDateTimeString = currentDate.toISOString()
+                
+
+                const data = {
+                    lesson_id: lessonList[lessonList.length-1].lesson_id+1, //giving the data to be appended a new id
+                    tutor_id: scheduleData.selectedTutor,
+                    private_learner_id: learnerId,
+                    start_time: formattedBeginDate,
+                    end_time: formattedEndDate,
+                    scheduling_date: currentDateTimeString,
+                    lesson_topic: scheduleData.lessonTopic,
+                    lesson_difficulty: scheduleData.lessonDifficulty,
+                    duration: scheduleData.lessonLength,
+                    Accepted: -1
+                }
+
+                //if there's no lessons in that day we show it in the calendar
+                if(!test) {
+                    dispatch(appendLesson(data))
+                }
+                //adding it to the list containg all lessons
+                dispatch(Addlesson(data))
+
                 dispatch(setVisibility(false))
                 dispatch(resetData())
             }catch(err) {

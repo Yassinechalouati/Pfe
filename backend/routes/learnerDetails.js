@@ -18,6 +18,7 @@ router.post('/details', auth, roleCheck(["Learner"]), (req, res) => {
             res.status(400).json({message: "user doesn't exist"})
         }else {
             const data = {
+                id: userId,
                 firstname: result[0].firstname,
                 lastname: result[0].lastname,
                 email: result[0].email,

@@ -5,6 +5,7 @@ import { setSelectedDate as setDate, setVisibility} from "../../state/slices/Sch
 import { IoMdTime } from "react-icons/io"
 import { setVisibility as setVisible } from "../../state/slices/ShowMore"
 import ShowMore from "./CalendarSchedule/ShowMore"
+import axiosInstance from "../../interceptors/axiosInterceptor"
 
 
 const daysInMonth = (year, month) => {
@@ -48,10 +49,31 @@ const GenerateCalendarGrid = (props) => {
     }
 
     //handling the logic behind show more
-    const handleShowMore = (event, day) => {
+    const handleShowMore = async (event, day) => {
         saveDate(day)
         event.stopPropagation()
         dispatch(setVisible(true))
+        // trasnforming the date into year-month-day format
+        const currentDate = new Date(props.year, props.month, day)
+        const year = currentDate.getFullYear();
+        const month = String(currentDate.getMonth() + 1).padStart(2, '0'); // Add 1 to zero-based month index
+        const dayOfMonth = String(currentDate.getDate()).padStart(2, '0');
+        
+        const formattedDate = `${year}-${month}-${dayOfMonth}`
+        try{
+            const response = await axiosInstance.post('http://localhost:5000/learner/getDayLessons', {
+                date: formattedDate
+            }, {
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('accesstoken')}`
+                }
+            })
+
+            console.log(response.data.result);
+        }catch(err) {
+            console.log("getDayLessons Error", err);
+        }
+
     }
 
 
@@ -64,9 +86,10 @@ const GenerateCalendarGrid = (props) => {
         cellClass += " bg-cellColor flex flex-col text-white cursor-pointer";
         let test = false // we're testing whether there is a scheduled lesson on that day or not 
 
-        lessonList.map((lesson, index) => {
-            const lessonDate = new Date(lesson.start_time) // this ressembels the scheduled date for the lesson
-            const currentDate = new Date(props.year, props.month, day)
+        for (let i = 0; i < lessonList.length; i++) {
+            const lesson = lessonList[i];
+            const lessonDate = new Date(lesson.start_time);
+            const currentDate = new Date(props.year, props.month, day);
             
             // Define the options for formatting the date
             const options = { 
@@ -76,53 +99,56 @@ const GenerateCalendarGrid = (props) => {
                 day: 'numeric' 
             };
             
-            const formattedCurrentDate = currentDate.toLocaleDateString('en-US', options)
-
+            const formattedCurrentDate = currentDate.toLocaleDateString('en-US', options);
+        
             // Format the date according to the options
-            const formattedLessonDate = lessonDate.toLocaleDateString('en-US', options)
-
-
-            if(formattedCurrentDate === formattedLessonDate) {
-                //formatting the start time of the lesson to Hours:minutes
-                const startDate = new Date(lesson.start_time);
-                const formattedStartTime = startDate.toLocaleTimeString('en-US', { hour12: false });
-                const [startHour, startMinute] = formattedStartTime.split(':');
-
-                const formattedStartHourMinute = `${startHour}:${startMinute}`;
-
-                //formatting the end time of the lesson to Hours:minutes
-                const endDate = new Date(lesson.end_time)
-                const formattedEndTime = endDate.toLocaleTimeString('en-US', { hour12: false });
-                const [endHour, endMinute] = formattedEndTime.split(':');
-
-                const formattedEndHourMinute = `${endHour}:${endMinute}`;
-
-
-                test = <div key={day} className={cellClass}>
-                <span className="mb-2 flex ">
-                    <span className={`rounded-full min-w-7 min-h-7 text-center ${isToday? "bg-button" : "" } text-white p-1`}>
-                        {day}  
-                    </span>
-                </span>
-                <div className="flex flex-col items-center justify-center space-y-2">
-                    <div className="font-semibold text-center ">
-                        {lesson.lesson_topic}
-                    </div>
-                    <div className="bg-lightGreen text-xs p-1 border border-elements text-elements rounded-xl">
-                        {lesson.lesson_difficulty}
-                    </div>
-                    <div className="flex items-center space-x-1">
-                        <IoMdTime className="text-darkg" size="15"></IoMdTime>
-                        <span className="text-darkg text-xs ">
-                            {formattedStartHourMinute} - {formattedEndHourMinute}
+            const formattedLessonDate = lessonDate.toLocaleDateString('en-US', options);
+        
+            if (formattedCurrentDate === formattedLessonDate) {
+                if(formattedCurrentDate === formattedLessonDate) {
+                    //formatting the start time of the lesson to Hours:minutes
+                    const startDate = new Date(lesson.start_time);
+                    const formattedStartTime = startDate.toLocaleTimeString('en-US', { hour12: false });
+                    const [startHour, startMinute] = formattedStartTime.split(':');
+    
+                    const formattedStartHourMinute = `${startHour}:${startMinute}`;
+    
+                    //formatting the end time of the lesson to Hours:minutes
+                    const endDate = new Date(lesson.end_time)
+                    const formattedEndTime = endDate.toLocaleTimeString('en-US', { hour12: false });
+                    const [endHour, endMinute] = formattedEndTime.split(':');
+    
+                    const formattedEndHourMinute = `${endHour}:${endMinute}`;
+    
+    
+                    test = <div key={day} className={cellClass}>
+                    <span className="mb-2 flex ">
+                        <span className={`rounded-full min-w-7 min-h-7 text-center ${isToday? "bg-button" : "" } text-white p-1`}>
+                            {day}  
                         </span>
+                    </span>
+                    <div className="flex flex-col items-center justify-center space-y-2">
+                        <div className="font-semibold text-center ">
+                            {lesson.lesson_topic}
+                        </div>
+                        <div className="bg-lightGreen text-xs p-1 border border-elements text-elements rounded-xl">
+                            {lesson.lesson_difficulty}
+                        </div>
+                        <div className="flex items-center space-x-1">
+                            <IoMdTime className="text-darkg" size="15"></IoMdTime>
+                            <span className="text-darkg text-xs ">
+                                {formattedStartHourMinute} - {formattedEndHourMinute}
+                            </span>
+                        </div>
+                        <button onClick={(event) => handleCellClick(event, day)} className="rounded-lg cursor-pointer w-full text-center p-1 text-xs bg-lightbutton border border-button text-button">Add</button>
+                        <button ref={showMoreRef} onClick={(event) => handleShowMore(event, day)} className="cursor-pointer underline text-xs text-darkg">Show more</button>
                     </div>
-                    <button onClick={(event) => handleCellClick(event, day)} className="rounded-lg cursor-pointer w-full text-center p-1 text-xs bg-lightbutton border border-button text-button">Add</button>
-                    <button ref={showMoreRef} onClick={(event) => handleShowMore(event, day)} className="cursor-pointer underline text-xs text-darkg">Show more</button>
                 </div>
-            </div>
+                }
+                break; // Break out of the loop once condition is satisfied
             }
-        }) 
+        }
+        
 
         
         const result = test? test : 

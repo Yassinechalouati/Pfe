@@ -24,7 +24,6 @@ router.post('/getFirstLesson', auth, roleCheck(["Learner"]), (req, res) => {
             console.log(err)
             res.status(500).json({message:"Internal Server Error"})
         }else {
-            console.log(result)
             res.status(200).json({message: result})
         }
     })

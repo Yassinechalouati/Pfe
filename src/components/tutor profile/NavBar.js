@@ -93,7 +93,7 @@ function NavBar() {
                                 <img 
                                     src={tutorData.displayableImage}
                                     alt="profilepicture" 
-                                    className="cursor-pointer hidden lg:block rounded-full w-12 h-12 object-cover"
+                                    className="cursor-pointer hidden lg:block rounded-full min-w-10 min-h-10  w-12 h-12 object-cover"
                                     onClick={toggleDropdown}
                                 />
                                 <DropdownMenu isOpen={isDropdownOpen} onClose={() => setIsDropdownOpen(false)} />

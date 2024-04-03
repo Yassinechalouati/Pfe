@@ -17,13 +17,21 @@ export const lessons = createSlice( {
         setAllLessons: (state, action) => {
             state.allLessons = action.payload
         },
+        appendLesson: (state, action) => {
+            state.firstlessonList = [...state.firstlessonList, action.payload]
+        },
+        Addlesson: (state, action) => {
+            state.allLessons = [...state.allLessons, action.payload]
+        }
     }
 })
 
 
 export const {
     setFirstLessonList, 
-    setAllLessons
+    setAllLessons,
+    appendLesson,
+    Addlesson
 } = lessons.actions
 
 export default lessons.reducer
