@@ -8,7 +8,7 @@ const initialState ={
     step: 0,
     selectedDate: '',
     visibility: false,
-    lessonLength: ''
+    lessonLength: '',
 
 }
 
@@ -57,6 +57,6 @@ export const {
     setSteps,
     setSelectedDate,
     setVisibility,
-    setLessonLength
+    setLessonLength,
 } = listSlice.actions
 export default listSlice.reducer

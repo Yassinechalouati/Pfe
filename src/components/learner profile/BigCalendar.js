@@ -1,13 +1,18 @@
 import { useState, useRef, useEffect } from 'react';
 import { IoIosArrowDroprightCircle } from "react-icons/io";
 import { IoIosArrowDropleftCircle } from "react-icons/io";
+import { useDispatch} from 'react-redux';
+import { setFirstLessonList } from '../../state/slices/lessonsList';
 import GenerateCalendarGrid from './GenerateCalendarGrid';
+import axiosInstance from '../../interceptors/axiosInterceptor';
 
 
 function BigCalendar() {
     const [year, setYear] = useState(new Date().getFullYear());
     const [month, setMonth] = useState(new Date().getMonth());
     const [slideDirection, setSlideDirection] = useState(null)
+    
+    const dispatch = useDispatch()
 
     const calendarGridRef = useRef(null);
 
@@ -65,7 +70,26 @@ function BigCalendar() {
         setMonth(new Date().getMonth())
     }
 
+    //getting the first lesson in every day
+    const fetchData = async () => {
+        try {
+           const response = await axiosInstance.post('http://localhost:5000/learner/getFirstLesson', {}, {
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('accesstoken')}`
+            }
+        })
+        console.log(response.data.message)
+        dispatch(setFirstLessonList(response.data.message))
+        }catch(err) {
+            console.log(err)
+        }
+    }
 
+
+    useEffect(() => {
+        fetchData()
+    }, [])
+    
 
 
     return (

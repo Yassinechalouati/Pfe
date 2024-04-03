@@ -47,8 +47,8 @@ router.post('/scheduleLesson', auth, roleCheck(["Learner"]), (req, res) => {
 
     
     // Prepare and execute the SQL query
-    const query = "INSERT INTO private_lesson(tutor_id, private_learner_id, start_time, end_time, lesson_topic, lesson_difficulty) VALUES(?, ?, ?, ?, ?, ?)";
-    mysql.query(query, [tutorId, userId, formattedBeginDate, formattedEndDate, lessonTopic, lessonDifficulty], (err, result) => {
+    const query = "INSERT INTO private_lesson(tutor_id, private_learner_id, start_time, end_time, lesson_topic, lesson_difficulty, duration, Accepted) VALUES(?, ?, ?, ?, ?, ?, ?, -1)";
+    mysql.query(query, [tutorId, userId, formattedBeginDate, formattedEndDate, lessonTopic, lessonDifficulty, lessonLength], (err, result) => {
         if (err) {
             console.log(err);
             res.status(500).json({ message: "Internal Server Error" });

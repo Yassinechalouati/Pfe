@@ -56,10 +56,8 @@ function ThirdStep(props) {
                         'Authorization': `Bearer ${localStorage.getItem('accesstoken')}`
                     }
                 })
-                console.log("visible");
                 dispatch(setVisibility(false))
                 dispatch(resetData())
-                console.log("invisible");
             }catch(err) {
                 console.log(err)
             }
