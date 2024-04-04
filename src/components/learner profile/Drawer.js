@@ -57,7 +57,7 @@ function Drawer(props) {
                             ></img>
                             :
                             <img 
-                            src={`${props.userData.pic? props.userData.pic : "/user.png"}`} 
+                            src={`${props.userData.pic==="user.png"? "/"+props.userData.pic : props.userData.pic}`} 
                             referrerPolicy="no-referrer"
                             alt="prolfiepicture" 
                             className="cursor-pointer rounded-full w-20 h-20 object-cover"

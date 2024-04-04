@@ -1,19 +1,23 @@
-import { useDispatch, useSelector } from "react-redux";
-import { useRef, useEffect } from "react";
-import { setVisibility } from "../../../state/slices/ShowMore";
+import { useDispatch, useSelector } from "react-redux"
+import { useRef, useEffect } from "react"
+import { setVisibility } from "../../../state/slices/ShowMore"
 import { IoMdCalendar } from "react-icons/io"
-import { IoMdTime } from "react-icons/io"
+import ShowMoreRow from "./ShowMoreRow"
+import { resetAllLessons } from "../../../state/slices/lessonsList"
+
 
 
 function ShowMore(props) {
     const modalRef = useRef(null)
     const dispatch = useDispatch()
     const visibility = useSelector(state => state.showMoreData.visibility)
+    const showMoreLessons = useSelector(state => state.lessonsList.allLessons)
 
     //when clicking outside of the modal we check if the list is saved or not, if it's saved w return the state of the final correct list else we reset the list
     const handleOutsideClick = (event) => {
         if (modalRef.current && !modalRef.current.contains(event.target)) {
             dispatch(setVisibility(false))
+            dispatch(resetAllLessons())
         }
     };
 
@@ -40,58 +44,15 @@ function ShowMore(props) {
                             <span className="text-active">{props.selectedDate}</span>
                         </div>
                         <div className="flex flex-col space-y-3 justify-center">
-                            <div className="flex p-2 rounded-lg hover:bg-lightg space-x-3 items-center">
-                                <img className="min-w-20 h-20 object-cover rounded-full" alt="tutorface" src="/random.jpg"></img>
-                                <div className="flex flex-col space-y-1 justify-center">
-                                    <div className="flex items-center space-x-2">
-                                        <span className="text-base">English lesson</span>
-                                        <div className="flex items-center space-x-1">
-                                            <IoMdTime className="text-darkg" size="15"></IoMdTime>
-                                            <span className="text-darkg text-xs ">
-                                                2:20 - 3:20
-                                            </span>
-                                        </div>
-                                        <div className="flex">
-                                            <div className="bg-lightGreen text-xs p-1 border border-elements text-elements rounded-xl">
-                                                On hold
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <span className="text-sm" >Tutor: User User</span>
-                                    <div className="flex">
-                                        <div className="bg-lightGreen text-xs p-1 border border-elements text-elements rounded-xl">
-                                            Advanced
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="flex p-2 rounded-lg space-x-3 hover:bg-lightg  items-center">
-                                <img className="min-w-20 h-20 object-cover rounded-full" alt="tutorface" src="/random.jpg"></img>
-                                <div className="flex flex-col space-y-1 justify-center">
-                                    <div className="flex items-center space-x-2">
-                                        <span className="text-base">English lesson</span>
-                                        <div className="flex items-center space-x-1">
-                                            <IoMdTime className="text-darkg" size="15"></IoMdTime>
-                                            <span className="text-darkg text-xs ">
-                                                2:20 - 3:20
-                                            </span>
-                                        </div>
-                                        <div className="flex">
-                                            <div className="bg-lightGreen text-xs p-1 border border-elements text-elements rounded-xl">
-                                                On hold
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <span className="text-sm" >Tutor: User User</span>
-                                    <div className="flex">
-                                        <div className="bg-lightGreen text-xs p-1 border border-elements text-elements rounded-xl">
-                                            Advanced
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            {
+                                //we show the items in an ascending order 
+                                Array.from(showMoreLessons)
+                                    .sort((a, b) => new Date(a.start_time) - new Date(b.start_time)) // Sort by start_time in ascending order
+                                    .map((lesson, index) => (
+                                        <ShowMoreRow key={index} lesson={lesson}></ShowMoreRow>
+                                    ))
+                            }
                         </div>
-
                     </div>
                 </div>
                 :

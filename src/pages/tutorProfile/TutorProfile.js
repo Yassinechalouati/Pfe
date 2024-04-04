@@ -51,28 +51,26 @@ function TutorProfile() {
                 fetchFile(response.data.message.pfp, "images", "tutor", response.data.message.id)
                 .then(async (resp )=> {
                     // Dispatch actions sequentially
-                await Promise.all([
-                    dispatch(setFirstName(response.data.message.firstname)),
-                    dispatch(setLastName(response.data.message.lastname)),
-                    dispatch(setEmail(response.data.message.email)),
-                    dispatch(setHasPassword(response.data.message.hasPassword)),
-                    dispatch(setDisplayableImage(resp)),
-                    dispatch(setDisplayableVideo(response.data.message.introductionVideo)),
-                    dispatch(setAboutMe(response.data.message.AboutMe)),
-                    dispatch(setDescription(response.data.message.description)),
-                    dispatch(setTeachingStyle(response.data.message.teachingStyle)),
-                    dispatch(setEducation(JSON.parse(response.data.message.Education))),
-                    dispatch(setLanguages(JSON.parse(response.data.message.Languages))),
-                    dispatch(setWorkExperience(JSON.parse(response.data.message.WorkExperience))),
-                    dispatch(setCountry(response.data.message.country)),
-                    dispatch(setTel(response.data.message.tel)),
-                    dispatch(setBirthday(response.data.message.Birthday))
-                ]);
-                const data = await fetchCountryData(response.data.message.country)
-                dispatch(setCountryFlag(data))
-
-
-                dispatch(setIsLoading(false))
+                    await Promise.all([
+                        dispatch(setFirstName(response.data.message.firstname)),
+                        dispatch(setLastName(response.data.message.lastname)),
+                        dispatch(setEmail(response.data.message.email)),
+                        dispatch(setHasPassword(response.data.message.hasPassword)),
+                        dispatch(setDisplayableImage(resp)),
+                        dispatch(setDisplayableVideo(response.data.message.introductionVideo)),
+                        dispatch(setAboutMe(response.data.message.AboutMe)),
+                        dispatch(setDescription(response.data.message.description)),
+                        dispatch(setTeachingStyle(response.data.message.teachingStyle)),
+                        dispatch(setEducation(JSON.parse(response.data.message.Education))),
+                        dispatch(setLanguages(JSON.parse(response.data.message.Languages))),
+                        dispatch(setWorkExperience(JSON.parse(response.data.message.WorkExperience))),
+                        dispatch(setCountry(response.data.message.country)),
+                        dispatch(setTel(response.data.message.tel)),
+                        dispatch(setBirthday(response.data.message.Birthday))
+                    ]);
+                    const data = await fetchCountryData(response.data.message.country)
+                    dispatch(setCountryFlag(data))
+                    dispatch(setIsLoading(false))
                 })
                 .catch(err => {
                     console.log(err);

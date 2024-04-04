@@ -39,3 +39,15 @@ export const fetchFile = async (pfp, fileType, role, id, )=> {
 export const LogOut = () => {
     localStorage.clear()
 }
+
+export const timeFormatter = (start_time) => {
+    const startDate = new Date(start_time);
+    const formattedStartTime = startDate.toLocaleTimeString('en-US', { hour12: false });
+    const [startHour, startMinute] = formattedStartTime.split(':');
+
+    const formattedStartHourMinute = `${startHour}:${startMinute}`;
+    
+
+    return formattedStartHourMinute
+
+}

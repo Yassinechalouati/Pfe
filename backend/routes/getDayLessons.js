@@ -11,8 +11,11 @@ router.post('/getDayLessons', auth, roleCheck(["Learner"]), (req, res) => {
         date //year-month-day
     } = req.body
 
-    const query = `SELECT * FROM private_lesson where start_time >= NOW() AND DATE(start_time) = ?
-    AND private_learner_id = ?`
+    const query = `SELECT pl.* , t.pfp, t.lastname, t.firstname FROM private_lesson as pl, tutor as t 
+    WHERE pl.start_time >= NOW() 
+    AND DATE(pl.start_time) = ?
+    AND pl.private_learner_id = ? 
+    AND t.id = pl.tutor_id`
 
     mysql.query(query, [date, userId], (err, result) => {
         if(err) {

@@ -6,6 +6,8 @@ import { IoMdTime } from "react-icons/io"
 import { setVisibility as setVisible } from "../../state/slices/ShowMore"
 import ShowMore from "./CalendarSchedule/ShowMore"
 import axiosInstance from "../../interceptors/axiosInterceptor"
+import { setAllLessons } from "../../state/slices/lessonsList"
+import { timeFormatter } from "../Global/functions"
 
 
 const daysInMonth = (year, month) => {
@@ -53,7 +55,7 @@ const GenerateCalendarGrid = (props) => {
         saveDate(day)
         event.stopPropagation()
         dispatch(setVisible(true))
-        // trasnforming the date into year-month-day format
+        // transforming the date into year-month-day format
         const currentDate = new Date(props.year, props.month, day)
         const year = currentDate.getFullYear();
         const month = String(currentDate.getMonth() + 1).padStart(2, '0'); // Add 1 to zero-based month index
@@ -68,8 +70,8 @@ const GenerateCalendarGrid = (props) => {
                     'Authorization': `Bearer ${localStorage.getItem('accesstoken')}`
                 }
             })
+            dispatch(setAllLessons(response.data.result))
 
-            console.log(response.data.result);
         }catch(err) {
             console.log("getDayLessons Error", err);
         }
@@ -107,18 +109,10 @@ const GenerateCalendarGrid = (props) => {
             if (formattedCurrentDate === formattedLessonDate) {
                 if(formattedCurrentDate === formattedLessonDate) {
                     //formatting the start time of the lesson to Hours:minutes
-                    const startDate = new Date(lesson.start_time);
-                    const formattedStartTime = startDate.toLocaleTimeString('en-US', { hour12: false });
-                    const [startHour, startMinute] = formattedStartTime.split(':');
-    
-                    const formattedStartHourMinute = `${startHour}:${startMinute}`;
+                    const formattedStartHourMinute = timeFormatter(lesson.start_time)
     
                     //formatting the end time of the lesson to Hours:minutes
-                    const endDate = new Date(lesson.end_time)
-                    const formattedEndTime = endDate.toLocaleTimeString('en-US', { hour12: false });
-                    const [endHour, endMinute] = formattedEndTime.split(':');
-    
-                    const formattedEndHourMinute = `${endHour}:${endMinute}`;
+                    const formattedEndHourMinute = timeFormatter(lesson.end_time)
     
     
                     test = <div key={day} className={cellClass}>

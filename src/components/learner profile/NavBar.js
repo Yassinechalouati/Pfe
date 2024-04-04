@@ -93,7 +93,7 @@ function NavBar() {
                             :
                             <div className="relative">
                                 <img 
-                                    src={`${learnerData.pic ? learnerData.pic : "/user.png"}`} 
+                                    src={`${learnerData.pic==="user.png" ? "/" +learnerData.pic: learnerData.pic }`} 
                                     alt="profilepicture" 
                                     referrerPolicy="no-referrer"
                                     className="cursor-pointer hidden lg:block rounded-full min-w-10 min-h-10 w-12 h-12 object-cover"
