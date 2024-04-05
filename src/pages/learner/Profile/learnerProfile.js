@@ -1,7 +1,7 @@
 import NavBar from "../../../components/learner profile/NavBar";
 import axiosInstance from "../../../interceptors/axiosInterceptor";
 import { useEffect } from "react";
-import { setIsLoading, setBirthday, setComfortLevel, setCountry, setEmail, setFirstName, setFocusThemes, setGoals, setHasPassword, setLastName, setLife_Goals, setPic, setTel, setTopics } from "../../../state/slices/userSlice";
+import { setId, setIsLoading, setBirthday, setComfortLevel, setCountry, setEmail, setFirstName, setFocusThemes, setGoals, setHasPassword, setLastName, setLife_Goals, setPic, setTel, setTopics } from "../../../state/slices/userSlice";
 import { useDispatch } from "react-redux";
 import CoursesSearch from "./CoursesSearch";
 import TutorsSearch from "./TutorsSearch";
@@ -29,6 +29,7 @@ function LearnerProfile() {
                 console.log(response.data.message);
                 // Dispatch actions sequentially
                 await Promise.all([
+                    dispatch(setId(response.data.message.id)),
                     dispatch(setFirstName(response.data.message.firstname)),
                     dispatch(setLastName(response.data.message.lastname)),
                     dispatch(setEmail(response.data.message.email)),

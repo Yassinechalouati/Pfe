@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
+  id: '',
   firstname: '',
   lastname: '',
   hasPassword: '', // this indicates whether the learner is signed up using gmail or not
@@ -32,6 +33,9 @@ export const userSlice = createSlice({
   reducers: {
     setEmail: (state, action) => {
       state.email = action.payload;
+    },
+    setId: (state, action ) => {
+      state.id = action.payload
     },
     setPassword: (state, action) => {
       state.password = action.payload
@@ -141,5 +145,7 @@ export const {
   setLastName, 
   setLife_Goals, 
   setTel, 
-  setTutorSearchList} = userSlice.actions
+  setTutorSearchList,
+  setId
+} = userSlice.actions
 export default userSlice.reducer

@@ -43,7 +43,7 @@ function ShowMore(props) {
                             <IoMdCalendar size="25" className="text-active"></IoMdCalendar>
                             <span className="text-active">{props.selectedDate}</span>
                         </div>
-                        <div className="flex flex-col space-y-3 justify-center">
+                        <div className="flex flex-col overflow-y-auto space-y-3 pr-2">
                             {
                                 //we show the items in an ascending order 
                                 Array.from(showMoreLessons)

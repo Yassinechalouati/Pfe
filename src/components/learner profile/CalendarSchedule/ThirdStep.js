@@ -4,7 +4,7 @@ import { resetData, setLessonDifficulty, setLessonTopic, setVisibility } from ".
 import { MdNavigateBefore } from "react-icons/md"
 import { IoMdCalendar } from "react-icons/io"
 import axiosInstance from "../../../interceptors/axiosInterceptor"
-import { Addlesson, appendLesson } from "../../../state/slices/lessonsList"
+import { Addlesson, appendLesson, replaceFirstLessonItem } from "../../../state/slices/lessonsList"
 
 
 
@@ -66,6 +66,7 @@ function ThirdStep(props) {
 
                 //we're verifying if the we got a lesson on that date or not
                 let test =false
+                let index = -5
 
                 for (let i = 0; i < lessonList.length; i++) {
                     const lesson = lessonList[i]
@@ -76,8 +77,27 @@ function ThirdStep(props) {
                         year: 'numeric'
                     };
 
-                    const formattedDate = lessonDate.toLocaleDateString('en-GB', options)
+                    const formattedDate = lessonDate.toLocaleDateString('en-US', options)
+                    console.log("condition: ", formattedDate === scheduleData.selectedDate);
+                    console.log("formattedDate: ", formattedDate, "selectedDate: ", scheduleData.selectedDate);
                     if (formattedDate === scheduleData.selectedDate){
+
+                        // Extract hours and minutes from the Date object
+                        const hours = lessonDate.getUTCHours(); // Use getUTCHours() for UTC time
+                        const minutes= lessonDate.getUTCMinutes(); // Use getUTCMinutes() for UTC time
+
+
+                        //compare the hours ken eli jebneh jdid 9bal eli deja mawjoud wa9tha nekhdou el index
+                        if(formattedHours < hours  ) {
+                            console.log("formattedHours < hours", formattedHours, " < ", hours  );
+                            index = i
+                        }else if(formattedHours === hours) {
+                            if(formattedMinutes < minutes) {
+                                console.log("formattedHours < minutes");
+                                index = i 
+                            }
+                        }
+
                         test = true
                         break
                     }
@@ -111,7 +131,7 @@ function ThirdStep(props) {
                 
 
                 const data = {
-                    lesson_id: lessonList[lessonList.length-1].lesson_id+1, //giving the data to be appended a new id
+                    lesson_id: lessonList[lessonList.length-1]? lessonList[lessonList.length-1].lesson_id+1 : 0, //giving the data to be appended a new id
                     tutor_id: scheduleData.selectedTutor,
                     private_learner_id: learnerId,
                     start_time: formattedBeginDate,
@@ -126,6 +146,11 @@ function ThirdStep(props) {
                 //if there's no lessons in that day we show it in the calendar
                 if(!test) {
                     dispatch(appendLesson(data))
+                }else {
+                    if(index >= 0){
+                        console.log("replaceFirstLessonItem Worked");
+                        dispatch(replaceFirstLessonItem({data, index}))
+                    }
                 }
                 //adding it to the list containg all lessons
                 dispatch(Addlesson(data))

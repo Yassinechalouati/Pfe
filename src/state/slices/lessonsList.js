@@ -23,6 +23,15 @@ export const lessons = createSlice( {
         Addlesson: (state, action) => {
             state.allLessons = [...state.allLessons, action.payload]
         },
+        replaceFirstLessonItem: (state, action) => {
+            const { data, index } = action.payload;
+            console.log("data: ", action, "index: ", index);
+            // Clone the current state array to avoid mutation
+            const lessonsCopy = [...state.firstlessonList]
+            lessonsCopy[index] = data
+
+            state.firstlessonList = lessonsCopy
+        },
         resetAllLessons: (state, action) => {
             state.allLessons = []
         }
@@ -35,7 +44,8 @@ export const {
     setAllLessons,
     appendLesson,
     Addlesson,
-    resetAllLessons
+    resetAllLessons,
+    replaceFirstLessonItem
 } = lessons.actions
 
 export default lessons.reducer
