@@ -11,10 +11,13 @@ router.post('/scheduleLesson', auth, roleCheck(["Learner"]), (req, res) => {
         lessonTopic,
         lessonDifficulty,
         selectedDate, // format: mm/dd/yyyy 
-        lessonLength
+        lessonLength,
+        lessonLanguage
     } = req.body;
 
-    if (!tutorId || !lessonTopic || !lessonDifficulty || !selectedDate || !lessonLength) {
+    console.log(req.body)
+
+    if (!tutorId || !lessonTopic || !lessonDifficulty || !selectedDate || !lessonLength || !lessonLanguage) {
         res.status(400).json({ message: "Bad Data!" });
         return; // return to avoid further execution if data is missing
     }
@@ -47,8 +50,8 @@ router.post('/scheduleLesson', auth, roleCheck(["Learner"]), (req, res) => {
 
     
     // Prepare and execute the SQL query
-    const query = "INSERT INTO private_lesson(tutor_id, private_learner_id, start_time, end_time, lesson_topic, lesson_difficulty, duration, Accepted) VALUES(?, ?, ?, ?, ?, ?, ?, -1)";
-    mysql.query(query, [tutorId, userId, formattedBeginDate, formattedEndDate, lessonTopic, lessonDifficulty, lessonLength], (err, result) => {
+    const query = "INSERT INTO private_lesson(tutor_id, private_learner_id, start_time, end_time, lesson_topic, lesson_difficulty, duration, Accepted, language) VALUES(?, ?, ?, ?, ?, ?, ?, -1, ?)";
+    mysql.query(query, [tutorId, userId, formattedBeginDate, formattedEndDate, lessonTopic, lessonDifficulty, lessonLength, lessonLanguage], (err, result) => {
         if (err) {
             console.log(err);
             res.status(500).json({ message: "Internal Server Error" });

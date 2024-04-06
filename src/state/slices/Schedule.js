@@ -9,6 +9,7 @@ const initialState ={
     selectedDate: '',
     visibility: false,
     lessonLength: '',
+    language: ''
 
 }
 
@@ -42,6 +43,9 @@ export const listSlice = createSlice({
         setVisibility: (state, action) => {
             state.visibility = action.payload
         },
+        setLanguage: (state, action) => {
+            state.language = action.payload
+        },
         resetData: () => initialState
 
     }
@@ -58,5 +62,6 @@ export const {
     setSelectedDate,
     setVisibility,
     setLessonLength,
+    setLanguage
 } = listSlice.actions
 export default listSlice.reducer

@@ -4,8 +4,10 @@ import { IoIosTimer } from "react-icons/io"
 import { FaChalkboardTeacher } from "react-icons/fa"
 import { MdNavigateNext } from "react-icons/md"
 import { IoMdCalendar } from "react-icons/io"
-import { setLessonLength, setTime } from "../../../state/slices/Schedule"
+import { setLanguage, setLessonLength, setTime } from "../../../state/slices/Schedule"
 import {useDispatch, useSelector} from 'react-redux'
+import { MdLanguage } from "react-icons/md";
+
 
 
 function FirstStep(props) {
@@ -22,12 +24,22 @@ function FirstStep(props) {
     const handleLessonChange = (e) => {
         dispatch(setLessonLength(e.target.value))
     }
-
+    
+    const handleLanguageChange = (e) => {
+        dispatch(setLanguage(e.target.value))
+    }
+ 
     const duration = [
         '15 minutes',
         '30 minutes', 
         '45 minutes',
         '60 minutes'
+    ]
+
+    const languages = [
+        "English", 
+        "French",
+        "Arabic"
     ]
 
 
@@ -51,7 +63,7 @@ function FirstStep(props) {
             </div>
             <div className="flex p-2 items-center space-x-6"> 
                 <IoIosTimer size="25" className="text-active"></IoIosTimer>
-                <span className="text-active">Lesson Length</span>
+                <span className="text-active">Select Lesson Length</span>
                 <select onChange={handleLessonChange} value={scheduleData.lessonLength} className="border focus:outline-none border-elements z-50 px-2 active:outline-none py-1 rounded-md">
                     <option disabled value=''>Select duration</option>
                     {duration.map((time, index) => (
@@ -59,11 +71,22 @@ function FirstStep(props) {
                     ))}
                 </select>
             </div>
-            <div onClick={props.moveForward} className={`flex p-2 ${scheduleData.time && scheduleData.lessonLength? 'hover:bg-lightg cursor-pointer': ''} rounded-md items-center  space-x-6`}> 
-                <FaChalkboardTeacher size="25" className={`${scheduleData.time && scheduleData.lessonLength? 'text-active' : 'text-disabled'} `}></FaChalkboardTeacher>
-                <span className={`${scheduleData.time && scheduleData.lessonLength? 'text-active' : 'text-disabled'}`}>Select Tutor</span>
+            <div className="flex p-2 items-center space-x-6 w-full">
+                <MdLanguage size="25" className="text-active" />
+                <span className="text-active">Select Language</span>
                 <div className="flex-grow"></div>
-                <MdNavigateNext size="25" className={`${scheduleData.time && scheduleData.lessonLength? 'text-elements' : 'text-disabled'}`}></MdNavigateNext>
+                <select onChange={handleLanguageChange} value={scheduleData.language} className="border focus:outline-none border-elements z-50 px-2 active:outline-none py-1 rounded-md">
+                    <option disabled value=''>Select Language</option>
+                    {languages.map((time, index) => (
+                        <option key={index} value={time}>{time}</option>
+                    ))}
+                </select>
+            </div>
+            <div onClick={props.moveForward} className={`flex p-2 ${scheduleData.time && scheduleData.lessonLength && scheduleData.language? 'hover:bg-lightg cursor-pointer': ''} rounded-md items-center  space-x-6`}> 
+                <FaChalkboardTeacher size="25" className={`${scheduleData.time && scheduleData.lessonLength && scheduleData.language? 'text-active' : 'text-disabled'} `}></FaChalkboardTeacher>
+                <span className={`${scheduleData.time && scheduleData.lessonLength && scheduleData.language? 'text-active' : 'text-disabled'}`}>Select preferences</span>
+                <div className="flex-grow"></div>
+                <MdNavigateNext size="25" className={`${scheduleData.time && scheduleData.lessonLength && scheduleData.language? 'text-elements' : 'text-disabled'}`}></MdNavigateNext>
             </div>
             </>
     );

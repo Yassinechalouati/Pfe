@@ -1,72 +1,97 @@
 
+import { useSelector, useDispatch } from "react-redux"
+import { setLessonDifficulty, setLessonTopic} from "../../../state/slices/Schedule"
 import { MdNavigateBefore } from "react-icons/md"
-import {useDispatch, useSelector} from 'react-redux'
 import { IoMdCalendar } from "react-icons/io"
-import {useState, useEffect} from 'react'
-import axiosInstance from "../../../interceptors/axiosInterceptor"
-import { setTutorSearchList } from "../../../state/slices/userSlice"
-import Loading from "../../Global/Loading"
-import TutorRow from "./TutorRow"
+import { FaBook } from "react-icons/fa";
+import { IoFlame } from "react-icons/io5";
+import { FaChalkboardTeacher } from "react-icons/fa"
+import { MdNavigateNext } from "react-icons/md"
 
 
-function SecondStep(props) {   
+
+function SecondStep(props) {
+
+    const scheduleData = useSelector(state => state.scheduleData )
     const dispatch = useDispatch()
-    const learnerData = useSelector(state => state.userData)
 
-    const [loading, setLoading] = useState(false)
-
-
-    //getting the tutors from database
-    async function fetchData () {
-        try {
-                setLoading(true)
-                const response = await axiosInstance.post('http://localhost:5000/SearchTutors', {}, {
-                    headers: {
-                        'Authorization': `Bearer ${localStorage.getItem('accesstoken')}`,
-                        'Content-Type': 'multipart/form-data' // Set the content type to multipart/form-data
-                    }
-                });
-                dispatch(setTutorSearchList(response.data.message))
-                setLoading(false)
-            }catch(err) {
-                console.log(err)
-                setLoading(false)
-            }
+    const handleLessonTopicChange = (e) => {
+        dispatch(setLessonTopic(e.target.value))
     }
 
-    //this function only fires when the list is empty 
-    useEffect(() => {
-        if(!learnerData.tutorSearchList || learnerData.tutorSearchList.length === 0) {
-            fetchData()
-        }
-    }, [])
+    const handleLessonDifficultyChange = (e) => {
+        dispatch(setLessonDifficulty(e.target.value))
+    }
 
-    
+
+    const topics = [
+        'Exam Preparation',
+        'Asking for advice',
+        'Medical Learning',
+        'Entrepreneurship'
+    ]
+
+    const difficulty = [
+        'Beginner',
+        'Intermediate',
+        'Advanced',
+        'Expert'
+    ]
+
+    const handleLessonDifficultyColor = () => {
+        const size="25"
+        switch (scheduleData.lessonDifficulty) {
+            case 'Beginner':
+            return <IoFlame size={size} className="text-elements" />
+            case 'Intermediate':
+            return <IoFlame size={size} className="text-yellow-500" />
+            case 'Advanced':
+            return <IoFlame size={size} className="text-orange-500" />
+            case 'Expert':
+            return <IoFlame size={size} className="text-red-500" />
+            default:
+            return <IoFlame size={size} className="text-active"></IoFlame>
+        }
+
+    }
+
     return (
         <>
             <div className="relative flex justify-center items-center w-full">
                 <MdNavigateBefore onClick={props.moveBackwards} size="25" className="text-elements cursor-pointer absolute left-0"></MdNavigateBefore>
-                <span className="block text-center text-black font-semibold text-lg">Select Tutor</span>
+                <span className="block text-center text-black font-semibold text-lg">Schedule</span>
             </div>
-            <div className="flex justify-center p-2 items-center space-x-6"> 
+            <div className="flex p-2 items-center justify-center space-x-6"> 
                 <IoMdCalendar size="25" className="text-active"></IoMdCalendar>
                 <span className="text-active">{props.selectedDate}</span>
             </div>
-            <input
-                type="search"
-                placeholder="Search for tutor..."
-                className="w-full mb-5 px-4 py-2 border rounded-xl focus:outline-none focus:border-elements transition-colors duration-300"
-                />
-            <div className="overflow-y-auto py-4 pr-5 w-full flex flex-col space-y-4">
-                {
-                    loading?
-                    <Loading></Loading>
-                    :
-                    learnerData.tutorSearchList.map((tutor, index) => {
-                        return <TutorRow key={index} moveForward={props.moveForward} tutor={tutor}></TutorRow>
-                    })
-
-                }
+            <div className="flex p-2 items-center space-x-6 w-full">
+                <FaBook size="25" className="text-active" />
+                <span className="text-active">Choose lesson topic</span>
+                <div className="flex-grow"></div>
+                <select onChange={handleLessonTopicChange} value={scheduleData.lessonTopic} className="border focus:outline-none border-elements z-50 px-2 active:outline-none py-1 rounded-md">
+                    <option disabled value=''>Choose lesson topic</option>
+                    {topics.map((topic, index) => (
+                        <option key={index} value={topic}>{topic}</option>
+                    ))}
+                </select>
+            </div>
+            <div className="flex p-2 items-center space-x-6 w-full">
+                {handleLessonDifficultyColor()}
+                <span className="text-active">Choose lesson difficulty</span>
+                <div className="flex-grow"></div>
+                <select onChange={handleLessonDifficultyChange} value={scheduleData.lessonDifficulty} className="border focus:outline-none border-elements z-50 px-2 active:outline-none py-1 rounded-md">
+                    <option disabled value=''>Choose lesson topic</option>
+                    {difficulty.map((item, index) => (
+                        <option key={index} value={item}>{item}</option>
+                    ))}
+                </select>
+            </div>
+            <div onClick={props.moveForward} className={`flex p-2 ${scheduleData.lessonTopic && scheduleData.lessonDifficulty? 'hover:bg-lightg cursor-pointer': ''} rounded-md items-center  space-x-6`}> 
+                <FaChalkboardTeacher size="25" className={`${scheduleData.lessonTopic && scheduleData.lessonDifficulty? 'text-active' : 'text-disabled'} `}></FaChalkboardTeacher>
+                <span className={`${scheduleData.lessonTopic && scheduleData.lessonDifficulty? 'text-active' : 'text-disabled'}`}>Select tutor</span>
+                <div className="flex-grow"></div>
+                <MdNavigateNext size="25" className={`${scheduleData.lessonTopic && scheduleData.lessonDifficulty? 'text-elements' : 'text-disabled'}`}></MdNavigateNext>
             </div>
         </>
     );

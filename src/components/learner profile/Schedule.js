@@ -3,8 +3,8 @@ import { useRef, useEffect } from "react"
 import {useDispatch, useSelector} from 'react-redux'
 import {resetData, setSteps, setVisibility} from '../../state/slices/Schedule'
 import FirstStep from "./CalendarSchedule/FirstStep"
-import ThirdStep from "./CalendarSchedule/ThirdStep"
 import SecondStep from "./CalendarSchedule/SecondStep"
+import ThirdStep from "./CalendarSchedule/ThridStep"
 import { setTutorSearchList } from "../../state/slices/userSlice"
 
 
@@ -88,10 +88,10 @@ function Schedule(props) {
     //handling the back button
     const handleNavigateForward = () => {
         if(scheduleData.step < 2) {
-            if(scheduleData.step === 0 && scheduleData.time && scheduleData.lessonLength){
+            if(scheduleData.step === 0 && scheduleData.time && scheduleData.lessonLength && scheduleData.language){
                 dispatch(setSteps(scheduleData.step+1))
             }
-            else if( scheduleData.step === 2 && scheduleData.lessonTopic && scheduleData.lessonDifficulty){
+            else if( scheduleData.step === 1 && scheduleData.lessonTopic && scheduleData.lessonDifficulty){
                 dispatch(setSteps(scheduleData.step+1))
             }
         }
@@ -100,7 +100,7 @@ function Schedule(props) {
     //steps to fill schedule a lesson
     const content = [
         <FirstStep selectedDate={props.selectedDate} times={times} moveForward={handleNavigateForward} moveBackwards={handleNavigateBack}></FirstStep>,
-        <SecondStep selectedDate={props.selectedDate} moveForward= {handleNavigateForward} moveBackwards={handleNavigateBack} ></SecondStep>,
+        <SecondStep  selectedDate={props.selectedDate} moveForward= {handleNavigateForward} moveBackwards={handleNavigateBack} ></SecondStep>,
         <ThirdStep selectedDate={props.selectedDate} moveBackwards={handleNavigateBack}></ThirdStep>
     ]
 
