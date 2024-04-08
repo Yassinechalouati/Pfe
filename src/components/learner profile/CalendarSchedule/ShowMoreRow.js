@@ -1,5 +1,5 @@
 import { IoMdTime } from "react-icons/io"
-import { timeFormatter } from "../../Global/functions";
+import { handleLessonDifficultyColor, timeFormatter } from "../../Global/functions";
 import { fetchFile } from "../../Global/functions";
 import {useEffect, useState} from 'react'
 import ReactLoading from 'react-loading';
@@ -63,8 +63,11 @@ function ShowMoreRow({lesson}) {
                     </div>
                 </div>
                 <span className="text-sm" >Tutor: {lesson.firstname+" "+lesson.lastname}</span>
-                <div className="flex">
-                    <div className="bg-lightGreen text-xs p-1 border border-elements text-elements rounded-xl">
+                <div className="flex space-x-2">
+                    <div className={`text-button2 bg-lightButton2 text-xs p-1 border border-button2 rounded-xl`}>
+                        {lesson.language}
+                    </div>
+                    <div className={`${handleLessonDifficultyColor(lesson.lesson_difficulty, 'other')} text-xs p-1 border rounded-xl`}>
                         {lesson.lesson_difficulty}
                     </div>
                 </div>

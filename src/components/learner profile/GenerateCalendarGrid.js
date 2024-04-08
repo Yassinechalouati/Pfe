@@ -7,7 +7,7 @@ import { setVisibility as setVisible } from "../../state/slices/ShowMore"
 import ShowMore from "./CalendarSchedule/ShowMore"
 import axiosInstance from "../../interceptors/axiosInterceptor"
 import { setAllLessons } from "../../state/slices/lessonsList"
-import { timeFormatter } from "../Global/functions"
+import { handleLessonDifficultyColor, timeFormatter } from "../Global/functions"
 
 
 const daysInMonth = (year, month) => {
@@ -79,11 +79,13 @@ const GenerateCalendarGrid = (props) => {
     }
 
 
+    //upon clicking on add button we show the modal and the selected Date 
     const handleCellClick = (event, day) => {
             saveDate(day)
             dispatch(setVisibility(true))
     };
 
+    //generating the cell to be show in calendar
     const cellContent = (day, cellClass, isToday) => {
         cellClass += " bg-cellColor flex flex-col text-white cursor-pointer";
         let test = false // we're testing whether there is a scheduled lesson on that day or not 
@@ -125,7 +127,12 @@ const GenerateCalendarGrid = (props) => {
                         <div className="font-semibold text-center ">
                             {lesson.lesson_topic}
                         </div>
-                        <div className="bg-lightGreen text-xs p-1 border border-elements text-elements rounded-xl">
+                        <div 
+                        className={`text-xs p-1 border text-button2 bg-lightButton2 border-button2 rounded-xl`}>
+                            {lesson.language}
+                        </div>
+                        <div 
+                        className={`text-xs p-1 border ${handleLessonDifficultyColor(lesson.lesson_difficulty, 'other')} rounded-xl`}>
                             {lesson.lesson_difficulty}
                         </div>
                         <div className="flex items-center space-x-1">
@@ -145,6 +152,7 @@ const GenerateCalendarGrid = (props) => {
         
 
         
+        //if there are scheduled lesson on this day we display them and display the show more button 
         const result = test? test : 
                 <div key={day} className={cellClass}>
                     <span className="mb-2 flex ">
@@ -167,7 +175,7 @@ const GenerateCalendarGrid = (props) => {
 
     for (let day = 1; day <= totalDays; day++) {
         const currentDate = new Date(props.year, props.month, day);
-        let cellClass = "py-1 px-3 min-h-52 relative lg:p-4 rounded-lg text-sm w-full text-left ";
+        let cellClass = "py-1 px-3 min-h-52 relative lg:p-3 rounded-lg text-sm w-full text-left ";
         if (currentDate.getDate() === today.getDate() &&
             currentDate.getMonth() === today.getMonth() &&
             currentDate.getFullYear() === today.getFullYear()) {

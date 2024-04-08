@@ -51,3 +51,56 @@ export const timeFormatter = (start_time) => {
     return formattedStartHourMinute
 
 }
+
+export const handleLessonDifficultyColor = (test, type) => {
+    if(type === 'Schedule') {
+        switch (test) {
+            case 'Beginner':
+            return "text-elements"
+            case 'Intermediate':
+            return "text-yellow-500" 
+            case 'Advanced':
+            return "text-button"  
+            case 'Expert':
+            return "text-errortext" 
+            default:
+            return "text-active"
+        }
+    }else {
+        switch (test) {
+            case 'Beginner':
+            return "text-elements border-elements bg-lightGreen"
+            case 'Intermediate':
+            return "text-yellow-500 bg-lightYellow border-yellow-500" 
+            case 'Advanced':
+            return "text-button border-button bg-lightbutton"  
+            case 'Expert':
+            return "bg-lightRed border-textRed text-textRed" 
+            default:
+            return "text-active"
+        }
+    }
+
+}
+
+export const convertTime = (scheduledTime) => {
+     //converting the selected time to normal one 
+            // Split the time string into hours, minutes, and AM/PM
+            const [time, period] = scheduledTime.split(' ');
+            const [hours, minutes] = time.split(':');
+
+            // Convert hours to 24-hour format
+            let hours24 = parseInt(hours, 10);
+            if (period === 'PM' && hours24 < 12) {
+                hours24 += 12;
+            } else if (period === 'AM' && hours24 === 12) {
+                hours24 = 0;
+            }
+
+            // Format the hours and minutes
+            const formattedHours = hours24.toString().padStart(2, '0')
+            const formattedMinutes = minutes.padStart(2, '0')
+
+
+            return {formattedHours, formattedMinutes}
+}

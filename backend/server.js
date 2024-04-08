@@ -65,6 +65,7 @@ const tutorDetails = require('./routes/tutorDetails')
 const scheduleLesson = require('./routes/schedule')
 const getFirstLessons = require('./routes/getFirstLessons') 
 const getDayLessons = require('./routes/getDayLessons')
+const getFreeTutors = require('./routes/getFreeTutors')
 
 //apis
 app.use('/', googleSignupRouter)
@@ -90,6 +91,7 @@ app.use('/tutor', tutorDetails)
 app.use('/learner', scheduleLesson)
 app.use('/learner', getFirstLessons)
 app.use('/learner', getDayLessons)
+app.use('/learner', getFreeTutors)
 
 
 // Socket.io logic

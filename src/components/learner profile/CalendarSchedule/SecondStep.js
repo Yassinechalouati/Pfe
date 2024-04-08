@@ -1,12 +1,12 @@
-
 import { useSelector, useDispatch } from "react-redux"
 import { setLessonDifficulty, setLessonTopic} from "../../../state/slices/Schedule"
 import { MdNavigateBefore } from "react-icons/md"
 import { IoMdCalendar } from "react-icons/io"
 import { FaBook } from "react-icons/fa";
-import { IoFlame } from "react-icons/io5";
+import { IoMdFlame } from "react-icons/io";
 import { FaChalkboardTeacher } from "react-icons/fa"
 import { MdNavigateNext } from "react-icons/md"
+import { handleLessonDifficultyColor } from '../../Global/functions'
 
 
 
@@ -25,10 +25,14 @@ function SecondStep(props) {
 
 
     const topics = [
-        'Exam Preparation',
-        'Asking for advice',
-        'Medical Learning',
-        'Entrepreneurship'
+      'Education',
+      'It',
+      'Advertising',
+      'Agriculture',
+      'Entrepreneurship',
+      'Government',
+      'Law',
+      'Customer Support',
     ]
 
     const difficulty = [
@@ -38,22 +42,7 @@ function SecondStep(props) {
         'Expert'
     ]
 
-    const handleLessonDifficultyColor = () => {
-        const size="25"
-        switch (scheduleData.lessonDifficulty) {
-            case 'Beginner':
-            return <IoFlame size={size} className="text-elements" />
-            case 'Intermediate':
-            return <IoFlame size={size} className="text-yellow-500" />
-            case 'Advanced':
-            return <IoFlame size={size} className="text-orange-500" />
-            case 'Expert':
-            return <IoFlame size={size} className="text-red-500" />
-            default:
-            return <IoFlame size={size} className="text-active"></IoFlame>
-        }
-
-    }
+    
 
     return (
         <>
@@ -66,7 +55,7 @@ function SecondStep(props) {
                 <span className="text-active">{props.selectedDate}</span>
             </div>
             <div className="flex p-2 items-center space-x-6 w-full">
-                <FaBook size="25" className="text-active" />
+                <FaBook size="25" className={` ${scheduleData.lessonTopic? 'text-button': 'text-active'}`} />
                 <span className="text-active">Choose lesson topic</span>
                 <div className="flex-grow"></div>
                 <select onChange={handleLessonTopicChange} value={scheduleData.lessonTopic} className="border focus:outline-none border-elements z-50 px-2 active:outline-none py-1 rounded-md">
@@ -77,7 +66,7 @@ function SecondStep(props) {
                 </select>
             </div>
             <div className="flex p-2 items-center space-x-6 w-full">
-                {handleLessonDifficultyColor()}
+                <IoMdFlame size="25" className={handleLessonDifficultyColor(scheduleData.lessonDifficulty, 'Schedule')}></IoMdFlame>
                 <span className="text-active">Choose lesson difficulty</span>
                 <div className="flex-grow"></div>
                 <select onChange={handleLessonDifficultyChange} value={scheduleData.lessonDifficulty} className="border focus:outline-none border-elements z-50 px-2 active:outline-none py-1 rounded-md">

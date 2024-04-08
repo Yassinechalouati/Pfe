@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from "react";
-import { fetchCountryData } from "../../Global/functions";
+import { convertTime, fetchCountryData} from "../../Global/functions";
 import { fetchFile } from "../../Global/functions";
 import { useDispatch, useSelector } from "react-redux";
 import { setSelectedTutor } from "../../../state/slices/Schedule";
@@ -55,26 +55,12 @@ function TutorRow(props) {
     const handleBookLesson = async () => {
             dispatch(setSelectedTutor(props.tutor.id))
 
-            //converting the selected time to normal one 
-            // Split the time string into hours, minutes, and AM/PM
-            const [time, period] = scheduleData.time.split(' ');
-            const [hours, minutes] = time.split(':');
-
-            // Convert hours to 24-hour format
-            let hours24 = parseInt(hours, 10);
-            if (period === 'PM' && hours24 < 12) {
-                hours24 += 12;
-            } else if (period === 'AM' && hours24 === 12) {
-                hours24 = 0;
-            }
-
-            // Format the hours and minutes
-            const formattedHours = hours24.toString().padStart(2, '0')
-            const formattedMinutes = minutes.padStart(2, '0')
-
+            const {formattedHours, formattedMinutes} = convertTime(scheduleData.time)
+            
             // Construct the normal time string
             const normalTime = `${formattedHours}:${formattedMinutes}`
-            console.log("normalTime: ", normalTime);
+
+            console.log("normalTime: ", normalTime)
 
 
             //we contact the api here that's responsible for scheduling lessons then we reset the fields after finish the transaction

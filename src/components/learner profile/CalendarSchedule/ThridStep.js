@@ -7,12 +7,14 @@ import axiosInstance from "../../../interceptors/axiosInterceptor"
 import { setTutorSearchList } from "../../../state/slices/userSlice"
 import Loading from "../../Global/Loading"
 import TutorRow from "./TutorRow"
+import { convertTime } from "../../Global/functions"
 
 
 
 function ThirdStep(props) {   
     const dispatch = useDispatch()
     const learnerData = useSelector(state => state.userData)
+    const scheduleData = useSelector(state => state.scheduleData )
 
     const [loading, setLoading] = useState(false)
 
@@ -21,10 +23,22 @@ function ThirdStep(props) {
     async function fetchData () {
         try {
                 setLoading(true)
-                const response = await axiosInstance.post('http://localhost:5000/SearchTutors', {}, {
+                const {formattedHours, formattedMinutes} = convertTime(scheduleData.time)
+            
+                // Construct the normal time string
+                const normalTime = `${formattedHours}:${formattedMinutes}`
+    
+                console.log("normalTime: ", normalTime)
+
+                const selectedDate = scheduleData.selectedDate + " "+ normalTime
+                const response = await axiosInstance.post('http://localhost:5000/learner/getFreeTutors', {
+                    selectedDate: selectedDate,
+                    lessonLength: scheduleData.lessonLength,
+                    lessonTopic: scheduleData.lessonTopic, 
+                    Language: scheduleData.language
+                }, {
                     headers: {
-                        'Authorization': `Bearer ${localStorage.getItem('accesstoken')}`,
-                        'Content-Type': 'multipart/form-data' // Set the content type to multipart/form-data
+                        'Authorization': `Bearer ${localStorage.getItem('accesstoken')}`
                     }
                 });
                 dispatch(setTutorSearchList(response.data.message))
@@ -37,9 +51,7 @@ function ThirdStep(props) {
 
     //this function only fires when the list is empty 
     useEffect(() => {
-        if(!learnerData.tutorSearchList || learnerData.tutorSearchList.length === 0) {
-            fetchData()
-        }
+        fetchData()
     }, [])
 
 

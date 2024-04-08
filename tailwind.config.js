@@ -20,7 +20,12 @@ module.exports = {
         'disabled': '#BBBBBB',
         'active' : '#413F42',
         'lightButton2' : '#fbdcdc',
-        'star' : '#FFCD3C'
+        'star' : '#FFCD3C',
+        'lightYellow': '#fffec8',
+        'lightRed': '#ffdadb',
+        'textRed': '#ff6c70'
+
+
       }
     },
   },

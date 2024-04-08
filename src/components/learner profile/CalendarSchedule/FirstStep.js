@@ -51,7 +51,7 @@ function FirstStep(props) {
                 <span className="text-active">{props.selectedDate}</span>
             </div>
             <div className="flex p-2 items-center space-x-6 w-full">
-                <IoMdTime size="25" className="text-active" />
+                <IoMdTime size="25" className={`${scheduleData.time? 'text-button': 'text-active'}`} />
                 <span className="text-active">Select Time</span>
                 <div className="flex-grow"></div>
                 <select onChange={handleTimeChange} value={scheduleData.time} className="border focus:outline-none border-elements z-50 px-2 active:outline-none py-1 rounded-md">
@@ -62,7 +62,7 @@ function FirstStep(props) {
                 </select>
             </div>
             <div className="flex p-2 items-center space-x-6"> 
-                <IoIosTimer size="25" className="text-active"></IoIosTimer>
+                <IoIosTimer size="25" className={`${scheduleData.lessonLength? 'text-button': 'text-active'}`}></IoIosTimer>
                 <span className="text-active">Select Lesson Length</span>
                 <select onChange={handleLessonChange} value={scheduleData.lessonLength} className="border focus:outline-none border-elements z-50 px-2 active:outline-none py-1 rounded-md">
                     <option disabled value=''>Select duration</option>
@@ -72,7 +72,7 @@ function FirstStep(props) {
                 </select>
             </div>
             <div className="flex p-2 items-center space-x-6 w-full">
-                <MdLanguage size="25" className="text-active" />
+                <MdLanguage size="25" className={`${scheduleData.language? 'text-button': 'text-active'}`} />
                 <span className="text-active">Select Language</span>
                 <div className="flex-grow"></div>
                 <select onChange={handleLanguageChange} value={scheduleData.language} className="border focus:outline-none border-elements z-50 px-2 active:outline-none py-1 rounded-md">
