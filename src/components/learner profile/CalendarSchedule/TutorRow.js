@@ -161,9 +161,11 @@ function TutorRow(props) {
                     lesson_topic: scheduleData.lessonTopic,
                     lesson_difficulty: scheduleData.lessonDifficulty,
                     duration: scheduleData.lessonLength,
-                    Accepted: -1,
-                    lessonLanguage: scheduleData.lessonLanguage
+                    language: scheduleData.language,
+                    Accepted: -1
                 }
+
+                console.log("data: ", data);
 
                 //if there's no lessons in that day we show it in the calendar
                 if(!test) {

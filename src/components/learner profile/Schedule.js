@@ -11,6 +11,7 @@ import { setTutorSearchList } from "../../state/slices/userSlice"
 function Schedule(props) {
     const modalRef = useRef(null)
     const scheduleData = useSelector(state => state.scheduleData) 
+    const learnerData = useSelector(state => state.userData)
 
     const dispatch = useDispatch()
 
@@ -108,7 +109,7 @@ function Schedule(props) {
             {
                 scheduleData.visibility?
                 <div className="fixed inset-0 bg-black bg-opacity-30 backdrop-blur-[1px] sm:backdrop-blur-[1px] z-50 flex justify-center items-center">
-                    <div ref={modalRef} className="max-h-[70%] bg-backg flex flex-col justify-center max-w-[90%] lg:max-w-[40%] space-y-5 shadow-lg rounded-lg p-6 z-30">
+                    <div ref={modalRef} className={`${learnerData.tutorSearchList.length>0? 'max-h-[70%]' : ''} bg-backg flex flex-col justify-center max-w-[90%] lg:max-w-[40%] space-y-5 shadow-lg rounded-lg p-6 z-30`}>
                         {
                             content[scheduleData.step]
                         }

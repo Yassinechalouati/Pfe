@@ -67,19 +67,29 @@ function ThirdStep(props) {
                 <IoMdCalendar size="25" className="text-active"></IoMdCalendar>
                 <span className="text-active">{props.selectedDate}</span>
             </div>
-            <input
+            {
+                learnerData.tutorSearchList.length>0?
+                <input
                 type="search"
                 placeholder="Search for tutor..."
                 className="w-full mb-5 px-4 py-2 border rounded-xl focus:outline-none focus:border-elements transition-colors duration-300"
                 />
-            <div className="overflow-y-auto py-4 pr-5 w-full flex flex-col space-y-4">
+                :
+                null
+            }
+            <div className={`${learnerData.tutorSearchList.length>0? 'overflow-y-auto ' : ''} py-4 pr-5 w-full flex flex-col space-y-4`}>
                 {
                     loading?
                     <Loading></Loading>
                     :
-                    learnerData.tutorSearchList.map((tutor, index) => {
-                        return <TutorRow key={index} moveForward={props.moveForward} tutor={tutor}></TutorRow>
-                    })
+                    (
+                        learnerData.tutorSearchList.length>0?
+                        learnerData.tutorSearchList.map((tutor, index) => {
+                            return <TutorRow key={index} moveForward={props.moveForward} tutor={tutor}></TutorRow>
+                        })
+                        :
+                        <img src="/No-Data.png" alt="no data" className="flex justify-center items-center w-80 h-80 object-cover" ></img>
+                    )
 
                 }
             </div>
