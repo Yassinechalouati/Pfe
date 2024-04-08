@@ -104,3 +104,31 @@ export const convertTime = (scheduledTime) => {
 
             return {formattedHours, formattedMinutes}
 }
+
+export const dateExistenceTester = (list, hour, minute, busyDate) => {
+    const formatHours = String(hour).padStart(2, '0')
+    const formatMinutes = String(minute).padStart(2, '0')
+    const usedTime= `${busyDate} ${formatHours}:${formatMinutes}`
+
+    let test = false
+    //we check if the time is used or not 
+    if(list.length > 0 ){
+        for(let i =0; i < list.length; i++){
+            const item = list[i].interval_time_formatted
+            if(item === usedTime) {
+                test = true
+                break
+            }
+        }
+    }
+    const hour12 = hour % 12 || 12;
+    const hourStr = hour12.toString().padStart(2, '0');
+    const minuteStr = minute.toString().padStart(2, '0');
+    const amPm = hour < 12 ? 'AM' : 'PM'
+    const result= `${hourStr}:${minuteStr} ${amPm}`
+    
+
+    return {
+        test, result
+    }
+}

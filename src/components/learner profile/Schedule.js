@@ -8,6 +8,7 @@ import ThirdStep from "./CalendarSchedule/ThridStep"
 import { setTutorSearchList } from "../../state/slices/userSlice"
 import axiosInstance from "../../interceptors/axiosInterceptor"
 import ReactLoading from 'react-loading';
+import { dateExistenceTester } from "../Global/functions"
 
 
 
@@ -60,6 +61,7 @@ function Schedule(props) {
     }, [])
     
 
+    //formatting the current date 
     const currentDate = new Date();
     const formattedDate = currentDate.toLocaleDateString("en-US", {
         weekday: "long",
@@ -68,8 +70,20 @@ function Schedule(props) {
         year: "numeric",
     })
 
+    //formatting the dates to get them in the same format as the busyDates that we're getting from the server
+    //format YYYY-MM-DD
+    const options = { month: '2-digit', day: '2-digit', year: 'numeric' };
+    const conditionDate = new Date(props.selectedDate).toLocaleDateString('en-US', options)
+    const month = conditionDate.split('/')[0]
+    const day = conditionDate.split('/')[1]
+    const year = conditionDate.split('/')[2]
+
+    const busyDate = `${year}-${month}-${day}`
+
     // Check if the selected date is today
     if (formattedDate === props.selectedDate) {
+
+
         const currentHour = currentDate.getHours();
         const currentMinute = currentDate.getMinutes();
         const startHour = currentHour + 2; // Start showing times from 2 hours ahead of the current time
@@ -78,21 +92,20 @@ function Schedule(props) {
         for (let hour = startHour; hour < 24; hour++) {
             const minuteStart = (hour === startHour) ? startMinute : 0;
             for (let minute = minuteStart; minute < 60; minute += 15) {
-                const hour12 = hour % 12 || 12;
-                const hourStr = hour12.toString().padStart(2, '0');
-                const minuteStr = minute.toString().padStart(2, '0');
-                const amPm = hour < 12 ? 'AM' : 'PM';
-                times.push(`${hourStr}:${minuteStr} ${amPm}`);
+                const {test, result } =dateExistenceTester(scheduleData.busyTimes, hour, minute, busyDate)
+                if(!test) {
+                    times.push(result);
+                }
             }
         }
     } else {
         for (let hour = 0; hour < 24; hour++) {
             for (let minute = 0; minute < 60; minute += 15) {
-                const hour12 = hour % 12 || 12;
-                const hourStr = hour12.toString().padStart(2, '0');
-                const minuteStr = minute.toString().padStart(2, '0');
-                const amPm = hour < 12 ? 'AM' : 'PM';
-                times.push(`${hourStr}:${minuteStr} ${amPm}`);
+                
+                const {test, result} = dateExistenceTester(scheduleData.busyTimes, hour, minute, busyDate)
+                if(!test) {
+                    times.push(result);
+                }
             }
         }
     }

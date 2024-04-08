@@ -10,6 +10,13 @@ router.post('/getBusyTimes', auth, roleCheck(["Learner"]), (req, res) => {
         selectedDate
     } = req.body
 
+    if(!selectedDate){
+        res.status(400).json({ message: "Bad Data!" });
+        return // to avoid further execution when data missing 
+    }
+
+    const userId = req.user.id;
+
     console.log(selectedDate)
 
     const month = selectedDate.split('/')[0]
@@ -25,6 +32,7 @@ router.post('/getBusyTimes', auth, roleCheck(["Learner"]), (req, res) => {
         SELECT start_time as interval_time, end_time
         FROM private_lesson
         WHERE DATE(start_time) = ?  -- Filter by the desired date
+        and private_learner_id = ?
         UNION ALL
         SELECT ADDTIME(interval_time, '00:15:00'), end_time
         FROM time_intervals
@@ -34,7 +42,7 @@ router.post('/getBusyTimes', auth, roleCheck(["Learner"]), (req, res) => {
     FROM time_intervals;
     `
 
-    mysql.query(query, [formattedTime], (err, result) => {
+    mysql.query(query, [userId, formattedTime], (err, result) => {
         if(err) {
             console.log(err)
             res.status(500).json({message: "Internal Server Error"})

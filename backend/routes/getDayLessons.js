@@ -11,6 +11,11 @@ router.post('/getDayLessons', auth, roleCheck(["Learner"]), (req, res) => {
         date //year-month-day
     } = req.body
 
+    if(!date){
+        res.status(400).json({ message: "Bad Data!" });
+        return // to avoid further execution when data missing 
+    }
+
     const query = `SELECT pl.* , t.pfp, t.lastname, t.firstname FROM private_lesson as pl, tutor as t 
     WHERE pl.start_time >= NOW() 
     AND DATE(pl.start_time) = ?
