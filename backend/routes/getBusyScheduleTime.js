@@ -1,0 +1,48 @@
+const express = require('express')
+const router = express.Router()
+const mysql = require('../helpers/Sql_connection')
+const auth = require('../middleware/auth')
+const roleCheck = require('../middleware/roleCheck')
+
+
+router.post('/getBusyTimes', auth, roleCheck(["Learner"]), (req, res) => {
+    const {
+        selectedDate
+    } = req.body
+
+    console.log(selectedDate)
+
+    const month = selectedDate.split('/')[0]
+    const day = selectedDate.split('/')[1]
+    const year = selectedDate.split('/')[2]
+
+
+    const formattedTime = year+"-"+month+"-"+day
+    
+    // Generate 15-minute increments between start_time and end_time for the specified date
+    const query = `
+    WITH RECURSIVE time_intervals AS (
+        SELECT start_time as interval_time, end_time
+        FROM private_lesson
+        WHERE DATE(start_time) = ?  -- Filter by the desired date
+        UNION ALL
+        SELECT ADDTIME(interval_time, '00:15:00'), end_time
+        FROM time_intervals
+        WHERE ADDTIME(interval_time, '00:15:00') <= end_time
+    )
+    SELECT DATE_FORMAT(interval_time, '%Y-%m-%d %H:%i') AS interval_time_formatted
+    FROM time_intervals;
+    `
+
+    mysql.query(query, [formattedTime], (err, result) => {
+        if(err) {
+            console.log(err)
+            res.status(500).json({message: "Internal Server Error"})
+        }else {
+            console.log(result)
+            res.status(200).json({message: result})
+        }
+    })
+})
+
+module.exports = router

@@ -1,17 +1,21 @@
 
-import { useRef, useEffect } from "react"
+import { useRef, useEffect, useState } from "react"
 import {useDispatch, useSelector} from 'react-redux'
-import {resetData, setSteps, setVisibility} from '../../state/slices/Schedule'
+import {resetData, setBusyTimes, setSteps, setVisibility} from '../../state/slices/Schedule'
 import FirstStep from "./CalendarSchedule/FirstStep"
 import SecondStep from "./CalendarSchedule/SecondStep"
 import ThirdStep from "./CalendarSchedule/ThridStep"
 import { setTutorSearchList } from "../../state/slices/userSlice"
+import axiosInstance from "../../interceptors/axiosInterceptor"
+import ReactLoading from 'react-loading';
+
 
 
 function Schedule(props) {
     const modalRef = useRef(null)
     const scheduleData = useSelector(state => state.scheduleData) 
     const learnerData = useSelector(state => state.userData)
+    const [loading, setLoading] = useState(false)
 
     const dispatch = useDispatch()
 
@@ -27,6 +31,33 @@ function Schedule(props) {
             dispatch(setVisibility(false))
         }
     };
+
+    //getting the busy times in a specific day
+    const fetchTimes = async () => {
+        if(scheduleData.selectedDate) {
+            setLoading(true)
+            try {
+                const response = await axiosInstance.post('http://localhost:5000/getBusyTimes', {
+                    selectedDate: scheduleData.selectedDate
+                }, {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('accesstoken')}`
+                    }
+                })
+                dispatch(setBusyTimes(response.data.message))
+                setLoading(false)
+            }catch(err) {
+                console.log("err", err)
+            }
+            finally{
+                setLoading(false)
+            }
+        }
+    }
+
+    useEffect(() => {
+        fetchTimes()
+    }, [])
     
 
     const currentDate = new Date();
@@ -111,6 +142,9 @@ function Schedule(props) {
                 <div className="fixed inset-0 bg-black bg-opacity-30 backdrop-blur-[1px] sm:backdrop-blur-[1px] z-50 flex justify-center items-center">
                     <div ref={modalRef} className={`${learnerData.tutorSearchList.length>0? 'max-h-[70%]' : ''} bg-backg flex flex-col justify-center max-w-[90%] lg:max-w-[40%] space-y-5 shadow-lg rounded-lg p-6 z-30`}>
                         {
+                            loading?
+                            <ReactLoading type="spin" color="#FFA447" height={'40px'} width={'40px'} />
+                            :
                             content[scheduleData.step]
                         }
                     </div>
