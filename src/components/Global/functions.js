@@ -132,3 +132,11 @@ export const dateExistenceTester = (list, hour, minute, busyDate) => {
         test, result
     }
 }
+
+//testing if the picture is from google or not
+export function isGoogleProfilePicture(pfpPath) {
+    // Define a regular expression pattern to match Google profile picture URLs
+    const googlePattern = /lh3\.googleusercontent\.com.*=s\d+-c-no/;
+    // Test if the pathname matches the Google pattern
+    return googlePattern.test(pfpPath);
+}

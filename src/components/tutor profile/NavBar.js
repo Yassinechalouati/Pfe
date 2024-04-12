@@ -1,5 +1,4 @@
 import { IoChatbubbles } from "react-icons/io5"
-import { IoNotifications } from "react-icons/io5"
 import { IoMdCalendar } from "react-icons/io"
 import { BsRobot } from "react-icons/bs"
 import { IoMenu } from "react-icons/io5"
@@ -11,6 +10,7 @@ import DropdownMenu from "../learner profile/DropdownMenu"
 import Notifications from "../Global/Notifications"
 
 
+
  
 
 function NavBar() {
@@ -19,17 +19,12 @@ function NavBar() {
     
     const [isDropdownOpen, setIsDropdownOpen] = useState(false)
 
-    const [notifications, setNotifications] = useState(false)
 
     const tutorData = useSelector(state => state.tutorData)
     
     
     const handleDrawer = () => {
         setIsOpen(true)
-    }
-
-    const handleNotifications = () => {
-        setNotifications(!notifications)
     }
 
     //handle DropDown visibility
@@ -87,18 +82,7 @@ function NavBar() {
                             <IoMenu onClick={handleDrawer} size="22" color="white"></IoMenu>
                         </div>
                         <IoChatbubbles className="cursor-pointer text-darkg hidden lg:block" size="22"></IoChatbubbles>
-                        <div className="relative py-1 cursor-pointer">
-                        <span class="absolute flex h-3 w-3 top-0 right-0">
-                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-elements opacity-75"></span>
-                            <span class="relative inline-flex rounded-full h-3 w-3 bg-elements"></span>
-                        </span>
-                            <IoNotifications
-                            onClick={handleNotifications}
-                            className="text-darkg hidden lg:block" 
-                            size="22"></IoNotifications>
-                            <Notifications isOpen={notifications}>
-                            </Notifications>
-                        </div>
+                        <Notifications></Notifications>
                         <NavLink to="/tutor/profile/Calendar">
                             <IoMdCalendar className="cursor-pointer hidden lg:block text-darkg" size="22"></IoMdCalendar>
                         </NavLink>
