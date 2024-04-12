@@ -1,5 +1,5 @@
 import { FcGoogle } from "react-icons/fc";
-import { setLearnerError, setTutorError } from "../../state/slices/loginSlice"
+import { setLearnerError, setLoading, setTutorError } from "../../state/slices/loginSlice"
 import { useGoogleLogin } from '@react-oauth/google';
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -25,6 +25,7 @@ export default function MailSignIn() {
     const handleLogin = useGoogleLogin({
         onSuccess: async (response) => {
             try{
+                dispatch(setLoading(true))
                 //send post request with google token in header
                 const resp = await axios.post(
                     'http://localhost:5000/GoogleLogin',
@@ -48,7 +49,8 @@ export default function MailSignIn() {
                     navigate('/learner/profile')
                 }
             }catch(err) {
-                const error = err.response.data.message
+                const error = err.response.data.message? err.response.data.message : "Cannot Login Now!"
+                dispatch(setLoading(false))
                 if(firstSegment === 'tutor') {
                     dispatch(setTutorError(error))
                 }else {

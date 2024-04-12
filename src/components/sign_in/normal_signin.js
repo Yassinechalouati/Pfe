@@ -33,7 +33,12 @@ export default function Normal({recaptchaRef}) {
     };
 
     const handleRecaptchaChange = (value) => {
-        dispatch(setRecaptchaToken(value))
+        try {
+            dispatch(setRecaptchaToken(value));
+        } catch (error) {
+            console.error("Error setting reCAPTCHA token:", error);
+            // Handle the error accordingly
+        }
     }
     
     const handleSignUp = (e) => {

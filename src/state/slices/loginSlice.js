@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit'
 
 const initialState ={
     email: '',
+    loading: false,
     password: '',
     tutorError: '',
     learnerError: '',
@@ -28,9 +29,12 @@ export const loginSlice = createSlice({
         setRecaptchaToken: (state, action) => {
             state.recaptchaToken = action.payload
         },
+        setLoading: (state, action) => {
+            state.loading = action.payload
+        },
         resetFields: () => initialState
     }
 })
 
-export const { setEmail, setPassword, setLearnerError, setTutorError, resetFields, setRecaptchaToken} = loginSlice.actions
+export const { setEmail, setPassword, setLearnerError, setTutorError, resetFields, setRecaptchaToken, setLoading} = loginSlice.actions
 export default loginSlice.reducer

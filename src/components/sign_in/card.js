@@ -12,6 +12,8 @@ import Loading from '../Global/Loading';
 
 function CardSignIn(){
 
+    const loading = useSelector(state => state.loginData.loading)
+
 
     //knowing whether it's a tutor or learner signing up
     const path = window.location.pathname;
@@ -96,10 +98,10 @@ function CardSignIn(){
 
     
     return (
-        <form onSubmit={handleLogin} className={`bg-white m-auto ${isLoading? "h-full": ""} relative rounded-3xl shadow-lg px-6 py-2 flex flex-col space-y-7 w-[97%] md:w-[30%] lg:w-[25%]`}>
+        <form onSubmit={handleLogin} className={`bg-white m-auto ${isLoading || loading? "h-full": ""} relative rounded-3xl shadow-lg px-6 py-2 flex flex-col space-y-7 w-[97%] md:w-[30%] lg:w-[25%]`}>
             <Logo></Logo>
             {
-                isLoading?
+                isLoading || loading?
                 <Loading></Loading>
                 :
                 <NormalContent recaptchaRef={recaptchaRef}></NormalContent>

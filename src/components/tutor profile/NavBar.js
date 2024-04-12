@@ -1,13 +1,14 @@
-import { IoChatbubbles } from "react-icons/io5";
-import { IoNotifications } from "react-icons/io5";
-import { IoMdCalendar } from "react-icons/io";
-import { BsRobot } from "react-icons/bs";
-import { IoMenu } from "react-icons/io5";
-import { useState } from "react";
-import Drawer from "../learner profile/Drawer";
-import { useSelector } from "react-redux";
-import { NavLink } from 'react-router-dom';
-import DropdownMenu from "../learner profile/DropdownMenu";
+import { IoChatbubbles } from "react-icons/io5"
+import { IoNotifications } from "react-icons/io5"
+import { IoMdCalendar } from "react-icons/io"
+import { BsRobot } from "react-icons/bs"
+import { IoMenu } from "react-icons/io5"
+import { useState } from "react"
+import Drawer from "../learner profile/Drawer"
+import { useSelector } from "react-redux"
+import { NavLink } from 'react-router-dom'
+import DropdownMenu from "../learner profile/DropdownMenu"
+import Notifications from "../Global/Notifications"
 
 
  
@@ -16,7 +17,9 @@ function NavBar() {
     //handle drawer visibility
     const [isOpen, setIsOpen] =useState(false)
     
-    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false)
+
+    const [notifications, setNotifications] = useState(false)
 
     const tutorData = useSelector(state => state.tutorData)
     
@@ -25,11 +28,14 @@ function NavBar() {
         setIsOpen(true)
     }
 
+    const handleNotifications = () => {
+        setNotifications(!notifications)
+    }
 
     //handle DropDown visibility
-  const toggleDropdown = () => {
-    setIsDropdownOpen(!isDropdownOpen);
-  };
+    const toggleDropdown = () => {
+        setIsDropdownOpen(!isDropdownOpen);
+    };
 
   
     return (
@@ -80,10 +86,21 @@ function NavBar() {
                         <div className="py-2 lg:hidden cursor-pointer px-2 flex justify-center items-center bg-button rounded-full">
                             <IoMenu onClick={handleDrawer} size="22" color="white"></IoMenu>
                         </div>
-                        <IoChatbubbles className="cursor-pointer hidden lg:block" color="#767676" size="22"></IoChatbubbles>
-                        <IoNotifications className="cursor-pointer hidden lg:block" color="#767676" size="22"></IoNotifications>
+                        <IoChatbubbles className="cursor-pointer text-darkg hidden lg:block" size="22"></IoChatbubbles>
+                        <div className="relative py-1 cursor-pointer">
+                        <span class="absolute flex h-3 w-3 top-0 right-0">
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-elements opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-3 w-3 bg-elements"></span>
+                        </span>
+                            <IoNotifications
+                            onClick={handleNotifications}
+                            className="text-darkg hidden lg:block" 
+                            size="22"></IoNotifications>
+                            <Notifications isOpen={notifications}>
+                            </Notifications>
+                        </div>
                         <NavLink to="/tutor/profile/Calendar">
-                            <IoMdCalendar className="cursor-pointer hidden lg:block" color="#767676" size="22"></IoMdCalendar>
+                            <IoMdCalendar className="cursor-pointer hidden lg:block text-darkg" size="22"></IoMdCalendar>
                         </NavLink>
                         {
                             tutorData.isLoading?
