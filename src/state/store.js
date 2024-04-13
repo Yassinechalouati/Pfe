@@ -7,6 +7,7 @@ import listReducer from './slices/listSlice'
 import scheduleReducer from './slices/Schedule'
 import showMoreReducer from './slices/ShowMore'
 import lessonsListReducer from './slices/lessonsList'
+import notificationsReducer from './slices/NotificationSlice'
 
 //store that contains a global state
 export const store = configureStore({
@@ -19,6 +20,7 @@ export const store = configureStore({
     scheduleData: scheduleReducer, //contains the information about scheduling a lesson
     showMoreData:  showMoreReducer, //contains the data concering the show more modal
     lessonsList: lessonsListReducer, //contains the lessons
+    notificationsData: notificationsReducer, //contains the notifications
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

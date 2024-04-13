@@ -2,17 +2,23 @@ import Notification from "./Notification"
 import { useEffect, useRef, useState } from "react"
 import { IoNotifications } from "react-icons/io5"
 import axiosInstance from "../../interceptors/axiosInterceptor"
-import ReactLoading from 'react-loading';
+import { NotificationLoading } from "./LoadingCards"
+import { useSelector, useDispatch } from "react-redux"
+import { setNotificationsList } from '../../state/slices/NotificationSlice'
 
 
 
 function Notifications(props) {
     const notifRef = useRef(null)
+    const dispatch = useDispatch()
     
     const [notifications, setNotifications] = useState(false)
-    const [notificationsList, setNotificationsList] = useState([])
+    const notificationsList = useSelector(state=> state.notificationsData.notificationsList)
     const [loading, setLoading] = useState(false)
+    const [isNotificationEmpty, setIsNotificationEmpty] = useState(false)
     
+
+    //handle notifications visibility and api calls 
     const handleNotifications = async () => {
         if(!notifications){
             try {
@@ -24,8 +30,8 @@ function Notifications(props) {
                         'Authorization': `Bearer ${localStorage.getItem('accesstoken')}`
                     }
                 })
-                console.log(notifications)
-                setNotificationsList(notifications.data.message)
+                setIsNotificationEmpty(notifications.data.message.length===0) //indicated wether there are notifications or not
+                dispatch(setNotificationsList(notifications.data.message))
                 setLoading(false)
             }catch(err) {
                 console.log(err)
@@ -53,7 +59,6 @@ function Notifications(props) {
       }, [])
     
 
-
     return (
         <div ref={notifRef} className="relative py-1">
             <div className="cursor-pointer" onClick={handleNotifications}>
@@ -75,16 +80,21 @@ function Notifications(props) {
                     </div>
                     {
                         loading?
-                        <div className="flex justify-center items-center ">
-                            <ReactLoading type="spin" color="#FFA447" height={'40px'} width={'40px'} />
-                        </div>
+                        <>
+                            <NotificationLoading></NotificationLoading>
+                            <NotificationLoading></NotificationLoading>
+                            <NotificationLoading></NotificationLoading>
+                        </>
                         :
-                        <Notification></Notification>
-                        //case taa mafama hata notif
-                        //<img alt="empty" src="/no-data.png" className="w-64 h-64 m-auto object-cover"></img>
+                        (
+                            isNotificationEmpty?
+                            <img alt="empty" src="/no-data.png" className="w-64 h-64 m-auto object-cover"></img>
+                            :
+                            notificationsList.map((notification, index) => {
+                                return <Notification notification={notification} key={index}></Notification>
+                            })
+                        )
                     }
-                    
-                    
                 </div>
             </div>
         </div>
