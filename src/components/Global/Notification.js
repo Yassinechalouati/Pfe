@@ -1,23 +1,26 @@
 import { IoCheckmarkCircle } from "react-icons/io5";
 import { IoCloseCircle } from "react-icons/io5";
-import { fetchFile, isGoogleProfilePicture } from "./functions"
+import { fetchFile, isGoogleProfilePicture, timeFormatter } from "./functions"
 import { useEffect, useState } from "react"
 import ElapsedTime from "./ElapsedTime";
 import { handleLessonDifficultyColor } from "./functions";
+import { updateNotification } from "../../state/slices/NotificationSlice";
+import { useDispatch} from 'react-redux'
 import axiosInstance from "../../interceptors/axiosInterceptor";
 
 function Notification(props) {
     
     //holding the picture
     const [imageUrl, setImageUrl] = useState(null);
+    const dispatch = useDispatch()
+
 
     // Format the date to display as "Month Day, Year"
     const handleTimeFormat = () => {
         const date = new Date(props.notification.start_time);
 
         const options = { month: 'long', day: 'numeric', year: 'numeric' };
-        const formattedDate = date.toLocaleDateString('en-US', options);
-
+        const formattedDate = date.toLocaleDateString('en-US', options)
 
         return formattedDate
     }
@@ -65,8 +68,8 @@ function Notification(props) {
     const handleAcceptLesson = async () => {
         try {
             const result = await notificationFeedBack(1)
+            dispatch(updateNotification({ notification: props.notification, accepted: 1}))
             console.log(result);
-
         }catch(err) {
             console.log(err)
         }
@@ -75,6 +78,7 @@ function Notification(props) {
     const handleRejectLesson = async () => {
         try{
             const result = await notificationFeedBack(0)
+            dispatch(updateNotification({ notification: props.notification, accepted: 0}))
             console.log(result);
         }catch(err) {
             console.log(err)
@@ -88,13 +92,17 @@ function Notification(props) {
                 <div className="text-sm">
                     {
                         props.notification.Accepted === -1? 
-                        <span className="text-darkg"><span className="font-semibold text-black">{props.notification.firstname+" "+props.notification.lastname}</span> wants to book a lesson with you on <span className="text-black font-semibold">{handleTimeFormat()}</span></span>
+                        <span className="text-darkg"><span className="font-semibold text-black">{props.notification.firstname+" "+props.notification.lastname}</span> wants to book <span className="font-bold text-elements">{props.notification.lesson_topic}</span> lesson with you <span className="">from</span> <span className="text-black font-bold">{timeFormatter(props.notification.start_time)}</span> <span className="font-bold text-black">{timeFormatter(props.notification.end_time)}</span> on <span className="text-black font-semibold">{handleTimeFormat()}.</span></span>
                         :
                         <span className="text-darkg"> 
-                            <span>You have a lesson with </span>
+                            <span>You have <span className="font-bold text-elements">{props.notification.lesson_topic}</span> lesson with </span>
                             <span className="font-semibold text-black">{props.notification.firstname+" "+props.notification.lastname}</span>
+                            <span className=""> from </span>
+                            <span className="font-semibold text-black">{timeFormatter(props.notification.start_time)}</span>
+                            <span className=""> to </span>
+                            <span className="font-semibold text-black">{timeFormatter(props.notification.end_time)}</span>
                             <span className=""> on </span>
-                            <span className="font-semibold text-black">{handleTimeFormat()}</span>
+                            <span className="font-semibold text-black">{handleTimeFormat()}.</span>
                         </span>
                     }
                 </div>
