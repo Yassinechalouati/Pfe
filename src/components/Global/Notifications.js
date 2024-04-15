@@ -16,6 +16,13 @@ function Notifications(props) {
     const notificationsList = useSelector(state=> state.notificationsData.notificationsList)
     const [loading, setLoading] = useState(false)
     const [isNotificationEmpty, setIsNotificationEmpty] = useState(false)
+    const [option, setOption] = useState(0)
+
+    const notifiationFilterOption = [
+        "All", 
+        "Pending",
+        "Accepted",
+    ]
     
 
     //handle notifications visibility and api calls 
@@ -57,6 +64,39 @@ function Notifications(props) {
           document.removeEventListener('mousedown', handleOutsideClick);
         }
       }, [])
+
+      //handling the filter option of the notificaton (All, Accepted, Requests)
+      const handleOptions = (e) => {
+        setOption(parseInt(e.target.value))
+      }
+
+      //handling the list to return based on the option object
+      const handleContent = () => {
+
+            let list = []
+            if(option === 0 ) {
+                list = notificationsList.map((notification, index) => {
+                    return <Notification notification={notification} key={index}></Notification>
+                })
+            }else if(option === 1) {
+                const pendingNotification = notificationsList.filter(notification => notification.Accepted === -1)
+                list = pendingNotification.map((notification, index) => {
+                    return <Notification notification={notification} key={index}></Notification>
+                })
+            }else if(option === 2) {
+                const acceptedNotifications = notificationsList.filter(notification => notification.Accepted === 1)
+                list = acceptedNotifications.map((notification, index) => {
+                    return <Notification notification={notification} key={index}></Notification>
+                })
+            }
+
+            //if the list is empty return the empty image else return the list
+            return list.length ===0? 
+            <img alt="empty" src="/no-data.png" className="w-64 h-64 m-auto object-cover"></img>
+            :
+            list
+
+        }
     
 
     return (
@@ -78,6 +118,14 @@ function Notifications(props) {
                         <div className="py-5 font-bold">Notifications</div>
                         <span className="text-darkg rounded-lg p-2 hover:bg-lightg cursor-pointer" >Mark all as read</span>
                     </div>
+                    <div className="flex px-2 py-2 items-center border-b space-x-3">
+                        {
+                            notifiationFilterOption.map((option, index) => {
+                                return <option key={index} onClick={handleOptions} className="text-sm cursor-pointer" value={index}>{option}</option>
+                            })
+                        }
+                    </div>
+
                     {
                         loading?
                         <>
@@ -90,9 +138,7 @@ function Notifications(props) {
                             isNotificationEmpty?
                             <img alt="empty" src="/no-data.png" className="w-64 h-64 m-auto object-cover"></img>
                             :
-                            notificationsList.map((notification, index) => {
-                                return <Notification notification={notification} key={index}></Notification>
-                            })
+                            handleContent()
                         )
                     }
                 </div>
