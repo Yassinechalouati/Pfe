@@ -24,7 +24,9 @@ router.post('/getBusyTimes', auth, roleCheck(["Learner"]), (req, res) => {
     const year = selectedDate.split('/')[2]
 
 
-    const formattedTime = year+"-"+month+"-"+day
+    const formattedTime = `${year}-${month}-${day}`
+
+    console.log(formattedTime);
     
     // Generate 15-minute increments between start_time and end_time for the specified date
     const query = `
@@ -33,6 +35,7 @@ router.post('/getBusyTimes', auth, roleCheck(["Learner"]), (req, res) => {
         FROM private_lesson
         WHERE DATE(start_time) = ?  -- Filter by the desired date
         and private_learner_id = ?
+        and Accepted <> 0
         UNION ALL
         SELECT ADDTIME(interval_time, '00:15:00'), end_time
         FROM time_intervals
@@ -42,7 +45,7 @@ router.post('/getBusyTimes', auth, roleCheck(["Learner"]), (req, res) => {
     FROM time_intervals;
     `
 
-    mysql.query(query, [userId, formattedTime], (err, result) => {
+    mysql.query(query, [formattedTime, userId], (err, result) => {
         if(err) {
             console.log(err)
             res.status(500).json({message: "Internal Server Error"})

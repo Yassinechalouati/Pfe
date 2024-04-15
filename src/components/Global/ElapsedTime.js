@@ -34,7 +34,7 @@ function ElapsedTime(time) {
 
     const interval = setInterval(() => {
       calculateElapsedTime();
-    }, 60000);
+    }, 0);
 
     return () => clearInterval(interval);
   }, [time]);

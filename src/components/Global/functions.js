@@ -85,24 +85,26 @@ export const handleLessonDifficultyColor = (test, type) => {
 
 export const convertTime = (scheduledTime) => {
      //converting the selected time to normal one 
-            // Split the time string into hours, minutes, and AM/PM
-            const [time, period] = scheduledTime.split(' ');
-            const [hours, minutes] = time.split(':');
+    // Split the time string into hours, minutes, and AM/PM
+    console.log("scheduleTime: ", scheduledTime);
+    const [time, period] = scheduledTime.split(' ');
+    const [hours, minutes] = time.split(':');
 
-            // Convert hours to 24-hour format
-            let hours24 = parseInt(hours, 10);
-            if (period === 'PM' && hours24 < 12) {
-                hours24 += 12;
-            } else if (period === 'AM' && hours24 === 12) {
-                hours24 = 0;
-            }
+    // Convert hours to 24-hour format
+    let hours24 = parseInt(hours, 10);
+    if (period === 'PM' && hours24 < 12) {
+        hours24 += 12;
+    } else if (period === 'AM' && hours24 === 12) {
+        hours24 = 0;
+    }
 
-            // Format the hours and minutes
-            const formattedHours = hours24.toString().padStart(2, '0')
-            const formattedMinutes = minutes.padStart(2, '0')
+    // Format the hours and minutes
+    const formattedHours = hours24.toString().padStart(2, '0')
+    const formattedMinutes = minutes.padStart(2, '0')
 
 
-            return {formattedHours, formattedMinutes}
+
+    return {formattedHours, formattedMinutes}
 }
 
 export const dateExistenceTester = (list, hour, minute, busyDate) => {
@@ -141,3 +143,31 @@ export function isGoogleProfilePicture(pfpPath) {
     return googlePattern.test(pfpPath);
 }
 
+ //convert time string to minutes
+export function getTimeInMinutes(timeString) {
+    const timeParts = timeString.split(' ')[1].split(':');
+    return parseInt(timeParts[0]) * 60 + parseInt(timeParts[1]);
+}
+
+
+// Helper function to get the maximum duration index based on the selected time and busy times
+export function getMaxDurationIndex(selectedTimeInMinutes, busyTimes, duration) {
+    // Filter out busy times that are after the selected time
+    const overlappingTimes = busyTimes.filter(busyTime =>
+      getTimeInMinutes(busyTime.interval_time_formatted) > selectedTimeInMinutes
+    );
+  
+    // Determine the maximum duration index based on the filtered busy times
+    let maxDurationIndex = duration.length
+    for (let i = 0; i < overlappingTimes.length; i++) {
+      const busyTimeInMinutes = getTimeInMinutes(overlappingTimes[i].interval_time_formatted);
+      const diffInMinutes = busyTimeInMinutes - selectedTimeInMinutes;
+  
+      if (diffInMinutes <= 60) {
+          maxDurationIndex = Math.min(maxDurationIndex, Math.floor(diffInMinutes / 15));
+          console.log("math: ", maxDurationIndex);
+      }
+    }
+  
+    return maxDurationIndex;
+  }

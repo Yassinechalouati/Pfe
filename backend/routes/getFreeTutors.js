@@ -32,8 +32,9 @@ router.post('/getFreeTutors', auth, roleCheck(["Learner"]), (req, res) => {
         WHERE (
            (pl.start_time >= ? AND pl.start_time <= ?)
             OR (pl.end_time >= ? AND pl.end_time <= ?)
-            OR (pl.start_time <= ? AND pl.end_time >= ?)			
+            OR (pl.start_time <= ? AND pl.end_time >= ?)	
         ) AND t.id = pl.tutor_id 
+        AND pl.Accepted <> 0
             Group by(t.id)
         )
         AND  (JSON_CONTAINS(education, ?, '$') = 1

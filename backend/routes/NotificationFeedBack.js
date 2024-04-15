@@ -10,8 +10,10 @@ router.post('/NotificationFeedback', auth, roleCheck(["Tutor"]), (req, res) => {
         lessonId,
         accepted
     } = req.body
-    
-    if(!lessonId || !accepted) {
+
+    console.log("condition: ", (accepted !==0 && accepted !==1));
+
+    if(!lessonId || (accepted !==0 && accepted !==1)) {
         res.status(400).json({ message: "Bad Data!" });
         return // to avoid further execution when data missing 
     }
@@ -26,7 +28,6 @@ router.post('/NotificationFeedback', auth, roleCheck(["Tutor"]), (req, res) => {
             console.log(err)
             res.status(500).json({message: "Internal Server Error"})
         }else {
-            console.log(result)
             res.status(200).json({message: "Updated"})
         }
     })

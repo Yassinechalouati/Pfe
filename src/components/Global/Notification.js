@@ -4,7 +4,7 @@ import { fetchFile, isGoogleProfilePicture, timeFormatter } from "./functions"
 import { useEffect, useState } from "react"
 import ElapsedTime from "./ElapsedTime";
 import { handleLessonDifficultyColor } from "./functions";
-import { updateNotification } from "../../state/slices/NotificationSlice";
+import { removeNotification, updateNotification } from "../../state/slices/NotificationSlice";
 import { useDispatch} from 'react-redux'
 import axiosInstance from "../../interceptors/axiosInterceptor";
 
@@ -78,7 +78,7 @@ function Notification(props) {
     const handleRejectLesson = async () => {
         try{
             const result = await notificationFeedBack(0)
-            dispatch(updateNotification({ notification: props.notification, accepted: 0}))
+            dispatch(removeNotification(props.notification.lesson_id))
             console.log(result);
         }catch(err) {
             console.log(err)
@@ -94,6 +94,7 @@ function Notification(props) {
                         props.notification.Accepted === -1? 
                         <span className="text-darkg"><span className="font-semibold text-black">{props.notification.firstname+" "+props.notification.lastname}</span> wants to book <span className="font-bold text-elements">{props.notification.lesson_topic}</span> lesson with you <span className="">from</span> <span className="text-black font-bold">{timeFormatter(props.notification.start_time)}</span> <span className="font-bold text-black">{timeFormatter(props.notification.end_time)}</span> on <span className="text-black font-semibold">{handleTimeFormat()}.</span></span>
                         :
+                        (props.notification.Accepted !==0?
                         <span className="text-darkg"> 
                             <span>You have <span className="font-bold text-elements">{props.notification.lesson_topic}</span> lesson with </span>
                             <span className="font-semibold text-black">{props.notification.firstname+" "+props.notification.lastname}</span>
@@ -104,6 +105,8 @@ function Notification(props) {
                             <span className=""> on </span>
                             <span className="font-semibold text-black">{handleTimeFormat()}.</span>
                         </span>
+                        :
+                        null)
                     }
                 </div>
                 <div className="flex space-x-2">

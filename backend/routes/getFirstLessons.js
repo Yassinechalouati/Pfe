@@ -16,6 +16,7 @@ router.post('/getFirstLesson', auth, roleCheck(["Learner"]), (req, res) => {
         FROM private_lesson t2
         WHERE DATE(t2.start_time) = DATE(t1.start_time)
         AND t2.start_time >= NOW()
+        and Accepted <> 0
         AND private_learner_id = ?
     )`
 

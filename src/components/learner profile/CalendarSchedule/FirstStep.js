@@ -7,6 +7,8 @@ import { IoMdCalendar } from "react-icons/io"
 import { setLanguage, setLessonLength, setTime } from "../../../state/slices/Schedule"
 import {useDispatch, useSelector} from 'react-redux'
 import { MdLanguage } from "react-icons/md";
+import { convertTime, getMaxDurationIndex } from "../../Global/functions"
+
 
 
 
@@ -30,16 +32,10 @@ function FirstStep(props) {
 
     //handling the given time output from the user
     const handleTimeChange = (e) => {
-        //if the user already chose length and he picks dates where there are limitations in lengths, he gets the maximum length he can
-        // example: length picked 60 minutes, user picks 11:30 PM he gets 30 minutes
-        if(e.target.value === "11:45 PM" && scheduleData.lessonLength){
-            dispatch(setLessonLength(duration[0]))
-        }else if(e.target.value ==="11:30 PM" && scheduleData.lessonLength !== duration[0] && scheduleData.lessonLength !== duration[1]) {
-            dispatch(setLessonLength(duration[1]))
-        }else if(e.target.value === "11:15 PM" && scheduleData.lessonLength !== duration[0] && scheduleData.lessonLength !== duration[1] && scheduleData.lessonLength !== duration[2] ) {
-            dispatch(setLessonLength(duration[2]))
-        }
+        //set the time the the option selected by the user 
         dispatch(setTime(e.target.value))
+        //clearing the lesson duration on every time change
+        dispatch(setLessonLength(''))
 
     }
 
@@ -51,26 +47,74 @@ function FirstStep(props) {
         dispatch(setLanguage(e.target.value))
     }
 
+    
     //we show possbile duration based on picked time
     //we're assuring that the max end_time is 00 in the next day
     function renderOptions() {
-        if (scheduleData.time === "11:45 PM") {
-          return duration.slice(0, 1).map((time, index) => (
-            <option key={index} value={time}>{time}</option>
-          ));
-        } else if (scheduleData.time === "11:30 PM") {
-          return duration.slice(0, 2).map((time, index) => (
-            <option key={index} value={time}>{time}</option>
-          ));
-        } else if (scheduleData.time === "11:15 PM") {
-          return duration.slice(0, 3).map((time, index) => (
-            <option key={index} value={time}>{time}</option>
-          ));
-        } else {
-          return duration.map((time, index) => (
-            <option key={index} value={time}>{time}</option>
-          ));
-        }
+        if(scheduleData.time && scheduleData.busyTimes) {
+
+            //testing if the time is followed by a busy time or not
+            //for example user picks 12:45 and 13:00 is taken
+            //he can't pick 60 minutes, 45 minutes or 30 minutes, he can't only pick 15 minutes
+            const options = { month: '2-digit', day: '2-digit', year: 'numeric' };
+            const conditionDate = new Date(props.selectedDate).toLocaleDateString('en-US', options)
+            const month = conditionDate.split('/')[0]
+            const day = conditionDate.split('/')[1]
+            const year = conditionDate.split('/')[2]
+
+            const currentDay = `${year}-${month}-${day}`
+
+            //getting the times that are busy in the selected Date
+            const filteredBusyDate = scheduleData.busyTimes.filter(time => time.interval_time_formatted.includes(currentDay))
+
+            console.log(scheduleData.time);
+            const {formattedHours, formattedMinutes} = convertTime(scheduleData.time)
+
+            console.log(formattedHours, formattedMinutes);
+
+            //converting the selected time to minutes
+            const selectedTimeInMinutes = parseInt(formattedHours) * 60 + parseInt(formattedMinutes)
+            console.log(selectedTimeInMinutes)
+
+            //getting how many items of the duration list should be shown
+            const maxDurationIndex = getMaxDurationIndex(selectedTimeInMinutes, filteredBusyDate, duration)
+
+            console.log("maxDurationIndex: ", maxDurationIndex)
+
+            
+            if(maxDurationIndex === duration.length ) {
+                // this indicates that if those times are the selected ones then we give limited options
+                if (scheduleData.time === "11:45 PM") {
+                    return duration.slice(0, 1).map((time, index) => (
+                      <option key={index} value={time}>{time}</option>
+                    ));
+                  } else if (scheduleData.time === "11:30 PM") {
+                    return duration.slice(0, 2).map((time, index) => (
+                      <option key={index} value={time}>{time}</option>
+                    ));
+                  } else if (scheduleData.time === "11:15 PM") {
+                    return duration.slice(0, 3).map((time, index) => (
+                      <option key={index} value={time}>{time}</option>
+                    ));
+                  } else {
+                    return duration.map((time, index) => (
+                      <option key={index} value={time}>{time}</option>
+                    ));
+                  }
+            }else {
+                //in other case show what
+                return duration.slice(0, maxDurationIndex ).map((time, index) => (
+                    <option key={index} value={time}>{time}</option>
+                ));
+            }
+
+
+
+        }   
+        
+
+        
+
       }
 
     return (

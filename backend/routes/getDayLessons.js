@@ -20,6 +20,7 @@ router.post('/getDayLessons', auth, roleCheck(["Learner"]), (req, res) => {
     WHERE pl.start_time >= NOW() 
     AND DATE(pl.start_time) = ?
     AND pl.private_learner_id = ? 
+    and Accepted <> 0
     AND t.id = pl.tutor_id`
 
     mysql.query(query, [date, userId], (err, result) => {
