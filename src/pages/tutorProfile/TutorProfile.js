@@ -2,13 +2,14 @@ import Settings from "../../components/Global/Settings";
 import TutorNavBar from "../../components/tutor profile/NavBar";
 import LinguaBuddy from "../learner/Profile/LinguaBuddy";
 import axiosInstance from '../../interceptors/axiosInterceptor'
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Classrooms from "./Classrooms";
 import Courses from "./Courses";
 import Exams from "./Exams";
 import Feed from "./Feed";
-import { fetchCountryData } from "../../components/Global/functions";
+import { fetchCountryData } from "../../components/Global/functions"
+import socket from '../../interceptors/socketInterceptor'
 import {
     setFirstName, 
     setLastName, 
@@ -26,7 +27,8 @@ import {
     setLanguages,
     setIsLoading, 
     setWorkExperience,
-    setCountryFlag
+    setCountryFlag,
+    setId
 
 } from '../../state/slices/tutorSlice'
 import { fetchFile } from "../../components/Global/functions";
@@ -36,8 +38,14 @@ function TutorProfile() {
     const dispatch = useDispatch()
 
     const tutorData = useSelector(state => state.tutorData)
+
     
     useEffect(() => {
+        // Listener for incoming notifications
+        const handleNotification = (data) => {
+            console.log("Notification came with data:", data);
+        };
+
         const fetchData = async () => {
             dispatch(setIsLoading(true))
             try {
@@ -46,28 +54,32 @@ function TutorProfile() {
                         'Authorization': `Bearer ${localStorage.getItem('accesstoken')}`,
                         'Content-Type': 'multipart/form-data' // Set the content type to multipart/form-data
                     }
-                });
+                })
+                await Promise.all([
+                    dispatch(setId(response.data.message.id)),
+                    dispatch(setFirstName(response.data.message.firstname)),
+                    dispatch(setLastName(response.data.message.lastname)),
+                    dispatch(setEmail(response.data.message.email)),
+                    dispatch(setHasPassword(response.data.message.hasPassword)),
+                    dispatch(setDisplayableVideo(response.data.message.introductionVideo)),
+                    dispatch(setAboutMe(response.data.message.AboutMe)),
+                    dispatch(setDescription(response.data.message.description)),
+                    dispatch(setTeachingStyle(response.data.message.teachingStyle)),
+                    dispatch(setEducation(JSON.parse(response.data.message.Education))),
+                    dispatch(setLanguages(JSON.parse(response.data.message.Languages))),
+                    dispatch(setWorkExperience(JSON.parse(response.data.message.WorkExperience))),
+                    dispatch(setCountry(response.data.message.country)),
+                    dispatch(setTel(response.data.message.tel)),
+                    dispatch(setBirthday(response.data.message.Birthday)),
+                ])
 
                 fetchFile(response.data.message.pfp, "images", "tutor", response.data.message.id)
                 .then(async (resp )=> {
+                    console.log(response.data.message);
                     // Dispatch actions sequentially
                     await Promise.all([
-                        dispatch(setFirstName(response.data.message.firstname)),
-                        dispatch(setLastName(response.data.message.lastname)),
-                        dispatch(setEmail(response.data.message.email)),
-                        dispatch(setHasPassword(response.data.message.hasPassword)),
                         dispatch(setDisplayableImage(resp)),
-                        dispatch(setDisplayableVideo(response.data.message.introductionVideo)),
-                        dispatch(setAboutMe(response.data.message.AboutMe)),
-                        dispatch(setDescription(response.data.message.description)),
-                        dispatch(setTeachingStyle(response.data.message.teachingStyle)),
-                        dispatch(setEducation(JSON.parse(response.data.message.Education))),
-                        dispatch(setLanguages(JSON.parse(response.data.message.Languages))),
-                        dispatch(setWorkExperience(JSON.parse(response.data.message.WorkExperience))),
-                        dispatch(setCountry(response.data.message.country)),
-                        dispatch(setTel(response.data.message.tel)),
-                        dispatch(setBirthday(response.data.message.Birthday))
-                    ]);
+                    ])
                     const data = await fetchCountryData(response.data.message.country)
                     dispatch(setCountryFlag(data))
                     dispatch(setIsLoading(false))
@@ -75,6 +87,16 @@ function TutorProfile() {
                 .catch(err => {
                     console.log(err);
                 })
+
+                console.log("herebruv", socket);
+                console.log("id: ", response.data.message.id);
+                socket.emit('createRoom', response.data.message.id)
+                socket.on('Notification incoming', (data_) => {
+                    console.log("notification came with data: ", data_);
+                })
+
+                // Add listener for incoming notifications
+                socket.on('Notification incoming', handleNotification);
             } catch (error) {
                 console.log(error);
                 dispatch(setIsLoading(false))
@@ -82,6 +104,10 @@ function TutorProfile() {
         };
         
         fetchData();
+        // Clean up function to remove event listener when component unmounts
+        return () => {
+            socket.off('Notification incoming', handleNotification);
+        };
     }, []);
     
 

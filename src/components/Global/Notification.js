@@ -4,8 +4,8 @@ import { fetchFile, isGoogleProfilePicture, timeFormatter } from "./functions"
 import { useEffect, useState } from "react"
 import ElapsedTime from "./ElapsedTime";
 import { handleLessonDifficultyColor } from "./functions";
-import { removeNotification, updateNotification } from "../../state/slices/NotificationSlice";
-import { useDispatch} from 'react-redux'
+import { removeNotification, setPendingNotificationNumber, updateNotification } from "../../state/slices/NotificationSlice";
+import { useDispatch, useSelector } from 'react-redux'
 import axiosInstance from "../../interceptors/axiosInterceptor";
 
 function Notification(props) {
@@ -13,6 +13,7 @@ function Notification(props) {
     //holding the picture
     const [imageUrl, setImageUrl] = useState(null);
     const dispatch = useDispatch()
+    const newNotifications = useSelector(state => state.notificationsData.pendingNotificationNumber)
 
 
     // Format the date to display as "Month Day, Year"
@@ -69,6 +70,7 @@ function Notification(props) {
         try {
             const result = await notificationFeedBack(1)
             dispatch(updateNotification({ notification: props.notification, accepted: 1}))
+            dispatch(setPendingNotificationNumber(newNotifications-1))
             console.log(result);
         }catch(err) {
             console.log(err)
@@ -79,6 +81,7 @@ function Notification(props) {
         try{
             const result = await notificationFeedBack(0)
             dispatch(removeNotification(props.notification.lesson_id))
+            dispatch(setPendingNotificationNumber(newNotifications-1))
             console.log(result);
         }catch(err) {
             console.log(err)

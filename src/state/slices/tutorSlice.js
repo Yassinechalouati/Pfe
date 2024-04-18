@@ -26,7 +26,8 @@ const initialState = {
   TeachingStyle: '',
   AboutMe: '',
   Country: '',
-  countryFlag: ''
+  countryFlag: '',
+  id: ''
 
 }
 
@@ -113,6 +114,9 @@ export const userSlice = createSlice({
     setCountry: (state, action )=> {
       state.Country = action.payload
     },
+    setId: (state, action) => {
+      state.id= action.payload
+    },
     resetUserData: () => initialState
   },
 })
@@ -145,6 +149,7 @@ export const {
   setBirthday, 
   setHasPassword, 
   setTel,
-  setCountryFlag
+  setCountryFlag,
+  setId
 } = userSlice.actions
 export default userSlice.reducer

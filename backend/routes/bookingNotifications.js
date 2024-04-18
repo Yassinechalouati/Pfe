@@ -12,6 +12,7 @@ router.post('/getNotifications', auth, roleCheck(["Tutor"]), (req, res) => {
     const query = `SELECT pl.*, l.pfp, l.firstname, l.lastname, l.isConnected
     FROM private_lesson AS pl, learner AS l
     WHERE pl.private_learner_id = l.id
+    AND pl.tutor_id = ?
     AND pl.Accepted <> 0 -- excluding the canceled lessons
     AND pl.start_time > NOW()
     ORDER BY pl.start_time ASC;`
@@ -21,7 +22,6 @@ router.post('/getNotifications', auth, roleCheck(["Tutor"]), (req, res) => {
             console.log(err)
             res.status(500).json({message: "Internal Server Error"})
         }else {
-            console.log(result)
             res.status(200).json({message: result})
         }
     })

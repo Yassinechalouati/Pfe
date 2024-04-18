@@ -1,7 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 const initialState ={
-    notificationsList: []
+    notificationsList: [],
+    pendingNotificationNumber: 0
 }
 
 
@@ -39,7 +40,11 @@ export const notificationSlice = createSlice({
             const lessonIdToRemove = action.payload
 
             state.notificationsList = state.notificationsList.filter(notification => notification.lesson_id !== lessonIdToRemove);
-        },        
+        },   
+        setPendingNotificationNumber: (state, action )=> {
+            state.pendingNotificationNumber = action.payload
+        }
+        ,
         resetFields: () => initialState
     }
 })
@@ -48,7 +53,8 @@ export const {
     resetFields,
     setNotificationsList,
     updateNotification,
-    removeNotification
+    removeNotification,
+    setPendingNotificationNumber
 
 } = notificationSlice.actions
 export default notificationSlice.reducer

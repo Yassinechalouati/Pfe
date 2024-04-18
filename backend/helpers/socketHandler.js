@@ -1,16 +1,28 @@
 const mysql = require('../helpers/Sql_connection');
 const verifyVerificationToken = require('../helpers/verifyVerificationToken');
 const generateRefreshToken = require('../helpers/generateRefreshToken');
-const generateAccessToken = require('../helpers/generateAccessToken');
+const generateAccessToken = require('../helpers/generateAccessToken')
+const authenticateSocket = require('../middleware/authenticateSocket')
 
 const socketHandler = (io) => {
+    io.use((socket, next) => {
+        authenticateSocket(socket, next)
+    });
+
     io.on('connection', (socket) => {
         console.log('A user connected');
 
+        
         socket.on('createRoom', (roomId) => {
-            socket.join(roomId);
+            console.log("joined Room ", roomId);
+            socket.join(roomId) 
         })        
-
+        
+        socket.on('notification', (data) => {
+            console.log("incoming notification data", data);
+            console.log("emitting notification now ", data.tutorId);
+            io.to(data.tutorId).emit('Notification incoming', { notification: data});
+        })
         // Handle email verification event
         socket.on('verifyEmail', async (token, id) => {
                 console.log("id: ", id);

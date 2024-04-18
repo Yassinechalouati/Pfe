@@ -6,11 +6,18 @@ import { useDispatch, useSelector } from "react-redux";
 import { setSelectedTutor } from "../../../state/slices/Schedule";
 import { Addlesson, appendLesson, replaceFirstLessonItem } from "../../../state/slices/lessonsList"
 import { resetData, setVisibility } from "../../../state/slices/Schedule"
-import axiosInstance from "../../../interceptors/axiosInterceptor";
+import axiosInstance from "../../../interceptors/axiosInterceptor"
+import io from 'socket.io-client'
+import { useRef } from "react";
+
 
 
 function TutorRow(props) {
     const dispatch = useDispatch()
+    const socket = useRef(null)
+    
+
+    
 
     
     const learnerId= useSelector(state => state.userData.id)
@@ -51,7 +58,8 @@ function TutorRow(props) {
         fetchFlag()
     }, [])
 
-   
+
+    
     const handleBookLesson = async () => {
             dispatch(setSelectedTutor(props.tutor.id))
 
@@ -60,26 +68,36 @@ function TutorRow(props) {
             // Construct the normal time string
             const normalTime = `${formattedHours}:${formattedMinutes}`
 
-            console.log("normalTime: ", normalTime)
-
+           
+        
 
             //we contact the api here that's responsible for scheduling lessons then we reset the fields after finish the transaction
             try {
-                
                 const selectedDate = scheduleData.selectedDate + " "+ normalTime
-                const response = await axiosInstance.post('http://localhost:5000/learner/scheduleLesson', {
+                const sentData =  {
                     tutorId: props.tutor.id,
                     lessonTopic: scheduleData.lessonTopic,
                     lessonDifficulty: scheduleData.lessonDifficulty,
                     selectedDate: selectedDate,
                     lessonLength: scheduleData.lessonLength,
                     lessonLanguage: scheduleData.language
-                }, {
+                }
+                const response = await axiosInstance.post('http://localhost:5000/learner/scheduleLesson', sentData, {
                     headers: {
                         'Authorization': `Bearer ${localStorage.getItem('accesstoken')}`
                     }
                 })
+                socket.current = io('http://localhost:5000', {
+                    auth: {
+                    token: localStorage.getItem('accesstoken')
+                    }
+                })
+                socket.current.emit('createRoom', (learnerId))
+                socket.current.emit('notification', sentData)
 
+                console.log("socket: ", socket.current);
+ 
+                
 
                 //we're verifying if the we got a lesson on that date or not
                 let test =false
@@ -123,6 +141,7 @@ function TutorRow(props) {
                         break
                     }
                 }
+
                 const date = scheduleData.selectedDate
                 const month = date.split('/')[0]
                 const day = date.split('/')[1]

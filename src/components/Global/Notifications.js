@@ -4,8 +4,7 @@ import { IoNotifications } from "react-icons/io5"
 import axiosInstance from "../../interceptors/axiosInterceptor"
 import { NotificationLoading } from "./LoadingCards"
 import { useSelector, useDispatch } from "react-redux"
-import { setNotificationsList } from '../../state/slices/NotificationSlice'
-
+import { setNotificationsList, setPendingNotificationNumber } from '../../state/slices/NotificationSlice'
 
 
 function Notifications(props) {
@@ -14,6 +13,7 @@ function Notifications(props) {
     
     const [notifications, setNotifications] = useState(false)
     const notificationsList = useSelector(state=> state.notificationsData.notificationsList)
+    const newNotifications = useSelector(state => state.notificationsData.pendingNotificationNumber)
     const [loading, setLoading] = useState(false)
     const [isNotificationEmpty, setIsNotificationEmpty] = useState(false)
     const [option, setOption] = useState(0)
@@ -39,6 +39,9 @@ function Notifications(props) {
                 })
                 setIsNotificationEmpty(notifications.data.message.length===0) //indicated wether there are notifications or not
                 dispatch(setNotificationsList(notifications.data.message))
+                const filteredNotifications = notifications.data.message.filter(item => item.Accepted === -1)//pending notifications
+                console.log("length: ",filteredNotifications.length);
+                dispatch(setPendingNotificationNumber(filteredNotifications.length))
                 setLoading(false)
             }catch(err) {
                 console.log(err)
@@ -99,6 +102,8 @@ function Notifications(props) {
         }
     
 
+        
+        console.log("option: ",option)
     return (
         <div ref={notifRef} className="relative py-1">
             <div className="cursor-pointer" onClick={handleNotifications}>
@@ -118,10 +123,26 @@ function Notifications(props) {
                         <div className="py-5 font-bold">Notifications</div>
                         <span className="text-darkg rounded-lg p-2 hover:bg-lightg cursor-pointer" >Mark all as read</span>
                     </div>
-                    <div className="flex px-2 py-2 items-center border-b space-x-3">
+                    <div className="flex relative px-2 py-2 items-center border-b space-x-4">
                         {
-                            notifiationFilterOption.map((option, index) => {
-                                return <option key={index} onClick={handleOptions} className="text-sm cursor-pointer" value={index}>{option}</option>
+                            notifiationFilterOption.map((optionn, index) => {
+                            return (
+                                <div key={index} className="flex items-center space-x-1">
+                                    {
+                                        ( optionn === "All" || optionn === "Pending") && newNotifications?
+                                        <div className="min-w-5 min-h-3 p-[3px] rounded-full text-[10px] bg-button text-white flex items-center justify-center">
+                                            {
+                                                newNotifications
+                                            }
+                                        </div>
+                                        :
+                                        null
+                                    }
+                                    <option onClick={handleOptions} className={`text-sm cursor-pointer ${option === index? "text-button font-bold border-b border-b-button" : "text-black"}`} value={index}>
+                                        {optionn}
+                                    </option>
+                                </div>
+                            )
                             })
                         }
                     </div>

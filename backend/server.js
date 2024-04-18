@@ -3,7 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const http = require('http');
-const socketIo = require('socket.io');
+const socketIo = require('socket.io')
 
 
 const app = express();
@@ -101,7 +101,9 @@ app.use('/tutor', notificationApproval)
 
 
 // Socket.io logic
-require('./helpers/socketHandler')(io);
+require('./helpers/socketHandler')(io);//non authenticated 
+
+
 
 
 
