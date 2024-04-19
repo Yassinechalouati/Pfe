@@ -32,6 +32,7 @@ import {
 
 } from '../../state/slices/tutorSlice'
 import { fetchFile } from "../../components/Global/functions";
+import { addNotification, incrementNumberOfNotificaitions } from "../../state/slices/NotificationSlice";
 
 function TutorProfile() {
 
@@ -39,12 +40,11 @@ function TutorProfile() {
 
     const tutorData = useSelector(state => state.tutorData)
 
+    const pendingNotificationNumber = useSelector(state => state.notificationsData.pendingNotificationNumber)
+
     
     useEffect(() => {
-        // Listener for incoming notifications
-        const handleNotification = (data) => {
-            console.log("Notification came with data:", data);
-        };
+        
 
         const fetchData = async () => {
             dispatch(setIsLoading(true))
@@ -72,6 +72,7 @@ function TutorProfile() {
                     dispatch(setTel(response.data.message.tel)),
                     dispatch(setBirthday(response.data.message.Birthday)),
                 ])
+                socket.emit('createRoom', response.data.message.id)
 
                 fetchFile(response.data.message.pfp, "images", "tutor", response.data.message.id)
                 .then(async (resp )=> {
@@ -87,16 +88,6 @@ function TutorProfile() {
                 .catch(err => {
                     console.log(err);
                 })
-
-                console.log("herebruv", socket);
-                console.log("id: ", response.data.message.id);
-                socket.emit('createRoom', response.data.message.id)
-                socket.on('Notification incoming', (data_) => {
-                    console.log("notification came with data: ", data_);
-                })
-
-                // Add listener for incoming notifications
-                socket.on('Notification incoming', handleNotification);
             } catch (error) {
                 console.log(error);
                 dispatch(setIsLoading(false))
@@ -104,12 +95,30 @@ function TutorProfile() {
         };
         
         fetchData();
-        // Clean up function to remove event listener when component unmounts
-        return () => {
-            socket.off('Notification incoming', handleNotification);
-        };
     }, []);
     
+
+    useEffect(() => {
+        // Listener for incoming notifications
+        const handleNotification = (data_) => {
+            //if there are already notifications we add it
+            console.log("adding notification");
+            dispatch(addNotification(data_.notification))
+            console.log("incrementing number of notifications");
+
+
+            console.log("number of notifications: ", pendingNotificationNumber+1);
+            //if there isn't we just update that there's a new notification
+            dispatch(incrementNumberOfNotificaitions())
+        }
+        socket.on('Notification incoming', handleNotification)
+
+         // Clean up function to remove event listener when component unmounts
+         return () => {
+            socket.off('Notification incoming', handleNotification);
+        };
+
+    }, [])
 
 
     const bodyContent = {

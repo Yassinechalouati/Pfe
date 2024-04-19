@@ -20,7 +20,7 @@ function TutorRow(props) {
     
 
     
-    const learnerId= useSelector(state => state.userData.id)
+    const learnerData= useSelector(state => state.userData)
 
     const lessonList = useSelector(state => state.lessonsList.firstlessonList)
 
@@ -87,13 +87,35 @@ function TutorRow(props) {
                         'Authorization': `Bearer ${localStorage.getItem('accesstoken')}`
                     }
                 })
+                
+                //current Date
+                const currentDate = new Date();
+                const currentDateTimeString = currentDate.toISOString()
+
+                const data = {
+                    lesson_id: response.data.lesson_id,
+                    tutor_id: props.tutor.id,
+                    start_time: response.data.start_time,
+                    end_time: response.data.end_time,
+                    lesson_topic: scheduleData.lessonTopic,
+                    lesson_difficulty: scheduleData.lessonDifficulty,
+                    duration: scheduleData.lessonLength,
+                    Accepted: -1,
+                    language: scheduleData.language,
+                    pfp: learnerData.pic,
+                    firstname: learnerData.firstname,
+                    lastname: learnerData.lastname,
+                    scheduling_date: currentDateTimeString
+
+                }
                 socket.current = io('http://localhost:5000', {
                     auth: {
                     token: localStorage.getItem('accesstoken')
                     }
                 })
-                socket.current.emit('createRoom', (learnerId))
-                socket.current.emit('notification', sentData)
+                console.log("learnerId: ", learnerData.id);
+                socket.current.emit('createRoom', (learnerData.id))
+                socket.current.emit('notification', data)
 
                 console.log("socket: ", socket.current);
  
@@ -117,18 +139,19 @@ function TutorRow(props) {
                     const formattedDate = lessonDate.toLocaleDateString('en-US', options)
                     if (formattedDate === scheduleData.selectedDate){
 
-                        console.log("lessonDate:", lessonDate)
+
+                        // console.log("lessonDate:", lessonDate)
                         const hours = lessonDate.getHours().toString().padStart(2, '0')
                         const minutes = lessonDate.getMinutes().toString().padStart(2, '0')
-                        console.log(hours);
+                        /*console.log(hours);
                         console.log("minutes", minutes);
                         console.log("hours eli hatinehom: ", formattedHours, " hours taa existing lesson: ", hours);
                         console.log("hours condition", formattedHours  === hours);
-                        console.log("minutes condition: ", formattedMinutes < minutes);
+                        console.log("minutes condition: ", formattedMinutes < minutes)*/
 
                         //compare the hours ken eli jebneh jdid 9bal eli deja mawjoud wa9tha nekhdou el index
                         if(formattedHours < hours  ) {
-                            console.log("formattedHours < hours", formattedHours, " < ", hours  );
+                            //console.log("formattedHours < hours", formattedHours, " < ", hours  );
                             index = i
                         }else if(formattedHours === hours) {
                             if(formattedMinutes < minutes) {
@@ -142,47 +165,6 @@ function TutorRow(props) {
                     }
                 }
 
-                const date = scheduleData.selectedDate
-                const month = date.split('/')[0]
-                const day = date.split('/')[1]
-                const year = date.split('/')[2]
-                const [hours, minutes] = normalTime.split(':').map(Number);
-
-                const lessonDuration = parseInt(scheduleData.lessonLength.split(' ')[0]);
-
-
-                // Calculate adjusted hours and minutes
-                let adjustedHours = hours + Math.floor((minutes + lessonDuration) / 60);
-                let adjustedMinutes = (minutes + lessonDuration) % 60
-
-                // Adjust date if necessary
-                let endDate = new Date(Date.UTC(year, month - 1, day, adjustedHours, adjustedMinutes))
-
-                // Format the adjusted enddate to "YYYY-MM-DD HH:MM:SS" format for MySQL
-                const formattedEndDate = endDate.toISOString().slice(0, 19).replace('T', ' ')
-
-
-                // Format the adjusted startdate to "YYYY-MM-DD HH:MM:SS" format for MySQL
-                const formattedBeginDate = year+"-"+month+"-"+day+" "+hours+":"+minutes+":"+"00"
-
-                //current Date
-                const currentDate = new Date();
-                const currentDateTimeString = currentDate.toISOString()
-                
-
-                const data = {
-                    lesson_id: lessonList[lessonList.length-1]? lessonList[lessonList.length-1].lesson_id+1 : 0, //giving the data to be appended a new id
-                    tutor_id: props.tutor.id,
-                    private_learner_id: learnerId,
-                    start_time: formattedBeginDate,
-                    end_time: formattedEndDate,
-                    scheduling_date: currentDateTimeString,
-                    lesson_topic: scheduleData.lessonTopic,
-                    lesson_difficulty: scheduleData.lessonDifficulty,
-                    duration: scheduleData.lessonLength,
-                    language: scheduleData.language,
-                    Accepted: -1
-                }
 
                 console.log("data: ", data);
 

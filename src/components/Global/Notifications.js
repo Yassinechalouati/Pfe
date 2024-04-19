@@ -40,7 +40,6 @@ function Notifications(props) {
                 setIsNotificationEmpty(notifications.data.message.length===0) //indicated wether there are notifications or not
                 dispatch(setNotificationsList(notifications.data.message))
                 const filteredNotifications = notifications.data.message.filter(item => item.Accepted === -1)//pending notifications
-                console.log("length: ",filteredNotifications.length);
                 dispatch(setPendingNotificationNumber(filteredNotifications.length))
                 setLoading(false)
             }catch(err) {
@@ -101,16 +100,19 @@ function Notifications(props) {
 
         }
     
-
-        
-        console.log("option: ",option)
     return (
         <div ref={notifRef} className="relative py-1">
             <div className="cursor-pointer" onClick={handleNotifications}>
-                <span className="absolute hidden lg:flex h-3 w-3 top-0 right-0">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-elements opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-3 w-3 bg-elements"></span>
-                </span>
+                {
+                    newNotifications>0?
+                    <span className="absolute hidden lg:flex h-3 w-3 top-0 right-0">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-elements opacity-75"></span>
+                        <span className="relative inline-flex rounded-full h-3 w-3 bg-elements"></span>
+                    </span>
+                    :
+                    null
+                }
+                
                 <IoNotifications
                 className="text-darkg hidden lg:block" 
                 size="22"></IoNotifications>

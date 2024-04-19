@@ -6,7 +6,8 @@ import ElapsedTime from "./ElapsedTime";
 import { handleLessonDifficultyColor } from "./functions";
 import { removeNotification, setPendingNotificationNumber, updateNotification } from "../../state/slices/NotificationSlice";
 import { useDispatch, useSelector } from 'react-redux'
-import axiosInstance from "../../interceptors/axiosInterceptor";
+import axiosInstance from "../../interceptors/axiosInterceptor"
+import socket from "../../interceptors/socketInterceptor";
 
 function Notification(props) {
     
@@ -14,6 +15,7 @@ function Notification(props) {
     const [imageUrl, setImageUrl] = useState(null);
     const dispatch = useDispatch()
     const newNotifications = useSelector(state => state.notificationsData.pendingNotificationNumber)
+
 
 
     // Format the date to display as "Month Day, Year"
@@ -44,7 +46,7 @@ function Notification(props) {
     }, [props.notification.pfp, props.notification.private_learner_id])
 
     //make api call to confirm or reject lesson
-    const notificationFeedBack = async (accepted) => {
+    const notificationFeedBack = async (accepted, eventName) => {
         return new Promise((resolve, reject) => {
             axiosInstance.post('http://localhost:5000/tutor/NotificationFeedback', {
                 lessonId: props.notification.lesson_id,
@@ -56,6 +58,11 @@ function Notification(props) {
             })
             .then((response) => {
                 console.log("response from NotificationFeedBack: ", response.data.message)
+                //sending notification to learner
+                socket.emit(eventName, {
+                    lesson: props.notification.lesson_id,
+                    learnerId: props.notification.private_learner_id
+                })
                 resolve("Accepted")
             })
             .catch((err) => {
@@ -68,7 +75,7 @@ function Notification(props) {
 
     const handleAcceptLesson = async () => {
         try {
-            const result = await notificationFeedBack(1)
+            const result = await notificationFeedBack(1, 'approveLesson')
             dispatch(updateNotification({ notification: props.notification, accepted: 1}))
             dispatch(setPendingNotificationNumber(newNotifications-1))
             console.log(result);
@@ -79,9 +86,10 @@ function Notification(props) {
     
     const handleRejectLesson = async () => {
         try{
-            const result = await notificationFeedBack(0)
+            const result = await notificationFeedBack(0, 'cancelLesson')
             dispatch(removeNotification(props.notification.lesson_id))
             dispatch(setPendingNotificationNumber(newNotifications-1))
+            
             console.log(result);
         }catch(err) {
             console.log(err)
@@ -95,7 +103,7 @@ function Notification(props) {
                 <div className="text-sm">
                     {
                         props.notification.Accepted === -1? 
-                        <span className="text-darkg"><span className="font-semibold text-black">{props.notification.firstname+" "+props.notification.lastname}</span> wants to book <span className="font-bold text-elements">{props.notification.lesson_topic}</span> lesson with you <span className="">from</span> <span className="text-black font-bold">{timeFormatter(props.notification.start_time)}</span> <span className="font-bold text-black">{timeFormatter(props.notification.end_time)}</span> on <span className="text-black font-semibold">{handleTimeFormat()}.</span></span>
+                        <span className="text-darkg"><span className="font-semibold text-black">{props.notification.firstname+" "+props.notification.lastname}</span> wants to book <span className="font-bold text-elements">{props.notification.lesson_topic}</span> lesson with you <span className="">from</span> <span className="text-black font-bold">{timeFormatter(props.notification.start_time)}</span> to <span className="font-bold text-black">{timeFormatter(props.notification.end_time)}</span> on <span className="text-black font-semibold">{handleTimeFormat()}.</span></span>
                         :
                         (props.notification.Accepted !==0?
                         <span className="text-darkg"> 

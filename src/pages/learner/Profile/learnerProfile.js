@@ -10,6 +10,7 @@ import Body from '../../../components/learner profile/Body'
 import LinguaBuddy from "./LinguaBuddy";
 import Settings from "../../../components/Global/Settings";
 import BigCalendar from '../../../components/learner profile/BigCalendar'
+import socket from "../../../interceptors/socketInterceptor";
 
 
 function LearnerProfile() {
@@ -26,7 +27,7 @@ function LearnerProfile() {
                     }
                 });
                 
-                console.log(response.data.message);
+                console.log(response.data.message)
                 // Dispatch actions sequentially
                 await Promise.all([
                     dispatch(setId(response.data.message.id)),
@@ -44,6 +45,8 @@ function LearnerProfile() {
                     dispatch(setComfortLevel(response.data.message.comfortlevel)),
                     dispatch(setBirthday(response.data.message.Birthday))
                 ]);
+
+                socket.emit('createRoom', response.data.message.id)
                 dispatch(setIsLoading(false))
             } catch (error) {
                 console.log(error);
@@ -53,6 +56,30 @@ function LearnerProfile() {
         
         fetchData();
     }, []);
+
+
+    useEffect(() => {
+        // Listener for incoming notifications
+        const handleCancelLesson = (data_) => {
+            
+            console.log("remove lesson Notification")
+        }
+
+        const handleApproveLesson = (data_) => {
+            console.log("approve lesson Notificaiton")
+        }
+        socket.on('cancelLesson', handleCancelLesson)
+        socket.on('approveLesson', handleApproveLesson)
+
+         // Clean up function to remove event listener when component unmounts
+         return () => {
+            socket.off('approveLesson', handleApproveLesson)
+            socket.off('cancelLesson', handleCancelLesson)
+        };
+
+    }, [])
+
+
 
     
     const bodyContent = {

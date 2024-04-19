@@ -18,11 +18,26 @@ const socketHandler = (io) => {
             socket.join(roomId) 
         })        
         
+        //handling the real time tutor notification when learner books lesson
         socket.on('notification', (data) => {
             console.log("incoming notification data", data);
-            console.log("emitting notification now ", data.tutorId);
-            io.to(data.tutorId).emit('Notification incoming', { notification: data});
+            console.log("emitting notification now ", data.tutor_id);
+            io.to(data.tutor_id).emit('Notification incoming', { notification: data});
         })
+
+        socket.on('cancelLesson', (data) => {
+            console.log("removing lesson", data)
+            io.to(data.learnerId).emit('Notification incoming', { removedLesson: data.lesson});
+
+        })
+
+        socket.on('approveLesson', (data) => {
+            console.log("approve lesson", data)
+            io.to(data.learnerId).emit('Notification incoming', { approvedLesson: data.lesson});
+
+        })
+
+
         // Handle email verification event
         socket.on('verifyEmail', async (token, id) => {
                 console.log("id: ", id);
