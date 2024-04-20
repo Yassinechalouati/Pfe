@@ -2,7 +2,7 @@ import NavBar from "../../../components/learner profile/NavBar";
 import axiosInstance from "../../../interceptors/axiosInterceptor";
 import { useEffect } from "react";
 import { setId, setIsLoading, setBirthday, setComfortLevel, setCountry, setEmail, setFirstName, setFocusThemes, setGoals, setHasPassword, setLastName, setLife_Goals, setPic, setTel, setTopics } from "../../../state/slices/userSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import CoursesSearch from "./CoursesSearch";
 import TutorsSearch from "./TutorsSearch";
 import ClassroomsSearch from './ClassroomsSearch'
@@ -10,11 +10,18 @@ import Body from '../../../components/learner profile/Body'
 import LinguaBuddy from "./LinguaBuddy";
 import Settings from "../../../components/Global/Settings";
 import BigCalendar from '../../../components/learner profile/BigCalendar'
-import socket from "../../../interceptors/socketInterceptor";
+import io from 'socket.io-client';
+
 
 
 function LearnerProfile() {
     const dispatch = useDispatch()
+    const learnerId = useSelector(state => state.userData.id)
+    const socket = io('http://localhost:5000', {
+            auth: {
+                token: localStorage.getItem('accesstoken')
+            }
+            });
 
     useEffect(() => {
         const fetchData = async () => {
@@ -45,8 +52,6 @@ function LearnerProfile() {
                     dispatch(setComfortLevel(response.data.message.comfortlevel)),
                     dispatch(setBirthday(response.data.message.Birthday))
                 ]);
-
-                socket.emit('createRoom', response.data.message.id)
                 dispatch(setIsLoading(false))
             } catch (error) {
                 console.log(error);
@@ -58,18 +63,26 @@ function LearnerProfile() {
     }, []);
 
 
-    useEffect(() => {
-        // Listener for incoming notifications
-        const handleCancelLesson = (data_) => {
-            
-            console.log("remove lesson Notification")
-        }
+    const handleCancelLesson = (data_) => {
+                
+        console.log("remove lesson Notification")
+    }
 
-        const handleApproveLesson = (data_) => {
-            console.log("approve lesson Notificaiton")
+    const handleApproveLesson = (data_) => {
+        const lessonId= data_.approvedLesson
+        console.log("approve lesson Notificaiton")
+    }
+
+    useEffect(() => {
+        if(learnerId) {
+            console.log("learnerId: ", learnerId);
+            socket.emit('createRoom', learnerId)
+            // Listener for incoming notifications
+            
+            socket.on('Cancel Notification', handleCancelLesson)
+            socket.on('Approvement Notification', handleApproveLesson)
         }
-        socket.on('cancelLesson', handleCancelLesson)
-        socket.on('approveLesson', handleApproveLesson)
+        
 
          // Clean up function to remove event listener when component unmounts
          return () => {
@@ -77,7 +90,7 @@ function LearnerProfile() {
             socket.off('cancelLesson', handleCancelLesson)
         };
 
-    }, [])
+    }, [learnerId])
 
 
 

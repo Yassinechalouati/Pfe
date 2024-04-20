@@ -9,7 +9,6 @@ import Courses from "./Courses";
 import Exams from "./Exams";
 import Feed from "./Feed";
 import { fetchCountryData } from "../../components/Global/functions"
-import socket from '../../interceptors/socketInterceptor'
 import {
     setFirstName, 
     setLastName, 
@@ -32,9 +31,17 @@ import {
 
 } from '../../state/slices/tutorSlice'
 import { fetchFile } from "../../components/Global/functions";
-import { addNotification, incrementNumberOfNotificaitions } from "../../state/slices/NotificationSlice";
+import { addNotification, incrementNumberOfNotificaitions } from "../../state/slices/NotificationSlice"
+import io from 'socket.io-client';
+
 
 function TutorProfile() {
+
+    const socket = io('http://localhost:5000', {
+    auth: {
+        token: localStorage.getItem('accesstoken')
+    }
+    });
 
     const dispatch = useDispatch()
 
@@ -72,8 +79,6 @@ function TutorProfile() {
                     dispatch(setTel(response.data.message.tel)),
                     dispatch(setBirthday(response.data.message.Birthday)),
                 ])
-                socket.emit('createRoom', response.data.message.id)
-
                 fetchFile(response.data.message.pfp, "images", "tutor", response.data.message.id)
                 .then(async (resp )=> {
                     console.log(response.data.message);
@@ -96,29 +101,36 @@ function TutorProfile() {
         
         fetchData();
     }, []);
+
+    const handleNotification = (data_) => {
+        //if there are already notifications we add it
+        console.log("adding notification");
+        dispatch(addNotification(data_.notification))
+        console.log("incrementing number of notifications");
+
+
+        console.log("number of notifications: ", pendingNotificationNumber+1);
+        //if there isn't we just update that there's a new notification
+        dispatch(incrementNumberOfNotificaitions())
+    }
     
 
     useEffect(() => {
-        // Listener for incoming notifications
-        const handleNotification = (data_) => {
-            //if there are already notifications we add it
-            console.log("adding notification");
-            dispatch(addNotification(data_.notification))
-            console.log("incrementing number of notifications");
+        if(tutorData.id && socket) {
+            console.log("condition true", socket);
 
-
-            console.log("number of notifications: ", pendingNotificationNumber+1);
-            //if there isn't we just update that there's a new notification
-            dispatch(incrementNumberOfNotificaitions())
+            socket.emit('createRoom', tutorData.id)
+            // Listener for incoming notifications
+            
+            socket.on('Notification incoming', handleNotification)
         }
-        socket.on('Notification incoming', handleNotification)
 
          // Clean up function to remove event listener when component unmounts
          return () => {
             socket.off('Notification incoming', handleNotification);
         };
 
-    }, [])
+    }, [tutorData.id])
 
 
     const bodyContent = {

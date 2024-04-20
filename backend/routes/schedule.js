@@ -36,7 +36,6 @@ router.post('/scheduleLesson', auth, roleCheck(["Learner"]), (req, res) => {
             console.log(err);
             res.status(500).json({ message: "Internal Server Error" });
         } else {
-            console.log("resulttt is :", result.insertId)
             res.status(200).json({lesson_id: result.insertId, start_time: formattedBeginDate, end_time: formattedEndDate}); // Assuming you want to return the result of the query
         }
     })

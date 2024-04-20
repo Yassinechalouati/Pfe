@@ -27,13 +27,13 @@ const socketHandler = (io) => {
 
         socket.on('cancelLesson', (data) => {
             console.log("removing lesson", data)
-            io.to(data.learnerId).emit('Notification incoming', { removedLesson: data.lesson});
+            io.to(data.learnerId).emit('Cancel Notification', { removedLesson: data.lesson});
 
         })
 
         socket.on('approveLesson', (data) => {
             console.log("approve lesson", data)
-            io.to(data.learnerId).emit('Notification incoming', { approvedLesson: data.lesson});
+            io.to(data.learnerId).emit('Approvement Notification', { approvedLesson: data.lesson});
 
         })
 

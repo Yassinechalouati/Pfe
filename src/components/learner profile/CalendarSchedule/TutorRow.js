@@ -105,7 +105,8 @@ function TutorRow(props) {
                     pfp: learnerData.pic,
                     firstname: learnerData.firstname,
                     lastname: learnerData.lastname,
-                    scheduling_date: currentDateTimeString
+                    scheduling_date: currentDateTimeString,
+                    private_learner_id: learnerData.id
 
                 }
                 socket.current = io('http://localhost:5000', {
@@ -114,7 +115,6 @@ function TutorRow(props) {
                     }
                 })
                 console.log("learnerId: ", learnerData.id);
-                socket.current.emit('createRoom', (learnerData.id))
                 socket.current.emit('notification', data)
 
                 console.log("socket: ", socket.current);
