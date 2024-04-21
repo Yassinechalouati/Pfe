@@ -1,5 +1,4 @@
-import { IoChatbubbles } from "react-icons/io5";
-import { IoNotifications } from "react-icons/io5";
+import { IoChatbubbles } from "react-icons/io5"
 import { IoMdCalendar } from "react-icons/io";
 import { BsRobot } from "react-icons/bs";
 import { IoMenu } from "react-icons/io5";
@@ -8,7 +7,7 @@ import Drawer from "./Drawer";
 import { useSelector } from "react-redux";
 import { NavLink } from 'react-router-dom';
 import DropdownMenu from "./DropdownMenu";
-import Notifications from "../Global/Notifications";
+import Notifications from "./LessonNotifications";
 
 
  

@@ -2,7 +2,7 @@ import Settings from "../../components/Global/Settings";
 import TutorNavBar from "../../components/tutor profile/NavBar";
 import LinguaBuddy from "../learner/Profile/LinguaBuddy";
 import axiosInstance from '../../interceptors/axiosInterceptor'
-import { useEffect, useRef } from "react";
+import { useEffect} from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Classrooms from "./Classrooms";
 import Courses from "./Courses";
@@ -32,16 +32,9 @@ import {
 } from '../../state/slices/tutorSlice'
 import { fetchFile } from "../../components/Global/functions";
 import { addNotification, incrementNumberOfNotificaitions } from "../../state/slices/NotificationSlice"
-import io from 'socket.io-client';
-
+import io from 'socket.io-client'
 
 function TutorProfile() {
-
-    const socket = io('http://localhost:5000', {
-    auth: {
-        token: localStorage.getItem('accesstoken')
-    }
-    });
 
     const dispatch = useDispatch()
 
@@ -116,20 +109,25 @@ function TutorProfile() {
     
 
     useEffect(() => {
-        if(tutorData.id && socket) {
+        if(tutorData.id) {
+            const socket = io('http://localhost:5000', {
+            auth: {
+                token: localStorage.getItem('accesstoken')
+            }
+            });
             console.log("condition true", socket);
 
             socket.emit('createRoom', tutorData.id)
             // Listener for incoming notifications
             
             socket.on('Notification incoming', handleNotification)
+            // Clean up function to remove event listener when component unmounts
+         return () => {
+            socket.disconnect();
+          }
         }
 
-         // Clean up function to remove event listener when component unmounts
-         return () => {
-            socket.off('Notification incoming', handleNotification);
-        };
-
+         
     }, [tutorData.id])
 
 

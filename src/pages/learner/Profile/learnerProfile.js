@@ -10,18 +10,13 @@ import Body from '../../../components/learner profile/Body'
 import LinguaBuddy from "./LinguaBuddy";
 import Settings from "../../../components/Global/Settings";
 import BigCalendar from '../../../components/learner profile/BigCalendar'
-import io from 'socket.io-client';
+import socket from '../../../interceptors/socketInterceptor'
 
 
 
 function LearnerProfile() {
     const dispatch = useDispatch()
     const learnerId = useSelector(state => state.userData.id)
-    const socket = io('http://localhost:5000', {
-            auth: {
-                token: localStorage.getItem('accesstoken')
-            }
-            });
 
     useEffect(() => {
         const fetchData = async () => {

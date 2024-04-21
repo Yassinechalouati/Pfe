@@ -25,6 +25,7 @@ async function refreshToken() {
     
     // Update the access token in local storage
     localStorage.setItem('accesstoken', newAccessToken);
+    console.log("new Access Token generated from socketinterceptor");
     
     return newAccessToken;
   } catch (error) {
@@ -40,7 +41,7 @@ const socket = io('http://localhost:5000', {
 
 // Intercept socket connection and authenticate
 socket.on('connection', async () => {
-  console.log("in conneciton");
+  console.log("in connection");
   const accessToken = localStorage.getItem('accesstoken');
   if (accessToken) {
     // Check if the access token is expired or not

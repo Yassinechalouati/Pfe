@@ -82,7 +82,7 @@ function NavBar() {
                             <IoMenu onClick={handleDrawer} size="22" color="white"></IoMenu>
                         </div>
                         <IoChatbubbles className="cursor-pointer text-darkg hidden lg:block" size="22"></IoChatbubbles>
-                        <Notifications></Notifications>
+                        <Notifications role ="Learner"></Notifications>
                         <NavLink to="/tutor/profile/Calendar">
                             <IoMdCalendar className="cursor-pointer hidden lg:block text-darkg" size="22"></IoMdCalendar>
                         </NavLink>
@@ -94,6 +94,7 @@ function NavBar() {
                                 <img 
                                     src={tutorData.displayableImage}
                                     alt="profilepicture" 
+                                    referrerPolicy="no-referrer"
                                     className="cursor-pointer hidden lg:block rounded-full min-w-10 min-h-10  w-12 h-12 object-cover"
                                     onClick={toggleDropdown}
                                 />

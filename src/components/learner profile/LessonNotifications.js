@@ -2,12 +2,12 @@ import Notification from "./Notification"
 import { useEffect, useRef, useState } from "react"
 import { IoNotifications } from "react-icons/io5"
 import axiosInstance from "../../interceptors/axiosInterceptor"
-import { NotificationLoading } from "./LoadingCards"
+import { NotificationLoading } from "../Global/LoadingCards"
 import { useSelector, useDispatch } from "react-redux"
 import { setNotificationsList, setPendingNotificationNumber } from '../../state/slices/NotificationSlice'
 
 
-function Notifications(props) {
+function LessonNotifications(props) {
     const notifRef = useRef(null)
     const dispatch = useDispatch()
     
@@ -22,6 +22,7 @@ function Notifications(props) {
         "All", 
         "Pending",
         "Accepted",
+        "Rejected"
     ]
     
 
@@ -30,7 +31,7 @@ function Notifications(props) {
         if(!notifications){
             try {
                 setLoading(true)
-                const notifications = await axiosInstance.post('http://localhost:5000/tutor/getNotifications', {
+                const notifications = await axiosInstance.post('http://localhost:5000/learner/getNotifications', {
     
                 }, {
                     headers: {
@@ -80,7 +81,7 @@ function Notifications(props) {
                 list = notificationsList.map((notification, index) => {
                     return <Notification notification={notification} key={index}></Notification>
                 })
-            }else if(option === 1) {//Pending Notifications
+            }else if(option === 1) {//Pending notificaitons
                 const pendingNotification = notificationsList.filter(notification => notification.Accepted === -1)
                 list = pendingNotification.map((notification, index) => {
                     return <Notification notification={notification} key={index}></Notification>
@@ -88,6 +89,12 @@ function Notifications(props) {
             }else if(option === 2) {//Accepted Notifications
                 const acceptedNotifications = notificationsList.filter(notification => notification.Accepted === 1)
                 list = acceptedNotifications.map((notification, index) => {
+                    return <Notification notification={notification} key={index}></Notification>
+                })
+            }
+            else if(option === 3) {//Rejected Notifications
+                const rejectedNotifications = notificationsList.filter(notification => notification.Accepted === 0)
+                list = rejectedNotifications.map((notification, index) => {
                     return <Notification notification={notification} key={index}></Notification>
                 })
             }
@@ -170,4 +177,4 @@ function Notifications(props) {
     );
 }
 
-export default Notifications;
+export default LessonNotifications

@@ -7,7 +7,7 @@ import { handleLessonDifficultyColor } from "./functions";
 import { removeNotification, setPendingNotificationNumber, updateNotification } from "../../state/slices/NotificationSlice";
 import { useDispatch, useSelector } from 'react-redux'
 import axiosInstance from "../../interceptors/axiosInterceptor"
-import socket from "../../interceptors/socketInterceptor";
+import socket from '../../interceptors/socketInterceptor'
 
 function Notification(props) {
     
@@ -15,7 +15,6 @@ function Notification(props) {
     const [imageUrl, setImageUrl] = useState(null);
     const dispatch = useDispatch()
     const newNotifications = useSelector(state => state.notificationsData.pendingNotificationNumber)
-
 
 
     // Format the date to display as "Month Day, Year"
@@ -33,7 +32,7 @@ function Notification(props) {
             try {
                 let imageUrl = props.notification.pfp;
                 if (!isGoogleProfilePicture(props.notification.pfp)) {
-                    imageUrl = await fetchFile(props.notification.pfp, 'image', 'Learner', props.notification.private_learner_id);
+                    imageUrl = await fetchFile(props.notification.pfp, 'images', 'Learner', props.notification.private_learner_id);
                 }
                 setImageUrl(imageUrl);
             } catch (err) {
@@ -43,7 +42,7 @@ function Notification(props) {
         };
     
         fetchImageUrl();
-    }, [props.notification.pfp, props.notification.private_learner_id])
+    }, [])
 
     //make api call to confirm or reject lesson
     const notificationFeedBack = async (accepted, eventName) => {
@@ -98,7 +97,11 @@ function Notification(props) {
 
     return (
          <div className="flex p-2 space-x-2 hover:bg-backg rounded-lg items-center py-4 border-b">
-            <img alt="pfp" src={imageUrl} className="w-16 rounded-full self-start h-16 object-cover"></img>
+            <img 
+            alt="pfp" 
+            src={imageUrl}
+            referrerPolicy="no-referrer"
+            className="min-w-16 max-w-16 max-h-16 rounded-full self-start min-h-16 object-cover"></img>
             <div className="flex flex-col self-start space-y-1">
                 <div className="text-sm">
                     {
