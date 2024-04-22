@@ -10,8 +10,7 @@ import Body from '../../../components/learner profile/Body'
 import LinguaBuddy from "./LinguaBuddy";
 import Settings from "../../../components/Global/Settings";
 import BigCalendar from '../../../components/learner profile/BigCalendar'
-import socket from '../../../interceptors/socketInterceptor'
-
+import io from 'socket.io-client'
 
 
 function LearnerProfile() {
@@ -70,21 +69,22 @@ function LearnerProfile() {
 
     useEffect(() => {
         if(learnerId) {
-            console.log("learnerId: ", learnerId);
+            const socket = io('http://localhost:5000', {
+            auth: {
+                token: localStorage.getItem('accesstoken')
+            }
+            })
+
+            console.log("learnerId: ", learnerId)
             socket.emit('createRoom', learnerId)
             // Listener for incoming notifications
             
             socket.on('Cancel Notification', handleCancelLesson)
             socket.on('Approvement Notification', handleApproveLesson)
+            return () => {
+                socket.disconnect();
+              }
         }
-        
-
-         // Clean up function to remove event listener when component unmounts
-         return () => {
-            socket.off('approveLesson', handleApproveLesson)
-            socket.off('cancelLesson', handleCancelLesson)
-        };
-
     }, [learnerId])
 
 

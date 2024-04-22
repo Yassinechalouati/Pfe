@@ -205,7 +205,7 @@ export function RowCardsLoading () {
 
 
 export function NotificationLoading() {
-    return (<div key="RowLOading" className="bg-white rounded-2xl max-w-sm p-4 w-full mx-auto">
+    return (<div key="RowLOading" className="bg-white z-40 rounded-2xl max-w-sm p-4 w-full mx-auto">
         <div className="animate-pulse flex items-center space-x-4">
             <div className="rounded-full bg-darkg w-16 h-16 self-center"></div>
             <div className="flex-1 space-y-6 py-1">

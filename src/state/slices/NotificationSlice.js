@@ -3,6 +3,9 @@ import { createSlice } from '@reduxjs/toolkit'
 const initialState ={
     notificationsList: [],
     pendingNotificationNumber: 0,
+    pageNumber: 1, //indicator for pagination
+    maxPageNumber: 0, //number of pages indicator
+    
 
 }
 
@@ -13,6 +16,15 @@ export const notificationSlice = createSlice({
     reducers : {
         setNotificationsList: (state, action ) => {
             state.notificationsList = action.payload
+        },
+        appendNotifications: (state, action ) => {
+            state.notificationsList = [...state.notificationsList, ...action.payload]
+        },
+        setPageNumber: (state, action) => {
+            state.pageNumber = action.payload
+        },
+        setMaxPageNumber: (state, action) => {
+            state.maxPageNumber = action.payload
         },
         updateNotification: (state, action) => {
             const { notification, accepted } = action.payload
@@ -65,6 +77,9 @@ export const {
     removeNotification,
     setPendingNotificationNumber,
     addNotification,
-    incrementNumberOfNotificaitions
+    incrementNumberOfNotificaitions,
+    setPageNumber, 
+    setMaxPageNumber,
+    appendNotifications
 } = notificationSlice.actions
 export default notificationSlice.reducer

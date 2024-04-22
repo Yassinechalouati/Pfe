@@ -5,12 +5,12 @@ import axiosInstance from "../../interceptors/axiosInterceptor"
 import { NotificationLoading } from "../Global/LoadingCards"
 import { useSelector, useDispatch } from "react-redux"
 import { setNotificationsList, setPendingNotificationNumber } from '../../state/slices/NotificationSlice'
+import ShowMoreNotifications from "./ShowMoreNotifications"
 
 
 function LessonNotifications(props) {
     const notifRef = useRef(null)
     const dispatch = useDispatch()
-    
     const [notifications, setNotifications] = useState(false)
     const notificationsList = useSelector(state=> state.notificationsData.notificationsList)
     const newNotifications = useSelector(state => state.notificationsData.pendingNotificationNumber)
@@ -26,21 +26,25 @@ function LessonNotifications(props) {
     ]
     
 
+
     //handle notifications visibility and api calls 
-    const handleNotifications = async () => {
+    const handleNotifications = async (Accepted) => {
         if(!notifications){
             try {
                 setLoading(true)
                 const notifications = await axiosInstance.post('http://localhost:5000/learner/getNotifications', {
-    
+                    page: 1,
+                    pageSize: 5,
+                    Accepted: Accepted
                 }, {
                     headers: {
                         'Authorization': `Bearer ${localStorage.getItem('accesstoken')}`
                     }
                 })
-                setIsNotificationEmpty(notifications.data.message.length===0) //indicated wether there are notifications or not
-                dispatch(setNotificationsList(notifications.data.message))
-                const filteredNotifications = notifications.data.message.filter(item => item.Accepted === -1)//pending notifications
+                console.log("notification: ", notifications.data.notification)
+                setIsNotificationEmpty(notifications.data.notification.length===0) //indicated wether there are notifications or not
+                dispatch(setNotificationsList(notifications.data.notification))
+                const filteredNotifications = notifications.data.notification.filter(item => item.Accepted === -1)//pending notifications
                 dispatch(setPendingNotificationNumber(filteredNotifications.length))
                 setLoading(false)
             }catch(err) {
@@ -69,47 +73,60 @@ function LessonNotifications(props) {
       }, [])
 
       //handling the filter option of the notificaton (All, Accepted, Requests)
-      const handleOptions = (e) => {
-        setOption(parseInt(e.target.value))
+      const handleOptions = async (e) => {
+        const value = parseInt(e.target.value)
+        setOption(value)
+        let accepted = ""
+        if(value ===1) {
+            accepted=-1
+        }else if (value === 2) {
+            accepted = 1
+        }else if ( value === 3){
+            accepted = 0
+        }
+        console.log("accepted: ", accepted);
+        try {
+            const notifications = await axiosInstance.post('http://localhost:5000/learner/getNotifications', {
+                page: 1,
+                pageSize: 5,
+                Accepted: accepted
+            }, {
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('accesstoken')}`
+                }
+            })
+            setIsNotificationEmpty(notifications.data.notification.length===0) //indicated wether there are notifications or not
+            if(accepted ===1 || !accepted ) {
+                dispatch(setNotificationsList(notifications.data.notification))
+                const filteredNotifications = notifications.data.notification.filter(item => item.Accepted === -1)//pending notifications
+                dispatch(setPendingNotificationNumber(filteredNotifications.length))
+            }
+            setLoading(false)
+        }catch (err) {
+            console.log(err)
+        }
       }
 
       //handling the list to return based on the option object
       const handleContent = () => {
-
-            let list = []
-            if(option === 0 ) {//All notifications
-                list = notificationsList.map((notification, index) => {
-                    return <Notification notification={notification} key={index}></Notification>
-                })
-            }else if(option === 1) {//Pending notificaitons
-                const pendingNotification = notificationsList.filter(notification => notification.Accepted === -1)
-                list = pendingNotification.map((notification, index) => {
-                    return <Notification notification={notification} key={index}></Notification>
-                })
-            }else if(option === 2) {//Accepted Notifications
-                const acceptedNotifications = notificationsList.filter(notification => notification.Accepted === 1)
-                list = acceptedNotifications.map((notification, index) => {
-                    return <Notification notification={notification} key={index}></Notification>
-                })
-            }
-            else if(option === 3) {//Rejected Notifications
-                const rejectedNotifications = notificationsList.filter(notification => notification.Accepted === 0)
-                list = rejectedNotifications.map((notification, index) => {
-                    return <Notification notification={notification} key={index}></Notification>
-                })
-            }
+        if(notificationsList) {
+            const list = notificationsList.map((notification, index) => {
+                return <Notification notification={notification} key={index}></Notification>
+            })
 
             //if the list is empty return the empty image else return the list
             return list.length ===0? 
             <img alt="empty" src="/no-data.png" className="w-64 h-64 m-auto object-cover"></img>
             :
             list
+            }
 
         }
+
     
     return (
         <div ref={notifRef} className="relative py-1">
-            <div className="cursor-pointer" onClick={handleNotifications}>
+            <div className="cursor-pointer" onClick={() => handleNotifications("")}>
                 {
                     newNotifications>0?
                     <span className="absolute hidden lg:flex h-3 w-3 top-0 right-0">
@@ -168,7 +185,12 @@ function LessonNotifications(props) {
                             isNotificationEmpty?
                             <img alt="empty" src="/no-data.png" className="w-64 h-64 m-auto object-cover"></img>
                             :
-                            handleContent()
+                            <>
+                            {
+                                handleContent()
+                            }
+                            <ShowMoreNotifications Accepted={option}></ShowMoreNotifications>
+                            </>
                         )
                     }
                 </div>

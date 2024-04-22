@@ -161,7 +161,14 @@ function Notifications(props) {
                             isNotificationEmpty?
                             <img alt="empty" src="/no-data.png" className="w-64 h-64 m-auto object-cover"></img>
                             :
-                            handleContent()
+                            <>
+                            {
+                                handleContent()
+                            }
+                            <div className="w-full text-center">
+                                <button className="cursor-pointer w-auto p-2 text-center underline text-xs text-darkg">Show more</button>
+                            </div>
+                            </>
                         )
                     }
                 </div>
