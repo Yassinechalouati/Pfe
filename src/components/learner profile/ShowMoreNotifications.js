@@ -9,15 +9,16 @@ function ShowMoreNotifications(props) {
 
     const handleShowMore = async() => {
         let accepted = ""
-        if(props.Accepted === 1) {
+        const Accepted = parseInt(props.Accepted)
+        if(Accepted === 1) {
             accepted = -1
-        }else if (props.Accepted === 2) {
+        }else if (Accepted === 2) {
             accepted = 1
-        }else if(props.Accepted === 3) {
+        }else if(Accepted === 3) {
             accepted = 0
         }
         try {
-            const notifications = await axiosInstance.post('http://localhost:5000/learner/getNotifications', {
+            const notifications = await axiosInstance.post(`http://localhost:5000/${props.role}/getNotifications`, {
                 page: pageNumber+1,//getting the next page
                 pageSize: 5,
                 Accepted: accepted
@@ -29,9 +30,8 @@ function ShowMoreNotifications(props) {
 
             dispatch(appendNotifications(notifications.data.notification))
             dispatch(setPageNumber(pageNumber+1))
-            if(maxPageNumber) {
-                dispatch(setMaxPageNumber(notifications.data.max))
-            }
+            dispatch(setMaxPageNumber(notifications.data.max))
+            
         }
         catch(err) {
             console.log("error", err)

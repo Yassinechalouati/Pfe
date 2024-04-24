@@ -4,7 +4,8 @@ import { IoNotifications } from "react-icons/io5"
 import axiosInstance from "../../interceptors/axiosInterceptor"
 import { NotificationLoading } from "./LoadingCards"
 import { useSelector, useDispatch } from "react-redux"
-import { setNotificationsList, setPendingNotificationNumber } from '../../state/slices/NotificationSlice'
+import { setNotificationsList, setPendingNotificationNumber, setMaxPageNumber, setPageNumber } from '../../state/slices/NotificationSlice'
+import ShowMoreNotifications from "../learner profile/ShowMoreNotifications"
 
 
 function Notifications(props) {
@@ -14,6 +15,7 @@ function Notifications(props) {
     const [notifications, setNotifications] = useState(false)
     const notificationsList = useSelector(state=> state.notificationsData.notificationsList)
     const newNotifications = useSelector(state => state.notificationsData.pendingNotificationNumber)
+    const maxPageNumber = useSelector(state => state.notificationsData.maxPageNumber)
     const [loading, setLoading] = useState(false)
     const [isNotificationEmpty, setIsNotificationEmpty] = useState(false)
     const [option, setOption] = useState(0)
@@ -22,24 +24,28 @@ function Notifications(props) {
         "All", 
         "Pending",
         "Accepted",
+        "Rejected"
     ]
     
 
     //handle notifications visibility and api calls 
-    const handleNotifications = async () => {
+    const handleNotifications = async (Accepted) => {
         if(!notifications){
             try {
                 setLoading(true)
                 const notifications = await axiosInstance.post('http://localhost:5000/tutor/getNotifications', {
-    
+                    page: 1,
+                    pageSize: 5,
+                    Accepted: Accepted
                 }, {
                     headers: {
                         'Authorization': `Bearer ${localStorage.getItem('accesstoken')}`
                     }
                 })
-                setIsNotificationEmpty(notifications.data.message.length===0) //indicated wether there are notifications or not
-                dispatch(setNotificationsList(notifications.data.message))
-                const filteredNotifications = notifications.data.message.filter(item => item.Accepted === -1)//pending notifications
+                setIsNotificationEmpty(notifications.data.notification.length===0) //indicated wether there are notifications or not
+                dispatch(setNotificationsList(notifications.data.notification))
+                dispatch(setMaxPageNumber(notifications.data.max))
+                const filteredNotifications = notifications.data.notification.filter(item => item.Accepted === -1)//pending notifications
                 dispatch(setPendingNotificationNumber(filteredNotifications.length))
                 setLoading(false)
             }catch(err) {
@@ -54,6 +60,8 @@ function Notifications(props) {
     const handleOutsideClick = (event) => {
         if (notifRef.current && !notifRef.current.contains(event.target)) {
             setNotifications(false)
+            dispatch(setPageNumber(1))
+            dispatch(setMaxPageNumber(0))
         }
     }
 
@@ -68,41 +76,60 @@ function Notifications(props) {
       }, [])
 
       //handling the filter option of the notificaton (All, Accepted, Requests)
-      const handleOptions = (e) => {
-        setOption(parseInt(e.target.value))
+      const handleOptions = async (e) => {
+        const value = parseInt(e.target.value)
+        setOption(value)
+        let accepted = ""
+        if(value === 1) {
+            accepted=-1
+        }else if (value === 2) {
+            accepted = 1
+        }
+        else if (value === 3) {
+            accepted = 0
+        }
+        console.log("accepted: ", accepted);
+        try {
+            const notifications = await axiosInstance.post('http://localhost:5000/tutor/getNotifications', {
+                page: 1,
+                pageSize: 5,
+                Accepted: accepted
+            }, {
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('accesstoken')}`
+                }
+            })
+            setIsNotificationEmpty(notifications.data.notification.length===0) //indicated wether there are notifications or not
+            dispatch(setNotificationsList(notifications.data.notification))
+            dispatch(setMaxPageNumber(notifications.data.max))
+            dispatch(setPageNumber(1))
+            dispatch(setMaxPageNumber(0))
+        }catch (err) {
+            console.log(err)
+        }
       }
 
-      //handling the list to return based on the option object
       const handleContent = () => {
-
-            let list = []
-            if(option === 0 ) {//All notifications
-                list = notificationsList.map((notification, index) => {
-                    return <Notification notification={notification} key={index}></Notification>
-                })
-            }else if(option === 1) {//Pending Notifications
-                const pendingNotification = notificationsList.filter(notification => notification.Accepted === -1)
-                list = pendingNotification.map((notification, index) => {
-                    return <Notification notification={notification} key={index}></Notification>
-                })
-            }else if(option === 2) {//Accepted Notifications
-                const acceptedNotifications = notificationsList.filter(notification => notification.Accepted === 1)
-                list = acceptedNotifications.map((notification, index) => {
-                    return <Notification notification={notification} key={index}></Notification>
-                })
-            }
+        if(notificationsList) {
+            const list = notificationsList.map((notification, index) => {
+                return <Notification notification={notification} key={index}></Notification>
+            })
 
             //if the list is empty return the empty image else return the list
             return list.length ===0? 
             <img alt="empty" src="/no-data.png" className="w-64 h-64 m-auto object-cover"></img>
             :
             list
+            }
 
         }
     
+        //console.log("hide showMore condition: ", notificationsList.length === maxPageNumber, " listLength: ", notificationsList.length, " maxPageNumber: ", maxPageNumber)
+
+
     return (
         <div ref={notifRef} className="relative py-1">
-            <div className="cursor-pointer" onClick={handleNotifications}>
+            <div className="cursor-pointer" onClick={() => handleNotifications("")}>
                 {
                     newNotifications>0?
                     <span className="absolute hidden lg:flex h-3 w-3 top-0 right-0">
@@ -130,16 +157,6 @@ function Notifications(props) {
                             notifiationFilterOption.map((optionn, index) => {
                             return (
                                 <div key={index} className="flex items-center space-x-1">
-                                    {
-                                        ( optionn === "All" || optionn === "Pending") && newNotifications?
-                                        <div className="min-w-5 min-h-3 p-[3px] rounded-full text-[10px] bg-button text-white flex items-center justify-center">
-                                            {
-                                                newNotifications
-                                            }
-                                        </div>
-                                        :
-                                        null
-                                    }
                                     <option onClick={handleOptions} className={`text-sm cursor-pointer ${option === index? "text-button font-bold border-b border-b-button" : "text-black"}`} value={index}>
                                         {optionn}
                                     </option>
@@ -165,9 +182,12 @@ function Notifications(props) {
                             {
                                 handleContent()
                             }
-                            <div className="w-full text-center">
-                                <button className="cursor-pointer w-auto p-2 text-center underline text-xs text-darkg">Show more</button>
-                            </div>
+                            {
+                                !isNotificationEmpty && notificationsList.length !== maxPageNumber ?
+                                <ShowMoreNotifications role="tutor" Accepted={option}></ShowMoreNotifications>
+                                :
+                                null
+                            }
                             </>
                         )
                     }

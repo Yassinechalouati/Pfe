@@ -7,8 +7,7 @@ import { handleLessonDifficultyColor } from "../Global/functions"
 function Notification(props) {
     
     //holding the picture
-    const [imageUrl, setImageUrl] = useState(null);
-
+    const [imageUrl, setImageUrl] = useState(null)
 
 
     // Format the date to display as "Month Day, Year"
@@ -26,7 +25,6 @@ function Notification(props) {
             try {
                 let imageUrl = props.notification.pfp;
                 if (!isGoogleProfilePicture(props.notification.pfp)) {
-                    console.log("it is google profile picture pfp:", props.notification.pfp, "id: ", props.notification.tutor_id);
                     imageUrl = await fetchFile(props.notification.pfp, 'images', 'tutor', props.notification.tutor_id);
                 }
                 setImageUrl(imageUrl);
@@ -41,11 +39,18 @@ function Notification(props) {
 
     return (
          <div className="flex p-2 space-x-2 hover:bg-backg rounded-lg items-center py-4 border-b">
-            <img 
-            alt="pfp" 
-            src={imageUrl}
-            referrerPolicy="no-referrer"
-            className="min-w-16 max-w-16 max-h-16 rounded-full self-start min-h-16 object-cover"></img>
+            {
+                imageUrl? 
+                <img 
+                alt="pfp" 
+                src={imageUrl}
+                referrerPolicy="no-referrer"
+                className="min-w-16 max-w-16 max-h-16 rounded-full self-start min-h-16 object-cover"></img>
+                : 
+                <div className="min-w-16 animate-pulse bg-darkg max-w-16 max-h-16 rounded-full self-start min-h-16 object-cover">
+                </div>
+            }
+           
             <div className="flex flex-col self-start space-y-1">
                 <div className="text-sm">
                     {

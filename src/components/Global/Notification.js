@@ -97,18 +97,24 @@ function Notification(props) {
 
     return (
          <div className="flex p-2 space-x-2 hover:bg-backg rounded-lg items-center py-4 border-b">
-            <img 
-            alt="pfp" 
-            src={imageUrl}
-            referrerPolicy="no-referrer"
-            className="min-w-16 max-w-16 max-h-16 rounded-full self-start min-h-16 object-cover"></img>
+            {
+                imageUrl? 
+                <img 
+                alt="pfp" 
+                src={imageUrl}
+                referrerPolicy="no-referrer"
+                className="min-w-16 max-w-16 max-h-16 rounded-full self-start min-h-16 object-cover"></img>
+                : 
+                <div className="min-w-16 animate-pulse bg-darkg max-w-16 max-h-16 rounded-full self-start min-h-16 object-cover">
+                </div>
+            }
             <div className="flex flex-col self-start space-y-1">
                 <div className="text-sm">
                     {
                         props.notification.Accepted === -1? 
                         <span className="text-darkg"><span className="font-semibold text-black">{props.notification.firstname+" "+props.notification.lastname}</span> wants to book <span className="font-bold text-elements">{props.notification.lesson_topic}</span> lesson with you <span className="">from</span> <span className="text-black font-bold">{timeFormatter(props.notification.start_time)}</span> to <span className="font-bold text-black">{timeFormatter(props.notification.end_time)}</span> on <span className="text-black font-semibold">{handleTimeFormat()}.</span></span>
                         :
-                        (props.notification.Accepted !==0?
+                        (props.notification.Accepted ===1?
                         <span className="text-darkg"> 
                             <span>You have <span className="font-bold text-elements">{props.notification.lesson_topic}</span> lesson with </span>
                             <span className="font-semibold text-black">{props.notification.firstname+" "+props.notification.lastname}</span>
@@ -120,7 +126,16 @@ function Notification(props) {
                             <span className="font-semibold text-black">{handleTimeFormat()}.</span>
                         </span>
                         :
-                        null)
+                        <span className="text-darkg"> 
+                            <span>You <span className="text-errortext font-bold">rejected</span> <span className="font-bold text-elements">{props.notification.lesson_topic}</span> lesson with </span>
+                            <span className="font-semibold text-black">{props.notification.firstname+" "+props.notification.lastname}</span>
+                            <span className=""> from </span>
+                            <span className="font-semibold text-black">{timeFormatter(props.notification.start_time)}</span>
+                            <span className=""> to </span>
+                            <span className="font-semibold text-black">{timeFormatter(props.notification.end_time)}</span>
+                            <span className=""> on </span>
+                            <span className="font-semibold text-black">{handleTimeFormat()}.</span>
+                        </span>)
                     }
                 </div>
                 <div className="flex space-x-2">

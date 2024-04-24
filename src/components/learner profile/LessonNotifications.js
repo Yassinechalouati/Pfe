@@ -4,8 +4,9 @@ import { IoNotifications } from "react-icons/io5"
 import axiosInstance from "../../interceptors/axiosInterceptor"
 import { NotificationLoading } from "../Global/LoadingCards"
 import { useSelector, useDispatch } from "react-redux"
-import { setNotificationsList, setPendingNotificationNumber } from '../../state/slices/NotificationSlice'
+import { setMaxPageNumber, setNotificationsList, setPendingNotificationNumber, setPageNumber } from '../../state/slices/NotificationSlice'
 import ShowMoreNotifications from "./ShowMoreNotifications"
+
 
 
 function LessonNotifications(props) {
@@ -17,6 +18,8 @@ function LessonNotifications(props) {
     const [loading, setLoading] = useState(false)
     const [isNotificationEmpty, setIsNotificationEmpty] = useState(false)
     const [option, setOption] = useState(0)
+    const maxPageNumber = useSelector(state => state.notificationsData.maxPageNumber)
+
 
     const notifiationFilterOption = [
         "All", 
@@ -44,6 +47,7 @@ function LessonNotifications(props) {
                 console.log("notification: ", notifications.data.notification)
                 setIsNotificationEmpty(notifications.data.notification.length===0) //indicated wether there are notifications or not
                 dispatch(setNotificationsList(notifications.data.notification))
+                dispatch(setMaxPageNumber(notifications.data.max))
                 const filteredNotifications = notifications.data.notification.filter(item => item.Accepted === -1)//pending notifications
                 dispatch(setPendingNotificationNumber(filteredNotifications.length))
                 setLoading(false)
@@ -59,6 +63,8 @@ function LessonNotifications(props) {
     const handleOutsideClick = (event) => {
         if (notifRef.current && !notifRef.current.contains(event.target)) {
             setNotifications(false)
+            dispatch(setPageNumber(1))
+            dispatch(setMaxPageNumber(0))
         }
     }
 
@@ -77,7 +83,7 @@ function LessonNotifications(props) {
         const value = parseInt(e.target.value)
         setOption(value)
         let accepted = ""
-        if(value ===1) {
+        if(value === 1) {
             accepted=-1
         }else if (value === 2) {
             accepted = 1
@@ -96,11 +102,9 @@ function LessonNotifications(props) {
                 }
             })
             setIsNotificationEmpty(notifications.data.notification.length===0) //indicated wether there are notifications or not
-            if(accepted ===1 || !accepted ) {
-                dispatch(setNotificationsList(notifications.data.notification))
-                const filteredNotifications = notifications.data.notification.filter(item => item.Accepted === -1)//pending notifications
-                dispatch(setPendingNotificationNumber(filteredNotifications.length))
-            }
+            dispatch(setNotificationsList(notifications.data.notification))
+            dispatch(setPageNumber(1))
+            dispatch(setMaxPageNumber(0))
             setLoading(false)
         }catch (err) {
             console.log(err)
@@ -123,7 +127,8 @@ function LessonNotifications(props) {
 
         }
 
-    
+        //console.log("hide showMore condition: ", notificationsList.length === maxPageNumber, " listLength: ", notificationsList.length, " maxPageNumber: ", maxPageNumber);
+        
     return (
         <div ref={notifRef} className="relative py-1">
             <div className="cursor-pointer" onClick={() => handleNotifications("")}>
@@ -154,16 +159,6 @@ function LessonNotifications(props) {
                             notifiationFilterOption.map((optionn, index) => {
                             return (
                                 <div key={index} className="flex items-center space-x-1">
-                                    {
-                                        ( optionn === "All" || optionn === "Pending") && newNotifications?
-                                        <div className="min-w-5 min-h-3 p-[3px] rounded-full text-[10px] bg-button text-white flex items-center justify-center">
-                                            {
-                                                newNotifications
-                                            }
-                                        </div>
-                                        :
-                                        null
-                                    }
                                     <option onClick={handleOptions} className={`text-sm cursor-pointer ${option === index? "text-button font-bold border-b border-b-button" : "text-black"}`} value={index}>
                                         {optionn}
                                     </option>
@@ -189,7 +184,12 @@ function LessonNotifications(props) {
                             {
                                 handleContent()
                             }
-                            <ShowMoreNotifications Accepted={option}></ShowMoreNotifications>
+                            {
+                                !isNotificationEmpty && notificationsList.length !== maxPageNumber ?
+                                <ShowMoreNotifications role="learner" Accepted={option}></ShowMoreNotifications>
+                                :
+                                null
+                            }
                             </>
                         )
                     }

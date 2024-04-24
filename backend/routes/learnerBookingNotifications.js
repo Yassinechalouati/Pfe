@@ -80,7 +80,7 @@ router.post('/getNotifications', auth, roleCheck(["Learner"]), (req, res) => {
                     console.log("Total rows:", totalRows);
                     res.status(200).json({ notification: result, max: totalRows });
                 }
-            });
+            })
 
         }
     })
