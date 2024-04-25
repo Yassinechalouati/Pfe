@@ -3,12 +3,18 @@ import { fetchFile, isGoogleProfilePicture, timeFormatter } from "../Global/func
 import { useEffect, useState } from "react"
 import ElapsedTime from "../Global/ElapsedTime";
 import { handleLessonDifficultyColor } from "../Global/functions"
+import axiosInstance from "../../interceptors/axiosInterceptor";
+import { updateNotificationRead, setUnreadNotifications } from "../../state/slices/NotificationSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 function Notification(props) {
     
     //holding the picture
     const [imageUrl, setImageUrl] = useState(null)
 
+    const dispatch = useDispatch()
+
+    const unreadNotifications = useSelector(state => state.notificationsData.unreadNotifs)
 
     // Format the date to display as "Month Day, Year"
     const handleTimeFormat = () => {
@@ -37,8 +43,32 @@ function Notification(props) {
         fetchImageUrl();
     }, [])
 
+    const handleNotificationClick = async () => {
+        //if the notification is unread we make it change it to read in the database
+        if(!props.notification.ReadByLearner) {
+            //Marking the notification as read 
+            try {
+                const response = await axiosInstance.post('http://localhost:5000/learner/markAsRead', {
+                    notificationId: props.notification.lesson_id,
+                    notificationType: 'private Lesson'
+                }, {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('accesstoken')}`
+                    }
+                })
+                console.log(response.data.message);
+                dispatch(updateNotificationRead({notification: props.notification, read: 1, role: "learner"}))
+                //decrementing how many unread notifications we have 
+                dispatch(setUnreadNotifications(unreadNotifications-1))
+            }catch(err) {
+                console.log(err)
+            }
+        }
+
+    }
+
     return (
-         <div className="flex p-2 space-x-2 hover:bg-backg rounded-lg items-center py-4 border-b">
+         <div onClick={handleNotificationClick} className="flex relative p-2 space-x-2 hover:bg-backg rounded-lg items-center py-4 border-b">
             {
                 imageUrl? 
                 <img 
@@ -89,10 +119,16 @@ function Notification(props) {
                         {props.notification.lesson_difficulty}
                     </div>
                 </div>
-                <span className="text-button2 text-xs">
+                <span className={`${props.notification.ReadByLearner? "font-normal" : "font-bold" } text-button2 text-xs`}>
                     Booked {ElapsedTime(props.notification.scheduling_date)}
                 </span>
             </div>
+            {
+                !props.notification.ReadByLearner? 
+                <div className="min-w-3 min-h-3 absolute bg-button2 rounded-full top-1/2 right-1 transform -translate-y-1/2"></div>
+                :
+                null
+            }
         </div>
     );
 }

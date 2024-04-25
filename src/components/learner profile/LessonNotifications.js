@@ -4,7 +4,7 @@ import { IoNotifications } from "react-icons/io5"
 import axiosInstance from "../../interceptors/axiosInterceptor"
 import { NotificationLoading } from "../Global/LoadingCards"
 import { useSelector, useDispatch } from "react-redux"
-import { setMaxPageNumber, setNotificationsList, setPendingNotificationNumber, setPageNumber } from '../../state/slices/NotificationSlice'
+import { setMaxPageNumber, setNotificationsList, setPageNumber, setSelectedOption } from '../../state/slices/NotificationSlice'
 import ShowMoreNotifications from "./ShowMoreNotifications"
 
 
@@ -14,10 +14,10 @@ function LessonNotifications(props) {
     const dispatch = useDispatch()
     const [notifications, setNotifications] = useState(false)
     const notificationsList = useSelector(state=> state.notificationsData.notificationsList)
-    const newNotifications = useSelector(state => state.notificationsData.pendingNotificationNumber)
+    const unreadNotifications = useSelector(state => state.notificationsData.unreadNotifs)
     const [loading, setLoading] = useState(false)
     const [isNotificationEmpty, setIsNotificationEmpty] = useState(false)
-    const [option, setOption] = useState(0)
+    const selectedOption = useSelector(state => state.notificationsData.selectedOption)
     const maxPageNumber = useSelector(state => state.notificationsData.maxPageNumber)
 
 
@@ -32,7 +32,8 @@ function LessonNotifications(props) {
 
     //handle notifications visibility and api calls 
     const handleNotifications = async (Accepted) => {
-        if(!notifications){
+        if(notificationsList.length<=0 && !notifications && selectedOption === 0){
+            console.log("fetching notifications again ");
             try {
                 setLoading(true)
                 const notifications = await axiosInstance.post('http://localhost:5000/learner/getNotifications', {
@@ -44,12 +45,9 @@ function LessonNotifications(props) {
                         'Authorization': `Bearer ${localStorage.getItem('accesstoken')}`
                     }
                 })
-                console.log("notification: ", notifications.data.notification)
                 setIsNotificationEmpty(notifications.data.notification.length===0) //indicated wether there are notifications or not
                 dispatch(setNotificationsList(notifications.data.notification))
                 dispatch(setMaxPageNumber(notifications.data.max))
-                const filteredNotifications = notifications.data.notification.filter(item => item.Accepted === -1)//pending notifications
-                dispatch(setPendingNotificationNumber(filteredNotifications.length))
                 setLoading(false)
             }catch(err) {
                 console.log(err)
@@ -81,7 +79,7 @@ function LessonNotifications(props) {
       //handling the filter option of the notificaton (All, Accepted, Requests)
       const handleOptions = async (e) => {
         const value = parseInt(e.target.value)
-        setOption(value)
+        dispatch(setSelectedOption(value))
         let accepted = ""
         if(value === 1) {
             accepted=-1
@@ -133,7 +131,7 @@ function LessonNotifications(props) {
         <div ref={notifRef} className="relative py-1">
             <div className="cursor-pointer" onClick={() => handleNotifications("")}>
                 {
-                    newNotifications>0?
+                    unreadNotifications>0?
                     <span className="absolute hidden lg:flex h-3 w-3 top-0 right-0">
                         <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-elements opacity-75"></span>
                         <span className="relative inline-flex rounded-full h-3 w-3 bg-elements"></span>
@@ -159,7 +157,7 @@ function LessonNotifications(props) {
                             notifiationFilterOption.map((optionn, index) => {
                             return (
                                 <div key={index} className="flex items-center space-x-1">
-                                    <option onClick={handleOptions} className={`text-sm cursor-pointer ${option === index? "text-button font-bold border-b border-b-button" : "text-black"}`} value={index}>
+                                    <option onClick={handleOptions} className={`text-sm cursor-pointer ${selectedOption === index? "text-button font-bold border-b border-b-button" : "text-black"}`} value={index}>
                                         {optionn}
                                     </option>
                                 </div>
@@ -186,7 +184,7 @@ function LessonNotifications(props) {
                             }
                             {
                                 !isNotificationEmpty && notificationsList.length !== maxPageNumber ?
-                                <ShowMoreNotifications role="learner" Accepted={option}></ShowMoreNotifications>
+                                <ShowMoreNotifications role="learner" Accepted={selectedOption}></ShowMoreNotifications>
                                 :
                                 null
                             }

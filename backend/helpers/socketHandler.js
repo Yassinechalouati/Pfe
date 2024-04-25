@@ -27,13 +27,48 @@ const socketHandler = (io) => {
 
         socket.on('cancelLesson', (data) => {
             console.log("removing lesson", data)
-            io.to(data.learnerId).emit('Cancel Notification', { removedLesson: data.lesson});
+            console.log("start_time: ", data.start_time)
 
+            //getting date in this format for example "May 25, 2024" 
+            //converting it to this format year-month-day
+
+            // Convert input date string to Date object
+            const date = new Date(data.start_time);
+
+            // Extract date components
+            const year = date.getFullYear();
+            // Month starts from 0, so add 1 to get the correct month
+            const month = (date.getMonth() + 1).toString().padStart(2, '0');
+            const day = date.getDate().toString().padStart(2, '0');
+
+            // Construct the formatted date string in ISO format
+            const formattedDate = `${year}-${month}-${day}T00:00:00.000Z`;
+
+            const query = `SELECT *
+            FROM private_lesson t1
+            WHERE start_time = (
+                SELECT MIN(start_time)
+                FROM private_lesson t2
+                WHERE DATE(t2.start_time) = DATE(t1.start_time)
+                AND t2.start_time >= NOW()
+                AND t2.Accepted <> 0 
+                AND Date(t2.start_time) = Date(?)
+                AND t2.private_learner_id = ?
+            )`
+            mysql.query(query, [formattedDate, data.learnerId], (err, result) => {
+                if(err) {
+                    console.log(err)
+                    io.to(data.learnerId).emit('CancelLesson Error', { removedLesson: "Internal Server Error"});
+                }else {
+                    console.log("result: ", result);
+                    io.to(data.learnerId).emit('Cancel Notification', { removedLesson: data.lesson, firstLesson: result[0], ReadByLearner: data.isSeenByLearner});
+                }
+            })
         })
 
         socket.on('approveLesson', (data) => {
             console.log("approve lesson", data)
-            io.to(data.learnerId).emit('Approvement Notification', { approvedLesson: data.lesson});
+            io.to(data.learnerId).emit('Approvement Notification', { approvedLesson: data.lesson, ReadByLearner: data.isSeenByLearner});
 
         })
 

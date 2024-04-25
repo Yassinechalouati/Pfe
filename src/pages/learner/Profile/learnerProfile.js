@@ -11,13 +11,17 @@ import LinguaBuddy from "./LinguaBuddy";
 import Settings from "../../../components/Global/Settings";
 import BigCalendar from '../../../components/learner profile/BigCalendar'
 import io from 'socket.io-client'
-
+import { setUnreadNotifications } from "../../../state/slices/NotificationSlice";
+import { appendLesson, deleteRejectedLesson, updateAllLessonsList, updateFirstLessonList } from "../../../state/slices/lessonsList";
 
 function LearnerProfile() {
     const dispatch = useDispatch()
     const learnerId = useSelector(state => state.userData.id)
+    const lessonsList = useSelector(state => state.lessonsList)
+    const unreadNotifs = useSelector(state => state.notificationsData.unreadNotifs)
 
     useEffect(() => {
+        //getting tutor details
         const fetchData = async () => {
             dispatch(setIsLoading(true))
             try {
@@ -56,14 +60,69 @@ function LearnerProfile() {
         fetchData();
     }, []);
 
+    useEffect(() => {
+        //consuming api to get if there are unread notifs or not 
+        const fetchNumberOfUnreadNotifs = async () => {
+            try {
+                const response = await axiosInstance.post('http://localhost:5000/learner/CountUnreadNotifications', {
 
-    const handleCancelLesson = (data_) => {
+                },  {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('accesstoken')}`
+                    }
+                })
+                console.log("number of unreadNotifs: ", response.data)
+                dispatch(setUnreadNotifications(response.data.unreadNotifs))
                 
+            }catch(err) {
+                console.log(err)
+            }
+        }
+
+        fetchNumberOfUnreadNotifs()
+    }, [])
+
+
+    //action to do when there's error in rejection query it server side
+    const handleCancelLessonError = (err) => {
+        console.log("error canceling lesson : ", err.removedLesson);
+    }
+
+    //action to do when lesson gets canceled by tutor
+    const handleCancelLesson = (data_) => {
+        console.log(data_)
+
+        //incrementing the number of unreadNotifs
+        if(data_.ReadByLearner) {
+            dispatch(setUnreadNotifications(unreadNotifs+1))
+        }
+        
+        //removing the rejected lesson from the ui
+        dispatch(deleteRejectedLesson(data_.removedLesson))
+
+        console.log("new first lesson: ", data_.firstLesson);
+        //showing the next approved lesson in the ui if it exists
+        if(data_.firstLesson) {
+            dispatch(appendLesson(data_.firstLesson))
+        } 
+
         console.log("remove lesson Notification")
     }
 
+    //action to do when lesson gets approved by tutor
     const handleApproveLesson = (data_) => {
+        console.log("Approve lesson Data: ", data_);
         const lessonId= data_.approvedLesson
+
+        //incrementing the number of unreadNotifs
+        if(data_.ReadByLearner) {
+            dispatch(setUnreadNotifications(unreadNotifs+1))
+        }
+
+        //changing lesson status to accepted if it exists 
+        dispatch(updateAllLessonsList({lessonId: lessonId, accepted: 1}))
+        dispatch(updateFirstLessonList({lessonId: lessonId, accepted: 1}))
+
         console.log("approve lesson Notificaiton")
     }
 
@@ -77,15 +136,22 @@ function LearnerProfile() {
 
             console.log("learnerId: ", learnerId)
             socket.emit('createRoom', learnerId)
-            // Listener for incoming notifications
+            // Listeners for incoming notifications
             
+            //reject lesson error notification listener 
+            socket.on('CancelLesson Error', handleCancelLessonError)
+
+            //lesson rejected by tutor notification listener
             socket.on('Cancel Notification', handleCancelLesson)
+
+            //listen approved by tutor notification listener
             socket.on('Approvement Notification', handleApproveLesson)
             return () => {
                 socket.disconnect();
               }
         }
     }, [learnerId])
+    
 
 
 

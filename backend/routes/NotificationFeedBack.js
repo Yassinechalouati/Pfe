@@ -18,9 +18,11 @@ router.post('/NotificationFeedback', auth, roleCheck(["Tutor"]), (req, res) => {
         return // to avoid further execution when data missing 
     }
 
+    //giving feedback of the tutor and also, making the notification for learner
     const query = ` 
     UPDATE private_lesson
-    set Accepted = ?
+    set Accepted = ?, 
+    ReadByLearner = 0
     where lesson_id = ?
     `
     mysql.query(query, [accepted, lessonId], (err, result) => {

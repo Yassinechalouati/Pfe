@@ -5,7 +5,6 @@ import { appendNotifications, setMaxPageNumber, setPageNumber } from "../../stat
 function ShowMoreNotifications(props) {
     const dispatch = useDispatch()
     const pageNumber = useSelector(state => state.notificationsData.pageNumber) //this indicates the current page we're in, in notifications
-    const maxPageNumber = useSelector(state => state.notificationsData.maxPageNumber)
 
     const handleShowMore = async() => {
         let accepted = ""

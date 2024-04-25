@@ -30,7 +30,7 @@ router.post('/scheduleLesson', auth, roleCheck(["Learner"]), (req, res) => {
 
     
     // Prepare and execute the SQL query
-    const query = "INSERT INTO private_lesson(tutor_id, private_learner_id, start_time, end_time, lesson_topic, lesson_difficulty, duration, Accepted, language) VALUES(?, ?, ?, ?, ?, ?, ?, -1, ?)";
+    const query = "INSERT INTO private_lesson(tutor_id, private_learner_id, start_time, end_time, lesson_topic, lesson_difficulty, duration, Accepted, language, ReadByTutor, ReadByLearner) VALUES(?, ?, ?, ?, ?, ?, ?, -1, ?, 0, 0)";
     mysql.query(query, [tutorId, userId, formattedBeginDate, formattedEndDate, lessonTopic, lessonDifficulty, lessonLength, lessonLanguage], (err, result) => {
         if (err) {
             console.log(err);

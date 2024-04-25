@@ -9,6 +9,7 @@ import { resetData, setVisibility } from "../../../state/slices/Schedule"
 import axiosInstance from "../../../interceptors/axiosInterceptor"
 import io from 'socket.io-client'
 import { useRef } from "react";
+import { setUnreadNotifications } from "../../../state/slices/NotificationSlice";
 
 
 
@@ -25,6 +26,9 @@ function TutorRow(props) {
     const lessonList = useSelector(state => state.lessonsList.firstlessonList)
 
     const scheduleData = useSelector(state => state.scheduleData)
+
+    const unreadNotifs = useSelector(state => state.notificationsData.unreadNotifs)
+
 
     //tutor profile picture
     const [imageData, setImageData] = useState()
@@ -87,6 +91,8 @@ function TutorRow(props) {
                         'Authorization': `Bearer ${localStorage.getItem('accesstoken')}`
                     }
                 })
+
+                dispatch(setUnreadNotifications(unreadNotifs+1))
                 
                 //current Date
                 const currentDate = new Date();

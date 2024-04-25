@@ -2,11 +2,10 @@ import { createSlice } from '@reduxjs/toolkit'
 
 const initialState ={
     notificationsList: [],
-    pendingNotificationNumber: 0,
     pageNumber: 1, //indicator for pagination
     maxPageNumber: 0, //number of pages indicator
-    
-
+    unreadNotifs: 0, //how many unreadNotifications
+    selectedOption: 0 //specifying which filtering option is selected
 }
 
 
@@ -48,6 +47,37 @@ export const notificationSlice = createSlice({
                 
             }
         },
+        updateNotificationRead: (state, action ) => {
+            const { notification, read, role } = action.payload
+
+            let updatedNotification 
+        
+            console.log("lesson_id", notification)
+        
+            // Find the index of the notification to update
+            const index = state.notificationsList.findIndex(item => item.lesson_id === notification.lesson_id);
+
+        
+            // If the notification is found, update it
+            if (index !== -1) {
+                if(role ==="learner") {
+                    updatedNotification = {
+                        ...notification, 
+                        ReadByLearner: read 
+                    }
+                } else {
+                    updatedNotification = {
+                        ...notification, 
+                        ReadByTutor: read
+                    }
+                }
+        
+                // Use map to update the specific notification, maintaining immutability
+                state.notificationsList = state.notificationsList.map((item, i) =>
+                    i === index ? updatedNotification : item
+                );
+            }
+        },
         addNotification: (state, action )=> {
 
             state.notificationsList = [...state.notificationsList, action.payload]
@@ -60,11 +90,11 @@ export const notificationSlice = createSlice({
 
             state.notificationsList = state.notificationsList.filter(notification => notification.lesson_id !== lessonIdToRemove);
         },   
-        setPendingNotificationNumber: (state, action )=> {
-            state.pendingNotificationNumber = action.payload
+        setUnreadNotifications: (state, action )=> {
+            state.unreadNotifs = action.payload
         },
-        incrementNumberOfNotificaitions: (state, action) => {
-            state.pendingNotificationNumber = state.pendingNotificationNumber+1
+        setSelectedOption: (state, action ) => {
+            state.selectedOption = action.payload
         },
         resetFields: () => initialState
     }
@@ -75,11 +105,12 @@ export const {
     setNotificationsList,
     updateNotification,
     removeNotification,
-    setPendingNotificationNumber,
+    setUnreadNotifications,
     addNotification,
-    incrementNumberOfNotificaitions,
     setPageNumber, 
     setMaxPageNumber,
-    appendNotifications
+    appendNotifications,
+    updateNotificationRead,
+    setSelectedOption
 } = notificationSlice.actions
 export default notificationSlice.reducer

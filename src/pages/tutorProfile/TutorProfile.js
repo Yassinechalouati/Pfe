@@ -31,7 +31,7 @@ import {
 
 } from '../../state/slices/tutorSlice'
 import { fetchFile } from "../../components/Global/functions";
-import { addNotification, incrementNumberOfNotificaitions } from "../../state/slices/NotificationSlice"
+import { addNotification, setUnreadNotifications } from "../../state/slices/NotificationSlice"
 import io from 'socket.io-client'
 
 function TutorProfile() {
@@ -40,12 +40,15 @@ function TutorProfile() {
 
     const tutorData = useSelector(state => state.tutorData)
 
-    const pendingNotificationNumber = useSelector(state => state.notificationsData.pendingNotificationNumber)
+    const unreadNotifications = useSelector(state => state.notificationsData.unreadNotifs)
+
+     //knowing whether it's a tutor or learner signing up
+     const path = window.location.pathname;
+    
 
     
     useEffect(() => {
-        
-
+        //getting tutor details
         const fetchData = async () => {
             dispatch(setIsLoading(true))
             try {
@@ -72,6 +75,7 @@ function TutorProfile() {
                     dispatch(setTel(response.data.message.tel)),
                     dispatch(setBirthday(response.data.message.Birthday)),
                 ])
+                //fetching the image from database
                 fetchFile(response.data.message.pfp, "images", "tutor", response.data.message.id)
                 .then(async (resp )=> {
                     console.log(response.data.message);
@@ -93,7 +97,30 @@ function TutorProfile() {
         };
         
         fetchData();
-    }, []);
+    }, [])
+
+
+    useEffect(() => {
+        //consuming api to get if there are unread notifs or not 
+        const fetchNumberOfUnreadNotifs = async () => {
+            try {
+                const response = await axiosInstance.post('http://localhost:5000/tutor/CountUnreadNotifications', {
+
+                },  {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('accesstoken')}`
+                    }
+                })
+                console.log("data: ", response.data.unreadNotifs);
+                dispatch(setUnreadNotifications(response.data.unreadNotifs))
+                
+            }catch(err) {
+                console.log(err)
+            }
+        }
+
+        fetchNumberOfUnreadNotifs()
+    }, [])
 
     const handleNotification = (data_) => {
         //if there are already notifications we add it
@@ -102,9 +129,9 @@ function TutorProfile() {
         console.log("incrementing number of notifications");
 
 
-        console.log("number of notifications: ", pendingNotificationNumber+1);
+        console.log("number of notifications: ", );
         //if there isn't we just update that there's a new notification
-        dispatch(incrementNumberOfNotificaitions())
+        dispatch(setUnreadNotifications(unreadNotifications+1))
     }
     
 
@@ -131,6 +158,7 @@ function TutorProfile() {
     }, [tutorData.id])
 
 
+
     const bodyContent = {
         Courses: <Courses></Courses>,
         Profile: <Feed></Feed>,
@@ -139,8 +167,7 @@ function TutorProfile() {
         Settings: <Settings></Settings>,
         Exams: <Exams></Exams>,
     }
-    //knowing whether it's a tutor or learner signing up
-    const path = window.location.pathname;
+
 
 
 
@@ -159,6 +186,7 @@ function TutorProfile() {
             return bodyContent.Settings
         }
     }
+
 
     return (
         <div className="w-screen h-screen bg-backg flex flex-col">

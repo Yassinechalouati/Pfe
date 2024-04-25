@@ -4,17 +4,18 @@ import { fetchFile, isGoogleProfilePicture, timeFormatter } from "./functions"
 import { useEffect, useState } from "react"
 import ElapsedTime from "./ElapsedTime";
 import { handleLessonDifficultyColor } from "./functions";
-import { removeNotification, setPendingNotificationNumber, updateNotification } from "../../state/slices/NotificationSlice";
+import { removeNotification, setUnreadNotifications, updateNotification } from "../../state/slices/NotificationSlice";
 import { useDispatch, useSelector } from 'react-redux'
+import { updateNotificationRead } from "../../state/slices/NotificationSlice";
 import axiosInstance from "../../interceptors/axiosInterceptor"
-import socket from '../../interceptors/socketInterceptor'
+import io from 'socket.io-client'
 
 function Notification(props) {
     
     //holding the picture
     const [imageUrl, setImageUrl] = useState(null);
     const dispatch = useDispatch()
-    const newNotifications = useSelector(state => state.notificationsData.pendingNotificationNumber)
+    const unreadNotifications = useSelector(state => state.notificationsData.unreadNotifs)
 
 
     // Format the date to display as "Month Day, Year"
@@ -58,9 +59,19 @@ function Notification(props) {
             .then((response) => {
                 console.log("response from NotificationFeedBack: ", response.data.message)
                 //sending notification to learner
+                const socket = io('http://localhost:5000', {
+                auth: {
+                    token: localStorage.getItem('accesstoken')
+                }
+                })
+
+                console.log("start_time:", props.notification.start_time, " formatted start_time: ", handleTimeFormat());
+                console.log("eventName :", eventName, "Condition for accepted: ", eventName==="approveLesson", "Condition for rejected: ", eventName=== "cancelLesson");
                 socket.emit(eventName, {
                     lesson: props.notification.lesson_id,
-                    learnerId: props.notification.private_learner_id
+                    learnerId: props.notification.private_learner_id, 
+                    start_time: handleTimeFormat(),
+                    isSeenByLearner: props.notification.ReadByLearner
                 })
                 resolve("Accepted")
             })
@@ -76,7 +87,6 @@ function Notification(props) {
         try {
             const result = await notificationFeedBack(1, 'approveLesson')
             dispatch(updateNotification({ notification: props.notification, accepted: 1}))
-            dispatch(setPendingNotificationNumber(newNotifications-1))
             console.log(result);
         }catch(err) {
             console.log(err)
@@ -87,23 +97,45 @@ function Notification(props) {
         try{
             const result = await notificationFeedBack(0, 'cancelLesson')
             dispatch(removeNotification(props.notification.lesson_id))
-            dispatch(setPendingNotificationNumber(newNotifications-1))
-            
             console.log(result);
         }catch(err) {
             console.log(err)
         }
     }
+    
+    const handleNotificationClick = async () => {
+        //if the notification is unread we make it change it to read in the database
+        if (!props.notification.ReadByTutor) {
+            //Marking the notification as read 
+            try {
+                const response = await axiosInstance.post('http://localhost:5000/tutor/markAsRead', {
+                    notificationId: props.notification.lesson_id,
+                    notificationType: 'private Lesson'
+                }, {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('accesstoken')}`
+                    }
+                })
+                console.log(response.data.message);
+                dispatch(updateNotificationRead({ notification: props.notification, read: 1, role: "tutor"}))
+                //decrementing how many unread notifications we have 
+                dispatch(setUnreadNotifications(unreadNotifications-1))
+            }catch(err) {
+                console.log(err)
+            }
+        }
+
+    }
 
     return (
-         <div className="flex p-2 space-x-2 hover:bg-backg rounded-lg items-center py-4 border-b">
+         <div onClick={handleNotificationClick} className="flex p-2 relative space-x-2 hover:bg-backg rounded-lg items-center py-4 border-b">
             {
                 imageUrl? 
                 <img 
                 alt="pfp" 
                 src={imageUrl}
                 referrerPolicy="no-referrer"
-                className="min-w-16 max-w-16 max-h-16 rounded-full self-start min-h-16 object-cover"></img>
+                className="min-w-16 self-start max-w-16 max-h-16 rounded-full min-h-16 object-cover"></img>
                 : 
                 <div className="min-w-16 animate-pulse bg-darkg max-w-16 max-h-16 rounded-full self-start min-h-16 object-cover">
                 </div>
@@ -146,20 +178,28 @@ function Notification(props) {
                         {props.notification.lesson_difficulty}
                     </div>
                 </div>
-                <span className="text-button2 text-xs">
+                <span className={`text-button2 text-xs ${props.notification.ReadByTutor? "font-normal": "font-bold"}`}>
                     Booked {ElapsedTime(props.notification.scheduling_date)}
                 </span>
             </div>
             {
                 props.notification.Accepted === -1?
-                <div className="flex items-center self-start space-x-1">
-                    <IoCheckmarkCircle onClick={handleAcceptLesson} className="text-elements cursor-pointer" size="25"></IoCheckmarkCircle>
-                    <IoCloseCircle onClick={handleRejectLesson} className="text-errortext cursor-pointer" size="25"></IoCloseCircle>
-                </div>
+                <>
+                    <div className="flex items-center self-start space-x-1">
+                        <IoCheckmarkCircle onClick={handleAcceptLesson} className="text-elements cursor-pointer" size="25"></IoCheckmarkCircle>
+                        <IoCloseCircle onClick={handleRejectLesson} className="text-errortext cursor-pointer" size="25"></IoCloseCircle>
+                    </div>
+                </>
                 :
                 null
             }
-        </div>
+            {
+                !props.notification.ReadByTutor? 
+                <div className="min-w-3 min-h-3 bg-button2 rounded-full absolute top-1/2 right-1 transform -translate-y-1/2"></div>
+                :
+                null
+            }
+        </div> 
     );
 }
 

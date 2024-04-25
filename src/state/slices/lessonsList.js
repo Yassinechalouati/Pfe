@@ -32,6 +32,36 @@ export const lessons = createSlice( {
 
             state.firstlessonList = lessonsCopy
         },
+        updateFirstLessonList: (state, action) => {
+            const {lessonId, accepted} = action.payload
+            if(state.firstlessonList) {
+                const lessonIndex = state.firstlessonList.findIndex(item => item.lesson_id === lessonId)
+                if (lessonIndex !==-1) {
+                    state.firstlessonList = state.firstlessonList.map((item, index) => 
+                        index === lessonIndex? {...item, Accepted: accepted} : item
+                    )
+                }   
+            }
+        },
+        deleteRejectedLesson: (state, action) => {
+            if(state.firstlessonList) {
+                state.firstlessonList = state.firstlessonList.filter(item => item.lesson_id !== action.payload)
+            }
+            if(state.allLessons) {
+                state.allLessons = state.allLessons.filter(item => item.lesson_id !== action.payload)
+            }
+        },
+        updateAllLessonsList: (state, action) => {
+            const {lessonId, accepted} = action.payload
+            if (state.allLessons) {
+                const lessonIndex = state.allLessons.findIndex(item => item.lesson_id === lessonId)
+                if (lessonIndex !==-1) {
+                    state.allLessons = state.allLessons.map((item, index) => 
+                        index === lessonIndex ? {...item, Accepted: accepted} : item
+                    )
+                }
+            }
+        },
         resetAllLessons: (state, action) => {
             state.allLessons = []
         }
@@ -45,7 +75,10 @@ export const {
     appendLesson,
     Addlesson,
     resetAllLessons,
-    replaceFirstLessonItem
+    replaceFirstLessonItem,
+    updateAllLessonsList,
+    updateFirstLessonList,
+    deleteRejectedLesson
 } = lessons.actions
 
 export default lessons.reducer

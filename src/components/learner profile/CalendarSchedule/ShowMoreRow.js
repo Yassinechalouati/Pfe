@@ -2,6 +2,7 @@ import { IoMdTime } from "react-icons/io"
 import { handleLessonDifficultyColor, timeFormatter } from "../../Global/functions";
 import { fetchFile } from "../../Global/functions";
 import {useEffect, useState} from 'react'
+import { isGoogleProfilePicture } from "../../Global/functions";
 import ReactLoading from 'react-loading';
 
 function ShowMoreRow({lesson}) {
@@ -21,8 +22,11 @@ function ShowMoreRow({lesson}) {
     const fetchImage = async () => {
         try {
             setLoading(true)
-            const image = await fetchFile(lesson.pfp, "images", "tutor", lesson.tutor_id)
-            setImageFile(image)
+            let imageUrl = lesson.pfp;
+            if (!isGoogleProfilePicture(lesson.pfp)) {
+                imageUrl = await fetchFile(lesson.pfp, "images", "tutor", lesson.tutor_id)
+            }
+            setImageFile(imageUrl)
             setLoading(false)
         } catch (err) {
             console.log(err)
@@ -43,7 +47,10 @@ function ShowMoreRow({lesson}) {
                     <ReactLoading type="spin" color="#FFA447" height={'80px'} width={'80px'} />
                 </div>
                 :
-                <img src={imageFile} className="min-w-20 min-h-20 max-w-20 max-h-20 object-cover rounded-full" alt="tutorface"></img>
+                <img 
+                src={imageFile} 
+                referrerPolicy="no-referrer"
+                className="min-w-20 min-h-20 max-w-20 max-h-20  object-cover rounded-full" alt="tutorface"></img>
             }
             <div className="flex flex-col space-y-1 justify-center">
                 <div className="flex items-center space-x-2">
