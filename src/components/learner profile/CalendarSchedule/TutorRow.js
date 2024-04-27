@@ -9,7 +9,7 @@ import { resetData, setVisibility } from "../../../state/slices/Schedule"
 import axiosInstance from "../../../interceptors/axiosInterceptor"
 import io from 'socket.io-client'
 import { useRef } from "react";
-import { setUnreadNotifications } from "../../../state/slices/NotificationSlice";
+import { addNotification, incrementUnreadNotifications } from "../../../state/slices/NotificationSlice";
 
 
 
@@ -27,7 +27,6 @@ function TutorRow(props) {
 
     const scheduleData = useSelector(state => state.scheduleData)
 
-    const unreadNotifs = useSelector(state => state.notificationsData.unreadNotifs)
 
 
     //tutor profile picture
@@ -50,10 +49,10 @@ function TutorRow(props) {
     }
 
     
-      const fetchFlag = async () => {
-        const data = await fetchCountryData(props.tutor.Country);
-        setCountryData(data);
-      };
+    const fetchFlag = async () => {
+    const data = await fetchCountryData(props.tutor.Country);
+    setCountryData(data);
+    };
 
     useEffect(() => {
         //getting tutor picture
@@ -92,7 +91,7 @@ function TutorRow(props) {
                     }
                 })
 
-                dispatch(setUnreadNotifications(unreadNotifs+1))
+                dispatch(incrementUnreadNotifications())
                 
                 //current Date
                 const currentDate = new Date();
@@ -112,7 +111,9 @@ function TutorRow(props) {
                     firstname: learnerData.firstname,
                     lastname: learnerData.lastname,
                     scheduling_date: currentDateTimeString,
-                    private_learner_id: learnerData.id
+                    private_learner_id: learnerData.id,
+                    ReadByTutor: 0,
+                    ReadByLearner: 0
 
                 }
                 socket.current = io('http://localhost:5000', {
@@ -124,6 +125,8 @@ function TutorRow(props) {
                 socket.current.emit('notification', data)
 
                 console.log("socket: ", socket.current);
+
+                dispatch(addNotification(data))
  
                 
 
@@ -183,7 +186,7 @@ function TutorRow(props) {
                         dispatch(replaceFirstLessonItem({data, index}))
                     }
                 }
-                //adding it to the list containg all lessons
+                //adding it to the list containing all lessons
                 dispatch(Addlesson(data))
 
                 dispatch(setVisibility(false))

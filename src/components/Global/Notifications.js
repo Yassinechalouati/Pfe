@@ -4,7 +4,7 @@ import { IoNotifications } from "react-icons/io5"
 import axiosInstance from "../../interceptors/axiosInterceptor"
 import { NotificationLoading } from "./LoadingCards"
 import { useSelector, useDispatch } from "react-redux"
-import { setNotificationsList, setUnreadNotifications, setMaxPageNumber, setPageNumber, setSelectedOption } from '../../state/slices/NotificationSlice'
+import { setNotificationsList, setMaxPageNumber, setPageNumber, setSelectedOption, setFetchedNotifications } from '../../state/slices/NotificationSlice'
 import ShowMoreNotifications from "../learner profile/ShowMoreNotifications"
 
 
@@ -19,8 +19,8 @@ function Notifications(props) {
     const UnreadNotifications = useSelector(state => state.notificationsData.unreadNotifs)
     const maxPageNumber = useSelector(state => state.notificationsData.maxPageNumber)
     const [loading, setLoading] = useState(false)
-    const [isNotificationEmpty, setIsNotificationEmpty] = useState(false)
     const selectedOption = useSelector(state => state.notificationsData.selectedOption)
+    const fetchedNotifications = useSelector(state => state.notificationsData.fetchedNotifications)
 
     const notifiationFilterOption = [
         "All", 
@@ -33,7 +33,7 @@ function Notifications(props) {
     //handle notifications visibility and api calls 
     const handleNotifications = async (Accepted) => {
         console.log("notificationsList conditions: ", !notificationsList);
-        if(notificationsList.length<=0 && !notifications && selectedOption === 0){
+        if( !fetchedNotifications && !notifications){
             console.log("fetching notifications again ");
             try {
                 setLoading(true)
@@ -46,7 +46,7 @@ function Notifications(props) {
                         'Authorization': `Bearer ${localStorage.getItem('accesstoken')}`
                     }
                 })
-                setIsNotificationEmpty(notifications.data.notification.length===0) //indicated wether there are notifications or not
+                dispatch(setFetchedNotifications(true))
                 dispatch(setNotificationsList(notifications.data.notification))
                 dispatch(setMaxPageNumber(notifications.data.max))
                 setLoading(false)
@@ -101,7 +101,6 @@ function Notifications(props) {
                     'Authorization': `Bearer ${localStorage.getItem('accesstoken')}`
                 }
             })
-            setIsNotificationEmpty(notifications.data.notification.length===0) //indicated wether there are notifications or not
             dispatch(setNotificationsList(notifications.data.notification))
             dispatch(setMaxPageNumber(notifications.data.max))
             dispatch(setPageNumber(1))
@@ -177,7 +176,7 @@ function Notifications(props) {
                         </>
                         :
                         (
-                            isNotificationEmpty?
+                            notificationsList.length === 0?
                             <img alt="empty" src="/no-data.png" className="w-64 h-64 m-auto object-cover"></img>
                             :
                             <>
@@ -185,7 +184,7 @@ function Notifications(props) {
                                 handleContent()
                             }
                             {
-                                !isNotificationEmpty && notificationsList.length !== maxPageNumber ?
+                                notificationsList.length !==0 && notificationsList.length !== maxPageNumber ?
                                 <ShowMoreNotifications role="tutor" Accepted={selectedOption}></ShowMoreNotifications>
                                 :
                                 null

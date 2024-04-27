@@ -4,8 +4,8 @@ import { fetchFile, isGoogleProfilePicture, timeFormatter } from "./functions"
 import { useEffect, useState } from "react"
 import ElapsedTime from "./ElapsedTime";
 import { handleLessonDifficultyColor } from "./functions";
-import { removeNotification, setUnreadNotifications, updateNotification } from "../../state/slices/NotificationSlice";
-import { useDispatch, useSelector } from 'react-redux'
+import { decrementUnreadNotifications, updateNotification } from "../../state/slices/NotificationSlice";
+import { useDispatch } from 'react-redux'
 import { updateNotificationRead } from "../../state/slices/NotificationSlice";
 import axiosInstance from "../../interceptors/axiosInterceptor"
 import io from 'socket.io-client'
@@ -15,7 +15,6 @@ function Notification(props) {
     //holding the picture
     const [imageUrl, setImageUrl] = useState(null);
     const dispatch = useDispatch()
-    const unreadNotifications = useSelector(state => state.notificationsData.unreadNotifs)
 
 
     // Format the date to display as "Month Day, Year"
@@ -86,7 +85,9 @@ function Notification(props) {
     const handleAcceptLesson = async () => {
         try {
             const result = await notificationFeedBack(1, 'approveLesson')
-            dispatch(updateNotification({ notification: props.notification, accepted: 1}))
+            
+            dispatch(updateNotification({ notification: props.notification.lesson_id, accepted: 1}))
+
             console.log(result);
         }catch(err) {
             console.log(err)
@@ -96,7 +97,9 @@ function Notification(props) {
     const handleRejectLesson = async () => {
         try{
             const result = await notificationFeedBack(0, 'cancelLesson')
-            dispatch(removeNotification(props.notification.lesson_id))
+
+            dispatch(updateNotification({ notification: props.notification.lesson_id, accepted: 0}))
+            
             console.log(result);
         }catch(err) {
             console.log(err)
@@ -119,7 +122,7 @@ function Notification(props) {
                 console.log(response.data.message);
                 dispatch(updateNotificationRead({ notification: props.notification, read: 1, role: "tutor"}))
                 //decrementing how many unread notifications we have 
-                dispatch(setUnreadNotifications(unreadNotifications-1))
+                dispatch(decrementUnreadNotifications())
             }catch(err) {
                 console.log(err)
             }

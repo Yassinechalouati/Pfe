@@ -5,7 +5,8 @@ const initialState ={
     pageNumber: 1, //indicator for pagination
     maxPageNumber: 0, //number of pages indicator
     unreadNotifs: 0, //how many unreadNotifications
-    selectedOption: 0 //specifying which filtering option is selected
+    selectedOption: 0, //specifying which filtering option is selected
+    fetchedNotifications: false //indicator that we did fetch notifications from backend at least once 
 }
 
 
@@ -29,22 +30,27 @@ export const notificationSlice = createSlice({
             const { notification, accepted } = action.payload
         
             // Find the index of the notification to update
-            const index = state.notificationsList.findIndex(item => item.lesson_id === notification.lesson_id);
+            const index = state.notificationsList.findIndex(item => item.lesson_id === notification);
 
+            console.log("index: ", index);
         
             // If the notification is found, update it
             if (index !== -1) {
-                const updatedNotification = {
-                    ...notification,
-                    Accepted: accepted
-                };
-        
-                // Use map to update the specific notification, maintaining immutability
-                state.notificationsList = state.notificationsList.map((item, i) =>
-                    i === index ? updatedNotification : item
-                );
-        
-                
+                //if we're in all we change the status of notification if we're in pending we just remove it 
+                if(state.selectedOption ===1 ){
+                    state.notificationsList = state.notificationsList.filter(notif => notif.lesson_id !== notification);
+                }else {
+                    const updatedNotification = {
+                        ...state.notificationsList[index],
+                        Accepted: accepted
+                    };
+                    console.log("updatedNotification redux:", updatedNotification);
+            
+                    // Use map to update the specific notification, maintaining immutability
+                    state.notificationsList = state.notificationsList.map((item, i) =>{
+                       return  i === index ? updatedNotification : item
+                    });
+                }
             }
         },
         updateNotificationRead: (state, action ) => {
@@ -79,11 +85,19 @@ export const notificationSlice = createSlice({
             }
         },
         addNotification: (state, action )=> {
-
-            state.notificationsList = [...state.notificationsList, action.payload]
-            
-            // If you need to sort the list, do it here
-            state.notificationsList.sort((a, b) => a.start_time < b.start_time ? -1 : 1);
+            console.log("selectedOPtion from redux :", state.selectedOption === 0 || state.selectedOption === 1 );
+            if((state.selectedOption === 0 || state.selectedOption === 1) && state.fetchedNotifications) {
+                state.notificationsList = [...state.notificationsList, action.payload]
+                
+                // If you need to sort the list, do it here
+                state.notificationsList.sort((a, b) => new Date(a.start_time) - new Date(b.start_time));
+            }
+        },
+        incrementUnreadNotifications: (state, action ) => {
+            state.unreadNotifs = state.unreadNotifs +1 
+        },
+        decrementUnreadNotifications: (state, action ) => {
+            state.unreadNotifs = state.unreadNotifs-1
         },
         removeNotification: (state, action) => {
             const lessonIdToRemove = action.payload
@@ -92,6 +106,9 @@ export const notificationSlice = createSlice({
         },   
         setUnreadNotifications: (state, action )=> {
             state.unreadNotifs = action.payload
+        },
+        setFetchedNotifications: (state, action) => {
+            state.fetchedNotifications = action.payload
         },
         setSelectedOption: (state, action ) => {
             state.selectedOption = action.payload
@@ -111,6 +128,9 @@ export const {
     setMaxPageNumber,
     appendNotifications,
     updateNotificationRead,
-    setSelectedOption
+    setSelectedOption,
+    incrementUnreadNotifications,
+    decrementUnreadNotifications,
+    setFetchedNotifications
 } = notificationSlice.actions
 export default notificationSlice.reducer

@@ -31,7 +31,7 @@ import {
 
 } from '../../state/slices/tutorSlice'
 import { fetchFile } from "../../components/Global/functions";
-import { addNotification, setUnreadNotifications } from "../../state/slices/NotificationSlice"
+import { addNotification, incrementUnreadNotifications, setUnreadNotifications } from "../../state/slices/NotificationSlice"
 import io from 'socket.io-client'
 
 function TutorProfile() {
@@ -41,6 +41,8 @@ function TutorProfile() {
     const tutorData = useSelector(state => state.tutorData)
 
     const unreadNotifications = useSelector(state => state.notificationsData.unreadNotifs)
+
+    const selectedOption = useSelector(state => state.notificationsData.selectedOption )
 
      //knowing whether it's a tutor or learner signing up
      const path = window.location.pathname;
@@ -125,13 +127,14 @@ function TutorProfile() {
     const handleNotification = (data_) => {
         //if there are already notifications we add it
         console.log("adding notification");
+
+        //adding notification
         dispatch(addNotification(data_.notification))
-        console.log("incrementing number of notifications");
+        
 
-
-        console.log("number of notifications: ", );
+        console.log("unreadNotificaitons Value: ", unreadNotifications);
         //if there isn't we just update that there's a new notification
-        dispatch(setUnreadNotifications(unreadNotifications+1))
+        dispatch(incrementUnreadNotifications())
     }
     
 
@@ -155,7 +158,7 @@ function TutorProfile() {
         }
 
          
-    }, [tutorData.id])
+    }, [tutorData.id, localStorage])
 
 
 
@@ -187,6 +190,8 @@ function TutorProfile() {
         }
     }
 
+
+    console.log("selectedOption Value", selectedOption)
 
     return (
         <div className="w-screen h-screen bg-backg flex flex-col">

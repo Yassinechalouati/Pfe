@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import ElapsedTime from "../Global/ElapsedTime";
 import { handleLessonDifficultyColor } from "../Global/functions"
 import axiosInstance from "../../interceptors/axiosInterceptor";
-import { updateNotificationRead, setUnreadNotifications } from "../../state/slices/NotificationSlice";
+import { updateNotificationRead, decrementUnreadNotifications } from "../../state/slices/NotificationSlice";
 import { useDispatch, useSelector } from "react-redux";
 
 function Notification(props) {
@@ -14,7 +14,6 @@ function Notification(props) {
 
     const dispatch = useDispatch()
 
-    const unreadNotifications = useSelector(state => state.notificationsData.unreadNotifs)
 
     // Format the date to display as "Month Day, Year"
     const handleTimeFormat = () => {
@@ -59,7 +58,7 @@ function Notification(props) {
                 console.log(response.data.message);
                 dispatch(updateNotificationRead({notification: props.notification, read: 1, role: "learner"}))
                 //decrementing how many unread notifications we have 
-                dispatch(setUnreadNotifications(unreadNotifications-1))
+                dispatch(decrementUnreadNotifications())
             }catch(err) {
                 console.log(err)
             }

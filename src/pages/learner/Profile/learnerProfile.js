@@ -11,14 +11,13 @@ import LinguaBuddy from "./LinguaBuddy";
 import Settings from "../../../components/Global/Settings";
 import BigCalendar from '../../../components/learner profile/BigCalendar'
 import io from 'socket.io-client'
-import { setUnreadNotifications } from "../../../state/slices/NotificationSlice";
+import { incrementUnreadNotifications, removeNotification, setUnreadNotifications, updateNotification } from "../../../state/slices/NotificationSlice";
 import { appendLesson, deleteRejectedLesson, updateAllLessonsList, updateFirstLessonList } from "../../../state/slices/lessonsList";
 
 function LearnerProfile() {
     const dispatch = useDispatch()
     const learnerId = useSelector(state => state.userData.id)
-    const lessonsList = useSelector(state => state.lessonsList)
-    const unreadNotifs = useSelector(state => state.notificationsData.unreadNotifs)
+    const selectedOption = useSelector(state => state.notificationsData.selectedOption)
 
     useEffect(() => {
         //getting tutor details
@@ -94,9 +93,14 @@ function LearnerProfile() {
 
         //incrementing the number of unreadNotifs
         if(data_.ReadByLearner) {
-            dispatch(setUnreadNotifications(unreadNotifs+1))
+            dispatch(incrementUnreadNotifications())
         }
         
+        //updating notification status 
+        dispatch(updateNotification({ notification: data_.removedLesson, accepted: 0}))
+        
+
+
         //removing the rejected lesson from the ui
         dispatch(deleteRejectedLesson(data_.removedLesson))
 
@@ -116,8 +120,12 @@ function LearnerProfile() {
 
         //incrementing the number of unreadNotifs
         if(data_.ReadByLearner) {
-            dispatch(setUnreadNotifications(unreadNotifs+1))
+            dispatch(incrementUnreadNotifications())
         }
+
+        //updating notification status 
+        dispatch(removeNotification(data_.approvedLesson))
+        
 
         //changing lesson status to accepted if it exists 
         dispatch(updateAllLessonsList({lessonId: lessonId, accepted: 1}))
@@ -150,7 +158,7 @@ function LearnerProfile() {
                 socket.disconnect();
               }
         }
-    }, [learnerId])
+    }, [learnerId, localStorage])
     
 
 
