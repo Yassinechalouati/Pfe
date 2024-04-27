@@ -61,14 +61,15 @@ const socketHandler = (io) => {
                     io.to(data.learnerId).emit('CancelLesson Error', { removedLesson: "Internal Server Error"});
                 }else {
                     console.log("result: ", result);
-                    io.to(data.learnerId).emit('Cancel Notification', { removedLesson: data.lesson, firstLesson: result[0], ReadByLearner: data.isSeenByLearner});
+                    io.to(data.learnerId).emit('Cancel Notification', { removedLesson: data.lesson, firstLesson: result[0], ReadByLearner: data.isSeenByLearner, lesson: data.sentLesson});
                 }
             })
         })
 
         socket.on('approveLesson', (data) => {
             console.log("approve lesson", data)
-            io.to(data.learnerId).emit('Approvement Notification', { approvedLesson: data.lesson, ReadByLearner: data.isSeenByLearner});
+            //chnaaml query njib beha el notification kima njib feha lel learner 
+            io.to(data.learnerId).emit('Approvement Notification', { approvedLesson: data.lesson, ReadByLearner: data.isSeenByLearner, lesson: data.sentLesson});
 
         })
 

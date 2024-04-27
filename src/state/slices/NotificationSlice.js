@@ -27,31 +27,45 @@ export const notificationSlice = createSlice({
             state.maxPageNumber = action.payload
         },
         updateNotification: (state, action) => {
-            const { notification, accepted } = action.payload
-        
-            // Find the index of the notification to update
-            const index = state.notificationsList.findIndex(item => item.lesson_id === notification);
+            const { notification, accepted, role, lesson } = action.payload
 
-            console.log("index: ", index);
-        
-            // If the notification is found, update it
-            if (index !== -1) {
-                //if we're in all we change the status of notification if we're in pending we just remove it 
-                if(state.selectedOption ===1 ){
-                    state.notificationsList = state.notificationsList.filter(notif => notif.lesson_id !== notification);
-                }else {
-                    const updatedNotification = {
-                        ...state.notificationsList[index],
-                        Accepted: accepted
-                    };
-                    console.log("updatedNotification redux:", updatedNotification);
+            if(role === "learner" && (state.selectedOption === 2 || state.selectedOption === 3 )) {
+                const updatedNotification = {
+                    ...lesson,
+                    Accepted: accepted
+                };
+                state.notificationsList = [...state.notificationsList, updatedNotification]
+                
+                // If you need to sort the list, do it here
+                state.notificationsList.sort((a, b) => new Date(a.start_time) - new Date(b.start_time));
+            } else {
+                // Find the index of the notification to update
+                const index = state.notificationsList.findIndex(item => item.lesson_id === notification);
+    
+                console.log("index: ", index);
+    
+    
             
-                    // Use map to update the specific notification, maintaining immutability
-                    state.notificationsList = state.notificationsList.map((item, i) =>{
-                       return  i === index ? updatedNotification : item
-                    });
+                // If the notification is found, update it
+                if (index !== -1) {
+                    //if we're in all we change the status of notification if we're in pending we just remove it 
+                    if(state.selectedOption ===1 ){
+                        state.notificationsList = state.notificationsList.filter(notif => notif.lesson_id !== notification);
+                    }else {
+                        const updatedNotification = {
+                            ...state.notificationsList[index],
+                            Accepted: accepted
+                        };
+                        console.log("updatedNotification redux:", updatedNotification);
+                
+                        // Use map to update the specific notification, maintaining immutability
+                        state.notificationsList = state.notificationsList.map((item, i) =>{
+                           return  i === index ? updatedNotification : item
+                        });
+                    }
                 }
             }
+        
         },
         updateNotificationRead: (state, action ) => {
             const { notification, read, role } = action.payload

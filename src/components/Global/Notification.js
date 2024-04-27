@@ -70,7 +70,8 @@ function Notification(props) {
                     lesson: props.notification.lesson_id,
                     learnerId: props.notification.private_learner_id, 
                     start_time: handleTimeFormat(),
-                    isSeenByLearner: props.notification.ReadByLearner
+                    isSeenByLearner: props.notification.ReadByLearner,
+                    sentLesson: props.notification
                 })
                 resolve("Accepted")
             })
@@ -86,7 +87,7 @@ function Notification(props) {
         try {
             const result = await notificationFeedBack(1, 'approveLesson')
             
-            dispatch(updateNotification({ notification: props.notification.lesson_id, accepted: 1}))
+            dispatch(updateNotification({ notification: props.notification.lesson_id, accepted: 1, role: "tutor", lesson:""}))
 
             console.log(result);
         }catch(err) {
@@ -98,7 +99,7 @@ function Notification(props) {
         try{
             const result = await notificationFeedBack(0, 'cancelLesson')
 
-            dispatch(updateNotification({ notification: props.notification.lesson_id, accepted: 0}))
+            dispatch(updateNotification({ notification: props.notification.lesson_id, accepted: 0, role: "tutor", lesson:""}))
             
             console.log(result);
         }catch(err) {

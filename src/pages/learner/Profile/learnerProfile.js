@@ -97,7 +97,7 @@ function LearnerProfile() {
         }
         
         //updating notification status 
-        dispatch(updateNotification({ notification: data_.removedLesson, accepted: 0}))
+        dispatch(updateNotification({ notification: data_.removedLesson, accepted: 0, role: "learner", lesson: data_.lesson}))
         
 
 
@@ -124,7 +124,7 @@ function LearnerProfile() {
         }
 
         //updating notification status 
-        dispatch(removeNotification(data_.approvedLesson))
+        dispatch(updateNotification({ notification: data_.approvedLesson, accepted: 1, role: "learner", lesson: data_.lesson}))
         
 
         //changing lesson status to accepted if it exists 
