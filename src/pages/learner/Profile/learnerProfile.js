@@ -91,13 +91,14 @@ function LearnerProfile() {
     const handleCancelLesson = (data_) => {
         console.log(data_)
 
-        //incrementing the number of unreadNotifs
-        if(data_.ReadByLearner) {
-            dispatch(incrementUnreadNotifications())
-        }
+       
+        //setting how many unreadNotif left
+        dispatch(setUnreadNotifications(data_.ReadByLearner))
+        
+        
         
         //updating notification status 
-        dispatch(updateNotification({ notification: data_.removedLesson, accepted: 0, role: "learner", lesson: data_.lesson}))
+        dispatch(updateNotification({ notification: data_.removedLesson, accepted: 0, role: "learner", lesson: data_.lesson, type:"cancel"}))
         
 
 
@@ -118,13 +119,12 @@ function LearnerProfile() {
         console.log("Approve lesson Data: ", data_);
         const lessonId= data_.approvedLesson
 
-        //incrementing the number of unreadNotifs
-        if(data_.ReadByLearner) {
-            dispatch(incrementUnreadNotifications())
-        }
+        //setting how many unreadNotif left
+        dispatch(setUnreadNotifications(data_.ReadByLearner))
+        
 
         //updating notification status 
-        dispatch(updateNotification({ notification: data_.approvedLesson, accepted: 1, role: "learner", lesson: data_.lesson}))
+        dispatch(updateNotification({ notification: data_.approvedLesson, accepted: 1, role: "learner", lesson: data_.lesson, type:"approve"}))
         
 
         //changing lesson status to accepted if it exists 

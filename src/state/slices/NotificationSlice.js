@@ -27,9 +27,9 @@ export const notificationSlice = createSlice({
             state.maxPageNumber = action.payload
         },
         updateNotification: (state, action) => {
-            const { notification, accepted, role, lesson } = action.payload
+            const { notification, accepted, role, lesson, type } = action.payload
 
-            if(role === "learner" && (state.selectedOption === 2 || state.selectedOption === 3 )) {
+            if(role === "learner" && ((state.selectedOption === 2 && type === "approve") || (state.selectedOption === 3 && type ==="cancel") )) {
                 const updatedNotification = {
                     ...lesson,
                     Accepted: accepted
@@ -111,7 +111,9 @@ export const notificationSlice = createSlice({
             state.unreadNotifs = state.unreadNotifs +1 
         },
         decrementUnreadNotifications: (state, action ) => {
-            state.unreadNotifs = state.unreadNotifs-1
+            if (state.unreadNotifs -1 >=0){
+                state.unreadNotifs = state.unreadNotifs-1
+            }
         },
         removeNotification: (state, action) => {
             const lessonIdToRemove = action.payload

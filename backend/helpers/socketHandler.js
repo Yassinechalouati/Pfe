@@ -60,16 +60,58 @@ const socketHandler = (io) => {
                     console.log(err)
                     io.to(data.learnerId).emit('CancelLesson Error', { removedLesson: "Internal Server Error"});
                 }else {
-                    console.log("result: ", result);
-                    io.to(data.learnerId).emit('Cancel Notification', { removedLesson: data.lesson, firstLesson: result[0], ReadByLearner: data.isSeenByLearner, lesson: data.sentLesson});
+                    console.log("result: ", result)
+                    const queryy = ` SELECT pl.*, t.pfp, t.firstname, t.lastname, t.isConnected
+                    FROM private_lesson AS pl, tutor AS t
+                    WHERE pl.tutor_id = t.id
+                    and lesson_id = ?`
+                    mysql.query(queryy, [data.lesson], (notificationError, notificationResult) => {
+                        if (notificationError) {
+                            console.log(notificationError)
+                            io.to(data.learnerId).emit('CancelLesson Error', { removedLesson: "Internal Server Error"});
+                        }else {
+                            const queryy = `SELECT Count(ReadByLearner) as length
+                            from private_lesson
+                            where private_learner_id = ? and readByLearner = 0;` 
+                            mysql.query(queryy, [data.learnerId], (unreadErr, unreadResult) =>{
+                                if(err) {
+                                    console.log(unreadErr)
+                                    io.to(data.learnerId).emit('ApproveLesson Error', { removedLesson: "Internal Server Error"});
+                                }else {
+                                    io.to(data.learnerId).emit('Cancel Notification', { removedLesson: data.lesson, firstLesson: result[0], ReadByLearner: unreadResult[0].length, lesson: notificationResult[0]})
+                                }
+                            })
+                        }
+                    })
                 }
             })
         })
 
         socket.on('approveLesson', (data) => {
             console.log("approve lesson", data)
-            //chnaaml query njib beha el notification kima njib feha lel learner 
-            io.to(data.learnerId).emit('Approvement Notification', { approvedLesson: data.lesson, ReadByLearner: data.isSeenByLearner, lesson: data.sentLesson});
+            const query = ` SELECT pl.*, t.pfp, t.firstname, t.lastname, t.isConnected
+            FROM private_lesson AS pl, tutor AS t
+            WHERE pl.tutor_id = t.id
+            and lesson_id = ?`
+            mysql.query(query, [data.lesson], (err, result )=> {
+                if (err) {
+                    console.log(err)
+                    io.to(data.learnerId).emit('ApproveLesson Error', { removedLesson: "Internal Server Error"});
+                }else {
+                    const queryy = `SELECT Count(ReadByLearner) as length
+                    from private_lesson
+                    where private_learner_id = ? and readByLearner = 0;` 
+                    mysql.query(queryy, [data.learnerId], (unreadErr, unreadResult) =>{
+                        if(err) {
+                            console.log(unreadErr)
+                            io.to(data.learnerId).emit('ApproveLesson Error', { removedLesson: "Internal Server Error"});
+                        }else {
+                            io.to(data.learnerId).emit('Approvement Notification', { approvedLesson: data.lesson, ReadByLearner: unreadResult[0].length, lesson: result[0]});
+
+                        }
+                    })
+                }
+            })
 
         })
 
