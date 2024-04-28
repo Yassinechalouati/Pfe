@@ -129,6 +129,19 @@ export const notificationSlice = createSlice({
         setSelectedOption: (state, action ) => {
             state.selectedOption = action.payload
         },
+        markAllAsRead: (state, action ) => {
+            if(state.notificationsList){
+                if(action.payload === "Learner"){
+                    state.notificationsList = state.notificationsList.map((item, i) => 
+                    item.ReadByLearner === 0 ? {...item, ReadByLearner:1} : item
+                    )
+                }else {
+                    state.notificationsList = state.notificationsList.map((item, i) => 
+                    item.ReadByTutor === 0 ? {...item, ReadByTutor:1} : item
+                    )
+                }
+            } 
+        },
         resetFields: () => initialState
     }
 })
@@ -147,6 +160,7 @@ export const {
     setSelectedOption,
     incrementUnreadNotifications,
     decrementUnreadNotifications,
-    setFetchedNotifications
+    setFetchedNotifications,
+    markAllAsRead
 } = notificationSlice.actions
 export default notificationSlice.reducer

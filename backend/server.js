@@ -74,6 +74,8 @@ const markTutorNotificationAsRead = require('./routes/markTutorNotificationRead'
 const markLearnerNotificationAsRead = require('./routes/markLearnerNotificationRead')
 const getNumberOfUnreadNotifsTutor = require('./routes/getTutorNumberUnreadNotifications')
 const getNumberOfUnreadNotifsLearner = require('./routes/getLearnerNumberUnreadNotifications')
+const tutorMarkAllAsReadRouter = require('./routes/TutormarkAllAsRead')
+const learnerMarkAllAsReadRouter = require('./routes/LearnerMarkAllAsRead')
 
 
 //apis
@@ -109,6 +111,8 @@ app.use('/learner', markLearnerNotificationAsRead)
 app.use('/tutor', markTutorNotificationAsRead)
 app.use('/tutor', getNumberOfUnreadNotifsTutor)
 app.use('/learner', getNumberOfUnreadNotifsLearner)
+app.use('/learner', learnerMarkAllAsReadRouter)
+app.use('/tutor', tutorMarkAllAsReadRouter)
 
 
 // Socket.io logic

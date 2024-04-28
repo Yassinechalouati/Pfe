@@ -4,8 +4,11 @@ import { IoNotifications } from "react-icons/io5"
 import axiosInstance from "../../interceptors/axiosInterceptor"
 import { NotificationLoading } from "./LoadingCards"
 import { useSelector, useDispatch } from "react-redux"
-import { setNotificationsList, setMaxPageNumber, setPageNumber, setSelectedOption, setFetchedNotifications } from '../../state/slices/NotificationSlice'
+import { setNotificationsList, setMaxPageNumber, setPageNumber, setSelectedOption, setFetchedNotifications, setUnreadNotifications, markAllAsRead } from '../../state/slices/NotificationSlice'
 import ShowMoreNotifications from "../learner profile/ShowMoreNotifications"
+import ReactLoading from 'react-loading';
+import { IoIosCheckmarkCircle } from "react-icons/io";
+
 
 
 function Notifications(props) {
@@ -19,6 +22,7 @@ function Notifications(props) {
     const UnreadNotifications = useSelector(state => state.notificationsData.unreadNotifs)
     const maxPageNumber = useSelector(state => state.notificationsData.maxPageNumber)
     const [loading, setLoading] = useState(false)
+    const [markAllAsReadLoading, setMarkAllAsReadLoading] = useState(false)
     const selectedOption = useSelector(state => state.notificationsData.selectedOption)
     const fetchedNotifications = useSelector(state => state.notificationsData.fetchedNotifications)
 
@@ -128,6 +132,26 @@ function Notifications(props) {
         //console.log("hide showMore condition: ", notificationsList.length === maxPageNumber, " listLength: ", notificationsList.length, " maxPageNumber: ", maxPageNumber)
 
 
+        //marking all notification as Unread
+        const handleMarkAllAsRead = async () => {
+            try {
+                setMarkAllAsReadLoading(true)
+                const reponse = await axiosInstance.post('http://localhost:5000/tutor/markAllAsRead', {
+
+                }, {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('accesstoken')}`
+                    }
+                })
+                //updating it in the ui
+                dispatch(setUnreadNotifications(0))
+                dispatch(markAllAsRead("Tutor"))
+                setMarkAllAsReadLoading(false)
+            }catch(err) {
+                console.log(err)
+            }
+        }
+
     return (
         <div ref={notifRef} className="relative py-1">
             <div className="cursor-pointer" onClick={() => handleNotifications("")}>
@@ -151,7 +175,22 @@ function Notifications(props) {
                 <div className="flex flex-col p-2 overflow-y-auto max-h-96">
                     <div className="flex px-2 items-center border-b justify-between">
                         <div className="py-5 font-bold">Notifications</div>
-                        <span className="text-darkg rounded-lg p-2 hover:bg-lightg cursor-pointer" >Mark all as read</span>
+                        <button disabled={UnreadNotifications <=0 || markAllAsReadLoading? true : false} onClick={handleMarkAllAsRead} className={`rounded-lg flex p-2 items-center hover:bg-lightg text-darkg  space-x-3 ${UnreadNotifications <=0|| markAllAsReadLoading? "cursor-not-allowed" : "cursor-pointer" }`} >
+                            {
+                                markAllAsReadLoading?
+                                <ReactLoading type="spin" color="#FFA447" height={'20px'} width={'20px'} />
+                                :
+                                (UnreadNotifications <=0?
+                                <IoIosCheckmarkCircle 
+                                size="20"
+                                className="text-elements"></IoIosCheckmarkCircle>
+                                :
+                                null) 
+                            }
+                            <span>
+                                Mark all as read 
+                            </span>
+                        </button>
                     </div>
                     <div className="flex relative px-2 py-2 items-center border-b space-x-4">
                         {

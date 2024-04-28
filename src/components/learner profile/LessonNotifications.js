@@ -4,9 +4,10 @@ import { IoNotifications } from "react-icons/io5"
 import axiosInstance from "../../interceptors/axiosInterceptor"
 import { NotificationLoading } from "../Global/LoadingCards"
 import { useSelector, useDispatch } from "react-redux"
-import { setFetchedNotifications, setMaxPageNumber, setNotificationsList, setPageNumber, setSelectedOption } from '../../state/slices/NotificationSlice'
+import { markAllAsRead, setFetchedNotifications, setMaxPageNumber, setNotificationsList, setPageNumber, setSelectedOption, setUnreadNotifications } from '../../state/slices/NotificationSlice'
 import ShowMoreNotifications from "./ShowMoreNotifications"
-
+import ReactLoading from 'react-loading';
+import { IoIosCheckmarkCircle } from "react-icons/io";
 
 
 function LessonNotifications(props) {
@@ -16,6 +17,7 @@ function LessonNotifications(props) {
     const notificationsList = useSelector(state=> state.notificationsData.notificationsList)
     const unreadNotifications = useSelector(state => state.notificationsData.unreadNotifs)
     const [loading, setLoading] = useState(false)
+    const [markAllAsReadLoading, setMarkAllAsReadLoading] = useState(false)
     const selectedOption = useSelector(state => state.notificationsData.selectedOption)
     const maxPageNumber = useSelector(state => state.notificationsData.maxPageNumber)
     const fetchedNotifications = useSelector(state => state.notificationsData.fetchedNotifications)
@@ -125,6 +127,26 @@ function LessonNotifications(props) {
 
         }
 
+        //marking all notification as Unread
+        const handleMarkAllAsRead = async () => {
+            try {
+                setMarkAllAsReadLoading(true)
+                const reponse = await axiosInstance.post('http://localhost:5000/learner/markAllAsRead', {
+
+                }, {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('accesstoken')}`
+                    }
+                })
+                //updating it in the ui
+                dispatch(setUnreadNotifications(0))
+                dispatch(markAllAsRead("Learner"))
+                setMarkAllAsReadLoading(false)
+            }catch(err) {
+                console.log(err)
+            }
+        }
+
         //console.log("hide showMore condition: ", notificationsList.length === maxPageNumber, " listLength: ", notificationsList.length, " maxPageNumber: ", maxPageNumber);
         
     return (
@@ -150,7 +172,22 @@ function LessonNotifications(props) {
                 <div className="flex flex-col p-2 overflow-y-auto max-h-96">
                     <div className="flex px-2 items-center border-b justify-between">
                         <div className="py-5 font-bold">Notifications</div>
-                        <span className="text-darkg rounded-lg p-2 hover:bg-lightg cursor-pointer" >Mark all as read</span>
+                        <button disabled={unreadNotifications <=0 || markAllAsReadLoading? true : false} onClick={handleMarkAllAsRead} className={`rounded-lg flex p-2 items-center hover:bg-lightg text-darkg  space-x-3 ${unreadNotifications <=0 || markAllAsReadLoading? "cursor-not-allowed" : "cursor-pointer" }`} >
+                            {
+                                markAllAsReadLoading?
+                                <ReactLoading type="spin" color="#FFA447" height={'20px'} width={'20px'} />
+                                :
+                                (unreadNotifications <=0?
+                                <IoIosCheckmarkCircle 
+                                size="20"
+                                className="text-elements"></IoIosCheckmarkCircle>
+                                :
+                                null) 
+                            }
+                            <span>
+                                Mark all as read 
+                            </span>
+                        </button>
                     </div>
                     <div className="flex relative px-2 py-2 items-center border-b space-x-4">
                         {
