@@ -89,7 +89,7 @@ function Notification(props) {
                         (props.notification.Accepted === 1?
                         <span className="text-darkg"> 
                             <span className="font-semibold text-black">{props.notification.firstname+" "+props.notification.lastname}</span>
-                            <span> <span className="text-elements">Accepted</span> your <span className="font-bold text-elements">{props.notification.lesson_topic}</span> lesson request</span>
+                            <span> <span className="text-elements font-bold">Accepted</span> your <span className="font-bold text-elements">{props.notification.lesson_topic}</span> lesson request</span>
                             <span className=""> from </span>
                             <span className="font-semibold text-black">{timeFormatter(props.notification.start_time)}</span>
                             <span className=""> to </span>
@@ -100,7 +100,7 @@ function Notification(props) {
                         :
                         <span className="text-darkg"> 
                             <span className="font-semibold text-black">{props.notification.firstname+" "+props.notification.lastname}</span>
-                            <span> <span className="text-errortext">rejected</span> your <span className="font-bold text-elements">{props.notification.lesson_topic}</span> lesson request</span>
+                            <span> <span className="text-errortext font-bold">rejected</span> your <span className="font-bold text-elements">{props.notification.lesson_topic}</span> lesson request</span>
                             <span className=""> from </span>
                             <span className="font-semibold text-black">{timeFormatter(props.notification.start_time)}</span>
                             <span className=""> to </span>

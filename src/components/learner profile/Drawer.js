@@ -146,6 +146,7 @@ function Drawer(props) {
                                 <span className="">Chat</span>
                             </NavLink>
                             <NavLink 
+                                to="/learner/profile/Notifications"
                                 className="flex h-10 drawerNav items-center w-full space-x-4">
                                 <IoNotifications size="25" color="#767676"></IoNotifications>
                                 <span className="">Notifications</span>
@@ -170,6 +171,7 @@ function Drawer(props) {
                                 <span className="">Chat</span>
                             </NavLink>
                             <NavLink 
+                                to="/tutor/profile/Notifications"
                                 className="flex h-10 drawerNav items-center w-full space-x-4">
                                 <IoNotifications size="25" color="#767676"></IoNotifications>
                                 <span className="">Notifications</span>

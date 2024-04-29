@@ -11,13 +11,13 @@ import LinguaBuddy from "./LinguaBuddy";
 import Settings from "../../../components/Global/Settings";
 import BigCalendar from '../../../components/learner profile/BigCalendar'
 import io from 'socket.io-client'
-import { incrementUnreadNotifications, removeNotification, setUnreadNotifications, updateNotification } from "../../../state/slices/NotificationSlice";
+import { setUnreadNotifications, updateNotification } from "../../../state/slices/NotificationSlice";
 import { appendLesson, deleteRejectedLesson, updateAllLessonsList, updateFirstLessonList } from "../../../state/slices/lessonsList";
+import NotificationsPage from '../NotificationsPage'
 
 function LearnerProfile() {
     const dispatch = useDispatch()
     const learnerId = useSelector(state => state.userData.id)
-    const selectedOption = useSelector(state => state.notificationsData.selectedOption)
 
     useEffect(() => {
         //getting tutor details
@@ -171,7 +171,8 @@ function LearnerProfile() {
         ClassroomsSearch: <ClassroomsSearch></ClassroomsSearch>,
         ChatBot: <LinguaBuddy></LinguaBuddy>,
         Settings: <Settings></Settings>,
-        calendar: <BigCalendar></BigCalendar>
+        calendar: <BigCalendar></BigCalendar>,
+        Notifications: <NotificationsPage></NotificationsPage>
     }
     //knowing whether it's a tutor or learner signing up
     const path = window.location.pathname;
@@ -193,6 +194,8 @@ function LearnerProfile() {
             return bodyContent.Settings
         }else if (path === '/learner/profile/Calendar') {
             return bodyContent.calendar
+        }else if(path === '/learner/profile/Notifications') {
+            return bodyContent.Notifications
         }
     }
 

@@ -33,6 +33,7 @@ import {
 import { fetchFile } from "../../components/Global/functions";
 import { addNotification, incrementUnreadNotifications, setUnreadNotifications } from "../../state/slices/NotificationSlice"
 import io from 'socket.io-client'
+import NotificationsPage from './NotificationsPage'
 
 function TutorProfile() {
 
@@ -169,6 +170,7 @@ function TutorProfile() {
         ChatBot: <LinguaBuddy></LinguaBuddy>,
         Settings: <Settings></Settings>,
         Exams: <Exams></Exams>,
+        Notifications: <NotificationsPage></NotificationsPage>
     }
 
 
@@ -187,6 +189,8 @@ function TutorProfile() {
             return bodyContent.Classrooms
         }else if(path === '/tutor/profile/Settings') {
             return bodyContent.Settings
+        }else if(path ==='/tutor/profile/Notifications'){
+            return bodyContent.Notifications
         }
     }
 

@@ -1,22 +1,18 @@
-import Notification from "./Notification"
-import { useEffect, useRef, useState } from "react"
-import { IoNotifications } from "react-icons/io5"
+import Notification from "../../components/Global/Notification"
+import { useEffect, useState } from "react"
 import axiosInstance from "../../interceptors/axiosInterceptor"
-import { NotificationLoading } from "./LoadingCards"
+import { NotificationLoading } from "../../components/Global/LoadingCards"
 import { useSelector, useDispatch } from "react-redux"
 import { setNotificationsList, setMaxPageNumber, setPageNumber, setSelectedOption, setFetchedNotifications, setUnreadNotifications, markAllAsRead } from '../../state/slices/NotificationSlice'
-import ShowMoreNotifications from "../learner profile/ShowMoreNotifications"
+import ShowMoreNotifications from "../../components/learner profile/ShowMoreNotifications"
 import ReactLoading from 'react-loading';
 import { IoIosCheckmarkCircle } from "react-icons/io";
 
 
 
 function Notifications(props) {
-    const notifRef = useRef(null)
     const dispatch = useDispatch()
     
-    //controls visibility of the modal
-    const [notifications, setNotifications] = useState(true)
 
     const notificationsList = useSelector(state=> state.notificationsData.notificationsList)
     const UnreadNotifications = useSelector(state => state.notificationsData.unreadNotifs)
@@ -24,7 +20,6 @@ function Notifications(props) {
     const [loading, setLoading] = useState(false)
     const [markAllAsReadLoading, setMarkAllAsReadLoading] = useState(false)
     const selectedOption = useSelector(state => state.notificationsData.selectedOption)
-    const fetchedNotifications = useSelector(state => state.notificationsData.fetchedNotifications)
 
     const notifiationFilterOption = [
         "All", 
@@ -34,17 +29,15 @@ function Notifications(props) {
     ]
     
 
-    //handle notifications visibility and api calls 
-    const handleNotifications = async (Accepted) => {
-        console.log("notificationsList conditions: ", !notificationsList);
-        if( !fetchedNotifications && !notifications){
-            console.log("fetching notifications again ");
+    //getting notifications from server
+    useEffect(() => {
+        const fetchNotifications = async () => {
             try {
                 setLoading(true)
                 const notifications = await axiosInstance.post('http://localhost:5000/tutor/getNotifications', {
                     page: 1,
                     pageSize: 5,
-                    Accepted: Accepted
+                    Accepted: ""
                 }, {
                     headers: {
                         'Authorization': `Bearer ${localStorage.getItem('accesstoken')}`
@@ -59,27 +52,11 @@ function Notifications(props) {
                 setLoading(false)
             }
         }
-        setNotifications(prevValue => !prevValue)
-    }
 
-    
-    const handleOutsideClick = (event) => {
-        if (notifRef.current && !notifRef.current.contains(event.target)) {
-            setNotifications(false)
-            dispatch(setPageNumber(1))
-            dispatch(setMaxPageNumber(0))
-        }
-    }
+        fetchNotifications()
+    }, []) 
 
-    //control the visibility of the modal
-    useEffect(() => {
-        document.addEventListener('mousedown', handleOutsideClick);
-    
-        // Cleanup the event listener when the component unmounts
-        return () => {
-          document.removeEventListener('mousedown', handleOutsideClick);
-        }
-      }, [])
+
 
       //handling the filter option of the notificaton (All, Accepted, Requests)
       const handleOptions = async (e) => {
@@ -153,26 +130,10 @@ function Notifications(props) {
         }
 
     return (
-        <div ref={notifRef} className="relative py-1">
-            <div className="cursor-pointer" onClick={() => handleNotifications("")}>
-                {
-                    UnreadNotifications>0?
-                    <span className="absolute hidden lg:flex h-3 w-3 top-0 right-0">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-elements opacity-75"></span>
-                        <span className="relative inline-flex rounded-full h-3 w-3 bg-elements"></span>
-                    </span>
-                    :
-                    null
-                }
-                
-                <IoNotifications
-                className="text-darkg hidden lg:block" 
-                size="22"></IoNotifications>
-            </div>
             <div 
-                className={`absolute hidden lg:block right-0 w-96 mt-2 bg-white border border-lightg rounded-md shadow-lg z-10 ${notifications ? 'opacity-100 scale-y-100' : 'opacity-0 scale-y-0'} transition-transform duration-300 transform origin-top-right`}
+                className={`h-[90%] bg-white overflow-x-hidden`}
                 >
-                <div className="flex flex-col p-2 overflow-y-auto max-h-96">
+                <div className="flex flex-col p-2 overflow-y-auto">
                     <div className="flex px-2 items-center border-b justify-between">
                         <div className="py-5 font-bold">Notifications</div>
                         <button disabled={UnreadNotifications <=0 || markAllAsReadLoading? true : false} onClick={handleMarkAllAsRead} className={`rounded-lg flex p-2 items-center hover:bg-lightg text-darkg  space-x-3 ${UnreadNotifications <=0|| markAllAsReadLoading? "cursor-not-allowed" : "cursor-pointer" }`} >
@@ -212,6 +173,8 @@ function Notifications(props) {
                             <NotificationLoading></NotificationLoading>
                             <NotificationLoading></NotificationLoading>
                             <NotificationLoading></NotificationLoading>
+                            <NotificationLoading></NotificationLoading>
+                            <NotificationLoading></NotificationLoading>
                         </>
                         :
                         (
@@ -233,7 +196,6 @@ function Notifications(props) {
                     }
                 </div>
             </div>
-        </div>
     );
 }
 

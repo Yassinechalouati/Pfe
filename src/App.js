@@ -9,8 +9,7 @@ import {Route, BrowserRouter as Router, Routes} from 'react-router-dom'
 import TutorProfile from './pages/tutorProfile/TutorProfile';
 import LearnerProfile from './pages/learner/Profile/learnerProfile';
 import ForgotPassword from './pages/ForgotPassword';
-import ForgotPasswordContent from './components/sign_in/ForgotPasswordContent';
-import Settings from './components/Global/Settings';
+import ForgotPasswordContent from './components/sign_in/ForgotPasswordContent'
 import Landingpage from './pages/Landingpage';
 function App() {
   return (
@@ -43,6 +42,8 @@ function App() {
         <Route path="/users/ForgotPassword/:token" element={<ForgotPassword></ForgotPassword>}></Route>
         <Route path="/learner/profile/Settings" element={<LearnerProfile></LearnerProfile>}></Route>
         <Route path="/landingpage" element={<Landingpage></Landingpage>}></Route>
+        <Route path="/tutor/profile/Notifications" element={<TutorProfile></TutorProfile>}></Route>
+        <Route path="/learner/profile/Notifications" element={<LearnerProfile></LearnerProfile>}></Route>
         <Route index element={<Landingpage></Landingpage>}></Route>
       </Routes>
     </Router>
