@@ -1,7 +1,4 @@
 const mysql = require('../helpers/Sql_connection');
-const verifyVerificationToken = require('../helpers/verifyVerificationToken');
-const generateRefreshToken = require('../helpers/generateRefreshToken');
-const generateAccessToken = require('../helpers/generateAccessToken')
 const authenticateSocket = require('../middleware/authenticateSocket')
 
 const socketHandler = (io) => {
@@ -116,70 +113,8 @@ const socketHandler = (io) => {
 
         })
 
-
-        // Handle email verification event
-        socket.on('verifyEmail', async (token, id) => {
-                console.log("id: ", id);
-                try {
-                    const { tokenDetails } = await verifyVerificationToken(token);
-                    const payload = { id: tokenDetails.id, role: tokenDetails.role, email: tokenDetails.email };
-    
-                    
-                    const query = `SELECT isVerified, email FROM ${mysql.escapeId(payload.role)} WHERE id = ?`;
-                    mysql.query(query, [payload.id], async (err, result) => {
-                        const roomId = `users_${result[0].email}` 
-                        if (err) {
-                            console.log(err);
-                            io.to(roomId).emit('emailVerificationFailed', { message: 'Internal Server Error' });
-                            io.to(id).emit('emailVerificationFailed', { message: 'Internal Server Error', verified: false });
-                            return;
-                        }
-                        else if (result.length > 0) {
-                            if (result[0].isVerified !== 1) {
-                                const verifQuery = `UPDATE ${mysql.escapeId(payload.role)} SET isVerified = 1 WHERE id = ?`;
-    
-                                mysql.query(verifQuery, [payload.id], async (err, result) => {
-                                    if (err) {
-                                        console.log(err);
-                                        io.to(roomId).emit('emailVerificationFailed', { message: 'Internal Server Error' });
-                                        io.to(id).emit('emailVerificationFailed', { message: 'Internal Server Error', verified:false });
-                                        return;
-                                    }
-    
-                                    const { accessToken } = await generateAccessToken(payload);
-                                    const { refreshToken } = await generateRefreshToken(payload);
-    
-                                    console.log('Email verified');
-    
-                                    // Emit a message to the user in the room
-                                    io.to(roomId).emit('emailVerified', { message: 'Email verified successfully', verified: true, refreshToken, accessToken });
-                                    io.to(id).emit('emailVerified', { message: 'Email verified successfully', verified: true }); // notifying the verfication page that the user is verified
-                                });
-                            } else {
-                                // User already verified
-                                console.log('User already verified');
-                                io.to(roomId).emit('emailVerificationFailed', { message: 'User already verified' });
-                                io.to(id).emit('emailVerificationFailed', { message: 'Internal Server Error', verified:false });
-                            }
-                        } else {
-                            console.log('Invalid link');
-                            io.to(roomId).emit('emailVerificationFailed', { message: 'Invalid link' });
-                        }
-                    });
-                    
-                }catch(err) {
-                    console.log(err);
-                    io.to(id).emit('emailVerificationFailed', { message: 'Internal Server Error', verified:false });
-                }
-        });
-
         socket.on('disconnect', () => {
             console.log('User disconnected');
-            // Handle leaving rooms to prevent memory leaks
-            /*Object.keys(socket.rooms).forEach(roomName => {
-                socket.leave(roomName);
-                console.log(`User left room: ${roomName}`);
-            }); */ 
         });
     });
 };

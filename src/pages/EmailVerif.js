@@ -1,6 +1,6 @@
+import axios from 'axios'
 import {useEffect, useState, useRef} from 'react'
-import {useParams} from 'react-router-dom'
-import io from 'socket.io-client'
+import {NavLink, useParams} from 'react-router-dom'
 
 function EmailVerif() {
     //getting the token from the url
@@ -8,36 +8,36 @@ function EmailVerif() {
     
     const [isValid, setIsValid] = useState(false)
     const [isLoading, setIsLoading] = useState(true)//to assure that we got the answer from the socket before displaying the html code 
-    const socket = useRef(null)
-    socket.current = io('http://localhost:5000')
     
     
     useEffect(()=> {
-        console.log("useEffect");
-        socket.current.on('connect', () => {
-            console.log('Socket connected, ID:', socket.current.id);
-            if(socket.current.id) {
-                socket.current.emit('verifyEmail', param.token, socket.current.id)
-                
-                socket.current.on('emailVerified', (data) => {
-                    setIsValid(true)
-                    setIsLoading(false)
-                    console.log(data.verified);
-                    socket.current.disconnect();
+        const verifyEmail =  async () => {
+            try {
+                const response = await axios.post('http://localhost:5000/user/verifEmail', {
+
+                },{
+                    headers: {
+                        'Authorization': `Bearer ${param.token}`
+                    }
                 })
-        
-                //listening for errors in the verification process
-                socket.current.on('emailVerificationFailed', (error) => {
-                    console.log(error.verified);
-                    setIsValid(false)
-                    setIsLoading(false)
-                    socket.current.disconnect();
-                })
-    
-            } 
-        });
+                //showing that the verification succeeded
+                setIsValid(true)
+                setIsLoading(false)
+                //update localStorage with tokens
+                localStorage.clear();
+                localStorage.setItem('accesstoken', response.data.accessToken)
+                localStorage.setItem('refreshtoken', response.data.refreshToken)
+            }catch(err){
+                console.log(err)
+                //showing that the link is invalid
+                setIsValid(false)
+                setIsLoading(false)
+            }
+        }
+        verifyEmail()
     }, [])
     
+
     
     return (
         <div className="flex w-screen h-screen flex-col justify-center items-center space-y-2">
@@ -47,8 +47,7 @@ function EmailVerif() {
                 <>
                     <img src="/verified.png" alt="verified" className="object-cover h-44 w-44"></img>
                     <span className="text-black text-2xl font-bold">Email verified successfully</span>
-                    <span className="text-darkg text-lg font-bold">You can go back to personalize your account.</span>
-                   
+                    <NavLink to='/learner/signup/personalize' className="rounded-md py-2 px-4 bg-lightGreen text-elements font-bold">Proceed</NavLink>
                 </>
                 :
                 <>

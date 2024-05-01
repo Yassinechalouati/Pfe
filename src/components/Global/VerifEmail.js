@@ -10,8 +10,6 @@ function VerifEmail({role, user}) {
 
     const dispatch = useDispatch()
 
-    const socket = useRef(null)
-
     //control the disability of the resend button
     const [resendDisabled, setResendDisabled] = useState(false)
     
@@ -52,49 +50,24 @@ function VerifEmail({role, user}) {
                 role : role
             })
             console.log(response.data)
-            //using websocket to detect when the user pressed the verification link sent to his email 
-            socket.current = io('http://localhost:5000') 
-            socket.current.emit('createRoom', `users_${user.email}`) //joining room 
-
-            if (role ==='Learner') {
-                //setting listener for when the learenr verified his email
-                socket.current.on('emailVerified', (data) => {
-                    dispatch(setLearnerVerified(true))
-                    dispatch(setVerificationLearner(false))//handling the email sent ui 
-                    console.log(user.isVerified)
-                    socket.current.disconnect(); // Disconnect the socket to avoid memory leaks
-                })
-    
-                //listening for errors in the verification process
-                socket.current.on('emailVerificationFailed', (error) => {
-                    dispatch(setVerificationLearner(false))//handling the email sent ui 
-                    dispatch(setLearnerError(error.message))
-                    socket.current.disconnect(); // Disconnect the socket
-                })
-            }
-            else {
-                //setting listener for when the tutor verified his email
-                socket.current.on('emailVerified', (data) => {
-                    dispatch(setTutorVerified(true))
-                    dispatch(setVerificationTutor(false))//handling the email sent ui 
-                    
-                    socket.current.disconnect(); // Disconnect the socket to avoid memory leaks
-                })
-    
-                //listening for errors in the verification process
-                socket.current.on('emailVerificationFailed', (error) => {
-                    dispatch(setVerificationTutor(false))//handling the email sent ui 
-                    dispatch(setTutorError(error.message))
-                    socket.current.disconnect(); // Disconnect the socket
-                })
-            }
         }catch(err) {
-            if(role === 'Learner'){
-                dispatch(setLearnerError('Error please try again later!'))
-            }else {
-                dispatch(setTutorError('Error please try again later!'))
+            if(err.response) {
+                if(err.response.status === 409) {
+                    if(role === 'Learner'){
+                        dispatch(setVerificationLearner(false))//handling the email sent ui 
+                        dispatch(setLearnerError(err.response.data.message))
+                        dispatch(setLearnerError('Error please try again later!'))
+                    }else {
+                        dispatch(setVerificationTutor(false))//handling the email sent ui 
+                        dispatch(setTutorError(err.response.data.message))
+                        dispatch(setTutorError('Error please try again later!'))
+                    }
+                    console.log("updating things ");
+                    
+                }
             }
             console.log(err);
+           
         }
     }
 

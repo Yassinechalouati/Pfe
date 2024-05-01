@@ -2,15 +2,14 @@ import Progress from './progress_bar'
 import First from './first_step'
 import Second from './second_step'
 import Third from './third_step'
-import {useSelector} from 'react-redux'
-import { useDispatch } from 'react-redux'
+import {useSelector, useDispatch} from 'react-redux'
 import {setSignUpStep, setIsLoading, setIsVerified, setVerificationLearner, resetUserData} from '../../state/slices/userSlice'
 import { setError } from '../../state/slices/userSlice'
 import axios from 'axios'
 import axiosInstance from '../../interceptors/axiosInterceptor';
 import {useNavigate} from 'react-router-dom'
 import Loading from '../Global/Loading'
-import {useRef} from 'react'
+import {useRef, useEffect} from 'react'
 import io from 'socket.io-client'
 import NextButton from './nextButton'
 import BackButton from './backButton'
@@ -51,31 +50,8 @@ export default function Card() {
                 pfp: userData.pic
             })
             console.log(response);
+            //showing the ui for the verification
             dispatch(setVerificationLearner(true))
-            //using websocket to detect when the user pressed the verification link sent to his email 
-            socket.current = io('http://localhost:5000') 
-            socket.current.emit('createRoom', `users_${userData.email}`) //joining room 
-
-            //setting listener for when the user verified his email
-            socket.current.on('emailVerified', (data) => {
-                console.log('Email verification status:', data);  
-                dispatch(setSignUpStep(step<2? step + 1: step)) //moving to next sign up step  
-                dispatch(setVerificationLearner(false)) //remove verification placeholder
-                dispatch(setIsVerified(true))
-                
-                //saving tokens in localstorage
-                localStorage.clear();
-                localStorage.setItem('accesstoken', data.accessToken)
-                localStorage.setItem('refreshtoken', data.refreshToken)
-                socket.current.disconnect(); // Disconnect the socket to avoid memory leaks
-            })
-
-            //listening for errors in the verification process
-            socket.current.on('emailVerificationFailed', (error) => {
-                dispatch(setError(error.message))
-                dispatch(setVerificationLearner(false)) //remove verification placeholder
-                socket.current.disconnect(); // Disconnect the socket
-            })
         }catch(err) {
             dispatch(setError(err.response.data.message))
             console.log(err);
@@ -149,6 +125,7 @@ export default function Card() {
         if(step === 0 ) {
             //if we're in the first step we make the signup with the inputs given by the user
             handleRegularSignup()
+
         }
         else if (step === 1) {
             handlePersonalize()
@@ -164,6 +141,15 @@ export default function Card() {
             return <Loading></Loading>
         return content[step]
     }
+
+    const path = window.location.pathname;
+
+    //controlling what to show based on the path
+    useEffect(() => {
+            if (path === '/learner/signup/personalize') {
+                dispatch(setSignUpStep(1)); // Dispatch the action after the component has rendered
+            }
+        }, []); // Empty dependency array ensures the effect runs only once after the component mounts
 
     return(
         <form onSubmit={handleNext} className="bg-white shadow-lg px-10 py-4 w-[97%] h-[95%] sm:w-[80%] sm:h-[93%] md:w-[60%] md:h-[93%] lg:w-[60%] lg:h-[93%] xl:w-[60%] xl:h-[93%] space-y-4 rounded-3xl flex flex-col items-center">
