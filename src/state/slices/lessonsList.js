@@ -43,6 +43,38 @@ export const lessons = createSlice( {
                 }   
             }
         },
+        replaceFirstLesson: (state, action) => {
+
+            const lessonDate = new Date(action.payload.start_time)
+            
+            const lessonIndex = state.firstlessonList.findIndex(item => (new Date(item.start_time)).getDate() === lessonDate.getDate() && (new Date(item.start_time)).getMonth() === lessonDate.getMonth() && (new Date(item.start_time)).getFullYear() === lessonDate.getFullYear() )
+
+            //if the lesson is on the same date as one of the lessons in the firstLesson Array and it's before that one we update the array 
+            if(lessonIndex !== -1) {
+                const firstLessonDate = new Date(state.firstlessonList[lessonIndex].start_time)
+                if (lessonDate < firstLessonDate) {
+                    const lessonCopy = [...state.firstlessonList]
+                    lessonCopy[lessonIndex] = { ...lessonCopy[lessonIndex], start_time: action.payload.start_time, end_time: action.payload.end_time, lesson_difficulty: action.payload.lesson_difficulty, lesson_topic: action.payload.lesson_topic, language: action.payload.language}
+                    state.firstlessonList = lessonCopy
+                }
+            }else {
+                //if it doens't exist and it's within the next 6 days we append it in the list 
+
+                // Create a Date object for today
+                const today = new Date();
+
+                // Calculate the date 6 days from now
+                const sixDaysFromNow = new Date();
+                sixDaysFromNow.setDate(today.getDate() + 6);
+
+                // Check if the start_time is within the next 6 days
+                const isWithinNextSixDays = lessonDate >= today && lessonDate <= sixDaysFromNow;
+
+                if (isWithinNextSixDays) {
+                    state.firstlessonList = [...state.firstlessonList, action.payload]
+                } 
+            }
+        },
         deleteRejectedLesson: (state, action) => {
             if(state.firstlessonList) {
                 state.firstlessonList = state.firstlessonList.filter(item => item.lesson_id !== action.payload)
@@ -78,7 +110,8 @@ export const {
     replaceFirstLessonItem,
     updateAllLessonsList,
     updateFirstLessonList,
-    deleteRejectedLesson
+    deleteRejectedLesson,
+    replaceFirstLesson
 } = lessons.actions
 
 export default lessons.reducer

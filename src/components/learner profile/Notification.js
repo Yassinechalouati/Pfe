@@ -67,7 +67,7 @@ function Notification(props) {
     }
 
     return (
-         <div onClick={handleNotificationClick} className="flex relative p-2 space-x-2 hover:bg-backg rounded-lg items-center py-4 border-b">
+         <div onClick={handleNotificationClick} className={` ${!props.notification.ReadByLearner? "bg-lightButton2" : ""} flex relative p-2 space-x-2 hover:bg-backg rounded-t-lg items-center py-4 border-b`}>
             {
                 imageUrl? 
                 <img 

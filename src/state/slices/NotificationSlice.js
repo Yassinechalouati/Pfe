@@ -52,16 +52,17 @@ export const notificationSlice = createSlice({
                     if(state.selectedOption ===1 ){
                         state.notificationsList = state.notificationsList.filter(notif => notif.lesson_id !== notification);
                     }else {
+                        const listCopy = [...state.notificationsList]  
+                        console.log("listCopy[index]:", listCopy[index]);
                         const updatedNotification = {
-                            ...state.notificationsList[index],
+                            ...listCopy[index],
                             Accepted: accepted
                         };
                         console.log("updatedNotification redux:", updatedNotification);
                 
                         // Use map to update the specific notification, maintaining immutability
-                        state.notificationsList = state.notificationsList.map((item, i) =>{
-                           return  i === index ? updatedNotification : item
-                        });
+                        listCopy[index] = updatedNotification
+                        state.notificationsList = listCopy
                     }
                 }
             }

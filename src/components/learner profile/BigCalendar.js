@@ -5,7 +5,6 @@ import { useDispatch} from 'react-redux';
 import { setFirstLessonList } from '../../state/slices/lessonsList';
 import GenerateCalendarGrid from './GenerateCalendarGrid';
 import axiosInstance from '../../interceptors/axiosInterceptor';
-import io from 'socket.io-client'
 
 
 function BigCalendar() {

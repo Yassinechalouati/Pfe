@@ -54,7 +54,8 @@ const socketHandler = (io) => {
                 AND t2.Accepted <> 0 
                 AND Date(t2.start_time) = Date(?)
                 AND t2.private_learner_id = ?
-            )`
+            )
+            And t1.accepted <>0`
             mysql.query(query, [formattedDate, data.learnerId], (err, result) => {
                 if(err) {
                     console.log(err)

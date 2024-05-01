@@ -5,21 +5,22 @@ const auth = require('../middleware/auth')
 const roleCheck = require('../middleware/roleCheck')
 
 
-router.post('/getFirstLesson', auth, roleCheck(["Learner"]), (req, res) => {
+router.post('/getFirstLesson', auth, roleCheck(["Tutor"]), (req, res) => {
     const userId = req.user.id
 
-    //getting only the future lessons
+    //getting only the first lessons for the next 6 days
     const query = `SELECT *
-    FROM private_lesson t1
+    FROM private_lesson AS t1
     WHERE start_time = (
         SELECT MIN(start_time)
-        FROM private_lesson t2
+        FROM private_lesson AS t2
         WHERE DATE(t2.start_time) = DATE(t1.start_time)
         AND t2.start_time >= NOW()
-        AND private_learner_id = ?
-        AND t2.Accepted <> 0
+        AND t2.start_time < NOW() + INTERVAL 7 DAY
+        AND tutor_id = ?
+        AND t2.Accepted = 1
     )
-    AND t1.Accepted <> 0;`
+    AND t1.Accepted = 1;`
 
     mysql.query(query, [userId], (err, result) => {
         if(err) {

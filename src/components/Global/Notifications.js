@@ -16,7 +16,7 @@ function Notifications(props) {
     const dispatch = useDispatch()
     
     //controls visibility of the modal
-    const [notifications, setNotifications] = useState(true)
+    const [notifications, setNotifications] = useState(false)
 
     const notificationsList = useSelector(state=> state.notificationsData.notificationsList)
     const UnreadNotifications = useSelector(state => state.notificationsData.unreadNotifs)

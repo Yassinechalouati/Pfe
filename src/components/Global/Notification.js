@@ -9,6 +9,7 @@ import { useDispatch } from 'react-redux'
 import { updateNotificationRead } from "../../state/slices/NotificationSlice";
 import axiosInstance from "../../interceptors/axiosInterceptor"
 import io from 'socket.io-client'
+import { replaceFirstLesson } from "../../state/slices/lessonsList";
 
 function Notification(props) {
     
@@ -83,10 +84,12 @@ function Notification(props) {
 
 
     const handleAcceptLesson = async () => {
+        console.log("AcceptedClickeeed");
         try {
             const result = await notificationFeedBack(1, 'approveLesson')
-            
             dispatch(updateNotification({ notification: props.notification.lesson_id, accepted: 1, role: "tutor", lesson:"", type:""}))
+            
+            dispatch(replaceFirstLesson(props.notification))
 
             console.log(result);
         }catch(err) {
@@ -131,7 +134,7 @@ function Notification(props) {
     }
 
     return (
-         <div onClick={handleNotificationClick} className="flex p-2 relative space-x-2 hover:bg-backg rounded-lg items-center py-4 border-b">
+         <div onClick={handleNotificationClick} className={` ${!props.notification.ReadByTutor? "bg-lightButton2" : ""} flex p-2 relative space-x-2 hover:bg-backg rounded-t-lg items-center py-4 border-b`}>
             {
                 imageUrl? 
                 <img 
@@ -188,9 +191,17 @@ function Notification(props) {
             {
                 props.notification.Accepted === -1?
                 <>
-                    <div className="flex items-center self-start space-x-1">
-                        <IoCheckmarkCircle onClick={handleAcceptLesson} className="text-elements cursor-pointer" size="25"></IoCheckmarkCircle>
-                        <IoCloseCircle onClick={handleRejectLesson} className="text-errortext cursor-pointer" size="25"></IoCloseCircle>
+                    <div className="flex z-50 items-center self-start space-x-1">
+                        <IoCheckmarkCircle onClick={(e) => {
+                            e.stopPropagation(); // Stop event propagation
+                            handleNotificationClick()
+                            handleAcceptLesson();
+                        }} className="text-elements cursor-pointer" size="25"></IoCheckmarkCircle>
+                        <IoCloseCircle onClick={(e) => {
+                            e.stopPropagation(); // Stop event propagation
+                            handleNotificationClick()
+                            handleRejectLesson();
+                        }} className="text-errortext cursor-pointer" size="25"></IoCloseCircle>
                     </div>
                 </>
                 :
