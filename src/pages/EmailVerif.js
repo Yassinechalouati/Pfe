@@ -8,6 +8,7 @@ function EmailVerif() {
     
     const [isValid, setIsValid] = useState(false)
     const [isLoading, setIsLoading] = useState(true)//to assure that we got the answer from the socket before displaying the html code 
+    const [role, setRole] = useState("")
     
     
     useEffect(()=> {
@@ -20,6 +21,7 @@ function EmailVerif() {
                         'Authorization': `Bearer ${param.token}`
                     }
                 })
+                setRole(response.data.role)
                 //showing that the verification succeeded
                 setIsValid(true)
                 setIsLoading(false)
@@ -47,12 +49,27 @@ function EmailVerif() {
                 <>
                     <img src="/verified.png" alt="verified" className="object-cover h-44 w-44"></img>
                     <span className="text-black text-2xl font-bold">Email verified successfully</span>
-                    <NavLink to='/learner/signup/personalize' className="rounded-md py-2 px-4 bg-lightGreen text-elements font-bold">Proceed</NavLink>
+                    {
+                        role && role ==="Learner" ? 
+                        <NavLink to='/learner/signup/personalize' className="rounded-md py-2 px-4 bg-elements text-white font-bold">Proceed</NavLink>
+                        : 
+                        (
+                            role && role === "Tutor" ?
+                            <NavLink to='/tutor/signup/personalization' className="rounded-md py-2 px-4 bg-elements text-white font-bold">Proceed</NavLink>
+                            :
+                            null
+                        )
+
+                    }
                 </>
                 :
                 <>
-                    <img src="/erreur-404.png" alt="verified" className="object-cover h-44 w-44"></img>
-                    <span className="text-black text-2xl font-bold">404 not found</span>
+                    <img src="/erreur-404.png" alt="verified" className="object-cover h-80 w-80"></img>
+                    <div className="flex items-center space-x-2"> 
+                        <NavLink to='/tutor/signup' className="rounded-md py-2 px-4 bg-white border-button2 border text-button2">Sign up As Tutor</NavLink>
+                        <NavLink to='/learner/signup/' className="rounded-md py-2 px-4 bg-button2 text-white">Sign up As Learner</NavLink>
+                    </div>
+
                 </>)
                 :
                 ""

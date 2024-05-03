@@ -21,8 +21,6 @@ export default function Form() {
     //initializing the tool to change the tutor data on the redux store
     const dispatch = useDispatch()
 
-    //using socket io
-    const socket = useRef(null)
 
     const navigate = useNavigate()
 
@@ -39,30 +37,6 @@ export default function Form() {
             })
             console.log(response)
             dispatch(setVerificationTutor(true))
-
-            //using websocket to detect when the user pressed the verification link sent to his email 
-            socket.current = io('http://localhost:5000') 
-            socket.current.emit('createRoom', `users_${tutorData.email}`) //joining room 
-
-            //setting listener for when the user verified his email
-            socket.current.on('emailVerified', (data) => {
-                console.log('Email verification status:', data);  
-                dispatch(setVerificationTutor(false))
-                dispatch(setIsVerified(true))
-                //saving tokens in localstorage
-                localStorage.clear()
-                localStorage.setItem('accesstoken', data.accessToken)
-                localStorage.setItem('refreshtoken', data.refreshToken)
-                navigate('/tutor/signup/personalization')
-                socket.current.disconnect(); // Disconnect the socket to avoid memory leaks
-            })
-
-            //listening for errors in the verification process
-            socket.current.on('emailVerificationFailed', (error) => {
-                dispatch(setVerificationTutor(false))
-                dispatch(setError(error.message))
-                socket.current.disconnect(); // Disconnect the socket
-            })
             
         }catch(err) {
             dispatch(setError(err.response.data.message))

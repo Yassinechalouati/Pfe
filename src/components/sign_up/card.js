@@ -9,8 +9,7 @@ import axios from 'axios'
 import axiosInstance from '../../interceptors/axiosInterceptor';
 import {useNavigate} from 'react-router-dom'
 import Loading from '../Global/Loading'
-import {useRef, useEffect} from 'react'
-import io from 'socket.io-client'
+import {useEffect} from 'react'
 import NextButton from './nextButton'
 import BackButton from './backButton'
 import VerifEmail from '../Global/VerifEmail'
@@ -19,15 +18,14 @@ export default function Card() {
     //step index
     const step = useSelector((state) => state.userData.signupStep)
 
-    //using socket io
-    const socket = useRef(null)
-
     //getting elements from redux store
     const userData = useSelector((state) => state.userData)
 
     //initializing the tool to change the user data on the redux store
     const dispatch = useDispatch()
 
+    //getting the url path
+    const path = window.location.pathname;
 
     //steps
     const content = [
@@ -66,7 +64,9 @@ export default function Card() {
             dispatch(setIsLoading(true))
             const response = await axiosInstance.post('/personalize', 
             {
-                language_proficiency: userData.proficiency
+                language_proficiency: userData.proficiency,
+                firstname: userData.firstname,
+                lastname: userData.lastname
             }, 
             {
                 headers: {
@@ -142,7 +142,7 @@ export default function Card() {
         return content[step]
     }
 
-    const path = window.location.pathname;
+   
 
     //controlling what to show based on the path
     useEffect(() => {

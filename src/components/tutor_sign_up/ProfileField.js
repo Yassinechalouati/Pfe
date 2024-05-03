@@ -24,7 +24,7 @@ function ProfileField(props) {
                 <span className="text-black text-sm font-bold h-full">{props.title}</span>
             </div>
             <div className="relative h-[85%] w-full shadow rounded-xl">
-                <textarea onChange={handleChange} maxLength={maxDescriptionLength} value={props.title==='Teaching Style'? TeachingStyle : AboutMe} className="w-full resize-none outline-none h-full rounded-xl p-2 text-sm" placeholder={props.placeholder}></textarea>
+                <textarea onChange={handleChange} maxLength={maxDescriptionLength} value={props.title==='Teaching Style'? TeachingStyle : AboutMe} className="w-full resize-none focus:outline-none border focus:border-button transition-colors duration-300 h-full rounded-xl p-2 text-sm" placeholder={props.placeholder}></textarea>
                 <span className="bottom-0 absolute text-sm right-3 ">{props.title ==='Teaching Style'? TeachingStyle.length : AboutMe.length}/{maxDescriptionLength}</span>
             </div>
         </div>

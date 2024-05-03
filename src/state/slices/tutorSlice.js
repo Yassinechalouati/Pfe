@@ -93,9 +93,9 @@ export const userSlice = createSlice({
     setServerImage: (state, action) => {
       state.serverImage = action.payload
     },
-    setDisplayableVideo: (state, action) => {
+    /*setDisplayableVideo: (state, action) => {
       state.displayableVideo = action.payload
-    },
+    },*/
     setLanguages: (state, action) => {
       state.languages = action.payload
     },
@@ -137,7 +137,7 @@ export const {
   setAboutMe,
   setDisplayableImage,
   setIntroductionVideo,
-  setDisplayableVideo,
+  /*setDisplayableVideo,*/
   setServerImage,
   setLanguages,
   setEducation, 

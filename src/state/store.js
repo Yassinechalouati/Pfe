@@ -9,6 +9,7 @@ import showMoreReducer from './slices/ShowMore'
 import lessonsListReducer from './slices/lessonsList'
 import notificationsReducer from './slices/NotificationSlice'
 
+
 //store that contains a global state
 export const store = configureStore({
   reducer: {

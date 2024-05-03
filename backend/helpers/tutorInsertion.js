@@ -22,7 +22,13 @@ const tutorInsertion = async (payload, res) => {
                 const {accessToken} = await generateAccessToken(user)
                 const {refreshToken} = await generateRefreshToken(user)
                 
-                res.status(201).json({message:"Signed up succesfully", refreshToken: refreshToken, accessToken: accessToken})
+                res.status(201).json({
+                    message:"Signed up succesfully", 
+                    refreshToken: refreshToken, 
+                    accessToken: accessToken,
+                    firstname: payload.given_name,
+                    lastname: payload.family_name
+                })
             }
         })
 }

@@ -19,7 +19,7 @@ function NextButton() {
             }
         }
         else if(step === 1) {
-            if(userData?.proficiency === ""){
+            if(userData?.proficiency === "" || userData?.firstname === "" || userData?.lastname === ""){
                 return "opacity-60"
             }
             else {
@@ -48,7 +48,7 @@ function NextButton() {
             }
         }
         else if(step ===1){
-            if(userData?.proficiency === "") {
+            if(userData?.proficiency === "" || userData?.firstname === "" || userData?.lastname === "") {
                 return true
             }
             else {

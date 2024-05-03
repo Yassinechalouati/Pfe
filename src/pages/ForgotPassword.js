@@ -95,7 +95,7 @@ function ForgotPassword() {
                             <div className="flex flex-col w-full">
                                     <label className="block text-[#000] text-sm font-semibold mb-2">Password</label>
                                     <input
-                                        className="shadow text-sm rounded-lg appearance-none border  w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                        className="shadow text-sm rounded-lg appearance-none border  w-full py-2 px-3 focus:border-button transition-colors duration-300"
                                         type="password"
                                         value = {password}
                                         onChange={handlePasswordChange}
@@ -109,7 +109,7 @@ function ForgotPassword() {
                             <div className="flex flex-col w-full">   
                                 <label className="block text-[#000] text-sm font-semibold mb-2">Confirm Password</label>
                                 <input
-                                    className="shadow text-sm appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                    className="shadow text-sm appearance-none border rounded-lg w-full py-2 px-3 focus:border-button transition-colors duration-300"
                                     type="password"
                                     value = {confPassword}
                                     pattern= {password}

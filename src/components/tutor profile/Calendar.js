@@ -62,7 +62,7 @@ function Calendar(props) {
       Here's An Overview Of Your Calendar For The Week  
     </span>,
     <hr key="line1" className="h-1 w-full"></hr>,
-    <div key="calendar" className="w-full grid grid-cols-3 md:grid-cols-5 xl:grid-cols-7 gap-10 rounded-3xl p-4 border border-1">
+    <div key="calendar" className="w-full grid grid-cols-3 md:grid-cols-5 xl:grid-cols-7 gap-3 rounded-3xl p-4 border border-1">
       {/* Render days of the week with their number in the month */}
       {weekFirstLesson && datesForWeek.map(({ day, dayOfMonth, className }, index) => {
         let firstLesson = {};
@@ -109,7 +109,7 @@ function Calendar(props) {
                   </div>
               </div>
             ) : (
-              <div className="min-h-[178px] min-w-20 bg-lightg p-2 rounded-md">
+              <div className="min-h-[169px] min-w-20 bg-lightg p-2 rounded-md">
               </div>
             )}
           </div>

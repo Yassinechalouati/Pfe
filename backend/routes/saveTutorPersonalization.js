@@ -14,7 +14,9 @@ router.post('/personalization', auth, roleCheck(["Tutor"]), upload.fields([{ nam
         AboutMe,
         education,
         languages,
-        workExperience
+        workExperience,
+        firstname,
+        lastname
     } = req.body;
 
     console.log(req.body);
@@ -29,8 +31,8 @@ router.post('/personalization', auth, roleCheck(["Tutor"]), upload.fields([{ nam
 
 
     // Update the tutor information with the filenames
-    const query = 'UPDATE tutor SET Country = ?, pfp = ?, introductionVideo = ?, description = ?, teachingStyle = ?, AboutMe = ?, Languages = ?, WorkExperience = ?, education = ? WHERE id = ?';
-    mysql.query(query, [Country, pfpFileName, introductionVideoFileName, description, TeachingStyle, AboutMe, languages, workExperience, education, id], (err, result) => {
+    const query = 'UPDATE tutor SET firstname = ?, lastname = ?, Country = ?, pfp = ?, introductionVideo = ?, description = ?, teachingStyle = ?, AboutMe = ?, Languages = ?, WorkExperience = ?, education = ? WHERE id = ?';
+    mysql.query(query, [firstname, lastname, Country, pfpFileName, introductionVideoFileName, description, TeachingStyle, AboutMe, languages, workExperience, education, id], (err, result) => {
         if (err) {
             console.error('Error updating tutor:', err);
             res.status(500).json({ error: 'Error updating tutor' });

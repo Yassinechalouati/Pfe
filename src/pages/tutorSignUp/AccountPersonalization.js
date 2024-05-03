@@ -51,6 +51,8 @@ function AccountPersonalization() {
             formData.append('languages', JSON.stringify(tutorData.languages));
             formData.append('workExperience', JSON.stringify(tutorData.workExperience));
             formData.append('education', JSON.stringify(tutorData.education));
+            formData.append('firstname', tutorData.firstname)
+            formData.append('lastname', tutorData.lastname)
 
 
             axiosInstance.post('http://localhost:5000/tutor/personalization', formData, {
@@ -85,7 +87,7 @@ function AccountPersonalization() {
     const welcomeDisabledCondition = !tutorData.Country
 
     //this is the condition that should be true in order to disable the next button in the intro phase
-    const introDisabledCondition = !tutorData.serverImage || !tutorData.displayableImage || !tutorData.displayableVideo || !tutorData.introductionVideo || !tutorData.description
+    const introDisabledCondition = !tutorData.serverImage || !tutorData.displayableImage || !tutorData.introductionVideo || !tutorData.description || !tutorData.firstname || !tutorData.lastname
 
     //this is the condition that should be true in order to disable the next button in the Profile phase
     const profileDisabledCondition = !tutorData.TeachingStyle || !tutorData.AboutMe || !listData.listOfLanguagesSaved || !listData.listOfWorkExperienceSaved || !listData.listOfEducationSaved
@@ -112,8 +114,10 @@ function AccountPersonalization() {
         return conditionComponent;
 
     }
+
+    console.log("introDisabledCondition: ", introDisabledCondition);
     return (
-        <form className="h-screen relative w-screen flex flex-col bg-backg">
+        <form onSubmit={handleNextButton} className="h-screen relative w-screen flex flex-col bg-backg">
             <StepBar></StepBar>
             {
                 content[tutorData.steps]
@@ -123,7 +127,7 @@ function AccountPersonalization() {
                     <GrFormPreviousLink  size="25"></GrFormPreviousLink>
                     <span className="text-base hidden sm:block md:block lg:block xl:block">Back</span>
                 </button>
-                <button disabled={handleDisabled()} onClick={handleNextButton} type="submit" className={`bg-button ${(tutorData.steps===0 && welcomeDisabledCondition) || (introDisabledCondition && tutorData.steps === 1) || (profileDisabledCondition && tutorData.steps === 2) || (tutorData.steps === 3 && wifiTestDisabledCondition)? 'opacity-60' :'hover:shadow'} sm:space-x-2 md:space-x-2 lg:space-x-2 xl:space-x-2 border border-button flex justify-center items-center w-[20%] sm:w-[15%] md:w-[15%] lg:w-[10%] xl:w-[10%] self-end h-10 text-center font-semibold text-lg px-4 py-2 rounded-full text-white`}>
+                <button disabled={handleDisabled()} type="submit" className={`bg-button ${(tutorData.steps===0 && welcomeDisabledCondition) || (introDisabledCondition && tutorData.steps === 1) || (profileDisabledCondition && tutorData.steps === 2) || (tutorData.steps === 3 && wifiTestDisabledCondition)? 'opacity-60' :'hover:shadow'} sm:space-x-2 md:space-x-2 lg:space-x-2 xl:space-x-2 border border-button flex justify-center items-center w-[20%] sm:w-[15%] md:w-[15%] lg:w-[10%] xl:w-[10%] self-end h-10 text-center font-semibold text-lg px-4 py-2 rounded-full text-white`}>
                     <span className="text-base hidden sm:block md:block lg:block xl:block">Next</span>
                     <GrFormNextLink size="25"></GrFormNextLink>
                 </button>

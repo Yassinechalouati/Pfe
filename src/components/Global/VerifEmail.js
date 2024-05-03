@@ -53,6 +53,7 @@ function VerifEmail({role, user}) {
         }catch(err) {
             if(err.response) {
                 if(err.response.status === 409) {
+                    console.log("error: ", err.response.data.message)
                     if(role === 'Learner'){
                         dispatch(setVerificationLearner(false))//handling the email sent ui 
                         dispatch(setLearnerError(err.response.data.message))

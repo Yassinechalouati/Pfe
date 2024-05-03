@@ -1,10 +1,11 @@
 import { FcGoogle } from "react-icons/fc";
 import { useDispatch } from "react-redux";
 import axios from "axios";
-import { setError } from "../../state/slices/tutorSlice";
+import { setError, setLastName } from "../../state/slices/tutorSlice";
 import { setIsLoading } from "../../state/slices/tutorSlice";
 import { useGoogleLogin } from '@react-oauth/google';
 import {useNavigate} from 'react-router-dom'
+import { setFirstName } from "../../state/slices/tutorSlice";
 
 //tutor mail sign up
 function MailSignup() {
@@ -32,6 +33,8 @@ function MailSignup() {
                 localStorage.clear();
                 localStorage.setItem('refreshtoken', resp.data.refreshToken)
                 localStorage.setItem('accesstoken', resp.data.accessToken)
+                dispatch(setLastName(resp.data.lastname))
+                dispatch(setFirstName(resp.data.firstname))
                 navigate('/tutor/signup/personalization')
             }catch(err) {
                 dispatch(setError(err.response.data.message))

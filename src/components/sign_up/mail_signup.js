@@ -1,7 +1,7 @@
 import { FcGoogle } from "react-icons/fc";
 import { useGoogleLogin } from '@react-oauth/google';
 import axios from 'axios'
-import {setSignUpStep, setIsLoading} from '../../state/slices/userSlice'
+import {setSignUpStep, setIsLoading, setFirstName, setLastName} from '../../state/slices/userSlice'
 import {useDispatch} from 'react-redux'
 import { useSelector } from 'react-redux'
 import { setError } from "../../state/slices/userSlice";
@@ -32,6 +32,8 @@ export default function Mail() {
                 localStorage.clear();
                 localStorage.setItem('refreshtoken', resp.data.refreshToken)
                 localStorage.setItem('accesstoken', resp.data.accessToken)
+                dispatch(setFirstName(resp.data.firstname))
+                dispatch(setLastName(resp.data.lastname))
                 dispatch(setSignUpStep(step<2? step + 1: step))
             }catch(err) {
                 dispatch(setError(err.response.data.message))

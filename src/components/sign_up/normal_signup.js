@@ -30,7 +30,7 @@ export default function Fields() {
                 <div className="flex flex-col">
                     <label className="block text-[#000] text-sm font-semibold mb-2">Email</label>
                     <input
-                        className="shadow text-sm appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        className="shadow text-sm appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 focus:outline-none focus:border-button transition-colors duration-300"
                         type="email"
                         pattern="[^\s@]+@[^\s@]+\.[^\s@]+"
                         value = {userData?.email}
@@ -41,7 +41,7 @@ export default function Fields() {
                 <div className="flex flex-col">
                     <label className="block text-[#000] text-sm font-semibold mb-2">Password</label>
                     <input
-                        className="shadow text-sm rounded-lg appearance-none border  w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        className="shadow text-sm rounded-lg appearance-none border  w-full py-2 px-3 text-gray-700 focus:outline-none focus:border-button transition-colors duration-300"
                         type="password"
                         value = {userData?.password}
                         onChange={handlePasswordChange}
@@ -55,7 +55,7 @@ export default function Fields() {
                 <div className="flex flex-col">   
                     <label className="block text-[#000] text-sm font-semibold mb-2">Confirm Password</label>
                     <input
-                        className="shadow text-sm appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        className="shadow text-sm appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 focus:outline-none focus:border-button transition-colors duration-300"
                         type="password"
                         value = {userData?.confpass}
                         pattern= {userData?.password}
