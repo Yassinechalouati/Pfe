@@ -23,6 +23,15 @@ const GenerateCalendarGrid = (props) => {
     const showMoreRef = useRef(null)
     const visibility = useSelector(state => state.showMoreData.visibility)
     const lessonList = useSelector(state => state.lessonsList.firstlessonList)
+    
+    //knowing whether it's a tutor or learner signing up
+    const path = window.location.pathname;
+
+    // Split the path by "/"
+    const segments = path.split('/');
+
+    // Get the value of the first segment
+    const firstSegment = segments[1]; 
 
     const showOptions = useSelector(state => state.scheduleData.visibility)
 
@@ -63,7 +72,7 @@ const GenerateCalendarGrid = (props) => {
         
         const formattedDate = `${year}-${month}-${dayOfMonth}`
         try{
-            const response = await axiosInstance.post('http://localhost:5000/learner/getDayLessons', {
+            const response = await axiosInstance.post(`http://localhost:5000/${firstSegment}/getDayLessons`, {
                 date: formattedDate
             }, {
                 headers: {
@@ -87,7 +96,7 @@ const GenerateCalendarGrid = (props) => {
 
     //generating the cell to be show in calendar
     const cellContent = (day, cellClass, isToday) => {
-        cellClass += " bg-cellColor flex flex-col text-white cursor-pointer";
+        cellClass += `bg-cellColor flex flex-col text-white ${firstSegment === "learner"? "cursor-pointer" : ""}`;
         let test = false // we're testing whether there is a scheduled lesson on that day or not 
 
         for (let i = 0; i < lessonList.length; i++) {
@@ -118,7 +127,7 @@ const GenerateCalendarGrid = (props) => {
     
     
                     test = <div key={day} className={cellClass}>
-                    <span className="mb-2 flex ">
+                    <span className="mb-2 flex">
                         <span className={`rounded-full min-w-7 min-h-7 text-center ${isToday? "bg-button" : "" } text-white p-1`}>
                             {day}  
                         </span>
@@ -141,7 +150,12 @@ const GenerateCalendarGrid = (props) => {
                                 {formattedStartHourMinute} - {formattedEndHourMinute}
                             </span>
                         </div>
-                        <button onClick={(event) => handleCellClick(event, day)} className="rounded-lg cursor-pointer w-full text-center p-1 text-xs bg-lightbutton border border-button text-button">Add</button>
+                        {
+                            firstSegment ==="learner"?
+                            <button onClick={(event) => handleCellClick(event, day)} className="rounded-lg cursor-pointer w-full text-center p-1 text-xs bg-lightbutton border border-button text-button">Add</button>
+                            :
+                            null
+                        }
                         <button ref={showMoreRef} onClick={(event) => handleShowMore(event, day)} className="cursor-pointer underline text-xs text-darkg">Show more</button>
                     </div>
                 </div>
@@ -155,14 +169,19 @@ const GenerateCalendarGrid = (props) => {
         //if there are scheduled lesson on this day we display them and display the show more button 
         const result = test? test : 
                 <div key={day} className={cellClass}>
-                    <span className="mb-2 flex ">
+                    <span className="mb-2 flex">
                         <span className={`rounded-full min-w-7 text-center ${isToday? "bg-button" : ""} text-white p-1`}>
                             {day}  
                         </span>
                     </span>
-                    <div className="flex flex-col m-auto w-full items-center justify-center space-y-2">
-                        <button  onClick={(event) => handleCellClick(event, day)} className="rounded-lg cursor-pointer w-full text-center p-1 text-xs bg-lightbutton border border-button text-button">Add</button>
-                    </div>
+                    {
+                        firstSegment ==="learner"?
+                        <div className="flex flex-col m-auto w-full items-center justify-center space-y-2">
+                            <button  onClick={(event) => handleCellClick(event, day)} className="rounded-lg cursor-pointer w-full text-center p-1 text-xs bg-lightbutton border border-button text-button">Add</button>
+                        </div>
+                        :
+                        <div className="flex-grow"></div>
+                    }
                 </div>
 
         return result
@@ -201,7 +220,7 @@ const GenerateCalendarGrid = (props) => {
     return (
         <>
             {grid}
-            {showOptions && (
+            {(firstSegment === "learner" && showOptions) && (
                 <Schedule selectedDate={selectedDate} />
             )}
             {

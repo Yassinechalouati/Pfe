@@ -78,7 +78,8 @@ const tutorMarkAllAsReadRouter = require('./routes/TutormarkAllAsRead')
 const learnerMarkAllAsReadRouter = require('./routes/LearnerMarkAllAsRead')
 const tutorCalendarOverviewRouter = require('./routes/calendarOverviewTutor')
 const emailVerificationRouter = require('./routes/VerifEmail')
-
+const getDayLessonsTutor = require('./routes/getDayLessonsTutor')
+ 
 
 //apis
 app.use('/', googleSignupRouter)
@@ -104,6 +105,7 @@ app.use('/tutor', tutorDetails)
 app.use('/learner', scheduleLesson)
 app.use('/learner', getFirstLessons)
 app.use('/learner', getDayLessons)
+app.use('/tutor', getDayLessonsTutor)
 app.use('/learner', getFreeTutors)
 app.use('/', getBusyTimes)
 app.use('/tutor', getTutorBookingNotifications)

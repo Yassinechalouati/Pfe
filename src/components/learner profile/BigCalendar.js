@@ -12,6 +12,16 @@ function BigCalendar() {
     const [month, setMonth] = useState(new Date().getMonth());
     const [slideDirection, setSlideDirection] = useState(null)
     
+    //knowing whether it's a tutor or learner signing up
+    const path = window.location.pathname;
+
+    // Split the path by "/"
+    const segments = path.split('/');
+
+    // Get the value of the first segment
+    const firstSegment = segments[1]; 
+    
+
     const dispatch = useDispatch()
 
     const calendarGridRef = useRef(null);
@@ -73,7 +83,7 @@ function BigCalendar() {
     //getting the first lesson in every day
     const fetchData = async () => {
         try {
-           const response = await axiosInstance.post('http://localhost:5000/learner/getFirstLesson', {}, {
+           const response = await axiosInstance.post(`http://localhost:5000/${firstSegment}/getFirstLesson`, {}, {
             headers: {
                 'Authorization': `Bearer ${localStorage.getItem('accesstoken')}`
             }

@@ -16,11 +16,24 @@ router.post('/getFirstLesson', auth, roleCheck(["Tutor"]), (req, res) => {
         FROM private_lesson AS t2
         WHERE DATE(t2.start_time) = DATE(t1.start_time)
         AND t2.start_time >= NOW()
-        AND t2.start_time < NOW() + INTERVAL 7 DAY
         AND tutor_id = ?
         AND t2.Accepted = 1
     )
     AND t1.Accepted = 1;`
+
+    //query that gets lessons within the next 7 days 
+    /*SELECT *
+    FROM private_lesson AS t1
+    WHERE start_time = (
+        SELECT MIN(start_time)
+        FROM private_lesson AS t2
+        WHERE DATE(t2.start_time) = DATE(t1.start_time)
+        AND t2.start_time >= NOW()
+        AND t2.start_time < NOW() + INTERVAL 7 DAY
+        AND tutor_id = ?
+        AND t2.Accepted = 1
+    )
+    AND t1.Accepted = 1;*/
 
     mysql.query(query, [userId], (err, result) => {
         if(err) {

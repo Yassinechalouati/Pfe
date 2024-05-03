@@ -14,6 +14,7 @@ import io from 'socket.io-client'
 import { setUnreadNotifications, updateNotification } from "../../../state/slices/NotificationSlice";
 import { appendLesson, deleteRejectedLesson, updateAllLessonsList, updateFirstLessonList } from "../../../state/slices/lessonsList";
 import NotificationsPage from '../NotificationsPage'
+import { fetchFile, isGoogleProfilePicture } from "../../../components/Global/functions";
 
 function LearnerProfile() {
     const dispatch = useDispatch()
@@ -32,6 +33,7 @@ function LearnerProfile() {
                 });
                 
                 console.log(response.data.message)
+
                 // Dispatch actions sequentially
                 await Promise.all([
                     dispatch(setId(response.data.message.id)),
@@ -39,7 +41,6 @@ function LearnerProfile() {
                     dispatch(setLastName(response.data.message.lastname)),
                     dispatch(setEmail(response.data.message.email)),
                     dispatch(setHasPassword(response.data.message.hasPassword)),
-                    dispatch(setPic(response.data.message.pfp)),
                     dispatch(setCountry(response.data.message.country)),
                     dispatch(setTel(response.data.message.tel)),
                     dispatch(setGoals(response.data.message.learning_goals)),
@@ -49,6 +50,16 @@ function LearnerProfile() {
                     dispatch(setComfortLevel(response.data.message.comfortlevel)),
                     dispatch(setBirthday(response.data.message.Birthday))
                 ]);
+
+                //if it's a google profile picture we save it and just show it, else we fetch the picture from our server
+                let imageUrl = response.data.message.pfp
+                if(imageUrl) {
+                    if (!isGoogleProfilePicture(imageUrl)) {
+                        imageUrl = await fetchFile(response.data.message.pfp, 'images', 'Learner', response.data.message.id);
+                    }
+                }
+                dispatch(setPic(imageUrl))
+
                 dispatch(setIsLoading(false))
             } catch (error) {
                 console.log(error);

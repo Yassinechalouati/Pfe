@@ -58,7 +58,7 @@ export const lessons = createSlice( {
                     state.firstlessonList = lessonCopy
                 }
             }else {
-                //if it doens't exist and it's within the next 6 days we append it in the list 
+                /*//if it doens't exist and it's within the next 6 days we append it in the list 
 
                 // Create a Date object for today
                 const today = new Date();
@@ -71,8 +71,8 @@ export const lessons = createSlice( {
                 const isWithinNextSixDays = lessonDate >= today && lessonDate <= sixDaysFromNow;
 
                 if (isWithinNextSixDays) {
-                    state.firstlessonList = [...state.firstlessonList, action.payload]
-                } 
+                } */
+                state.firstlessonList = [...state.firstlessonList, action.payload]
             }
         },
         deleteRejectedLesson: (state, action) => {

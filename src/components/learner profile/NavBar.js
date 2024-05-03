@@ -2,7 +2,7 @@ import { IoChatbubbles } from "react-icons/io5"
 import { IoMdCalendar } from "react-icons/io";
 import { BsRobot } from "react-icons/bs";
 import { IoMenu } from "react-icons/io5";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Drawer from "./Drawer";
 import { useSelector } from "react-redux";
 import { NavLink } from 'react-router-dom';
@@ -16,7 +16,9 @@ function NavBar() {
     //handle drawer visibility
     const [isOpen, setIsOpen] =useState(false)
     
-    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false)
+
+    const pfpRef = useRef(null)
 
     const learnerData = useSelector(state => state.userData)
     
@@ -93,13 +95,14 @@ function NavBar() {
                             :
                             <div className="relative">
                                 <img 
+                                    ref={pfpRef}
                                     src={`${learnerData.pic==="user.png" ? "/" +learnerData.pic: learnerData.pic }`} 
                                     alt="profilepicture" 
                                     referrerPolicy="no-referrer"
                                     className="cursor-pointer hidden lg:block rounded-full min-w-10 min-h-10 w-12 h-12 object-cover"
                                     onClick={toggleDropdown}
                                 />
-                                <DropdownMenu isOpen={isDropdownOpen} onClose={() => setIsDropdownOpen(false)} />
+                                <DropdownMenu pfpRef={pfpRef} isOpen={isDropdownOpen} onClose={() => setIsDropdownOpen(false)} />
                             </div>
                             
                         }

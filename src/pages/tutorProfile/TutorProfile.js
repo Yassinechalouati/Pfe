@@ -34,6 +34,7 @@ import { fetchFile } from "../../components/Global/functions";
 import { addNotification, incrementUnreadNotifications, setUnreadNotifications } from "../../state/slices/NotificationSlice"
 import io from 'socket.io-client'
 import NotificationsPage from './NotificationsPage'
+import BigCalendar from "../../components/learner profile/BigCalendar";
 
 function TutorProfile() {
 
@@ -170,7 +171,8 @@ function TutorProfile() {
         ChatBot: <LinguaBuddy></LinguaBuddy>,
         Settings: <Settings></Settings>,
         Exams: <Exams></Exams>,
-        Notifications: <NotificationsPage></NotificationsPage>
+        Notifications: <NotificationsPage></NotificationsPage>,
+        Calendar: <BigCalendar></BigCalendar>
     }
 
 
@@ -191,6 +193,8 @@ function TutorProfile() {
             return bodyContent.Settings
         }else if(path ==='/tutor/profile/Notifications'){
             return bodyContent.Notifications
+        }else if(path === "/tutor/profile/Calendar"){
+            return bodyContent.Calendar
         }
     }
 

@@ -9,6 +9,16 @@ function ShowMoreRow({lesson}) {
     const [imageFile, setImageFile] = useState('')
     const [loading, setLoading] = useState(false)
 
+
+    //knowing whether it's a tutor or learner signing up
+    const path = window.location.pathname;
+
+    // Split the path by "/"
+    const segments = path.split('/');
+
+    // Get the value of the first segment
+    const firstSegment = segments[1]; 
+
     const handleLessonStatus = (Accepted) => {
         if(Accepted === -1){
             return "On Hold"
@@ -69,7 +79,15 @@ function ShowMoreRow({lesson}) {
                         </div>
                     </div>
                 </div>
-                <span className="text-sm" >Tutor: {lesson.firstname+" "+lesson.lastname}</span>
+                <span className="text-sm" >
+                    {
+                        firstSegment === "learner"?
+                        "Tutor: "
+                        :
+                        "Learner: "
+                    }   
+                    {lesson.firstname+" "+lesson.lastname}
+                    </span>
                 <div className="flex space-x-2">
                     <div className={`text-button2 bg-lightButton2 text-xs p-1 border border-button2 rounded-xl`}>
                         {lesson.language}

@@ -66,12 +66,15 @@ function Calendar(props) {
       {/* Render days of the week with their number in the month */}
       {weekFirstLesson && datesForWeek.map(({ day, dayOfMonth, className }, index) => {
         let firstLesson = {};
+        const currentDate = new Date()
         for (let i = 0; i < weekFirstLesson.length; i++) {
-          const currentItemDate = new Date(weekFirstLesson[i].start_time);
-          const dayName = daysOfWeek[currentItemDate.getDay()];
-          if (dayName === day) {
-            firstLesson = weekFirstLesson[i];
-            break;
+          const currentItemDate = new Date(weekFirstLesson[i].start_time)
+          if(dayOfMonth === currentItemDate.getDate() && currentDate.getMonth() === currentItemDate.getMonth() && currentDate.getFullYear() === currentItemDate.getFullYear() ) {
+            const dayName = daysOfWeek[currentItemDate.getDay()];
+            if (dayName === day) {
+              firstLesson = weekFirstLesson[i];
+              break;
+            }
           }
         }
   
