@@ -5,11 +5,12 @@ const roleCheck = require('../middleware/roleCheck')
 const mysql = require('../helpers/Sql_connection')
 
 
-router.post('/details', auth, roleCheck(["Tutor"]), (req, res) => {
-    console.log(req.user.id);
-    const userId = req.user.id
-    const query ='select * from tutor where id = ?'
-    mysql.query(query, [userId], (err, result) => {
+router.post('/selectedTutor', auth, roleCheck(["Learner"]), (req, res) => {
+    const {
+        uuid
+    } = req.body
+    const query ='select * from tutor where uuid = ?'
+    mysql.query(query, [uuid], (err, result) => {
         if(err) {
             console.log(err)
             res.status(500).json({message: "Internal Servor Error"})
@@ -22,7 +23,6 @@ router.post('/details', auth, roleCheck(["Tutor"]), (req, res) => {
                 firstname: result[0].firstname,
                 lastname: result[0].lastname,
                 email: result[0].email,
-                hasPassword: result[0].pword !== '',
                 pfp: result[0].pfp,
                 country: result[0].Country,
                 tel: result[0].tel,
@@ -34,7 +34,6 @@ router.post('/details', auth, roleCheck(["Tutor"]), (req, res) => {
                 Languages: result[0].Languages,
                 WorkExperience: result[0].WorkExperience,
                 Education : result[0].Education,
-                uuid: result[0].uuid,
                 created_at: result[0].created_at
             }
             console.log(data);

@@ -5,6 +5,7 @@ const bcrypt = require('bcrypt');
 const generateVerificationToken = require('../helpers/generateVerificationToken')
 const sendEmail = require('../helpers/sendEmail')
 const {generateLearnerEmailHtml } = require('../helpers/emailContent')
+const { v4: uuidv4 } = require('uuid');
 
 
 router.post('/regular_signup', (req, res) => {
@@ -18,7 +19,6 @@ router.post('/regular_signup', (req, res) => {
     }
     else {
         //checking if the email already exists in the Database or not 
-        
         const query = 'select email from learner where email = ? UNION select email from Tutor where email = ?'
         mysql.query(query, [email, email], (err, result) => {
             //Checking whether there's an error in database or not 
@@ -34,8 +34,10 @@ router.post('/regular_signup', (req, res) => {
                     //hashing the password before the insertion in the database
                     bcrypt.hash(pword, 10)
                     .then(hash => {
-                        const insertionQuery = 'INSERT INTO LEARNER(email, pword, pfp, isVerified) VALUES(?, ?, ?, 0)'
-                        mysql.query(insertionQuery, [email, hash, pfp], async (err, result)=> {
+                        //generating unique key for learner
+                        const uuid = uuidv4();
+                        const insertionQuery = 'INSERT INTO LEARNER(email, pword, pfp, isVerified, uuid) VALUES(?, ?, ?, 0, ?)'
+                        mysql.query(insertionQuery, [email, hash, pfp, uuid], async (err, result)=> {
                             //Checking whether there's an error in database or not 
                             if (err) {
                                 console.log("query error: ", err)

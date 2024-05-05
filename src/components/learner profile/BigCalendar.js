@@ -4,15 +4,16 @@ import { IoIosArrowDropleftCircle } from "react-icons/io";
 import { useDispatch} from 'react-redux';
 import { setFirstLessonList } from '../../state/slices/lessonsList';
 import GenerateCalendarGrid from './GenerateCalendarGrid';
-import axiosInstance from '../../interceptors/axiosInterceptor';
+import axiosInstance from '../../interceptors/axiosInterceptor'
+import { useLocation } from 'react-router-dom';
 
 
 function BigCalendar() {
     const [year, setYear] = useState(new Date().getFullYear());
     const [month, setMonth] = useState(new Date().getMonth());
     const [slideDirection, setSlideDirection] = useState(null)
-    
-    //knowing whether it's a tutor or learner signing up
+    const location = useLocation();
+
     const path = window.location.pathname;
 
     // Split the path by "/"
@@ -102,7 +103,7 @@ function BigCalendar() {
 
 
     return (
-        <div className={`bg-backg h-[90%] overflow-y-auto  overflow-x-hidden py-4 px-4 lg:px-36 rounded-lg shadow-lg`}>
+        <div className={`bg-backg overflow-y-auto ${location.pathname.startsWith('/learner/profile/Tutor/')? "p-3 h-full" : "py-4 px-4 lg:px-36 h-[90%] "} overflow-x-hidden rounded-lg shadow-lg`}>
             <div className="calendar-header relative w-full flex items-center lg:justify-center mb-4">
                 <div className="flex items-center space-x-7 lg:space-x-36">
                     <IoIosArrowDropleftCircle size="25" className="text-button hover:text-orange-600 cursor-pointer" onClick={prevMonth}></IoIosArrowDropleftCircle>

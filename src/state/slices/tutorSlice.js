@@ -27,7 +27,9 @@ const initialState = {
   AboutMe: '',
   Country: '',
   countryFlag: '',
-  id: ''
+  id: '',
+  uuid: '',
+  created_at: ''
 
 }
 
@@ -117,6 +119,12 @@ export const userSlice = createSlice({
     setId: (state, action) => {
       state.id= action.payload
     },
+    setUuid: (state, action) => {
+      state.uuid = action.payload
+    },
+    setCreatedAt: (state, action) => {
+      state.created_at = action.payload
+    },
     resetUserData: () => initialState
   },
 })
@@ -150,6 +158,8 @@ export const {
   setHasPassword, 
   setTel,
   setCountryFlag,
-  setId
+  setId,
+  setUuid,
+  setCreatedAt
 } = userSlice.actions
 export default userSlice.reducer

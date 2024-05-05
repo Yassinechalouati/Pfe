@@ -1,7 +1,7 @@
 import NavBar from "../../../components/learner profile/NavBar";
 import axiosInstance from "../../../interceptors/axiosInterceptor";
 import { useEffect } from "react";
-import { setId, setIsLoading, setBirthday, setComfortLevel, setCountry, setEmail, setFirstName, setFocusThemes, setGoals, setHasPassword, setLastName, setLife_Goals, setPic, setTel, setTopics } from "../../../state/slices/userSlice";
+import { setId, setIsLoading, setBirthday, setComfortLevel, setCountry, setEmail, setFirstName, setFocusThemes, setGoals, setHasPassword, setLastName, setLife_Goals, setPic, setTel, setTopics, setUuid, setCreatedAt } from "../../../state/slices/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import CoursesSearch from "./CoursesSearch";
 import TutorsSearch from "./TutorsSearch";
@@ -15,10 +15,16 @@ import { setUnreadNotifications, updateNotification } from "../../../state/slice
 import { appendLesson, deleteRejectedLesson, updateAllLessonsList, updateFirstLessonList } from "../../../state/slices/lessonsList";
 import NotificationsPage from '../NotificationsPage'
 import { fetchFile, isGoogleProfilePicture } from "../../../components/Global/functions";
+import TutorProfile from "../../../components/learner profile/TutorProfile";
+import { useLocation } from 'react-router-dom';
+
 
 function LearnerProfile() {
     const dispatch = useDispatch()
     const learnerId = useSelector(state => state.userData.id)
+
+    const location = useLocation();
+
 
     useEffect(() => {
         //getting tutor details
@@ -36,6 +42,7 @@ function LearnerProfile() {
 
                 // Dispatch actions sequentially
                 await Promise.all([
+                    dispatch(setUuid(response.data.message.uuid)),
                     dispatch(setId(response.data.message.id)),
                     dispatch(setFirstName(response.data.message.firstname)),
                     dispatch(setLastName(response.data.message.lastname)),
@@ -48,7 +55,8 @@ function LearnerProfile() {
                     dispatch(setFocusThemes(response.data.message.focus_themes)),
                     dispatch(setTopics(response.data.message.interested_topics)),
                     dispatch(setComfortLevel(response.data.message.comfortlevel)),
-                    dispatch(setBirthday(response.data.message.Birthday))
+                    dispatch(setBirthday(response.data.message.Birthday)),
+                    dispatch(setCreatedAt(response.data.message.created_at))
                 ]);
 
                 //if it's a google profile picture we save it and just show it, else we fetch the picture from our server
@@ -178,6 +186,7 @@ function LearnerProfile() {
     const bodyContent = {
         CoursesSearch: <CoursesSearch></CoursesSearch>,
         TutorsSearch: <TutorsSearch></TutorsSearch>,
+        TutorProfile: <TutorProfile></TutorProfile>,
         Profile: <Body></Body>,
         ClassroomsSearch: <ClassroomsSearch></ClassroomsSearch>,
         ChatBot: <LinguaBuddy></LinguaBuddy>,
@@ -207,6 +216,8 @@ function LearnerProfile() {
             return bodyContent.calendar
         }else if(path === '/learner/profile/Notifications') {
             return bodyContent.Notifications
+        }else if(location.pathname.startsWith('/learner/profile/Tutor/')) {
+            return bodyContent.TutorProfile
         }
     }
 

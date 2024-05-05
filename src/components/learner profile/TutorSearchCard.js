@@ -2,6 +2,7 @@ import { IoIosHeart } from "react-icons/io";
 import { IoIosHeartEmpty } from "react-icons/io";
 import { useEffect, useState } from 'react'
 import { fetchCountryData, fetchFile } from "../Global/functions";
+import { NavLink } from "react-router-dom"
 
 
 function TutorSearchCard(props) {
@@ -14,6 +15,7 @@ function TutorSearchCard(props) {
 
     //flag image of the tutor's country
     const [countryData, setCountryData] = useState(null);
+
 
 
     const handleLike = () => {
@@ -47,10 +49,9 @@ function TutorSearchCard(props) {
         fetchFlag()
     }, [])
 
-
-
+    
     return (
-        <div className="cursor-pointer min-h-72 max-h-72 rounded-2xl flex flex-col space-y-3 shadow-lg px-5 py-2 bg-white border-darkg border" >
+        <div className="cursor-pointer hover:bg-lightButton2 transition-colors duration-300 min-h-72 max-h-72 rounded-2xl flex flex-col space-y-3 shadow-lg px-5 py-2 bg-white border-darkg border" >
             <div className="flex w-full items-center space-x-3">
                 <img src={imageData} alt="prolfiepicture" className="rounded-3xl min-w-24 max-w-24 h-24 object-cover"></img>
                 <div className="flex flex-col space-y-2 w-full h-full truncate">
@@ -84,9 +85,13 @@ function TutorSearchCard(props) {
                     <button
                     className={`bg-button2 border border-button2 flex justify-center items-center text-center font-semibold px-4 py-2 rounded-full text-white hover:shadow`}>
                     Text</button>
-                    <button 
+                    {/*navigating to tutor profile*/}
+                    <NavLink      
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    to={`/learner/profile/Tutor/${props.tutor.uuid}`}
                     className={`bg-backg  border border-button2 flex justify-center items-center text-center font-semibold px-4 py-2 rounded-full text-button2 hover:shadow`}>
-                    Profile</button>
+                    Profile</NavLink>
             </div>
         </div>
     );

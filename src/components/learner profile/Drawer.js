@@ -177,6 +177,7 @@ function Drawer(props) {
                                 <span className="">Notifications</span>
                             </NavLink>
                             <NavLink 
+                                to="/tutor/profile/Calendar"
                                 className="flex h-10 drawerNav items-center w-full space-x-4">
                                 <IoMdCalendar size="25" color="#767676"></IoMdCalendar>
                                 <span className="">Calendar</span>

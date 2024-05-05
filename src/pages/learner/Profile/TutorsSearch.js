@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import TutorSearchCard from "../../../components/learner profile/TutorSearchCard";
-import { setTutorSearchList } from "../../../state/slices/userSlice";
+import { setMaxPageNumber, setTutorSearchList } from "../../../state/slices/userSlice";
 import axiosInstance from "../../../interceptors/axiosInterceptor";
 import { useDispatch, useSelector } from "react-redux";
 import Loading from '../../../components/Global/Loading'
+import ShowMoreTutors from "../../../components/learner profile/ShowMoreTutors";
 
 
 function TutorsSearch(props) {
@@ -14,16 +15,21 @@ function TutorsSearch(props) {
 
     const learnerData = useSelector(state => state.userData)
 
+    const maxPageNumber = useSelector(state => state.userData.maxPageNumber)
+
     async function fetchData () {
         try {
                 setLoading(true)
-                const response = await axiosInstance.post('http://localhost:5000/SearchTutors', {}, {
+                const response = await axiosInstance.post('http://localhost:5000/SearchTutors', {
+                    page: 1,
+                    pageSize: 3
+                }, {
                     headers: {
-                        'Authorization': `Bearer ${localStorage.getItem('accesstoken')}`,
-                        'Content-Type': 'multipart/form-data' // Set the content type to multipart/form-data
+                        'Authorization': `Bearer ${localStorage.getItem('accesstoken')}`
                     }
                 });
-                dispatch(setTutorSearchList(response.data.message))
+                dispatch(setTutorSearchList(response.data.tutorsList))
+                dispatch(setMaxPageNumber(response.data.tutorsNumber))
                 setLoading(false)
             }catch(err) {
                 console.log(err)
@@ -55,13 +61,22 @@ function TutorsSearch(props) {
                     loading? 
                     <Loading></Loading>
                     :
-                    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 w-full gap-5 ">
+                    <>
+                        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 w-full gap-5 ">
+                            {
+                                learnerData.tutorSearchList.map((tutor, index) => {
+                                    return <TutorSearchCard key={index} tutor={tutor}></TutorSearchCard>
+                                })
+                            }
+                        </div>
                         {
-                            learnerData.tutorSearchList.map((tutor, index) => {
-                                return <TutorSearchCard key={index} tutor={tutor}></TutorSearchCard>
-                            })
+                            maxPageNumber !== learnerData.tutorSearchList.length?
+                            <ShowMoreTutors></ShowMoreTutors>
+                            :
+                            null
+
                         }
-                    </div>
+                    </>
 
                 }
             </div>

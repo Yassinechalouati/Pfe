@@ -46,6 +46,7 @@ function App() {
         <Route path="/landingpage" element={<Landingpage></Landingpage>}></Route>
         <Route path="/tutor/profile/Notifications" element={<TutorProfile></TutorProfile>}></Route>
         <Route path="/learner/profile/Notifications" element={<LearnerProfile></LearnerProfile>}></Route>
+        <Route path="/learner/profile/Tutor/:uuid" element={<LearnerProfile></LearnerProfile>}></Route>
         <Route index element={<Landingpage></Landingpage>}></Route>
       </Routes>
     </Router>

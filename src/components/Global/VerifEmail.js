@@ -2,8 +2,7 @@ import { MdMarkEmailRead } from "react-icons/md";
 import { useDispatch } from "react-redux";
 import {  setVerificationTutor, setIsVerified as setTutorVerified, setError as setLearnerError } from "../../state/slices/tutorSlice"
 import {  setVerificationLearner, setIsVerified as setLearnerVerified, setError as setTutorError} from "../../state/slices/userSlice"
-import { useRef, useState } from 'react'
-import io from 'socket.io-client'
+import {useState} from 'react'
 import axios from 'axios'
 
 function VerifEmail({role, user}) {

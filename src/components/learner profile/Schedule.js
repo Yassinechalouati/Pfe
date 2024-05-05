@@ -9,6 +9,7 @@ import { setTutorSearchList } from "../../state/slices/userSlice"
 import axiosInstance from "../../interceptors/axiosInterceptor"
 import ReactLoading from 'react-loading';
 import { dateExistenceTester } from "../Global/functions"
+import { useLocation } from 'react-router-dom';
 
 
 
@@ -17,6 +18,8 @@ function Schedule(props) {
     const scheduleData = useSelector(state => state.scheduleData) 
     const learnerData = useSelector(state => state.userData)
     const [loading, setLoading] = useState(false)
+    const location = useLocation()
+    const selectedTutorData = useSelector(state => state.userData.selectedTutor)
 
     const dispatch = useDispatch()
 
@@ -38,13 +41,30 @@ function Schedule(props) {
         if(scheduleData.selectedDate) {
             setLoading(true)
             try {
-                const response = await axiosInstance.post('http://localhost:5000/getBusyTimes', {
-                    selectedDate: scheduleData.selectedDate
-                }, {
-                    headers: {
-                        'Authorization': `Bearer ${localStorage.getItem('accesstoken')}`
-                    }
-                })
+                let response;
+                //if we're scheduling from a tutors profile 
+                if(location.pathname.startsWith('/learner/profile/Tutor/')){
+                    response = await axiosInstance.post('http://localhost:5000/learner/getTutorAndLearnerBusyTimes', {
+                        selectedDate: scheduleData.selectedDate,
+                        tutorId: selectedTutorData.id
+                    }, {
+                        headers: {
+                            'Authorization': `Bearer ${localStorage.getItem('accesstoken')}`
+                        }
+                    })
+                    console.log("response coming from getTutorAndLearnerBusyTimes");
+                }else {
+                    //if we're scheduling from general calendar
+                    response = await axiosInstance.post('http://localhost:5000/getBusyTimes', {
+                        selectedDate: scheduleData.selectedDate
+                    }, {
+                        headers: {
+                            'Authorization': `Bearer ${localStorage.getItem('accesstoken')}`
+                        }
+                    })
+                    console.log("response coming from getBusyTimes");
+
+                }
                 dispatch(setBusyTimes(response.data.message))
                 setLoading(false)
             }catch(err) {

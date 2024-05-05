@@ -32,7 +32,9 @@ router.post('/details', auth, roleCheck(["Learner"]), (req, res) => {
                 focus_themes: result[0].focus_themes,
                 interested_topics: result[0].interested_topics,
                 comfortlevel: result[0].comfortlevel,
-                Birthday: result[0].Birthday
+                Birthday: result[0].Birthday,
+                uuid: result[0].uuid,
+                created_at: result[0].created_at
             }
             res.status(200).json({message: data})
         }

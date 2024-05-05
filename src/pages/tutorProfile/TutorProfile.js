@@ -27,7 +27,9 @@ import {
     setIsLoading, 
     setWorkExperience,
     setCountryFlag,
-    setId
+    setId,
+    setUuid,
+    setCreatedAt
 
 } from '../../state/slices/tutorSlice'
 import { fetchFile } from "../../components/Global/functions";
@@ -63,6 +65,7 @@ function TutorProfile() {
                     }
                 })
                 await Promise.all([
+                    dispatch(setUuid(response.data.message.uuid)),
                     dispatch(setId(response.data.message.id)),
                     dispatch(setFirstName(response.data.message.firstname)),
                     dispatch(setLastName(response.data.message.lastname)),
@@ -78,6 +81,7 @@ function TutorProfile() {
                     dispatch(setCountry(response.data.message.country)),
                     dispatch(setTel(response.data.message.tel)),
                     dispatch(setBirthday(response.data.message.Birthday)),
+                    dispatch(setCreatedAt(response.data.message.created_at))
                 ])
                 //fetching the image from database
                 fetchFile(response.data.message.pfp, "images", "tutor", response.data.message.id)

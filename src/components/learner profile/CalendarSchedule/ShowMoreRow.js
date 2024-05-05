@@ -34,7 +34,11 @@ function ShowMoreRow({lesson}) {
             setLoading(true)
             let imageUrl = lesson.pfp;
             if (!isGoogleProfilePicture(lesson.pfp)) {
-                imageUrl = await fetchFile(lesson.pfp, "images", "tutor", lesson.tutor_id)
+                if(firstSegment === "learner") {
+                    imageUrl = await fetchFile(lesson.pfp, "images", "tutor", lesson.tutor_id)
+                }else {
+                    imageUrl = await fetchFile(lesson.pfp, 'images', 'Learner', lesson.private_learner_id);
+                }
             }
             setImageFile(imageUrl)
             setLoading(false)

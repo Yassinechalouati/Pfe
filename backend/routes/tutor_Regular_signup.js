@@ -5,7 +5,7 @@ const bcrypt = require('bcrypt');
 const generateVerificationToken= require('../helpers/generateVerificationToken')
 const sendEmail = require('../helpers/sendEmail')
 const {generateTutorEmailHtml } = require('../helpers/emailContent')
-
+const { v4: uuidv4 } = require('uuid');
 
 router.post('/regsignup', (req, res) => {
     const email = req.body.email
@@ -33,8 +33,10 @@ router.post('/regsignup', (req, res) => {
                     //hashing the password before the insertion in the database
                     bcrypt.hash(pword, 10)
                     .then(hash => {
-                        const insertionQuery = 'INSERT INTO Tutor(email, pword, isVerified) VALUES(?, ?, 0)'
-                        mysql.query(insertionQuery, [email, hash], async (err, result)=> {
+                        // Generate UUID for a new tutor
+                        const uuid = uuidv4();
+                        const insertionQuery = 'INSERT INTO Tutor(email, pword, isVerified, uuid) VALUES(?, ?, 0, ?)'
+                        mysql.query(insertionQuery, [email, hash, uuid], async (err, result)=> {
                             //Checking whether there's an error in database or not 
                             if (err) {
                                 console.log("query error: ", err)

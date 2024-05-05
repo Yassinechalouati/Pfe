@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
   id: '',
+  uuid: '',
   firstname: '',
   lastname: '',
   hasPassword: '', // this indicates whether the learner is signed up using gmail or not
@@ -23,7 +24,11 @@ const initialState = {
   isVerified: false,
   error: '',
   verificationPlaceholder: false,
-  tutorSearchList: []
+  tutorSearchList: [],
+  tutorSearchPageNumber: 1,//indicates the page number when searching for tutors
+  maxPageNumber : "", //indicates the max number of pages when search for tutors
+  created_at: '',
+  selectedTutor: {}
 }
 
 //slice that contains all the sign_up user informations
@@ -117,6 +122,24 @@ export const userSlice = createSlice({
     setTutorSearchList: (state, action) => {
       state.tutorSearchList = action.payload
     },
+    appendTutorSearchList: (state, action) => {
+      state.tutorSearchList = [...state.tutorSearchList, ...action.payload]
+    },
+    incrementPageNumber: (state, action) => {
+      state.tutorSearchPageNumber = state.tutorSearchPageNumber+1
+    },
+    setMaxPageNumber: (state, action) => {
+      state.maxPageNumber = action.payload
+    },
+    setUuid: (state, action) => {
+      state.uuid = action.payload
+    },
+    setCreatedAt: (state, action) => {
+      state.created_at = action.payload
+    },
+    setSelectedTutor: (state, action) => {
+      state.selectedTutor = action.payload
+    },
     resetUserData: () => initialState
   },
 })
@@ -146,6 +169,12 @@ export const {
   setLife_Goals, 
   setTel, 
   setTutorSearchList,
-  setId
+  setId,
+  appendTutorSearchList,
+  incrementPageNumber,
+  setMaxPageNumber,
+  setUuid,
+  setCreatedAt,
+  setSelectedTutor
 } = userSlice.actions
 export default userSlice.reducer
