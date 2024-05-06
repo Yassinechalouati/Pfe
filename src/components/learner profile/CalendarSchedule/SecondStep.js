@@ -7,6 +7,12 @@ import { IoMdFlame } from "react-icons/io";
 import { FaChalkboardTeacher } from "react-icons/fa"
 import { MdNavigateNext } from "react-icons/md"
 import { handleLessonDifficultyColor } from '../../Global/functions'
+import { useLocation } from 'react-router-dom'
+import TutorRow from "./TutorRow";
+import { useEffect, useState } from "react";
+
+
+
 
 
 
@@ -14,6 +20,11 @@ function SecondStep(props) {
 
     const scheduleData = useSelector(state => state.scheduleData )
     const dispatch = useDispatch()
+    const selectedTutorData = useSelector(state => state.userData.selectedTutor)
+    const location = useLocation()
+    const [tutorSpecialities, setTutorSpecialities] = useState([])
+
+
 
     const handleLessonTopicChange = (e) => {
         dispatch(setLessonTopic(e.target.value))
@@ -42,6 +53,16 @@ function SecondStep(props) {
         'Expert'
     ]
 
+      //incase where user is scheduling from tutor profile directly 
+      useEffect(() => {
+        if(selectedTutorData && location.pathname.startsWith('/learner/profile/Tutor/')) {
+            // Merge the arrays
+            const  combinedArray =[...JSON.parse(selectedTutorData.WorkExperience), ...JSON.parse(selectedTutorData.Education)]
+
+            // Extract unique tags
+            setTutorSpecialities([...new Set(combinedArray.map(obj => obj.tag))])
+        }
+    }, [selectedTutorData])
     
 
     return (
@@ -60,7 +81,15 @@ function SecondStep(props) {
                 <div className="flex-grow"></div>
                 <select onChange={handleLessonTopicChange} value={scheduleData.lessonTopic} className="border focus:outline-none border-elements z-50 px-2 active:outline-none py-1 rounded-md">
                     <option disabled value=''>Choose lesson topic</option>
-                    {topics.map((topic, index) => (
+                    {
+                    location.pathname.startsWith('/learner/profile/Tutor/')?
+                    //case of scheduling a lesson directly from tutor profile
+                    tutorSpecialities.map((item, index) => (
+                        <option key={index} value={item}>{item}</option>
+                    ))
+                    :
+                    //scheduling from general calendar
+                    topics.map((topic, index) => (
                         <option key={index} value={topic}>{topic}</option>
                     ))}
                 </select>
@@ -71,17 +100,26 @@ function SecondStep(props) {
                 <div className="flex-grow"></div>
                 <select onChange={handleLessonDifficultyChange} value={scheduleData.lessonDifficulty} className="border focus:outline-none border-elements z-50 px-2 active:outline-none py-1 rounded-md">
                     <option disabled value=''>Choose lesson topic</option>
-                    {difficulty.map((item, index) => (
-                        <option key={index} value={item}>{item}</option>
-                    ))}
+                    { 
+                    difficulty.map((item, index) => (
+                            <option key={index} value={item}>{item}</option>
+                        ))
+                    }
                 </select>
             </div>
-            <div onClick={props.moveForward} className={`flex p-2 ${scheduleData.lessonTopic && scheduleData.lessonDifficulty? 'hover:bg-lightg cursor-pointer': ''} rounded-md items-center  space-x-6`}> 
-                <FaChalkboardTeacher size="25" className={`${scheduleData.lessonTopic && scheduleData.lessonDifficulty? 'text-active' : 'text-disabled'} `}></FaChalkboardTeacher>
-                <span className={`${scheduleData.lessonTopic && scheduleData.lessonDifficulty? 'text-active' : 'text-disabled'}`}>Select tutor</span>
-                <div className="flex-grow"></div>
-                <MdNavigateNext size="25" className={`${scheduleData.lessonTopic && scheduleData.lessonDifficulty? 'text-elements' : 'text-disabled'}`}></MdNavigateNext>
-            </div>
+            {
+                location.pathname.startsWith('/learner/profile/Tutor/')?
+                //case of scheduling a lesson directly from tutor profile
+                <TutorRow></TutorRow>
+                :
+                //scheduling from general calendar
+                <div onClick={props.moveForward} className={`flex p-2 ${scheduleData.lessonTopic && scheduleData.lessonDifficulty? 'hover:bg-lightg cursor-pointer': ''} rounded-md items-center  space-x-6`}> 
+                    <FaChalkboardTeacher size="25" className={`${scheduleData.lessonTopic && scheduleData.lessonDifficulty? 'text-active' : 'text-disabled'} `}></FaChalkboardTeacher>
+                    <span className={`${scheduleData.lessonTopic && scheduleData.lessonDifficulty? 'text-active' : 'text-disabled'}`}>Select tutor</span>
+                    <div className="flex-grow"></div>
+                    <MdNavigateNext size="25" className={`${scheduleData.lessonTopic && scheduleData.lessonDifficulty? 'text-elements' : 'text-disabled'}`}></MdNavigateNext>
+                </div>
+            }
         </>
     );
 }

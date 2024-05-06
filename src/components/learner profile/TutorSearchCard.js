@@ -55,7 +55,7 @@ function TutorSearchCard(props) {
             <div className="flex w-full items-center space-x-3">
                 <img src={imageData} alt="prolfiepicture" className="rounded-3xl min-w-24 max-w-24 h-24 object-cover"></img>
                 <div className="flex flex-col space-y-2 w-full h-full truncate">
-                    <span className="text-lg">
+                    <span className="text-lg truncate">
                         {props.tutor.firstname && props.tutor.lastname ? props.tutor.firstname + " " + props.tutor.lastname : props.tutor.email}
                     </span>
                     <div className="flex space-x-2 items-center">

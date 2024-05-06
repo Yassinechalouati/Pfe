@@ -4,10 +4,11 @@ function ScheduleLessonFromTutorProfile(props) {
     
 
     return (
-        <div className="flex flex-col space-y-3 bg-white rounded-lg shadow-xl p-8">
+        <>
             <h4 className="text-xl text-gray-900 font-bold">Schedule a lesson</h4>
-                <BigCalendar></BigCalendar>
-        </div>
+            <span className="">Welcome to the scheduling section. Here, you can conveniently arrange a lesson with your chosen tutor. Please note that you will automatically be presented with available time slots that align with both your and the tutor's schedules.</span>
+            <BigCalendar></BigCalendar>
+        </>
     );
 }
 

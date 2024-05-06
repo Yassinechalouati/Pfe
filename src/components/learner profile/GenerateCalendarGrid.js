@@ -133,18 +133,18 @@ const GenerateCalendarGrid = (props) => {
                         </span>
                     </span>
                     <div className="flex flex-col items-center justify-center space-y-2">
-                        <div className="font-semibold text-center ">
+                        <div className="font-semibold text-center max-w-full truncate ">
                             {lesson.lesson_topic}
                         </div>
                         <div 
-                        className={`text-xs p-1 border text-button2 bg-lightButton2 border-button2 rounded-xl`}>
+                        className={`text-xs p-1 border max-w-full truncate text-button2 bg-lightButton2 border-button2 rounded-xl`}>
                             {lesson.language}
                         </div>
                         <div 
-                        className={`text-xs p-1 border ${handleLessonDifficultyColor(lesson.lesson_difficulty, 'other')} rounded-xl`}>
+                        className={`text-xs p-1 border max-w-full truncate ${handleLessonDifficultyColor(lesson.lesson_difficulty, 'other')} rounded-xl`}>
                             {lesson.lesson_difficulty}
                         </div>
-                        <div className="flex items-center space-x-1">
+                        <div className="flex items-center space-x-1 max-w-full truncate">
                             <IoMdTime className="text-darkg" size="15"></IoMdTime>
                             <span className="text-darkg text-xs ">
                                 {formattedStartHourMinute} - {formattedEndHourMinute}
@@ -152,7 +152,7 @@ const GenerateCalendarGrid = (props) => {
                         </div>
                         {
                             firstSegment ==="learner"?
-                            <button onClick={(event) => handleCellClick(event, day)} className="rounded-lg cursor-pointer w-full text-center p-1 text-xs bg-lightbutton border border-button text-button">Add</button>
+                            <button onClick={(event) => handleCellClick(event, day)} className="rounded-lg max-w-full truncate cursor-pointer w-full text-center p-1 text-xs bg-lightbutton border border-button text-button">Add</button>
                             :
                             null
                         }

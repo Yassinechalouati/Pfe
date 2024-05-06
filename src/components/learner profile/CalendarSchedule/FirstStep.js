@@ -8,11 +8,15 @@ import { setLanguage, setLessonLength, setTime } from "../../../state/slices/Sch
 import {useDispatch, useSelector} from 'react-redux'
 import { MdLanguage } from "react-icons/md";
 import { convertTime, getMaxDurationIndex } from "../../Global/functions"
+import { useLocation } from 'react-router-dom';
 
 
 
 
 function FirstStep(props) {
+
+    const location = useLocation()
+    const selectedTutorData = useSelector(state => state.userData.selectedTutor)
     
     const duration = [
         '15 minutes',
@@ -151,8 +155,14 @@ function FirstStep(props) {
                 <div className="flex-grow"></div>
                 <select onChange={handleLanguageChange} value={scheduleData.language} className="border focus:outline-none border-elements z-50 px-2 active:outline-none py-1 rounded-md">
                     <option disabled value=''>Select Language</option>
-                    {languages.map((time, index) => (
-                        <option key={index} value={time}>{time}</option>
+                    {
+                    location.pathname.startsWith('/learner/profile/Tutor/')?
+                    JSON.parse(selectedTutorData.Languages).map((item, index) => (
+                        <option key={index} value={item.language}>{item.language}</option>
+                    ))
+                    :
+                    languages.map((language, index) => (
+                        <option key={index} value={language}>{language}</option>
                     ))}
                 </select>
             </div>

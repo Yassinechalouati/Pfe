@@ -112,6 +112,7 @@ export const notificationSlice = createSlice({
             state.unreadNotifs = state.unreadNotifs +1 
         },
         decrementUnreadNotifications: (state, action ) => {
+            console.log("condition: ", state.unreadNotifs -1 >=0);
             if (state.unreadNotifs -1 >=0){
                 state.unreadNotifs = state.unreadNotifs-1
             }
@@ -143,6 +144,9 @@ export const notificationSlice = createSlice({
                 }
             } 
         },
+        tutorIncrementNotifications: (state, action ) => {
+            state.unreadNotifs = state.unreadNotifs +1  
+        },
         resetFields: () => initialState
     }
 })
@@ -162,6 +166,7 @@ export const {
     incrementUnreadNotifications,
     decrementUnreadNotifications,
     setFetchedNotifications,
+    tutorIncrementNotifications,
     markAllAsRead
 } = notificationSlice.actions
 export default notificationSlice.reducer

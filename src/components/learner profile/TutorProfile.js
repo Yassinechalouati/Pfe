@@ -1,16 +1,17 @@
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import axiosInstance from "../../interceptors/axiosInterceptor";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector} from 'react-redux'
 import { setSelectedTutor } from "../../state/slices/userSlice";
-import { fetchFile, fetchCountryData} from "../Global/functions";
+import { fetchFile, fetchCountryData, timeFormatter} from "../Global/functions";
 import { IoMdCalendar } from "react-icons/io";
 import { FaChalkboardTeacher } from "react-icons/fa";
 import { IoIosInformationCircle } from "react-icons/io";
 import { MdLanguage } from "react-icons/md";
 import { MdWork } from "react-icons/md";
 import { RiGraduationCapFill } from "react-icons/ri";
+import { MdDateRange } from "react-icons/md";
 import LikeButton from "./LikeButton";
 import FollowTutor from "./FollowTutor"
 import ScheduleLessonFromTutorProfile from "./ScheduleLessonFromTutorProfile";
@@ -28,6 +29,15 @@ function TutorProfile(props) {
     const [countryFlag, setCountryFlag] = useState(null)
 
     const [isLoading, setIsLoading] = useState(null)
+
+    //ref for the component to be scrolled to
+    const scheduleRef = useRef(null);
+
+    // Event handler for button click
+    const scrollToSchedule = () => {
+        // Scroll to the component using its ref
+        scheduleRef.current.scrollIntoView({ behavior: 'smooth' });
+    };
 
 
 
@@ -81,6 +91,28 @@ function TutorProfile(props) {
         fetchData()
     }, [])
 
+  // Function to format timestamp into a readable format
+  const formatTimestamp = (timestamp) => {
+    const date = new Date(timestamp);
+    const months = [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December'
+    ];
+    const month = months[date.getMonth()];
+    const day = date.getDate();
+    const year = date.getFullYear();
+    return `${day} ${month} ${year}`;
+  };
 
 
 
@@ -93,10 +125,10 @@ function TutorProfile(props) {
                         <div className="w-full h-[200px]">
                             <img src="https://vojislavd.com/ta-template-demo/assets/img/profile-background.jpg" className="w-full h-full rounded-tl-lg rounded-tr-lg"></img>
                         </div>
-                        <div className="flex flex-col items-center -mt-20 z-50">
+                        <div className="flex flex-col items-center -mt-20">
                             <img src={imgUrl} className="min-w-40 max-w-40 min-h-40 max-h-40 object-cover border-4 border-white rounded-full" alt="Profile" />
                             <div className="flex items-center space-x-2 mt-2">
-                                <p className="text-2xl">{selectedTutorData.firstname+" "+selectedTutorData.lastname}</p>
+                                <span className="text-2xl">{selectedTutorData.firstname+" "+selectedTutorData.lastname}</span>
                             </div>
                             <div className="flex space-x-2 items-center">
                                 {countryFlag && countryFlag[0]?.flags && (
@@ -106,19 +138,19 @@ function TutorProfile(props) {
                             </div>
                         </div>
                         {
-                                videoUrl?
-                                <video
-                                className="object-fill mt-4 w-[70%] flex justify-center items-centerr rounded-xl"
-                                controls
-                                muted
-                                >
-                                <source src={videoUrl} type="video/mp4" />
-                                </video>
-                                :
-                                null
+                            videoUrl?
+                            <video
+                            className="object-fill mt-4 w-[70%] flex justify-center items-center rounded-xl"
+                            controls
+                            muted
+                            >
+                            <source src={videoUrl} type="video/mp4" />
+                            </video>
+                            :
+                            null
                         }
                         <div className="flex flex-col w-full justify-center items-center space-y-3 mt-4"> 
-                            <button className="button w-[70%] flex items-center justify-center space-x-2 bg-white border py-3 px-4 rounded-full hover:bg-button2 transition-colors duration-300 hover:text-white border-button2 text-button2">
+                            <button onClick={scrollToSchedule} className="button w-[70%] flex items-center justify-center space-x-2 bg-white border py-3 px-4 rounded-full hover:bg-button2 transition-colors duration-300 hover:text-white border-button2 text-button2">
                                 <IoMdCalendar size="25" className="icon"></IoMdCalendar>
                                 <span >Schedule</span>
                             </button>
@@ -164,6 +196,11 @@ function TutorProfile(props) {
                             }
                         </div>
                         <div className="flex items-center space-x-2">
+                            <MdDateRange size="25" className="text-button"></MdDateRange>
+                            <h4 className="text-lg text-gray-700 font-bold">Joined</h4>
+                        </div>
+                        <span className="">{formatTimestamp(selectedTutorData.created_at)}</span>
+                        <div className="flex items-center space-x-2">
                             <MdWork size="25" className="text-button"></MdWork>
                             <h4 className="text-lg text-gray-700 font-bold">Work Experience</h4>
                         </div>
@@ -202,7 +239,9 @@ function TutorProfile(props) {
                             null
                         }
                     </div>
-                    <ScheduleLessonFromTutorProfile></ScheduleLessonFromTutorProfile>
+                    <div ref={scheduleRef} className="flex flex-col space-y-3 bg-white rounded-lg shadow-xl p-8">
+                        <ScheduleLessonFromTutorProfile></ScheduleLessonFromTutorProfile>
+                    </div>
                 </>
                 
                 :

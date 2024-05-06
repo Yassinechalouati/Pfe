@@ -110,6 +110,7 @@ function Notification(props) {
     }
     
     const handleNotificationClick = async () => {
+        console.log("read: ", props.notification.ReadByTutor);
         //if the notification is unread we make it change it to read in the database
         if (!props.notification.ReadByTutor) {
             //Marking the notification as read 

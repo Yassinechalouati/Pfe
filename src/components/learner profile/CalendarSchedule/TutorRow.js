@@ -10,16 +10,14 @@ import axiosInstance from "../../../interceptors/axiosInterceptor"
 import io from 'socket.io-client'
 import { useRef } from "react";
 import { addNotification, incrementUnreadNotifications } from "../../../state/slices/NotificationSlice";
-
+import { useLocation } from 'react-router-dom';
+import { FaCalendarPlus } from "react-icons/fa6"
+import { MdNavigateNext } from "react-icons/md"
 
 
 function TutorRow(props) {
     const dispatch = useDispatch()
     const socket = useRef(null)
-    
-
-    
-
     
     const learnerData= useSelector(state => state.userData)
 
@@ -27,7 +25,9 @@ function TutorRow(props) {
 
     const scheduleData = useSelector(state => state.scheduleData)
 
-
+    const selectedTutorData = useSelector(state => state.userData.selectedTutor)
+    
+    const location = useLocation()
 
     //tutor profile picture
     const [imageData, setImageData] = useState()
@@ -35,50 +35,51 @@ function TutorRow(props) {
     //flag image of the tutor's country
     const [countryData, setCountryData] = useState(null);
 
-    //fetching tutor profile picture from backend
+    //fetching tutor profile picture from backend when booking from general calendar
     async function fetchData () {
-        if(props.tutor.pfp && props.tutor.id){
-            fetchFile(props.tutor.pfp, "images", "Tutor", props.tutor.id)
-            .then(response => {
-                setImageData(response)
-            })
-            .catch(error => {
-                console.log(error);
-            })
+        if(!location.pathname.startsWith('/learner/profile/Tutor/')) {
+            if(props.tutor.pfp && props.tutor.id ){
+                fetchFile(props.tutor.pfp, "images", "Tutor", props.tutor.id)
+                .then(response => {
+                    setImageData(response)
+                })
+                .catch(error => {
+                    console.log(error);
+                })
+            }
         }
     }
 
-    
+    //get country flag when booking from general calendar
     const fetchFlag = async () => {
-    const data = await fetchCountryData(props.tutor.Country);
-    setCountryData(data);
-    };
+    if(!location.pathname.startsWith('/learner/profile/Tutor/')) {
+        const data = await fetchCountryData(props.tutor.Country);
+        setCountryData(data)
+    }
+    }
 
     useEffect(() => {
+        //when booking from general calendar
         //getting tutor picture
         fetchData()
-        //getting the flag of the tutor's country
+        //getting the flag of the tutor's country 
         fetchFlag()
     }, [])
 
-
     
     const handleBookLesson = async () => {
-            dispatch(setSelectedTutor(props.tutor.id))
+            dispatch(setSelectedTutor(location.pathname.startsWith('/learner/profile/Tutor/')? selectedTutorData.id: props.tutor.id))
 
             const {formattedHours, formattedMinutes} = convertTime(scheduleData.time)
             
             // Construct the normal time string
             const normalTime = `${formattedHours}:${formattedMinutes}`
 
-           
-        
-
             //we contact the api here that's responsible for scheduling lessons then we reset the fields after finish the transaction
             try {
                 const selectedDate = scheduleData.selectedDate + " "+ normalTime
                 const sentData =  {
-                    tutorId: props.tutor.id,
+                    tutorId: location.pathname.startsWith('/learner/profile/Tutor/')? selectedTutorData.id: props.tutor.id,
                     lessonTopic: scheduleData.lessonTopic,
                     lessonDifficulty: scheduleData.lessonDifficulty,
                     selectedDate: selectedDate,
@@ -99,7 +100,7 @@ function TutorRow(props) {
 
                 const data = {
                     lesson_id: response.data.lesson_id,
-                    tutor_id: props.tutor.id,
+                    tutor_id: location.pathname.startsWith('/learner/profile/Tutor/')? selectedTutorData.id: props.tutor.id,
                     start_time: response.data.start_time,
                     end_time: response.data.end_time,
                     lesson_topic: scheduleData.lessonTopic,
@@ -197,19 +198,33 @@ function TutorRow(props) {
     }
 
     return (
-        <div onClick={handleBookLesson} className="flex cursor-pointer hover:bg-lightg rounded-md p-2 w-full items-center space-x-2">
-            <img src={imageData} alt="tutorprofilepicture" className=" min-w-20 h-20 object-cover rounded-full"></img>
-            <div className="flex truncate flex-col justify-center">
-                <span className="text-black">{props.tutor.firstname && props.tutor.lastname ? props.tutor.firstname + " " + props.tutor.lastname : props.tutor.email}</span>
-                <div className="flex space-x-2 items-center">
-                    {countryData && countryData[0]?.flags && (
-                        <img className="rounded-lg w-4 h-4 object-cover" src={countryData[0].flags.png} alt={props.tutor.Country} />
-                    )}
-                    <span className=" ml-4 text-sm text-darkg">{props.tutor.Country}</span>
+        <>
+            {
+                location.pathname.startsWith('/learner/profile/Tutor/')? 
+                <div onClick={handleBookLesson} className={`flex p-2 ${scheduleData.lessonTopic && scheduleData.lessonDifficulty? 'hover:bg-lightg cursor-pointer': ''} rounded-md items-center  space-x-6`}> 
+                    <FaCalendarPlus size="25" className={`${scheduleData.lessonTopic && scheduleData.lessonDifficulty? 'text-active' : 'text-disabled'} `}></FaCalendarPlus>
+                    <span className={`${scheduleData.lessonTopic && scheduleData.lessonDifficulty? 'text-active' : 'text-disabled'}`}>Book the lesson</span>
+                    <div className="flex-grow"></div>
+                    <MdNavigateNext size="25" className={`${scheduleData.lessonTopic && scheduleData.lessonDifficulty? 'text-elements' : 'text-disabled'}`}></MdNavigateNext>
                 </div>
-                <span className="text-darkg mt-2 text-sm">{props.tutor.description}</span>
-            </div>
-        </div>
+                :
+                    <div onClick={handleBookLesson} className="flex cursor-pointer hover:bg-lightg rounded-md p-2 w-full items-center space-x-2">
+                    <img src={imageData} alt="tutorprofilepicture" className=" min-w-20 h-20 object-cover rounded-full"></img>
+                    <div className="flex truncate flex-col justify-center">
+                        <span className="text-black">{props.tutor.firstname && props.tutor.lastname ? props.tutor.firstname + " " + props.tutor.lastname : props.tutor.email}</span>
+                        <div className="flex space-x-2 items-center">
+                            {countryData && countryData[0]?.flags && (
+                                <img className="rounded-lg w-4 h-4 object-cover" src={countryData[0].flags.png} alt={props.tutor.Country} />
+                            )}
+                            <span className=" ml-4 text-sm text-darkg">{props.tutor.Country}</span>
+                        </div>
+                        <span className="text-darkg mt-2 text-sm">{props.tutor.description}</span>
+                    </div>
+                </div>
+            }
+        </>
+
+        
     );
 }
 

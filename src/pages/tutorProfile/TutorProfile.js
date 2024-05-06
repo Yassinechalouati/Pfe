@@ -33,7 +33,7 @@ import {
 
 } from '../../state/slices/tutorSlice'
 import { fetchFile } from "../../components/Global/functions";
-import { addNotification, incrementUnreadNotifications, setUnreadNotifications } from "../../state/slices/NotificationSlice"
+import { addNotification, setUnreadNotifications, tutorIncrementNotifications } from "../../state/slices/NotificationSlice"
 import io from 'socket.io-client'
 import NotificationsPage from './NotificationsPage'
 import BigCalendar from "../../components/learner profile/BigCalendar";
@@ -140,7 +140,8 @@ function TutorProfile() {
 
         console.log("unreadNotificaitons Value: ", unreadNotifications);
         //if there isn't we just update that there's a new notification
-        dispatch(incrementUnreadNotifications())
+
+        dispatch(tutorIncrementNotifications())
     }
     
 

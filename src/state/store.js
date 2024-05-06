@@ -8,10 +8,14 @@ import scheduleReducer from './slices/Schedule'
 import showMoreReducer from './slices/ShowMore'
 import lessonsListReducer from './slices/lessonsList'
 import notificationsReducer from './slices/NotificationSlice'
+import {
+  createStateSyncMiddleware,
+  initMessageListener,
+} from "redux-state-sync";
 
 
 //store that contains a global state
-export const store = configureStore({
+const store = configureStore({
   reducer: {
     userData: userReducer, //contains signup user Data
     Error: errorReducer, // contains Errors to show
@@ -24,9 +28,33 @@ export const store = configureStore({
     notificationsData: notificationsReducer, //contains the notifications
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({
+    getDefaultMiddleware().concat(createStateSyncMiddleware({
+      whitelist: [
+        //lessons actions
+        'lessons/setFirstLessonList',
+        'lessons/updateAllLessonsList',
+        'lessons/deleteRejectedLesson',
+        'lessons/replaceFirstLesson',
+        'lessons/updateFirstLessonList',
+        'lessons/replaceFirstLessonItem',
+        'lessons/appendLesson',
+        //notifications action
+        'notification_data/setUnreadNotifications',
+        'notification_data/updateNotification',
+        'notification_data/incrementUnreadNotifications',
+        'notification_data/markAllAsRead',
+        'notification_data/decrementUnreadNotifications',
+        'notification_data/updateNotificationRead',
+        
+
+      ],
+    }))
+    /*getDefaultMiddleware({
       serializableCheck: {
         ignoredActions: ['tutor_data/setIntroductionVideo'],
       },
-    }),
+    }),*/
 })
+
+initMessageListener(store);
+export default store;

@@ -86,8 +86,8 @@ function Calendar(props) {
             </span>
             <span className={className}>{dayOfMonth}</span>
             {Object.keys(firstLesson).length > 0 ? (
-              <div className="flex flex-col items-center justify-center space-y-2 bg-cellColor p-[2px] rounded-md min-w-20">
-                  <div className="font-semibold text-center text-white">
+              <div className="flex flex-col items-center justify-center space-y-2 bg-cellColor p-[2px] rounded-md min-w-20 max-w-20">
+                  <div className="font-semibold text-center text-white w-[80%] truncate">
                       {firstLesson.lesson_topic}
                   </div>
                   <div 
