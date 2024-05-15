@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux'
 import { useSelector } from 'react-redux';
 
 function Description() {
-    const maxDescriptionLength = 150
+    const maxDescriptionLength = 800
     //hook to change tutor Data in the slice
     const dispatch = useDispatch()
 

@@ -9,7 +9,7 @@ import { useDispatch } from 'react-redux'
 import { updateNotificationRead } from "../../state/slices/NotificationSlice";
 import axiosInstance from "../../interceptors/axiosInterceptor"
 import io from 'socket.io-client'
-import { replaceFirstLesson } from "../../state/slices/lessonsList";
+import { removeCurrentDayLessons, replaceFirstLesson, updateCurrentDayLessons } from "../../state/slices/lessonsList";
 
 function Notification(props) {
     
@@ -91,6 +91,8 @@ function Notification(props) {
             
             dispatch(replaceFirstLesson(props.notification))
 
+            dispatch(updateCurrentDayLessons(props.notification.lesson_id))
+
             console.log(result);
         }catch(err) {
             console.log(err)
@@ -102,7 +104,7 @@ function Notification(props) {
             const result = await notificationFeedBack(0, 'cancelLesson')
 
             dispatch(updateNotification({ notification: props.notification.lesson_id, accepted: 0, role: "tutor", lesson:"", type:"approve"}))
-            
+            dispatch(removeCurrentDayLessons(props.notification.lesson_id))
             console.log(result);
         }catch(err) {
             console.log(err)

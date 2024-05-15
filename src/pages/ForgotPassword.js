@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { useEffect, useState } from 'react';
-import {useParams, useNavigate} from 'react-router-dom'
+import {useParams, useNavigate, NavLink} from 'react-router-dom'
 import Loading from '../components/Global/Loading';
 import { FaLessThanEqual } from 'react-icons/fa';
 
@@ -127,8 +127,11 @@ function ForgotPassword() {
                     </div>)
                     :
                     <>
-                    <img src="/erreur-404.png" alt="verified" className="object-cover h-44 w-44"></img>
-                        <span className="text-black text-2xl font-bold">404 not found</span>
+                        <img src="/erreur-404.png" alt="verified" className="object-cover h-80 w-80"></img>
+                        <div className="flex items-center space-x-2"> 
+                            <NavLink to='/tutor/signup' className="rounded-md py-2 px-4 bg-white border-button2 border text-button2">Sign up As Tutor</NavLink>
+                            <NavLink to='/learner/signup' className="rounded-md py-2 px-4 bg-button2 text-white">Sign up As Learner</NavLink>
+                        </div>
                     </>
                 )
                 :

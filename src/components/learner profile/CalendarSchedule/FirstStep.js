@@ -1,7 +1,7 @@
 
 import { IoMdTime } from "react-icons/io"
 import { IoIosTimer } from "react-icons/io"
-import { FaChalkboardTeacher } from "react-icons/fa"
+import { IoMdSettings } from "react-icons/io";
 import { MdNavigateNext } from "react-icons/md"
 import { IoMdCalendar } from "react-icons/io"
 import { setLanguage, setLessonLength, setTime } from "../../../state/slices/Schedule"
@@ -167,7 +167,7 @@ function FirstStep(props) {
                 </select>
             </div>
             <div onClick={props.moveForward} className={`flex p-2 ${scheduleData.time && scheduleData.lessonLength && scheduleData.language? 'hover:bg-lightg cursor-pointer': ''} rounded-md items-center  space-x-6`}> 
-                <FaChalkboardTeacher size="25" className={`${scheduleData.time && scheduleData.lessonLength && scheduleData.language? 'text-active' : 'text-disabled'} `}></FaChalkboardTeacher>
+                <IoMdSettings size="25" className={`${scheduleData.time && scheduleData.lessonLength && scheduleData.language? 'text-active' : 'text-disabled'} `}></IoMdSettings>
                 <span className={`${scheduleData.time && scheduleData.lessonLength && scheduleData.language? 'text-active' : 'text-disabled'}`}>Select preferences</span>
                 <div className="flex-grow"></div>
                 <MdNavigateNext size="25" className={`${scheduleData.time && scheduleData.lessonLength && scheduleData.language? 'text-elements' : 'text-disabled'}`}></MdNavigateNext>

@@ -81,6 +81,7 @@ const emailVerificationRouter = require('./routes/VerifEmail')
 const getDayLessonsTutor = require('./routes/getDayLessonsTutor')
 const getSelectedTutorDetails = require('./routes/getSelectedTutorDetails')
 const getBusyScheduleTimeLearnerAndTutor = require('./routes/getBusyScheduleTimeLearnerAndTutor')
+const removeLesssonRouter = require('./routes/removeLesson')
  
 
 //apis
@@ -123,6 +124,7 @@ app.use('/tutor', tutorCalendarOverviewRouter)
 app.use('/user', emailVerificationRouter)
 app.use('/learner', getSelectedTutorDetails)
 app.use('/learner', getBusyScheduleTimeLearnerAndTutor)
+app.use('/', removeLesssonRouter)
 
 
 // Socket.io logic

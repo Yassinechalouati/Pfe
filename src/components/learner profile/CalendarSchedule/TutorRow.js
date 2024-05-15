@@ -4,7 +4,7 @@ import { convertTime, fetchCountryData} from "../../Global/functions";
 import { fetchFile } from "../../Global/functions";
 import { useDispatch, useSelector } from "react-redux";
 import { setSelectedTutor } from "../../../state/slices/Schedule";
-import { Addlesson, appendLesson, replaceFirstLessonItem } from "../../../state/slices/lessonsList"
+import { Addlesson, addLessontoCurrentDayLessons, appendLesson, replaceFirstLessonItem } from "../../../state/slices/lessonsList"
 import { resetData, setVisibility } from "../../../state/slices/Schedule"
 import axiosInstance from "../../../interceptors/axiosInterceptor"
 import io from 'socket.io-client'
@@ -67,6 +67,7 @@ function TutorRow(props) {
     }, [])
 
     
+    console.log("tutorData:", selectedTutorData);
     const handleBookLesson = async () => {
             dispatch(setSelectedTutor(location.pathname.startsWith('/learner/profile/Tutor/')? selectedTutorData.id: props.tutor.id))
 
@@ -190,6 +191,30 @@ function TutorRow(props) {
                 //adding it to the list containing all lessons
                 dispatch(Addlesson(data))
 
+                const currentDayLessonsData = {
+                    lesson_id: response.data.lesson_id,
+                    tutor_id: location.pathname.startsWith('/learner/profile/Tutor/')? selectedTutorData.id: props.tutor.id,
+                    start_time: response.data.start_time,
+                    end_time: response.data.end_time,
+                    lesson_topic: scheduleData.lessonTopic,
+                    lesson_difficulty: scheduleData.lessonDifficulty,
+                    duration: scheduleData.lessonLength,
+                    Accepted: -1,
+                    language: scheduleData.language,
+                    pfp: location.pathname.startsWith('/learner/profile/Tutor/')? selectedTutorData.pfp: props.tutor.pfp,
+                    firstname: location.pathname.startsWith('/learner/profile/Tutor/')? selectedTutorData.firstname: props.tutor.firstname,
+                    lastname: location.pathname.startsWith('/learner/profile/Tutor/')? selectedTutorData.lastname: props.tutor.lastname,
+                    scheduling_date: currentDateTimeString,
+                    private_learner_id: learnerData.id,
+                    ReadByTutor: 0,
+                    ReadByLearner: 0
+
+                }
+
+                dispatch(addLessontoCurrentDayLessons(currentDayLessonsData))
+
+
+
                 dispatch(setVisibility(false))
                 dispatch(resetData())
             }catch(err) {
@@ -209,12 +234,12 @@ function TutorRow(props) {
                 </div>
                 :
                     <div onClick={handleBookLesson} className="flex cursor-pointer hover:bg-lightg rounded-md p-2 w-full items-center space-x-2">
-                    <img src={imageData} alt="tutorprofilepicture" className=" min-w-20 h-20 object-cover rounded-full"></img>
+                    <img src={imageData} alt="tutorprofilepicture" className=" min-w-20  min-h-20 max-h-20 max-w-20 object-cover rounded-full"></img>
                     <div className="flex truncate flex-col justify-center">
                         <span className="text-black">{props.tutor.firstname && props.tutor.lastname ? props.tutor.firstname + " " + props.tutor.lastname : props.tutor.email}</span>
                         <div className="flex space-x-2 items-center">
                             {countryData && countryData[0]?.flags && (
-                                <img className="rounded-lg w-4 h-4 object-cover" src={countryData[0].flags.png} alt={props.tutor.Country} />
+                                <img className="rounded-lg min-w-4 min-h-4 max-h-4 max-w-4 object-cover" src={countryData[0].flags.png} alt={props.tutor.Country} />
                             )}
                             <span className=" ml-4 text-sm text-darkg">{props.tutor.Country}</span>
                         </div>

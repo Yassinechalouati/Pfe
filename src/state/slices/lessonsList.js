@@ -3,7 +3,10 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
     firstlessonList: [],
-    allLessons: []
+    allLessons: [],
+    currentDayLesson: {},
+    currentDayLessons: [],
+    notificationModalVisibility: false
 }
 
 
@@ -94,6 +97,42 @@ export const lessons = createSlice( {
                 }
             }
         },
+        setCurrentDayLessons: (state, action) => {
+            state.currentDayLessons = action.payload
+        },
+        setNotificationModalVisibility: (state, action )=> {
+            state.notificationModalVisibility = action.payload
+        },
+        updateCurrentDayLessons: (state, action ) => {
+            const index = state.currentDayLessons.findIndex(item => item.lesson_id === action.payload)
+
+            if (index !== -1) {
+                const copy = [...state.currentDayLessons]
+                copy[index] = {...copy[index], Accepted: 1}
+                state.currentDayLessons = copy
+            }
+        },
+        removeCurrentDayLessons: (state, action ) => {
+            if(state.currentDayLessons) {
+                state.currentDayLessons = state.currentDayLessons.filter(item => item.lesson_id !== action.payload)
+            }
+        },
+        addLessontoCurrentDayLessons: (state, action )=> {
+            const lessonDate = new Date(action.payload.start_time)
+            const lessonYear = lessonDate.getFullYear()
+            const lessonMonth = lessonDate.getMonth()
+            const lessonDay = lessonDate.getDate()
+
+            const today = new Date()
+            const thisYear = today.getFullYear()
+            const thisMonth = today.getMonth()
+            const thisDay = today.getDate()
+
+            if(lessonYear === thisYear && thisMonth === lessonMonth && lessonDay === thisDay){
+                state.currentDayLessons = [...state.currentDayLessons, action.payload]
+                state.currentDayLessons.sort((a, b) => new Date(a.start_time) - new Date(b.start_time));
+            }
+        },
         resetAllLessons: (state, action) => {
             state.allLessons = []
         }
@@ -111,7 +150,13 @@ export const {
     updateAllLessonsList,
     updateFirstLessonList,
     deleteRejectedLesson,
-    replaceFirstLesson
+    replaceFirstLesson,
+    setCurrentDayLesson,
+    setNotificationModalVisibility,
+    setCurrentDayLessons,
+    updateCurrentDayLessons,
+    removeCurrentDayLessons,
+    addLessontoCurrentDayLessons
 } = lessons.actions
 
 export default lessons.reducer

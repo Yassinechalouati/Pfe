@@ -1,6 +1,6 @@
 import NavBar from "../../../components/learner profile/NavBar";
 import axiosInstance from "../../../interceptors/axiosInterceptor";
-import { useEffect } from "react";
+import { useEffect} from "react";
 import { setId, setIsLoading, setBirthday, setComfortLevel, setCountry, setEmail, setFirstName, setFocusThemes, setGoals, setHasPassword, setLastName, setLife_Goals, setPic, setTel, setTopics, setUuid, setCreatedAt } from "../../../state/slices/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import CoursesSearch from "./CoursesSearch";
@@ -12,16 +12,19 @@ import Settings from "../../../components/Global/Settings";
 import BigCalendar from '../../../components/learner profile/BigCalendar'
 import io from 'socket.io-client'
 import { setUnreadNotifications, updateNotification } from "../../../state/slices/NotificationSlice";
-import { appendLesson, deleteRejectedLesson, updateAllLessonsList, updateFirstLessonList } from "../../../state/slices/lessonsList";
+import { appendLesson, deleteRejectedLesson, removeCurrentDayLessons, setCurrentDayLesson, setCurrentDayLessons, setNotificationModalVisibility, updateAllLessonsList, updateCurrentDayLessons, updateFirstLessonList } from "../../../state/slices/lessonsList";
 import NotificationsPage from '../NotificationsPage'
 import { fetchFile, isGoogleProfilePicture } from "../../../components/Global/functions";
 import TutorProfile from "../../../components/learner profile/TutorProfile";
 import { useLocation } from 'react-router-dom';
+import LessonReminderModal from "../../../components/Global/lessonReminderModal";
 
 
 function LearnerProfile() {
     const dispatch = useDispatch()
     const learnerId = useSelector(state => state.userData.id)
+    const lessonModalVisibility = useSelector(state => state.lessonsList.notificationModalVisibility)
+    const currentDayLessons = useSelector(state => state.lessonsList.currentDayLessons)
 
     const location = useLocation();
 
@@ -130,6 +133,7 @@ function LearnerProfile() {
             dispatch(appendLesson(data_.firstLesson))
         } 
 
+        dispatch(removeCurrentDayLessons(data_.removedLesson))
         console.log("remove lesson Notification")
     }
 
@@ -150,6 +154,7 @@ function LearnerProfile() {
         dispatch(updateAllLessonsList({lessonId: lessonId, accepted: 1}))
         dispatch(updateFirstLessonList({lessonId: lessonId, accepted: 1}))
 
+        dispatch(updateCurrentDayLessons(data_.approvedLesson))
         console.log("approve lesson Notificaiton")
     }
 
@@ -221,11 +226,96 @@ function LearnerProfile() {
         }
     }
 
+    useEffect(() => {
+        //fetching today's lessons 
+        const currentDay= new Date()
+        const dayOfMonth = currentDay.getDate()
+        const month = currentDay.getMonth()+1
+        const year = currentDay.getFullYear()
+
+        const fetchTodaysUpcomingLessons = async () => {
+            try {
+                const response = await axiosInstance.post('http://localhost:5000/learner/getDayLessons', {
+                    date: `${year}-${month}-${dayOfMonth}`
+                }, {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('accesstoken')}`
+                    }
+                })
+                const lessons = response.data.result
+                console.log("today's lessons: ", lessons)
+
+                dispatch(setCurrentDayLessons(lessons))
+            }catch(err) {
+                console.log(err)
+            }
+        }
+
+        fetchTodaysUpcomingLessons()
+
+        
+    }, [])// Run effect only once on component mount
+
+    useEffect(() => {
+        const openNewTab = (link, name) => {
+            const newTab = window.open(`/videoCall/${link}?name=${name}`, '_blank'); // Replace '/new-page' with the path of the page you want to open
+            if (newTab) {
+                newTab.focus(); // Focus on the new tab if it's successfully opened
+            } else {
+                // Handle cases where the new tab couldn't be opened (e.g., due to pop-up blockers)
+                window.location.href = `/videoCall/${link}?name=${name}`; // Fallback to navigating in the same tab
+            }
+        };
+        //array that will hold the timeouts
+        let timeoutIds = []
+        if(currentDayLessons) {
+
+            console.log("timeout effect is running!");
+            //we're gonna show the lesson confirmation modal when the difference between the current time and lesson time is 15 minutes  
+            currentDayLessons.forEach(lesson => {
+                const startTime = new Date(lesson.start_time)
+                const notificationTime = new Date(startTime.getTime() - 15 * 60000); // 15 minutes before start time
+                const videoCallTime = new Date(startTime.getTime())
+                // Set timeout for notification
+                const timeDifference = notificationTime.getTime() - Date.now();
+                const videoCallTimeDifference = videoCallTime.getTime() - Date.now()
+                if (timeDifference > 0 && lesson.Accepted ===1) {
+                    const timeoutId = setTimeout(() => {
+                        // Display notification to the user
+                        dispatch(setCurrentDayLesson(lesson))
+                        dispatch(setNotificationModalVisibility(true))
+                    }, timeDifference)
+    
+                    timeoutIds.push(timeoutId)
+                }
+                if(videoCallTimeDifference> 0 && lesson.Accepted ===1 ) {
+                    const timeoutId = setTimeout(() => {
+                        openNewTab(lesson.uuid, lesson.firstname+ " " +lesson.lastname)
+                    }, videoCallTimeDifference)
+    
+                    timeoutIds.push(timeoutId)
+                }
+            });
+        }
+        // Clean up any timers on unmount
+        return () => {
+            // Clear all pending timeouts
+            timeoutIds.forEach(timeoutId => clearTimeout(timeoutId));
+        };
+        
+    }, [currentDayLessons])
+
     return (
         <div className="w-screen h-screen bg-backg flex flex-col">
             <NavBar></NavBar>
             {
                 handleBody()
+            }
+            {
+                lessonModalVisibility?
+                    <LessonReminderModal></LessonReminderModal>
+                :
+                null
             }
         </div>
     );

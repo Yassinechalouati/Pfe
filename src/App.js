@@ -11,6 +11,7 @@ import LearnerProfile from './pages/learner/Profile/learnerProfile';
 import ForgotPassword from './pages/ForgotPassword';
 import ForgotPasswordContent from './components/sign_in/ForgotPasswordContent'
 import Landingpage from './pages/Landingpage';
+import VideoCall from './components/Global/VideoCall';
 function App() {
   return (
     <Router>
@@ -47,6 +48,7 @@ function App() {
         <Route path="/tutor/profile/Notifications" element={<TutorProfile></TutorProfile>}></Route>
         <Route path="/learner/profile/Notifications" element={<LearnerProfile></LearnerProfile>}></Route>
         <Route path="/learner/profile/Tutor/:uuid" element={<LearnerProfile></LearnerProfile>}></Route>
+        <Route path="/videoCall/:uuid" element={<VideoCall></VideoCall>}></Route>
         <Route index element={<Landingpage></Landingpage>}></Route>
       </Routes>
     </Router>

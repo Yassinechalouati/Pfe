@@ -37,6 +37,8 @@ import { addNotification, setUnreadNotifications, tutorIncrementNotifications } 
 import io from 'socket.io-client'
 import NotificationsPage from './NotificationsPage'
 import BigCalendar from "../../components/learner profile/BigCalendar";
+import { addLessontoCurrentDayLessons, setCurrentDayLesson, setCurrentDayLessons, setNotificationModalVisibility } from "../../state/slices/lessonsList";
+import LessonReminderModal from "../../components/Global/lessonReminderModal";
 
 function TutorProfile() {
 
@@ -46,7 +48,9 @@ function TutorProfile() {
 
     const unreadNotifications = useSelector(state => state.notificationsData.unreadNotifs)
 
-    const selectedOption = useSelector(state => state.notificationsData.selectedOption )
+    const currentDayLessons = useSelector(state => state.lessonsList.currentDayLessons)
+
+    const notificationModalVisibility = useSelector(state => state.lessonsList.notificationModalVisibility)
 
      //knowing whether it's a tutor or learner signing up
      const path = window.location.pathname;
@@ -136,9 +140,10 @@ function TutorProfile() {
 
         //adding notification
         dispatch(addNotification(data_.notification))
-        
 
-        console.log("unreadNotificaitons Value: ", unreadNotifications);
+        dispatch(addLessontoCurrentDayLessons(data_.notification))
+
+        console.log("unreadNotifications Value: ", unreadNotifications);
         //if there isn't we just update that there's a new notification
 
         dispatch(tutorIncrementNotifications())
@@ -203,8 +208,76 @@ function TutorProfile() {
         }
     }
 
+    useEffect(() => {
+        //fetching today's lessons 
+        const currentDay= new Date()
+        const dayOfMonth = currentDay.getDate()
+        const month = currentDay.getMonth()+1
+        const year = currentDay.getFullYear()
 
-    console.log("selectedOption Value", selectedOption)
+        const fetchTodaysUpcomingLessons = async () => {
+            try {
+                const response = await axiosInstance.post('http://localhost:5000/tutor/getDayLessons', {
+                    date: `${year}-${month}-${dayOfMonth}`
+                }, {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('accesstoken')}`
+                    }
+                })
+                const lessons = response.data.result
+                console.log("today's lessons: ", lessons)
+
+                dispatch(setCurrentDayLessons(lessons))
+            }catch(err) {
+                console.log(err)
+            }
+        }
+
+        fetchTodaysUpcomingLessons()
+
+    }, [])// Run effect only once on component mount
+
+
+    useEffect(() => {
+        
+        //array that will hold the timeouts
+        let timeoutIds = []
+        if(currentDayLessons) {
+
+            console.log("timeout effect is running!");
+            //we're gonna show the lesson confirmation modal when the difference between the current time and lesson time is 15 minutes  
+            currentDayLessons.forEach(lesson => {
+                const startTime = new Date(lesson.start_time)
+                const notificationTime = new Date(startTime.getTime() - 15 * 60000); // 15 minutes before start time
+                const videoCallTime = new Date(startTime.getTime())
+                // Set timeout for notification
+                const timeDifference = notificationTime.getTime() - Date.now();
+                const videoCallTimeDifference = videoCallTime.getTime() - Date.now()
+                if (timeDifference > 0 && lesson.Accepted ===1) {
+                    const timeoutId = setTimeout(() => {
+                        // Display notification to the user
+                        dispatch(setCurrentDayLesson(lesson))
+                        dispatch(setNotificationModalVisibility(true))
+                    }, timeDifference)
+    
+                    timeoutIds.push(timeoutId)
+                }
+                if(videoCallTimeDifference> 0 && lesson.Accepted ===1 ) {
+                    const timeoutId = setTimeout(() => {
+                        //openNewTab(lesson.uuid, lesson.firstname+ " " +lesson.lastname)
+                    }, videoCallTimeDifference)
+    
+                    timeoutIds.push(timeoutId)
+                }
+            });
+        }
+        // Clean up any timers on unmount
+        return () => {
+            // Clear all pending timeouts
+            timeoutIds.forEach(timeoutId => clearTimeout(timeoutId));
+        };
+        
+    }, [currentDayLessons])
 
     return (
         <div className="w-screen h-screen bg-backg flex flex-col">
@@ -212,7 +285,21 @@ function TutorProfile() {
             {
                 handleTutorBody()
             }
-        </div>
+            {
+                notificationModalVisibility?
+                <LessonReminderModal></LessonReminderModal>
+                :
+                null
+                /*
+                <NavLink      
+                target="_blank" 
+                rel="noopener noreferrer"
+                to={`/learner/profile/Tutor/${props.tutor.uuid}`}
+                className="hidden">
+                Profile</NavLink>
+                */
+            }
+        </div> 
     );
 }
 

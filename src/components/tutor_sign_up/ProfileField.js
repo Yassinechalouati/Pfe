@@ -7,7 +7,7 @@ function ProfileField(props) {
     const TeachingStyle = useSelector(state => state.tutorData.TeachingStyle)
     const AboutMe = useSelector(state => state.tutorData.AboutMe)
 
-    const maxDescriptionLength = 150
+    const maxDescriptionLength = 800
 
 
     const handleChange = (e) => {

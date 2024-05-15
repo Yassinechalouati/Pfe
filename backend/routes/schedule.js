@@ -4,8 +4,12 @@ const mysql = require('../helpers/Sql_connection');
 const auth = require('../middleware/auth');
 const roleCheck = require('../middleware/roleCheck');
 const {formatTime} = require('../helpers/Functions')
+const { v4: uuidv4 } = require('uuid');
 
 router.post('/scheduleLesson', auth, roleCheck(["Learner"]), (req, res) => {
+    //generating unique key for lesson
+    const uuid = uuidv4()
+
     const userId = req.user.id;
     const {
         tutorId,
@@ -30,8 +34,8 @@ router.post('/scheduleLesson', auth, roleCheck(["Learner"]), (req, res) => {
 
     
     // Prepare and execute the SQL query
-    const query = "INSERT INTO private_lesson(tutor_id, private_learner_id, start_time, end_time, lesson_topic, lesson_difficulty, duration, Accepted, language, ReadByTutor, ReadByLearner) VALUES(?, ?, ?, ?, ?, ?, ?, -1, ?, 0, 0)";
-    mysql.query(query, [tutorId, userId, formattedBeginDate, formattedEndDate, lessonTopic, lessonDifficulty, lessonLength, lessonLanguage], (err, result) => {
+    const query = "INSERT INTO private_lesson(tutor_id, private_learner_id, start_time, end_time, lesson_topic, lesson_difficulty, duration, Accepted, language, ReadByTutor, ReadByLearner, uuid) VALUES(?, ?, ?, ?, ?, ?, ?, -1, ?, 0, 0, ?)";
+    mysql.query(query, [tutorId, userId, formattedBeginDate, formattedEndDate, lessonTopic, lessonDifficulty, lessonLength, lessonLanguage, uuid], (err, result) => {
         if (err) {
             console.log(err);
             res.status(500).json({ message: "Internal Server Error" });
