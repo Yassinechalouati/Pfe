@@ -12,7 +12,7 @@ import Settings from "../../../components/Global/Settings";
 import BigCalendar from '../../../components/learner profile/BigCalendar'
 import io from 'socket.io-client'
 import { setUnreadNotifications, updateNotification } from "../../../state/slices/NotificationSlice";
-import { appendLesson, deleteRejectedLesson, removeCurrentDayLessons, setCurrentDayLesson, setCurrentDayLessons, setNotificationModalVisibility, updateAllLessonsList, updateCurrentDayLessons, updateFirstLessonList } from "../../../state/slices/lessonsList";
+import { appendLesson, deleteRejectedLesson, removeCurrentDayLessons, setCurrentDayLesson, setCurrentDayLessons, setNotificationModalVisibility, setVideoCallModalVisibility, updateAllLessonsList, updateCurrentDayLessons, updateFirstLessonList } from "../../../state/slices/lessonsList";
 import NotificationsPage from '../NotificationsPage'
 import { fetchFile, isGoogleProfilePicture } from "../../../components/Global/functions";
 import TutorProfile from "../../../components/learner profile/TutorProfile";
@@ -25,6 +25,14 @@ function LearnerProfile() {
     const learnerId = useSelector(state => state.userData.id)
     const lessonModalVisibility = useSelector(state => state.lessonsList.notificationModalVisibility)
     const currentDayLessons = useSelector(state => state.lessonsList.currentDayLessons)
+    
+    const learnerfirstName = useSelector(state => state.userData.firstname)
+    const learnerLastName = useSelector(state => state.userData.lastname)
+
+    const currentDayLesson = useSelector(state => state.lessonsList.currentDayLesson)
+
+    const videoCallModalVisibility = useSelector(state => state.lessonsList.videoCallModalVisibility)
+
 
     const location = useLocation();
 
@@ -257,15 +265,6 @@ function LearnerProfile() {
     }, [])// Run effect only once on component mount
 
     useEffect(() => {
-        const openNewTab = (link, name) => {
-            const newTab = window.open(`/videoCall/${link}?name=${name}`, '_blank'); // Replace '/new-page' with the path of the page you want to open
-            if (newTab) {
-                newTab.focus(); // Focus on the new tab if it's successfully opened
-            } else {
-                // Handle cases where the new tab couldn't be opened (e.g., due to pop-up blockers)
-                window.location.href = `/videoCall/${link}?name=${name}`; // Fallback to navigating in the same tab
-            }
-        };
         //array that will hold the timeouts
         let timeoutIds = []
         if(currentDayLessons) {
@@ -290,9 +289,10 @@ function LearnerProfile() {
                 }
                 if(videoCallTimeDifference> 0 && lesson.Accepted ===1 ) {
                     const timeoutId = setTimeout(() => {
-                        openNewTab(lesson.uuid, lesson.firstname+ " " +lesson.lastname)
+                        console.log("currentDayLesson: ", currentDayLesson);
+                        dispatch(setCurrentDayLesson(lesson))
+                        dispatch(setVideoCallModalVisibility(true))
                     }, videoCallTimeDifference)
-    
                     timeoutIds.push(timeoutId)
                 }
             });
@@ -313,7 +313,13 @@ function LearnerProfile() {
             }
             {
                 lessonModalVisibility?
-                    <LessonReminderModal></LessonReminderModal>
+                    <LessonReminderModal type=""></LessonReminderModal>
+                :
+                null
+            }
+             {
+                videoCallModalVisibility?
+                <LessonReminderModal fullName={learnerfirstName +" "+ learnerLastName} type="videoCall"></LessonReminderModal>
                 :
                 null
             }

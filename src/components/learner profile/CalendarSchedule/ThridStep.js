@@ -16,7 +16,12 @@ function ThirdStep(props) {
     const learnerData = useSelector(state => state.userData)
     const scheduleData = useSelector(state => state.scheduleData )
 
+
+    const [tutorName, setTutorName] = useState("")
+
     const [loading, setLoading] = useState(false)
+
+    const [filteredList, setFilteredTutors] = useState(learnerData.tutorSearchList)
 
 
     //getting the tutors from database
@@ -42,6 +47,7 @@ function ThirdStep(props) {
                     }
                 });
                 dispatch(setTutorSearchList(response.data.message))
+                setFilteredTutors(response.data.message)
                 setLoading(false)
             }catch(err) {
                 console.log(err)
@@ -54,6 +60,24 @@ function ThirdStep(props) {
         fetchData()
     }, [])
 
+
+    //taking name input from user and comparing the input with the list elements in lower case to avoid case sensitivity 
+    const handleSearching = (e) => {
+        setTutorName(e.target.value);
+        const inputName = e.target.value.toLowerCase()
+
+        const filteredList = learnerData.tutorSearchList.filter(tutor => {
+            if(tutor.firstname && tutor.lastname) {
+                const fullName = `${tutor.firstname.toLowerCase()} ${tutor.lastname.toLowerCase()}`;
+                return fullName.includes(inputName) || tutor.firstname.toLowerCase().includes(inputName) || tutor.lastname.toLowerCase().includes(inputName);
+            }else {
+                return true
+            }
+        });
+        setFilteredTutors(filteredList); 
+        
+        console.log("tutor: ", filteredList);
+    }
 
 
     
@@ -71,6 +95,8 @@ function ThirdStep(props) {
                 learnerData.tutorSearchList.length>0?
                 <input
                 type="search"
+                value={tutorName}
+                onChange={handleSearching}
                 placeholder="Search for tutor..."
                 className="w-full mb-5 px-4 py-2 border rounded-xl focus:outline-none focus:border-elements transition-colors duration-300"
                 />
@@ -83,8 +109,8 @@ function ThirdStep(props) {
                     <Loading></Loading>
                     :
                     (
-                        learnerData.tutorSearchList.length>0?
-                        learnerData.tutorSearchList.map((tutor, index) => {
+                        filteredList.length>0?
+                        filteredList.map((tutor, index) => {
                             return <TutorRow key={index} moveForward={props.moveForward} tutor={tutor}></TutorRow>
                         })
                         :

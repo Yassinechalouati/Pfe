@@ -82,16 +82,17 @@ function SecondStep(props) {
                 <select onChange={handleLessonTopicChange} value={scheduleData.lessonTopic} className="border focus:outline-none border-elements z-50 px-2 active:outline-none py-1 rounded-md">
                     <option disabled value=''>Choose lesson topic</option>
                     {
-                    location.pathname.startsWith('/learner/profile/Tutor/')?
-                    //case of scheduling a lesson directly from tutor profile
-                    tutorSpecialities.map((item, index) => (
-                        <option key={index} value={item}>{item}</option>
-                    ))
-                    :
-                    //scheduling from general calendar
-                    topics.map((topic, index) => (
-                        <option key={index} value={topic}>{topic}</option>
-                    ))}
+                        location.pathname.startsWith('/learner/profile/Tutor/')?
+                        //case of scheduling a lesson directly from tutor profile
+                        tutorSpecialities.map((item, index) => (
+                            <option key={index} value={item}>{item}</option>
+                        ))
+                        :
+                        //scheduling from general calendar
+                        topics.map((topic, index) => (
+                            <option key={index} value={topic}>{topic}</option>
+                        ))
+                    }
                 </select>
             </div>
             <div className="flex p-2 items-center space-x-6 w-full">
@@ -99,7 +100,7 @@ function SecondStep(props) {
                 <span className="text-active">Choose lesson difficulty</span>
                 <div className="flex-grow"></div>
                 <select onChange={handleLessonDifficultyChange} value={scheduleData.lessonDifficulty} className="border focus:outline-none border-elements z-50 px-2 active:outline-none py-1 rounded-md">
-                    <option disabled value=''>Choose lesson topic</option>
+                    <option disabled value=''>Choose lesson difficulty</option>
                     { 
                     difficulty.map((item, index) => (
                             <option key={index} value={item}>{item}</option>

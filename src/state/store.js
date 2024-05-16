@@ -38,6 +38,11 @@ const store = configureStore({
         'lessons/updateFirstLessonList',
         'lessons/replaceFirstLessonItem',
         'lessons/appendLesson',
+        'lessons/setNotificationModalVisibility',
+        'lessons/updateCurrentDayLessons',
+        'lessons/addLessontoCurrentDayLessons',
+        'lessons/setVideoCallModalVisibility',
+        'lessons/removeCurrentDayLessons',
         //notifications action
         'notification_data/setUnreadNotifications',
         'notification_data/updateNotification',

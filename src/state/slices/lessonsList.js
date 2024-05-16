@@ -6,7 +6,8 @@ const initialState = {
     allLessons: [],
     currentDayLesson: {},
     currentDayLessons: [],
-    notificationModalVisibility: false
+    notificationModalVisibility: false,
+    videoCallModalVisibility: false
 }
 
 
@@ -97,6 +98,9 @@ export const lessons = createSlice( {
                 }
             }
         },
+        setCurrentDayLesson: (state, action ) => {
+            state.currentDayLesson = action.payload
+        },
         setCurrentDayLessons: (state, action) => {
             state.currentDayLessons = action.payload
         },
@@ -133,6 +137,9 @@ export const lessons = createSlice( {
                 state.currentDayLessons.sort((a, b) => new Date(a.start_time) - new Date(b.start_time));
             }
         },
+        setVideoCallModalVisibility: (state, action ) => {
+            state.videoCallModalVisibility = action.payload
+        },
         resetAllLessons: (state, action) => {
             state.allLessons = []
         }
@@ -156,7 +163,9 @@ export const {
     setCurrentDayLessons,
     updateCurrentDayLessons,
     removeCurrentDayLessons,
-    addLessontoCurrentDayLessons
+    addLessontoCurrentDayLessons,
+    setVideoCallModalVisibility
+    
 } = lessons.actions
 
 export default lessons.reducer

@@ -28,7 +28,13 @@ const initialState = {
   tutorSearchPageNumber: 1,//indicates the page number when searching for tutors
   maxPageNumber : "", //indicates the max number of pages when search for tutors
   created_at: '',
-  selectedTutor: {}
+  selectedTutor: {},
+  filterOptions: {
+    availability: '',
+    language: '',
+    proficiency: '',
+    name: ''
+  }
 }
 
 //slice that contains all the sign_up user informations
@@ -140,6 +146,28 @@ export const userSlice = createSlice({
     setSelectedTutor: (state, action) => {
       state.selectedTutor = action.payload
     },
+    setfilterOptions: (state, action )=> {
+      const {type, value} = action.payload
+
+      //resetting the page number upon every new filtering action 
+      state.tutorSearchPageNumber = 1
+
+      //saving the filtering options
+      state.filterOptions[type] = value
+    },
+    resetPageNumber: (state, action ) => {
+      state.tutorSearchPageNumber = 1
+    },
+    resetFilterOptions: (state, action) => {
+      //resetting the page number upon every new filtering action 
+      state.tutorSearchPageNumber = 1
+      state.filterOptions = {
+        name: state.filterOptions.name,
+        proficiency :"",
+        language: "",
+        availability: ""
+      }
+    },
     resetUserData: () => initialState
   },
 })
@@ -175,6 +203,9 @@ export const {
   setMaxPageNumber,
   setUuid,
   setCreatedAt,
-  setSelectedTutor
+  setSelectedTutor,
+  setfilterOptions,
+  resetPageNumber,
+  resetFilterOptions
 } = userSlice.actions
 export default userSlice.reducer

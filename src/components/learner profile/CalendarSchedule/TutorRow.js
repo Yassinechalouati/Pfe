@@ -64,10 +64,9 @@ function TutorRow(props) {
         fetchData()
         //getting the flag of the tutor's country 
         fetchFlag()
-    }, [])
+    }, [props.tutor])
 
     
-    console.log("tutorData:", selectedTutorData);
     const handleBookLesson = async () => {
             dispatch(setSelectedTutor(location.pathname.startsWith('/learner/profile/Tutor/')? selectedTutorData.id: props.tutor.id))
 

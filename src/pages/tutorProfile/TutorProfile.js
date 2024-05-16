@@ -2,7 +2,7 @@ import Settings from "../../components/Global/Settings";
 import TutorNavBar from "../../components/tutor profile/NavBar";
 import LinguaBuddy from "../learner/Profile/LinguaBuddy";
 import axiosInstance from '../../interceptors/axiosInterceptor'
-import { useEffect} from "react";
+import { useEffect} from "react"; 
 import { useDispatch, useSelector } from "react-redux";
 import Classrooms from "./Classrooms";
 import Courses from "./Courses";
@@ -37,7 +37,7 @@ import { addNotification, setUnreadNotifications, tutorIncrementNotifications } 
 import io from 'socket.io-client'
 import NotificationsPage from './NotificationsPage'
 import BigCalendar from "../../components/learner profile/BigCalendar";
-import { addLessontoCurrentDayLessons, setCurrentDayLesson, setCurrentDayLessons, setNotificationModalVisibility } from "../../state/slices/lessonsList";
+import { addLessontoCurrentDayLessons, setCurrentDayLesson, setCurrentDayLessons, setNotificationModalVisibility, setVideoCallModalVisibility } from "../../state/slices/lessonsList";
 import LessonReminderModal from "../../components/Global/lessonReminderModal";
 
 function TutorProfile() {
@@ -54,7 +54,12 @@ function TutorProfile() {
 
      //knowing whether it's a tutor or learner signing up
      const path = window.location.pathname;
+
+     const currentDayLesson = useSelector(state => state.lessonsList.currentDayLesson)
+
+     const videoCallModalVisibility = useSelector(state => state.lessonsList.videoCallModalVisibility)
     
+     console.log("path: ", path);
 
     
     useEffect(() => {
@@ -264,9 +269,9 @@ function TutorProfile() {
                 }
                 if(videoCallTimeDifference> 0 && lesson.Accepted ===1 ) {
                     const timeoutId = setTimeout(() => {
-                        //openNewTab(lesson.uuid, lesson.firstname+ " " +lesson.lastname)
+                        dispatch(setCurrentDayLesson(lesson))
+                        dispatch(setVideoCallModalVisibility(true))
                     }, videoCallTimeDifference)
-    
                     timeoutIds.push(timeoutId)
                 }
             });
@@ -287,17 +292,15 @@ function TutorProfile() {
             }
             {
                 notificationModalVisibility?
-                <LessonReminderModal></LessonReminderModal>
+                <LessonReminderModal type="reminder"></LessonReminderModal>
                 :
                 null
-                /*
-                <NavLink      
-                target="_blank" 
-                rel="noopener noreferrer"
-                to={`/learner/profile/Tutor/${props.tutor.uuid}`}
-                className="hidden">
-                Profile</NavLink>
-                */
+            }
+            {
+                videoCallModalVisibility?
+                <LessonReminderModal fullName={tutorData.firstname +" "+ tutorData.lastname} type="videoCall"></LessonReminderModal>
+                :
+                null
             }
         </div> 
     );

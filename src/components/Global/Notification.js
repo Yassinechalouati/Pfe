@@ -81,18 +81,45 @@ function Notification(props) {
             })
         })
     }
+ 
+    //upon the acceptance of the lesson, we send the learner and the tutor emails containing the videoCall link
+    const handleSendEmailAfterAcceptance = async(uuid, learnerId, topic, date) => {
+        return new Promise((resolve, reject) => {
+            axiosInstance.post('http://localhost:5000/tutor/sendVideoCallLink', {
+                lesson_uuid: uuid,
+                learner_id: learnerId,
+                lesson_topic: topic,
+                lesson_date: date
+            }, {
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('accesstoken')}`
+                }
+            })
+            .then((result) => {
 
+                resolve("Email sent")
+            })
+            .catch((err) => {
+                reject("Email Not sent ")
+            })
+        })
+    }
 
     const handleAcceptLesson = async () => {
         console.log("AcceptedClickeeed");
         try {
             const result = await notificationFeedBack(1, 'approveLesson')
+
+            
             dispatch(updateNotification({ notification: props.notification.lesson_id, accepted: 1, role: "tutor", lesson:"", type:""}))
             
             dispatch(replaceFirstLesson(props.notification))
-
+            
             dispatch(updateCurrentDayLessons(props.notification.lesson_id))
-
+            
+            const emailApiResult = await  handleSendEmailAfterAcceptance(props.notification.uuid, props.notification.private_learner_id, props.notification.lesson_topic, props.notification.start_time)
+            
+            console.log(emailApiResult);
             console.log(result);
         }catch(err) {
             console.log(err)

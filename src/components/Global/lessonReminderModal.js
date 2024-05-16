@@ -3,10 +3,13 @@ import { IoMdTime } from "react-icons/io"
 import { IoMdCalendar } from "react-icons/io"
 import { FaBook } from "react-icons/fa";
 import { IoIosAlarm } from "react-icons/io";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { isGoogleProfilePicture, timeFormatter } from "./functions";
 import { useEffect, useState } from "react";
 import { fetchFile } from "./functions";
+import { NavLink } from "react-router-dom";
+import { GiRingingAlarm } from "react-icons/gi";
+import { setNotificationModalVisibility, setVideoCallModalVisibility } from "../../state/slices/lessonsList";
 
 
 
@@ -15,6 +18,7 @@ function LessonReminderModal(props) {
     //tutor profile picture
     const [imageData, setImageData] = useState()
 
+    const dispatch = useDispatch()
 
     useEffect(() => {
         //fetching tutor profile picture from backend
@@ -48,18 +52,34 @@ function LessonReminderModal(props) {
         return formattedDate
     }
 
-
-
+    //hidding the modal
+    const handleCloseModal = () => {
+        if(props.type === "videoCall"){
+            dispatch(setVideoCallModalVisibility(false))
+        }else {
+            dispatch(setNotificationModalVisibility(false))
+        }
+    }
 
     return (
         <div className="fixed inset-0 bg-black bg-opacity-30 backdrop-blur-[1px] sm:backdrop-blur-[1px] z-50 flex justify-center items-center">
             <div className={`bg-backg w-[90%] md:w-[50%] lg:w-[35%] xl:w-[35%] max-h-[80%] min-h-[50%] flex flex-col rounded-md `} >
                 <div className="flex space-x-2 py-3 justify-between rounded-t-md px-3 items-center bg-lightg">
                     <div className="flex items-center space-x-2"> 
-                        <IoIosAlarm size="25" className="text-black"></IoIosAlarm>
-                        <span className="text-black font-bold"> Lesson Reminder </span>      
+                    {
+                        props.type==="videoCall"?
+                        <>
+                            <GiRingingAlarm size="25" className="text-black"></GiRingingAlarm>
+                            <span className="text-black font-bold"> Lesson Reminder </span>      
+                        </>
+                        :
+                        <>
+                            <IoIosAlarm size="25" className="text-black"></IoIosAlarm>
+                            <span className="text-black font-bold"> Lesson Reminder </span>      
+                        </>
+                    }
                     </div>
-                    <MdCancel size="25" className="text-darkg transition-colors duration-300 cursor-pointer hover:text-errortext"></MdCancel>
+                    <MdCancel onClick={handleCloseModal} size="25" className="text-darkg transition-colors duration-300 cursor-pointer hover:text-errortext"></MdCancel>
                 </div>
                 <div className="px-14 py-7 flex flex-col space-y-5">
                     <div className="flex items-center space-x-2">
@@ -82,6 +102,18 @@ function LessonReminderModal(props) {
                     <div className="flex items-center space-x-4">
                         <FaBook size="28" className="text-black"></FaBook>
                         <div className="">{lessonData.currentDayLesson.lesson_topic} in {lessonData.currentDayLesson.language}</div>
+                    </div>
+                    <div onClick={handleCloseModal} className="flex justify-center items-center">
+                        {
+                            props.type ==="videoCall"?
+                            <NavLink
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            to={`/videoCall/${lessonData.currentDayLesson.uuid}?name=${props.fullName}`}
+                            className="py-2 px-8 border border-button hover:bg-lightbutton hover:text-button transition-colors duration-300 rounded-sm bg-button text-white  text-sm">Start Call</NavLink>
+                            :
+                            null
+                        }
                     </div>
                 </div>
             </div>
