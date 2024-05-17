@@ -6,7 +6,6 @@ import { setfilterOptions } from "../../../state/slices/userSlice";
 
 function Availability(props) {
 
-    const [date, setDate ]= useState()
     const dispatch = useDispatch()
     const filterOptions = useSelector(state => state.userData.filterOptions)
 
@@ -39,7 +38,7 @@ function Availability(props) {
                 type:"availability",
                 value: result
             }))
-            setDate(date)
+            props.setDate(date)
             const data = {...filterOptions, availability:result}
             //getting data from server
             props.fetchData(data)
@@ -51,7 +50,7 @@ function Availability(props) {
     return (
         <DatePicker 
         ref={datepickerRef}
-        selected={date} 
+        selected={props.date} 
         showIcon
         className="text-center p-2 rounded-lg cursor-pointer border border-darkg text-darkg" 
         onChange={handleDateChange} 

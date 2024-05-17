@@ -60,7 +60,7 @@ router.post('/SearchTutors', auth, roleCheck(["Learner"]), (req, res) => {
         }
         query+=` (id not in (
             select DISTINCT pl.tutor_id from private_lesson as pl
-            where (? >=start_time and ? <=end_time) and accepted <> 0
+            where ((? >=start_time and ? <=end_time) and accepted <> 0)
         ))`
 
         dependancyArray.push(filterOptions.availability, filterOptions.availability)

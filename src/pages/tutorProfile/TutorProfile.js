@@ -29,7 +29,8 @@ import {
     setCountryFlag,
     setId,
     setUuid,
-    setCreatedAt
+    setCreatedAt,
+    setIsVerified
 
 } from '../../state/slices/tutorSlice'
 import { fetchFile } from "../../components/Global/functions";
@@ -39,6 +40,9 @@ import NotificationsPage from './NotificationsPage'
 import BigCalendar from "../../components/learner profile/BigCalendar";
 import { addLessontoCurrentDayLessons, setCurrentDayLesson, setCurrentDayLessons, setNotificationModalVisibility, setVideoCallModalVisibility } from "../../state/slices/lessonsList";
 import LessonReminderModal from "../../components/Global/lessonReminderModal";
+import Account from "../../components/Settings/Account"
+import Subscription from "../../components/Settings/Subscription"
+import ProfileChange from "../../components/Settings/ProfileChange";
 
 function TutorProfile() {
 
@@ -76,6 +80,7 @@ function TutorProfile() {
                 await Promise.all([
                     dispatch(setUuid(response.data.message.uuid)),
                     dispatch(setId(response.data.message.id)),
+                    dispatch(setIsVerified(response.data.message.isVerified)),
                     dispatch(setFirstName(response.data.message.firstname)),
                     dispatch(setLastName(response.data.message.lastname)),
                     dispatch(setEmail(response.data.message.email)),
@@ -184,10 +189,13 @@ function TutorProfile() {
         Profile: <Feed></Feed>,
         Classrooms: <Classrooms></Classrooms>,
         ChatBot: <LinguaBuddy></LinguaBuddy>,
-        Settings: <Settings></Settings>,
+        Settings: <Settings userData={tutorData}></Settings>,
         Exams: <Exams></Exams>,
         Notifications: <NotificationsPage></NotificationsPage>,
-        Calendar: <BigCalendar></BigCalendar>
+        Calendar: <BigCalendar></BigCalendar>,
+        tutorProfile: <ProfileChange></ProfileChange>,
+        informationChange: <Account></Account>,
+        subscription: <Subscription></Subscription>
     }
 
 
@@ -210,6 +218,12 @@ function TutorProfile() {
             return bodyContent.Notifications
         }else if(path === "/tutor/profile/Calendar"){
             return bodyContent.Calendar
+        }else if(path === "/tutor/profile/Settings/tutor-profile"){
+            return bodyContent.tutorProfile
+        }else if(path === "/tutor/profile/Settings/account") {
+            return bodyContent.informationChange
+        }else if(path ==="/tutor/profile/Settings/subscription"){
+            return bodyContent.subscription
         }
     }
 

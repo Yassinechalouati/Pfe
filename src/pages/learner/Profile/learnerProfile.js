@@ -1,7 +1,7 @@
 import NavBar from "../../../components/learner profile/NavBar";
 import axiosInstance from "../../../interceptors/axiosInterceptor";
 import { useEffect} from "react";
-import { setId, setIsLoading, setBirthday, setComfortLevel, setCountry, setEmail, setFirstName, setFocusThemes, setGoals, setHasPassword, setLastName, setLife_Goals, setPic, setTel, setTopics, setUuid, setCreatedAt } from "../../../state/slices/userSlice";
+import { setId, setIsLoading, setBirthday, setComfortLevel, setCountry, setEmail, setFirstName, setFocusThemes, setGoals, setHasPassword, setLastName, setLife_Goals, setPic, setTel, setTopics, setUuid, setCreatedAt, setIsVerified } from "../../../state/slices/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import CoursesSearch from "./CoursesSearch";
 import TutorsSearch from "./TutorsSearch";
@@ -18,6 +18,10 @@ import { fetchFile, isGoogleProfilePicture } from "../../../components/Global/fu
 import TutorProfile from "../../../components/learner profile/TutorProfile";
 import { useLocation } from 'react-router-dom';
 import LessonReminderModal from "../../../components/Global/lessonReminderModal";
+import ProfileChange from '../../../components/Settings/ProfileChange'
+import Account from '../../../components/Settings/Account'
+import Subscription from "../../../components/Settings/Subscription";
+
 
 
 function LearnerProfile() {
@@ -32,6 +36,9 @@ function LearnerProfile() {
     const currentDayLesson = useSelector(state => state.lessonsList.currentDayLesson)
 
     const videoCallModalVisibility = useSelector(state => state.lessonsList.videoCallModalVisibility)
+
+    const learnerData = useSelector(state => state.userData)
+
 
 
     const location = useLocation();
@@ -57,6 +64,7 @@ function LearnerProfile() {
                     dispatch(setId(response.data.message.id)),
                     dispatch(setFirstName(response.data.message.firstname)),
                     dispatch(setLastName(response.data.message.lastname)),
+                    dispatch(setIsVerified(response.data.message.isVerified)),
                     dispatch(setEmail(response.data.message.email)),
                     dispatch(setHasPassword(response.data.message.hasPassword)),
                     dispatch(setCountry(response.data.message.country)),
@@ -203,9 +211,13 @@ function LearnerProfile() {
         Profile: <Body></Body>,
         ClassroomsSearch: <ClassroomsSearch></ClassroomsSearch>,
         ChatBot: <LinguaBuddy></LinguaBuddy>,
-        Settings: <Settings></Settings>,
+        Settings: <Settings userData={learnerData}></Settings>,
         calendar: <BigCalendar></BigCalendar>,
-        Notifications: <NotificationsPage></NotificationsPage>
+        Notifications: <NotificationsPage></NotificationsPage>,
+        studentProfile: <ProfileChange></ProfileChange>,
+        informationChange: <Account></Account>,
+        subscription: <Subscription></Subscription>
+
     }
     //knowing whether it's a tutor or learner signing up
     const path = window.location.pathname;
@@ -231,6 +243,12 @@ function LearnerProfile() {
             return bodyContent.Notifications
         }else if(location.pathname.startsWith('/learner/profile/Tutor/')) {
             return bodyContent.TutorProfile
+        }else if(path === "/learner/profile/Settings/student-profile"){
+            return bodyContent.studentProfile
+        }else if(path ==="/learner/profile/Settings/account") {
+            return bodyContent.informationChange
+        }else if(path ==="/learner/profile/Settings/subscription") {
+            return bodyContent.subscription
         }
     }
 

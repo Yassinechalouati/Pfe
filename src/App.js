@@ -49,6 +49,12 @@ function App() {
         <Route path="/learner/profile/Notifications" element={<LearnerProfile></LearnerProfile>}></Route>
         <Route path="/learner/profile/Tutor/:uuid" element={<LearnerProfile></LearnerProfile>}></Route>
         <Route path="/videoCall/:uuid" element={<VideoCall></VideoCall>}></Route>
+        <Route path="/learner/profile/Settings/student-profile" element={<LearnerProfile></LearnerProfile>}></Route>
+        <Route path="/learner/profile/Settings/account" element={<LearnerProfile></LearnerProfile>}></Route>
+        <Route path="/learner/profile/Settings/subscription" element={<LearnerProfile></LearnerProfile>}></Route>
+        <Route path="/tutor/profile/Settings/tutor-profile" element={<TutorProfile></TutorProfile>}></Route>
+        <Route path="/tutor/profile/Settings/account" element={<TutorProfile></TutorProfile>}></Route>
+        <Route path="/tutor/profile/Settings/subscription" element={<TutorProfile></TutorProfile>}></Route>
         <Route index element={<Landingpage></Landingpage>}></Route>
       </Routes>
     </Router>

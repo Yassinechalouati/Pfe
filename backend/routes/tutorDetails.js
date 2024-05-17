@@ -35,7 +35,8 @@ router.post('/details', auth, roleCheck(["Tutor"]), (req, res) => {
                 WorkExperience: result[0].WorkExperience,
                 Education : result[0].Education,
                 uuid: result[0].uuid,
-                created_at: result[0].created_at
+                created_at: result[0].created_at,
+                isVerified: result[0].isVerified
             }
             console.log(data);
             res.status(200).json({message: data})

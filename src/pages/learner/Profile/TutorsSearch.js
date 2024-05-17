@@ -5,7 +5,7 @@ import axiosInstance from "../../../interceptors/axiosInterceptor";
 import { useDispatch, useSelector } from "react-redux";
 import Loading from '../../../components/Global/Loading'
 import ShowMoreTutors from "../../../components/learner profile/ShowMoreTutors";
-import SearchTutors from "../../../components/learner profile/SearchTutors";
+import SearchTutors from "../../../components/learner profile/TutorFilterOption/SearchTutors";
 import LanguageSelection from "../../../components/learner profile/TutorFilterOption/LanguageSelection";
 import Availability from '../../../components/learner profile/TutorFilterOption/Availability'
 import Proficiency from "../../../components/learner profile/TutorFilterOption/Proficiency";
@@ -16,6 +16,8 @@ import Proficiency from "../../../components/learner profile/TutorFilterOption/P
 function TutorsSearch(props) {
 
     const dispatch = useDispatch()
+    
+    const [date, setDate ]= useState() 
 
     const [loading, setLoading] = useState(false)
 
@@ -60,6 +62,7 @@ function TutorsSearch(props) {
             proficiency: "",
             availability: ""
         })
+        setDate("")
     }
 
     useEffect(() => {
@@ -79,7 +82,7 @@ function TutorsSearch(props) {
                 <hr className="h-1"></hr>
                 <div className="w-full flex items-center space-x-3 h-auto flex-wrap"> 
                     <span className="">Filter by:</span>
-                    <Availability fetchData={fetchData}></Availability>
+                    <Availability date={date} setDate={setDate} fetchData={fetchData}></Availability>
                     <LanguageSelection fetchData={fetchData}></LanguageSelection>
                     <div className="flex-grow hidden lg:block"></div>
                     {

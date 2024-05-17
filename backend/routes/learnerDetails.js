@@ -34,7 +34,8 @@ router.post('/details', auth, roleCheck(["Learner"]), (req, res) => {
                 comfortlevel: result[0].comfortlevel,
                 Birthday: result[0].Birthday,
                 uuid: result[0].uuid,
-                created_at: result[0].created_at
+                created_at: result[0].created_at,
+                isVerified : result[0].isVerified
             }
             res.status(200).json({message: data})
         }

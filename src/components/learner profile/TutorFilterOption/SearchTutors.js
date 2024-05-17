@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { setfilterOptions } from "../../state/slices/userSlice";
+import { setfilterOptions } from "../../../state/slices/userSlice";
 import { useState } from "react";
 function SearchTutors(props) {
 
