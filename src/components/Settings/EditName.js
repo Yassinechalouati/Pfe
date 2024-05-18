@@ -87,7 +87,7 @@ function EditName(props) {
                         <EditIcon></EditIcon>
                     </div>
                     :
-                    <button type="submit" className="px-4 py-2 bg-button2 rounded-md cursor-pointer text-white ">Confirm</button>
+                    <button type="submit" className="px-4 py-2 bg-elements rounded-md cursor-pointer text-white ">Confirm</button>
                 }
             </form>
             <span className="text-darkg">

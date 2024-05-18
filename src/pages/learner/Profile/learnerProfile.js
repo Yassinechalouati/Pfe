@@ -1,7 +1,7 @@
 import NavBar from "../../../components/learner profile/NavBar";
 import axiosInstance from "../../../interceptors/axiosInterceptor";
 import { useEffect} from "react";
-import { setId, setIsLoading, setBirthday, setComfortLevel, setCountry, setEmail, setFirstName, setFocusThemes, setGoals, setHasPassword, setLastName, setLife_Goals, setPic, setTel, setTopics, setUuid, setCreatedAt, setIsVerified } from "../../../state/slices/userSlice";
+import { setId, setIsLoading, setBirthday, setComfortLevel, setCountry, setEmail, setFirstName, setFocusThemes, setGoals, setHasPassword, setLastName, setLife_Goals, setPic, setTel, setTopics, setUuid, setCreatedAt, setIsVerified, setProficiency } from "../../../state/slices/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import CoursesSearch from "./CoursesSearch";
 import TutorsSearch from "./TutorsSearch";
@@ -70,12 +70,10 @@ function LearnerProfile() {
                     dispatch(setCountry(response.data.message.country)),
                     dispatch(setTel(response.data.message.tel)),
                     dispatch(setGoals(response.data.message.learning_goals)),
-                    dispatch(setLife_Goals(response.data.message.goals)),
-                    dispatch(setFocusThemes(response.data.message.focus_themes)),
                     dispatch(setTopics(response.data.message.interested_topics)),
-                    dispatch(setComfortLevel(response.data.message.comfortlevel)),
                     dispatch(setBirthday(response.data.message.Birthday)),
-                    dispatch(setCreatedAt(response.data.message.created_at))
+                    dispatch(setCreatedAt(response.data.message.created_at)),
+                    dispatch(setProficiency(response.data.message.language_proficiency))
                 ]);
 
                 //if it's a google profile picture we save it and just show it, else we fetch the picture from our server

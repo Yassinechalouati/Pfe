@@ -17,6 +17,7 @@ router.post('/details', auth, roleCheck(["Learner"]), (req, res) => {
             console.log("no user with this id");
             res.status(400).json({message: "user doesn't exist"})
         }else {
+            console.log("LEARENER DATA:", result[0]);
             const data = {
                 id: userId,
                 firstname: result[0].firstname,
@@ -28,10 +29,7 @@ router.post('/details', auth, roleCheck(["Learner"]), (req, res) => {
                 tel: result[0].tel,
                 language_proficiency: result[0].language_proficiency,
                 learning_goals: result[0].learning_goals,
-                goals: result[0].goals, 
-                focus_themes: result[0].focus_themes,
                 interested_topics: result[0].interested_topics,
-                comfortlevel: result[0].comfortlevel,
                 Birthday: result[0].Birthday,
                 uuid: result[0].uuid,
                 created_at: result[0].created_at,

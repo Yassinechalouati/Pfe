@@ -2,7 +2,7 @@ import { NavLink } from "react-router-dom";
 
 function Title(props) {
     return (
-        <div className="flex-col flex ">
+        <div className="flex-col flex space-y-3">
             <div className="flex items-center space-x-2">
                 <NavLink
                  to={`/${props.role}/profile/Settings`}
@@ -15,8 +15,8 @@ function Title(props) {
                 <span className="text-black">
                     {props.title}
                 </span>
-
             </div>
+            <span className="text-black text-2xl">{props.title}</span>
         </div>
     );
 }
