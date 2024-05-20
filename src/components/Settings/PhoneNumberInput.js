@@ -1,17 +1,16 @@
-import React, { useState } from 'react';
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
-const PhoneNumberInput = () => {
-    const [phone, setPhone] = useState('');
+const PhoneNumberInput = (props) => {
 
-
-    console.log("phone: ", phone);
     return (
         <div className='w-full'>
             <PhoneInput
                 country={'tn'} // Set Tunisia as the default country
-                value={phone}
-                onChange={phone => setPhone(phone)}
+                value={props.value}
+                countryCodeEditable={false}
+                copyNumbersOnly={true}
+                onChange={phone => props.onChange(phone)}
+                onEnterKeyPress={props.save}
                 inputStyle={{
                     height: '40px',
                     width: '100%',
