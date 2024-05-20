@@ -74,8 +74,8 @@ function FocusTopics(props) {
     useEffect(()=> {
         if(focusTopics && focusTopics.length>0 ){
             try {
-                const parsedTopics = JSON.parse(focusTopics);
-                setTopics(parsedTopics);
+                
+                setTopics(focusTopics);
             } catch (error) {
                 console.error("Failed to parse focusTopics:", error);
             }

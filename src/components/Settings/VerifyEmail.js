@@ -1,11 +1,12 @@
-import axios from 'axios'
-import {useEffect, useState, useRef} from 'react'
-import {NavLink, useParams} from 'react-router-dom'
+import axios from "axios"
+import { useEffect, useState } from "react"
+import { NavLink, useParams } from "react-router-dom"
 
-function EmailVerif() {
-    //getting the token from the url
-    const param = useParams()
-    
+
+function VerifyEmail(props) {
+     //getting the token from the url
+     const param = useParams()
+
     const [isValid, setIsValid] = useState(false)
     const [isLoading, setIsLoading] = useState(true)//to assure that we got the answer from the socket before displaying the html code 
     const [role, setRole] = useState("")
@@ -15,7 +16,7 @@ function EmailVerif() {
         const verifyEmail =  async () => {
             try {
                 const response = await axios.post('http://localhost:5000/user/verifEmail', {
-                    type: "Signup"
+                    type : 'Settings'
                 },{
                     headers: {
                         'Authorization': `Bearer ${param.token}`
@@ -25,10 +26,6 @@ function EmailVerif() {
                 //showing that the verification succeeded
                 setIsValid(true)
                 setIsLoading(false)
-                //update localStorage with tokens
-                localStorage.clear();
-                localStorage.setItem('accesstoken', response.data.accessToken)
-                localStorage.setItem('refreshtoken', response.data.refreshToken)
             }catch(err){
                 console.log(err)
                 //showing that the link is invalid
@@ -38,24 +35,21 @@ function EmailVerif() {
         }
         verifyEmail()
     }, [])
-    
-
-    
     return (
-        <div className="flex w-screen h-screen flex-col justify-center items-center space-y-2">
-            {
+        <div className="flex flex-col space-y-3 justify-center h-screen w-screen items-center">
+             {
                 !isLoading?
                 (isValid? 
                 <>
-                    <img src="/verified.png" alt="verified" className="object-cover h-44 w-44"></img>
+                    <img src="/verifiedD.png"  className=" w-96 object-cover  h-96" ></img>
                     <span className="text-black text-2xl font-bold">Email verified successfully</span>
                     {
                         role && role ==="Learner" ? 
-                        <NavLink to='/learner/signup/personalize' className="rounded-md py-2 px-4 bg-elements text-white font-bold">Proceed</NavLink>
+                        <NavLink to="/learner/profile/Settings/account" className=" px-4 py-2 rounded-lg bg-elements text-white cursor-pointer"> Go back to Settings</NavLink>
                         : 
                         (
                             role && role === "Tutor" ?
-                            <NavLink to='/tutor/signup/personalization' className="rounded-md py-2 px-4 bg-elements text-white font-bold">Proceed</NavLink>
+                            <div className=" px-4 py-2 rounded-lg bg-elements text-white cursor-pointer"> Go back to Settings</div>
                             :
                             null
                         )
@@ -75,10 +69,9 @@ function EmailVerif() {
                 ""
                 
             }
-                
+            
         </div>
-        
     );
 }
 
-export default EmailVerif;
+export default VerifyEmail;

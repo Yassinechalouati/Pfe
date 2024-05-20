@@ -46,7 +46,8 @@ function VerifEmail({role, user}) {
             
             const response = await axios.post('http://localhost:5000/resend/verification_link', {
                 email: user.email,
-                role : role
+                role : role,
+                type: "Signup"
             })
             console.log(response.data)
         }catch(err) {

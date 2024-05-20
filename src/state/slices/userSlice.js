@@ -8,9 +8,6 @@ const initialState = {
   hasPassword: '', // this indicates whether the learner is signed up using gmail or not
   country:'', 
   tel: '', 
-  life_goals: '',
-  focus_themes: '',
-  comfortlevel: '',
   Birthday: '',
   email: '',
   password: '',
@@ -60,6 +57,9 @@ export const userSlice = createSlice({
     setProficiency: (state, action) => {
       state.proficiency = action.payload
     },
+    changeGoals: (state, action) =>{
+      state.goals = action.payload
+    },
     setGoals: (state, action) => {
       const index = state.goals.indexOf(action.payload);
       if (index !== -1) {
@@ -70,6 +70,9 @@ export const userSlice = createSlice({
         // If the goal doesn't exist, add it to the array
         state.goals.push(action.payload)
       }
+    },
+    changeTopics: (state, action) => {
+      state.topics = action.payload
     },
     setTopics: (state, action) => {
       const index = state.topics.indexOf(action.payload);
@@ -109,15 +112,6 @@ export const userSlice = createSlice({
     },
     setTel: (state, action) => {
       state.tel = action.payload
-    },
-    setLife_Goals: (state, action) => {
-      state.life_goals = action.payload
-    },
-    setFocusThemes: (state, action) => {
-      state.focus_themes = action.payload
-    },
-    setComfortLevel: (state, action) => {
-      state.comfortlevel = action.payload
     },
     setBirthday: (state, action) => {
       state.Birthday = action.payload
@@ -188,13 +182,10 @@ export const {
   setIsVerified, 
   setVerificationLearner, 
   setBirthday, 
-  setComfortLevel, 
   setCountry, 
   setFirstName, 
-  setFocusThemes, 
   setHasPassword, 
   setLastName, 
-  setLife_Goals, 
   setTel, 
   setTutorSearchList,
   setId,
@@ -206,6 +197,8 @@ export const {
   setSelectedTutor,
   setfilterOptions,
   resetPageNumber,
-  resetFilterOptions
+  resetFilterOptions,
+  changeGoals,
+  changeTopics
 } = userSlice.actions
 export default userSlice.reducer

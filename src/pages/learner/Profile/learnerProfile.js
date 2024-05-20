@@ -1,7 +1,7 @@
 import NavBar from "../../../components/learner profile/NavBar";
 import axiosInstance from "../../../interceptors/axiosInterceptor";
 import { useEffect} from "react";
-import { setId, setIsLoading, setBirthday, setComfortLevel, setCountry, setEmail, setFirstName, setFocusThemes, setGoals, setHasPassword, setLastName, setLife_Goals, setPic, setTel, setTopics, setUuid, setCreatedAt, setIsVerified, setProficiency } from "../../../state/slices/userSlice";
+import { setId, setIsLoading, setBirthday, setCountry, setEmail, setFirstName, setHasPassword, setLastName, setPic, setTel, setUuid, setCreatedAt, setIsVerified, setProficiency, changeGoals, changeTopics } from "../../../state/slices/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import CoursesSearch from "./CoursesSearch";
 import TutorsSearch from "./TutorsSearch";
@@ -69,8 +69,8 @@ function LearnerProfile() {
                     dispatch(setHasPassword(response.data.message.hasPassword)),
                     dispatch(setCountry(response.data.message.country)),
                     dispatch(setTel(response.data.message.tel)),
-                    dispatch(setGoals(response.data.message.learning_goals)),
-                    dispatch(setTopics(response.data.message.interested_topics)),
+                    dispatch(changeGoals(JSON.parse(response.data.message.learning_goals))),
+                    dispatch(changeTopics(JSON.parse(response.data.message.interested_topics))),
                     dispatch(setBirthday(response.data.message.Birthday)),
                     dispatch(setCreatedAt(response.data.message.created_at)),
                     dispatch(setProficiency(response.data.message.language_proficiency))

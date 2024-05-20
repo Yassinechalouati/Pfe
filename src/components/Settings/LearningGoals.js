@@ -1,6 +1,8 @@
 import { MdEdit } from "react-icons/md";
 import { useEffect, useState } from "react"
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { arraysEqualUnordered } from "../Global/functions";
+import { changeGoals } from "../../state/slices/userSlice";
 
 
 function LearningGoals(props) {
@@ -11,6 +13,8 @@ function LearningGoals(props) {
 
     const [learningGoal, setLearningGoal] = useState([])
 
+
+    const dispatch = useDispatch()
     
 
     //list of goals
@@ -23,13 +27,26 @@ function LearningGoals(props) {
         "Other"
     ]
 
+
+    
+
     const handleClick = () => {
         if(!editing ){
             setEditing(true)
         }
     }
-    const handleSave = () => {
+    const handleSave = async() => {
         if(editing) {
+            if(learningGoal && !arraysEqualUnordered(learningGoal, learning_goals)) {
+                console.log("api called ");
+                try {
+                    await props.modifyCall(learningGoal, 'learningGoals')
+                    dispatch(changeGoals(learningGoal))
+                } catch (error) {
+                    console.log(error);
+                }
+                
+            }
             setEditing(false)
         }
     }
@@ -72,7 +89,7 @@ function LearningGoals(props) {
             try {
                 console.log("learning_goals: ", learning_goals);
                 
-                setLearningGoal(JSON.parse(learning_goals))
+                setLearningGoal(learning_goals)
             } catch (error) {
                 console.error("Failed to parse learning_goals:", error);
             }

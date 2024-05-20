@@ -15,7 +15,7 @@ router.post('/Update', auth, roleCheck(["Learner"]), async (req, res) => {
 
     try {
         if (type === 'profic') {
-            query += ' proficiency = ? WHERE id = ?';
+            query += ' language_proficiency = ? WHERE id = ?';
             dependencyArray.push(newParameter, userId);
         } else if (type === 'learningGoals') {
             query += ' learning_goals = ? WHERE id = ?';

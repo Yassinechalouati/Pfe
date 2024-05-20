@@ -8,6 +8,7 @@ const generateAccessToken = require('../helpers/generateAccessToken')
 
 router.post('/verifEmail', async (req, res) => {
     try {
+        const {type} = req.body
         const authHeader = req.headers['authorization'];
         const token = authHeader && authHeader.split(' ')[1];
 
@@ -32,12 +33,14 @@ router.post('/verifEmail', async (req, res) => {
                             console.log(err);
                             res.status(500).json({message: "Internal Server Error"})
                         }else {
-                            const { accessToken } = await generateAccessToken(payload);
-                            const { refreshToken } = await generateRefreshToken(payload);
-    
-                            console.log("email verified successfully");
-                            res.status(200).json({ message: 'Email verified successfully', verified: true, refreshToken, accessToken, role :payload.role })
-                            
+                            if(type ==="Settings") {
+                                res.status(200).json({ message: 'Email verified successfully', role :payload.role })
+                            }else if(type ==="Signup"){
+                                const { accessToken } = await generateAccessToken(payload);
+                                const { refreshToken } = await generateRefreshToken(payload);
+                                console.log("email verified successfully");
+                                res.status(200).json({ message: 'Email verified successfully', verified: true, refreshToken, accessToken, role :payload.role })
+                            }
                         }
                     });
                 } else {

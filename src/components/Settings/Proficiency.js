@@ -19,8 +19,19 @@ function Proficiency(props) {
             setEditing(true)
         }
     }
-    const handleSave = () => {
+
+
+
+    const handleSave = async () => {
         if(editing) {
+            if ( userProficiency && userProficiency !== proficiency) {
+                try {
+                await props.modifyCall(proficiency, 'profic')
+                } catch (error) {
+                    console.log(error);
+                }
+
+            }
             setEditing(false)
         }
     }

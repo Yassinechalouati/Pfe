@@ -12,6 +12,7 @@ import ForgotPassword from './pages/ForgotPassword';
 import ForgotPasswordContent from './components/sign_in/ForgotPasswordContent'
 import Landingpage from './pages/Landingpage';
 import VideoCall from './components/Global/VideoCall';
+import VerifyEmail from './components/Settings/VerifyEmail';
 function App() {
   return (
     <Router>
@@ -55,6 +56,7 @@ function App() {
         <Route path="/tutor/profile/Settings/tutor-profile" element={<TutorProfile></TutorProfile>}></Route>
         <Route path="/tutor/profile/Settings/account" element={<TutorProfile></TutorProfile>}></Route>
         <Route path="/tutor/profile/Settings/subscription" element={<TutorProfile></TutorProfile>}></Route>
+        <Route path="/users/profile/Settings/verifyEmail/:token" element={<VerifyEmail></VerifyEmail>}></Route>
         <Route index element={<Landingpage></Landingpage>}></Route>
       </Routes>
     </Router>

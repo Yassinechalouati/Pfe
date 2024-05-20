@@ -171,3 +171,16 @@ export function getMaxDurationIndex(selectedTimeInMinutes, busyTimes, duration) 
   
     return maxDurationIndex;
   }
+
+
+  //compares two arrays ignoring order
+  export const arraysEqualUnordered = (arr1, arr2) => {
+    if (arr1.length !== arr2.length) return false;
+    const sortedArr1 = [...arr1].sort();
+    const sortedArr2 = [...arr2].sort();
+    console.log('sortedArr1: ', sortedArr1, "sortedArr2: ", sortedArr2);
+    for (let i = 0; i < sortedArr1.length; i++) {
+        if (sortedArr1[i] !== sortedArr2[i]) return false;
+    }
+    return true;
+};

@@ -7,7 +7,8 @@ const sendEmail = require('../helpers/sendEmail')
 
 //api for resending email verification 
 router.post('/verification_Link', async (req, res) => {
-    const {role, email} = req.body
+    const {role, email, type} = req.body
+    console.log("req.body: ", req.body);
     const query = `SELECT id, isVerified from ${mysql.escapeId(role)} where email = ?`
     try {
         if (role === "Learner"){
@@ -20,13 +21,21 @@ router.post('/verification_Link', async (req, res) => {
                         const user = {id: result[0].id, role: role} 
                         //making verification token
                         const {verificationToken} = await generateVerificationToken(user)
-                        
-                        const url = `${process.env.BASE_URL}users/verify/${verificationToken}`
-                        //making the email beautiful
-                        const emailHtml = generateLearnerEmailHtml(url)
-                        //sending verification email to user 
-                        await sendEmail(email, "Email Verification", emailHtml)
-                        res.status(201).json({message: "Email sent", roomId: `users_${email}`}) 
+                        if(type ==="Settings"){
+                            //making the email beautiful
+                            const url = `${process.env.BASE_URL}users/profile/Settings/verifyEmail/${verificationToken}`
+                            const emailHtml = generateLearnerEmailHtml(url)
+                            //sending verification email to user 
+                            await sendEmail(email, "Email Verification", emailHtml)
+                            res.status(201).json({message:"Email sent"})
+                        }else if(type ==="Signup") { 
+                            const url = `${process.env.BASE_URL}users/verify/${verificationToken}`
+                            //making the email beautiful
+                            const emailHtml = generateLearnerEmailHtml(url)
+                            //sending verification email to user 
+                            await sendEmail(email, "Email Verification", emailHtml)
+                            res.status(201).json({message: "Email sent", roomId: `users_${email}`}) 
+                        }
                     }
                     else {
                         res.status(409).json({message: 'User Already verified'})
@@ -47,13 +56,21 @@ router.post('/verification_Link', async (req, res) => {
                         const user = {id: result[0].id, role: role} 
                         //making verification token
                         const {verificationToken} = await generateVerificationToken(user)
-                        
-                        const url = `${process.env.BASE_URL}users/verify/${verificationToken}`
-                        //making the email beautiful
-                        const emailHtml = generateTutorEmailHtml(url)
-                        //sending verification email to user 
-                        await sendEmail(email, "Email Verification", emailHtml)
-                        res.status(201).json({message: "Email sent", roomId: `users_${email}`}) 
+                        if(type ==="Settings") {
+                            const url = `${process.env.BASE_URL}users/verify/${verificationToken}`
+                            //making the email beautiful
+                            const emailHtml = generateTutorEmailHtml(url)
+                            //sending verification email to user 
+                            await sendEmail(email, "Email Verification", emailHtml)
+                            res.status(201).json({message: "Email sent", roomId: `users_${email}`})  
+                        }else if(type ==="Signup"){
+                            const url = `${process.env.BASE_URL}users/verify/${verificationToken}`
+                            //making the email beautiful
+                            const emailHtml = generateTutorEmailHtml(url)
+                            //sending verification email to user 
+                            await sendEmail(email, "Email Verification", emailHtml)
+                            res.status(201).json({message: "Email sent", roomId: `users_${email}`}) 
+                        }
                     }else {
                         res.status(409).json({message: 'User Already verified'})
                     }
