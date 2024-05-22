@@ -89,9 +89,25 @@ function TutorProfile() {
                     dispatch(setAboutMe(response.data.message.AboutMe)),
                     dispatch(setDescription(response.data.message.description)),
                     dispatch(setTeachingStyle(response.data.message.teachingStyle)),
-                    dispatch(setEducation(JSON.parse(response.data.message.Education))),
-                    dispatch(setLanguages(JSON.parse(response.data.message.Languages))),
-                    dispatch(setWorkExperience(JSON.parse(response.data.message.WorkExperience))),
+                    dispatch(setEducation(
+                        response.data.message.Education?
+                        JSON.parse(response.data.message.Education)
+                        :
+                        []
+                    )),
+                    dispatch(
+                        setLanguages(
+                                response.data.message.Languages?
+                                JSON.parse(response.data.message.Languages)
+                                :
+                                []
+                            )),
+                    dispatch(setWorkExperience(
+                        response.data.message.WorkExperience?
+                        JSON.parse(response.data.message.WorkExperience)
+                        :
+                        []
+                    )),
                     dispatch(setCountry(response.data.message.country)),
                     dispatch(setTel(response.data.message.tel)),
                     dispatch(setBirthday(response.data.message.Birthday)),

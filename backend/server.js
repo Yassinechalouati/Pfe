@@ -83,6 +83,7 @@ const getSelectedTutorDetails = require('./routes/getSelectedTutorDetails')
 const getBusyScheduleTimeLearnerAndTutor = require('./routes/getBusyScheduleTimeLearnerAndTutor')
 const sendVideoCallEmail = require('./routes/sendVideoCallLink')
 const updateLearner = require('./routes/LearnerUpdate')
+const updateTutor = require('./routes/TutorUpdate')
  
 
 //apis
@@ -127,6 +128,7 @@ app.use('/learner', getSelectedTutorDetails)
 app.use('/learner', getBusyScheduleTimeLearnerAndTutor)
 app.use('/tutor', sendVideoCallEmail)
 app.use('/learner', updateLearner)
+app.use('/tutor', updateTutor)
 
 
 // Socket.io logic

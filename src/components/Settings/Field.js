@@ -44,7 +44,7 @@ function Field(props) {
 
     const modifyCall = async () => {
         return new Promise((resolve, reject) => {
-            axiosInstance.post('http://localhost:5000/learner/Update', {
+            axiosInstance.post(`http://localhost:5000/${firstSegment}/Update`, {
                 type: props.name,
                 newParameter: value
             }, {

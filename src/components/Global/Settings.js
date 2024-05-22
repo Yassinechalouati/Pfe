@@ -49,7 +49,7 @@ function Settings(props) {
                     icon={<MdFace size="25" className="text-black"></MdFace>}
                     next={<MdOutlineNavigateNext size="25" className=""></MdOutlineNavigateNext>}
                     description="Update your learning goals and interests."
-                    title="Student Profile" 
+                    title={`${firstSegment === "learner"? "Student" : "Tutor" } Profile`}
                     role={firstSegment}
                     route={firstSegment==="learner"? "student-profile": "tutor-profile"}
                 ></Card>

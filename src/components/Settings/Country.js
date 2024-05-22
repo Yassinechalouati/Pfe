@@ -1,21 +1,11 @@
 
 import { useEffect, useState } from 'react';
 import {IoIosArrowDown} from 'react-icons/io'
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { MdEdit } from "react-icons/md";
+import { setCountry } from '../../state/slices/userSlice';
 
 function Country(props) {
-    const [editing, setEditing] = useState(false)
-    const handleClick = () => {
-        if(!editing ){
-            setEditing(true)
-        }
-    }
-    const handleSave = () => {
-        if(editing) {
-            setEditing(false)
-        }
-    }
     //list of countries 
     const countries = [
         "Afghanistan",
@@ -218,15 +208,39 @@ function Country(props) {
     const tutorData = useSelector(state => state.tutorData)
 
     const Country = props.role === "learner"? learnerData.country : tutorData.country
-    const [country, setCountry] = useState('')
+    const [countryLocal, setCountryLocal] = useState('')
+    const [editing, setEditing] = useState(false)
+
+    const dispatch = useDispatch()
+
+
+    //enter edit mode
+    const handleClick = () => {
+        if(!editing ){
+            setEditing(true)
+        }
+    }
+    const handleSave = async() => {
+        if(editing) {
+            if(countryLocal !== Country){
+                try {
+                    await props.modifyCall(countryLocal, 'From')
+                    dispatch(setCountry(countryLocal))
+                } catch (error) {
+                    console.log(error);
+                }
+            }
+            setEditing(false)
+        }
+    }
 
     const handleCountryChange = (e) => {
-        setCountry(e.target.value)
+        setCountryLocal(e.target.value)
     }
 
     useEffect(() => {
         if(Country){
-            setCountry(Country)
+            setCountryLocal(Country)
         }
     }, [Country])
     return (
@@ -237,7 +251,7 @@ function Country(props) {
             {
                 !editing?
                 <>
-                    <span className="">{country}</span>
+                    <span className="">{countryLocal}</span>
                     <MdEdit size="17" className=""></MdEdit>
                 </>
                 :
@@ -246,7 +260,7 @@ function Country(props) {
                         <div className="relative flex flex-col w-full">
                             <select
                                 className="block appearance-none w-full bg-white border border-gray-300 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
-                                name="Country" value={country} onChange={handleCountryChange}
+                                name="Country" value={countryLocal} onChange={handleCountryChange}
                             >
                                 <option disabled value="">Select your country</option>
                                 {

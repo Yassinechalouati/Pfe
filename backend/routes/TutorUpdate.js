@@ -5,25 +5,34 @@ const auth = require('../middleware/auth');
 const roleCheck = require('../middleware/roleCheck');
 const bcrypt = require('bcrypt');
 
-router.post('/Update', auth, roleCheck(["Learner"]), async (req, res) => {
+router.post('/Update', auth, roleCheck(["Tutor"]), async (req, res) => {
     const { type, newParameter } = req.body;
     console.log(req.body);
     const userId = req.user.id;
 
-    let query = 'UPDATE learner SET';
+    let query = 'UPDATE tutor SET';
     let dependencyArray = [];
 
     try {
-        if (type === 'profic') {
-            query += ' language_proficiency = ? WHERE id = ?';
+        if (type === 'AboutMe') {
+            query += ' AboutMe = ? WHERE id = ?';
             dependencyArray.push(newParameter, userId);
-        } else if (type === 'learningGoals') {
-            query += ' learning_goals = ? WHERE id = ?';
+        } else if (type === 'langs') {
+            query += ' languages = ? WHERE id = ?';
             dependencyArray.push(JSON.stringify(newParameter), userId);
-        } else if (type === 'FocusTopics') {
-            query += ' interested_topics = ? WHERE id = ?';
+        } else if (type === 'Education') {
+            query += ' Education = ? WHERE id = ?';
             dependencyArray.push(JSON.stringify(newParameter), userId);
-        } else if (type === 'From') {
+        } else if(type === 'ts') {
+            query += ' teachingStyle = ? where id = ?'
+            dependencyArray.push(newParameter, userId)
+        }else if(type === "desc") {
+            query += ' description = ? where id = ?'
+            dependencyArray.push(newParameter, userId)
+        } else if(type ==="W.E") {
+            query += ' WorkExperience = ? where id = ?'
+            dependencyArray.push(JSON.stringify(newParameter), userId)
+        }else if (type === 'From') {
             query += ' Country = ? WHERE id = ?';
             dependencyArray.push(newParameter, userId);
         } else if (type === 'fName' && newParameter) {

@@ -184,3 +184,18 @@ export function getMaxDurationIndex(selectedTimeInMinutes, busyTimes, duration) 
     }
     return true;
 };
+
+
+//compares two array of objects ignoring order 
+
+export function compareLanguageLists(list1, list2) {
+    if (list1.length !== list2.length) {
+        return false;
+    }
+
+    return list1.every(item1 =>
+        list2.some(item2 => item1.language === item2.language)
+    ) && list2.every(item2 =>
+        list1.some(item1 => item2.language === item1.language)
+    );
+}

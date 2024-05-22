@@ -50,7 +50,7 @@ function Account(props) {
             <Field
              name="fName" 
              title="First Name" 
-             field={firstSegment ==="learner"? learnerData.firstname : tutorData.lastname}></Field>
+             field={firstSegment ==="learner"? learnerData.firstname : tutorData.firstname}></Field>
             <Field 
             name="lName" 
             title="Last Name" 

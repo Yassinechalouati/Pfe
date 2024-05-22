@@ -28,9 +28,9 @@ router.post('/details', auth, roleCheck(["Learner"]), (req, res) => {
                 country: result[0].Country,
                 tel: result[0].tel,
                 language_proficiency: result[0].language_proficiency,
-                learning_goals: result[0].learning_goals,
-                interested_topics: result[0].interested_topics,
-                Birthday: result[0].Birthday,
+                learning_goals: result[0].learning_goals ? result[0].learning_goals : [] ,
+                interested_topics: result[0].interested_topics? result[0].interested_topics : [],
+                Birthday: result[0].Birthday? result[0].Birthday : "",
                 uuid: result[0].uuid,
                 created_at: result[0].created_at,
                 isVerified : result[0].isVerified

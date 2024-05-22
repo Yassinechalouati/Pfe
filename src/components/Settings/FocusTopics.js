@@ -1,14 +1,17 @@
 import { MdEdit } from "react-icons/md";
 import { useEffect, useState } from "react"
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { arraysEqualUnordered } from "../Global/functions";
+import { changeTopics } from "../../state/slices/userSlice";
 
 function FocusTopics(props) {
     const [editing, setEditing] = useState(false)
 
-    const focusTopics= useSelector(state => state.userData.topics) //transforming the string array into an object
+    const focusTopics= useSelector(state => state.userData.topics) 
 
     const [topics, setTopics] = useState([])
 
+    const dispatch = useDispatch()
     
 
      const listTopics =[
@@ -32,8 +35,17 @@ function FocusTopics(props) {
             setEditing(true)
         }
     }
-    const handleSave = () => {
+    const handleSave = async () => {
         if(editing) {
+            console.log("focustopics: ", focusTopics, "topics: ", topics);
+            try {
+            if (topics && !arraysEqualUnordered(focusTopics, topics)) {
+                    await props.modifyCall(topics, 'FocusTopics')
+                    dispatch(changeTopics(topics))
+                }
+            } catch (error) {
+                console.log(error);
+            }
             setEditing(false)
         }
     }
@@ -74,7 +86,6 @@ function FocusTopics(props) {
     useEffect(()=> {
         if(focusTopics && focusTopics.length>0 ){
             try {
-                
                 setTopics(focusTopics);
             } catch (error) {
                 console.error("Failed to parse focusTopics:", error);
