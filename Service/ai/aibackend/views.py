@@ -4,6 +4,8 @@ from django.http import JsonResponse, HttpResponseBadRequest
 from django.views.decorators.csrf import csrf_exempt
 from face_recognition import load_image_file, face_locations
 from google.ai import generativelanguage as glm
+import json
+import markdown
 
 logger = logging.getLogger(__name__)
 
@@ -30,32 +32,53 @@ genai.configure(api_key="AIzaSyBFzKNI02At6aCko5ldFvvrLvfFJCw1a6o")
 @csrf_exempt
 def chat(request):
     if request.method == 'POST':
-        text = request.POST.get("text")
-        # Load image file for face recognition
+        data = json.loads(request.body.decode("utf-8"))
+        print("data:", data)
+        text = data.get('messages')[-1] if data.get('messages') else f"You are a helpful teacher. I will talk with you in {data.get('language')} language about the topic {data.get('topic')}. Starting from now, you will only answer in {data.get('language')} and always keep in mind my grammatical errors and point them out to me. Now, tell me that you understood me and wait for me."
         model = genai.GenerativeModel("gemini-pro")
-        history = [
-            glm.Content(
-            role="user",
-            parts=[
-                glm.Part(text=f'You are a helpful teacher. I will talk with you in {"German"} language about the topic {"why are stars bright"}. Starting from now, you will only answer in {"German"} and always keep in mind my grammatical errors and point them out to me. Now, tell me that you understood me and wait for me.'
+        if(data.get('messages')):
+            history = [
+                glm.Content(
+                    role ="user",
+                    parts=[
+                        glm.Part(text=f"You are a helpful teacher. I will talk with you in {data.get('language')} language about the topic {data.get('topic')}. Starting from now, you will only answer in {data.get('language')} and always keep in mind my grammatical errors and point them out to me. Now, tell me that you understood me and wait for me.")
+                    ]
+                ) 
+            ]
+        else:
+            history = []
+        for i in range(1, len(data.get('messages'))-1):
+            if(i%2 ==0 ):
+                history.append(
+                    glm.Content(
+                        role="model",
+                        parts=[
+                            glm.Part(text=data.get('messages')[i])
+                        ]
+                    )
                 )
-            ],
-        ),
-            glm.Content(
-            role="model",
-            parts=[
-                glm.Part(text="Verstehe! Ich freue mich darauf, mit dir auf Deutsch über das Thema why are stars bright zu sprechen. Ich werde mein Bestes geben, dir die Grammatik zu erklären, falls du Fehler machst. Frag einfach nach, los geht's!"
-
+            else:
+                history.append(
+                    glm.Content(
+                        role="user",
+                        parts=[
+                            glm.Part(text=data.get('messages')[i])
+                        ]
+                    )
                 )
-            ],
-        ),
-        ]
+        print("history: ", history)
+            
         chat = model.start_chat(history= history)
-        print(text)
+        print("text: ", text)
         response = chat.send_message(text)
         
         response_data = {
-            "text": response.text,  # Assuming response.text contains the relevant response data
+            "text": markdown.markdown(response.text),  # Assuming response.text contains the relevant response data
             # Add other relevant data from response if needed
         }
+
+
+        print('text: ', response.text)
+
+        print("history:", history) 
         return JsonResponse({"data": response_data})

@@ -77,7 +77,7 @@ function TeachingStyle(props) {
                         </div>
                         <button type="submit" className="px-4 py-2 rounded-md bg-elements text-white"> Save</button>    
                         <span className="bottom-0 absolute text-sm right-3 ">
-                                {value.length}/{maxDescriptionLength}
+                            {value? value.length : 0}/{maxDescriptionLength}
                         </span>
                     </div>
                 </> 

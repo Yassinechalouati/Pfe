@@ -3,6 +3,7 @@ import { IoIosHeartEmpty } from "react-icons/io";
 import { useEffect, useState } from 'react'
 import { fetchCountryData, fetchFile } from "../Global/functions";
 import { NavLink } from "react-router-dom"
+import axiosInstance from "../../interceptors/axiosInterceptor";
 
 
 function TutorSearchCard(props) {
@@ -18,7 +19,30 @@ function TutorSearchCard(props) {
 
 
 
-    const handleLike = () => {
+    const handleLike = async () => {
+        if(!liked){//liking the tutor
+            try {
+                const response = await axiosInstance('http://localhost:5000/learner/Like', {
+                    tutorId: props.tutorid,
+                    action: 'Like'
+                })
+                console.log(response);
+                
+            } catch (error) {
+                console.log(error);
+            }
+        }else {//disliking the tutor
+            try {
+                const response = await axiosInstance('http://localhost:5000/learner/Like', {
+                    tutorId: props.tutorid,
+                    action: 'Dislike'
+                })
+                console.log(response);
+                
+            } catch (error) {
+                console.log(error);
+            }
+        }
         setLiked(prevValue => !prevValue)
     }
 

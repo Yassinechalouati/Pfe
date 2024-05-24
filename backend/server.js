@@ -84,7 +84,12 @@ const getBusyScheduleTimeLearnerAndTutor = require('./routes/getBusyScheduleTime
 const sendVideoCallEmail = require('./routes/sendVideoCallLink')
 const updateLearner = require('./routes/LearnerUpdate')
 const updateTutor = require('./routes/TutorUpdate')
- 
+const updateLearnerFile = require('./routes/UpdateLearnerFile')
+const updateTutorFiles = require('./routes/UpdateTutorFiles')
+const deleteLearnerAccount = require('./routes/deleteLearnerAccount')
+const deleteTutorAccount = require('./routes/deleteTutorAccount')
+const chatBot = require('./routes/chatBot')
+const likeTutors = require('./routes/likeTutor')
 
 //apis
 app.use('/', googleSignupRouter)
@@ -129,7 +134,12 @@ app.use('/learner', getBusyScheduleTimeLearnerAndTutor)
 app.use('/tutor', sendVideoCallEmail)
 app.use('/learner', updateLearner)
 app.use('/tutor', updateTutor)
-
+app.use('/learner', updateLearnerFile)
+app.use('/tutor', updateTutorFiles)
+app.use('/tutor', deleteTutorAccount)
+app.use('/learner', deleteLearnerAccount)
+app.use('/user', chatBot)
+app.use('/learner', likeTutors)
 
 // Socket.io logic
 require('./helpers/socketHandler')(io);//non authenticated 

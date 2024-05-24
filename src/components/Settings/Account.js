@@ -1,8 +1,10 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Title from "./Title";
 import Field from "./Field";
 import BirthdayField from "./BirthdayField";
 import axios from "axios";
+import { useState } from "react";
+import ReactLoading from 'react-loading';
 
 
 
@@ -11,6 +13,10 @@ import axios from "axios";
 function Account(props) {
     const learnerData = useSelector(state => state.userData)
     const tutorData = useSelector(state => state.tutorData)
+    const [loading, setLoading] = useState(false)
+    const [disabled, setDisabled] = useState(false)
+
+
     const path = window.location.pathname;
 
     // Split the path by "/"
@@ -18,6 +24,8 @@ function Account(props) {
 
     // Get the value of the first segment
     const firstSegment = segments[1]; 
+    
+    const dispatch = useDispatch()
 
 
     const isVerified = firstSegment ==="learner"? learnerData.isVerified : tutorData.isVerified
@@ -32,14 +40,25 @@ function Account(props) {
             }else {
                 email = tutorData.email
             }
+            setLoading(true)
             const response = await axios.post('http://localhost:5000/resend/verification_Link', {
                 email: email,
                 role : firstSegment ==="learner"? "Learner" : "Tutor",
                 type:"Settings"
             })
+            // Disable the button to prevent multiple clicks
+            setDisabled(true)
+
+            // Wait for 1 minute (60000 milliseconds) before enabling the button again
+            setTimeout(() => {
+                setDisabled(false)
+            }, 60000);
+            
+            setLoading(false)
             console.log(response)
         } catch (error) {
             console.log(error)
+            setLoading(false)
         }
     }
 
@@ -78,7 +97,12 @@ function Account(props) {
                 </div>
                 {
                     !isVerified?
-                    <button type="submit" className="px-4 py-2 rounded-md bg-elements text-white"> Verify email</button>
+                    (
+                        loading?
+                        <ReactLoading type="spin" color="#FFA447" height={'50px'} width={'50px'} />
+                        :
+                        <button disabled={disabled} type="submit" className={`${disabled? "opacity-60" : "" } px-4 py-2 rounded-md bg-elements text-white`}> Verify email</button>
+                    )
                     :
                     <div className="px-4 py-2 rounded-lg text-white bg-elements">
                         ✓ Verified

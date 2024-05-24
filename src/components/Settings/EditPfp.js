@@ -1,6 +1,10 @@
 import { useRef, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch} from "react-redux";
 import {setPic} from '../../state/slices/userSlice'
+import axiosInstance from "../../interceptors/axiosInterceptor";
+import ReactLoading from 'react-loading';
+import { setDisplayableImage, setError } from "../../state/slices/tutorSlice";
+
 
 
 function EditPfp(props) {
@@ -9,6 +13,8 @@ function EditPfp(props) {
     const [loading, setLoading] = useState(false)
 
     const [imageError, setImageError] = useState()
+    
+
 
     const dispatch = useDispatch()
 
@@ -27,24 +33,43 @@ function EditPfp(props) {
             const imageFile = event.target.files[0]
             console.log(imageFile)
             const formData = new FormData()
-            formData.append('image', imageFile)
+            formData.append('userFile', imageFile)
+            formData.append('type', "image")
+
             //sending the image to server so that ai checks if it contains a face
             
             if(props.role ==="learner") {
                 //send request to server to change picture
-
                 reader.readAsDataURL(imageFile)
-                reader.onload = () => {
-                    dispatch(setPic(reader.result))
+                reader.onload = async () => {
+                    try {
+                        const response = await axiosInstance.post('http://localhost:5000/learner/UpdateFile', formData, 
+                            {
+                                headers: {
+                                    'Authorization': `Bearer ${localStorage.getItem('accesstoken')}`,
+                                    'Content-Type': 'multipart/form-data' // Set the content type to multipart/form-data
+                                }
+                            }
+                        )
+                        
+                        dispatch(setPic(reader.result))
+                    }catch(err) {
+                        console.log(err);
+                    }
                 }
                 reader.onerror = error => {
                     const err = 'Cannot load image!'
                     //setImageError(err)
                     console.log("Error", error)
                 }
+                setLoading(false)
             }else {
-                /*try {
-                    const response = await axiosInstance.post('http://localhost:5000/imageFaceDetection', formData, {
+                try {
+                    setImageError('')
+                    const aiForm = new FormData()
+                    aiForm.append('image', imageFile)
+
+                    const response = await axiosInstance.post('http://localhost:5000/imageFaceDetection', aiForm, {
                         headers: {
                             Authorization: `Bearer ${localStorage.getItem('accesstoken')}`
                         }
@@ -52,8 +77,21 @@ function EditPfp(props) {
                     //if the server responds with true then it contains a face else it doesn't so we show error 
                     if(response.data.message){
                         reader.readAsDataURL(imageFile)
-                        reader.onload = () => {
-                            dispatch(setDisplayableImage(reader.result))
+                        reader.onload = async () => {
+                            try {
+                                const response = await axiosInstance.post('http://localhost:5000/tutor/UpdateFile', formData, 
+                                    {
+                                        headers: {
+                                            'Authorization': `Bearer ${localStorage.getItem('accesstoken')}`,
+                                            'Content-Type': 'multipart/form-data' // Set the content type to multipart/form-data
+                                        }
+                                    }
+                                )
+                                
+                                dispatch(setDisplayableImage(reader.result))
+                            }catch(err) {
+                                console.log(err);
+                            }
                         }
                         reader.onerror = error => {
                             const err = 'Cannot load image!'
@@ -74,20 +112,28 @@ function EditPfp(props) {
                     }
                     finally{
                         setLoading(false)
-                    }*/
+                    }
             }
         }
     }
 
     return (
         <div className="flex flex-col space-y-2 items-center">
-            <img 
-                onClick={handleImageClick}
-                src={props.profilepicture} 
-                alt="profilepicture" 
-                referrerPolicy="no-referrer"
-                className="cursor-pointer hover:opacity-60 transition-opacity duration-200 rounded-full min-w-28 min-h-28 w-28 h-28 object-cover"
-            />
+            {
+                loading? 
+                <div className="flex justify-center items-center shadow cursor-pointer bg-white object-cover border-2 border-backg transform h-20 w-20 rounded-full ">
+                    <ReactLoading type="spin" color="#FFA447" height={'50px'} width={'50px'} />
+                </div>
+                :
+                <img 
+                    onClick={handleImageClick}
+                    src={props.profilepicture} 
+                    alt="profilepicture" 
+                    referrerPolicy="no-referrer"
+                    className="cursor-pointer hover:opacity-60 transition-opacity duration-200 rounded-full min-w-28 min-h-28 w-28 h-28 object-cover"
+                />
+            }
+            <span className="text-errortext font-bold">{imageError}</span>
             <input type="file" onChange={handlePictureChange} ref={pictureRef} accept="image/*" className="hidden"/>
         </div>
     );

@@ -83,6 +83,7 @@ function LearnerProfile() {
                         imageUrl = await fetchFile(response.data.message.pfp, 'images', 'Learner', response.data.message.id);
                     }
                 }
+                console.log("image: ", imageUrl);
                 dispatch(setPic(imageUrl))
 
                 dispatch(setIsLoading(false))

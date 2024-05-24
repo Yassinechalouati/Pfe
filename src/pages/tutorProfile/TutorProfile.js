@@ -8,7 +8,7 @@ import Classrooms from "./Classrooms";
 import Courses from "./Courses";
 import Exams from "./Exams";
 import Feed from "./Feed";
-import { fetchCountryData } from "../../components/Global/functions"
+import { fetchCountryData, isGoogleProfilePicture } from "../../components/Global/functions"
 import {
     setFirstName, 
     setLastName, 
@@ -113,21 +113,23 @@ function TutorProfile() {
                     dispatch(setBirthday(response.data.message.Birthday)),
                     dispatch(setCreatedAt(response.data.message.created_at))
                 ])
-                //fetching the image from database
-                fetchFile(response.data.message.pfp, "images", "tutor", response.data.message.id)
-                .then(async (resp )=> {
-                    console.log(response.data.message);
-                    // Dispatch actions sequentially
-                    await Promise.all([
-                        dispatch(setDisplayableImage(resp)),
-                    ])
-                    const data = await fetchCountryData(response.data.message.country)
-                    dispatch(setCountryFlag(data))
-                    dispatch(setIsLoading(false))
-                })
-                .catch(err => {
-                    console.log(err);
-                })
+                //if it's a google profile picture we save it and just show it, else we fetch the picture from our server
+                let imageUrl = response.data.message.pfp
+                if(imageUrl) {
+                    if (!isGoogleProfilePicture(imageUrl)) {
+                        imageUrl = await fetchFile(response.data.message.pfp, "images", "tutor", response.data.message.id);
+                    }
+                }
+                console.log("image: ", imageUrl);
+                await Promise.all([
+                    dispatch(setDisplayableImage(imageUrl)),
+                ])
+                
+               if(response.data.message.country){
+                   const data = await fetchCountryData(response.data.message.country)
+                   dispatch(setCountryFlag(data))
+               }
+                dispatch(setIsLoading(false))
             } catch (error) {
                 console.log(error);
                 dispatch(setIsLoading(false))

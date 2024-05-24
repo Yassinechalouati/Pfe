@@ -145,7 +145,7 @@ function FirstPhase() {
         "Oman",
         "Pakistan",
         "Palau",
-        "Palestine State",
+        "Palestine",
         "Panama",
         "Papua New Guinea",
         "Paraguay",

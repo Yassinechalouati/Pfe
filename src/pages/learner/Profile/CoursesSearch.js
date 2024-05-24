@@ -1,10 +1,12 @@
+import VoiceMessage from "../../../components/LinguaBuddy/VoiceMessage";
+
 
 function CoursesSearch() {
     return (
-            <div className="h-[90%]">
-                Courses
-            </div>
-    );
-}
+        <div>
+            Courses
+        </div>
+    )
+};
 
 export default CoursesSearch;

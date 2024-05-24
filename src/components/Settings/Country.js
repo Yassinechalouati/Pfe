@@ -4,6 +4,9 @@ import {IoIosArrowDown} from 'react-icons/io'
 import { useDispatch, useSelector } from "react-redux";
 import { MdEdit } from "react-icons/md";
 import { setCountry } from '../../state/slices/userSlice';
+import {setCountry as SetTutorCountry, setCountryFlag} from '../../state/slices/tutorSlice'
+import { fetchCountryData } from '../Global/functions';
+import ReactLoading from 'react-loading';
 
 function Country(props) {
     //list of countries 
@@ -141,7 +144,7 @@ function Country(props) {
         "Oman",
         "Pakistan",
         "Palau",
-        "Palestine State",
+        "Palestine",
         "Panama",
         "Papua New Guinea",
         "Paraguay",
@@ -207,9 +210,10 @@ function Country(props) {
     const learnerData = useSelector(state => state.userData)
     const tutorData = useSelector(state => state.tutorData)
 
-    const Country = props.role === "learner"? learnerData.country : tutorData.country
+    const Country = props.role === "learner"? learnerData.country : tutorData.Country
     const [countryLocal, setCountryLocal] = useState('')
     const [editing, setEditing] = useState(false)
+    const [loading, setLoading] = useState(false)
 
     const dispatch = useDispatch()
 
@@ -225,9 +229,18 @@ function Country(props) {
             if(countryLocal !== Country){
                 try {
                     await props.modifyCall(countryLocal, 'From')
-                    dispatch(setCountry(countryLocal))
+                    if(props.role ==="learner") {
+                        dispatch(setCountry(countryLocal))
+                    }else {
+                        dispatch(SetTutorCountry(countryLocal))
+                        setLoading(true)
+                        const data = await fetchCountryData(countryLocal)
+                        dispatch(setCountryFlag(data))
+                        setLoading(false)
+                    }
                 } catch (error) {
                     console.log(error);
+                    setLoading(false)
                 }
             }
             setEditing(false)
@@ -243,6 +256,8 @@ function Country(props) {
             setCountryLocal(Country)
         }
     }, [Country])
+
+    console.log("editing from Country Tutor: ", editing);
     return (
         <div onClick={handleClick} className="border-b px-2 hover:bg-lightg cursor-pointer justify-between items-center flex border-lightg py-2">
             <span className="text-black font-bold">
@@ -273,7 +288,12 @@ function Country(props) {
                                 <IoIosArrowDown></IoIosArrowDown>
                             </div>
                         </div>
-                        <div onClick={handleSave} className="px-4 py-2 rounded-md bg-elements text-white"> Save</div>
+                        {
+                            loading?
+                            <ReactLoading type="spin" color="#FFA447" height={'50px'} width={'50px'} />
+                            :
+                            <div onClick={handleSave} className="px-4 py-2 rounded-md bg-elements text-white"> Save</div>
+                        }
                     </div>
                 </> 
             }

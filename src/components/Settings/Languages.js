@@ -40,8 +40,8 @@ function Languages(props) {
                     } catch (error) {
                         console.log(error);
                     }
+                }
                 setEditing(false)
-            }
             }
         }
 

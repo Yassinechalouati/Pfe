@@ -2,6 +2,11 @@
   font-family: 'Nunito';
 }
 
+iframe
+{
+    display: none;
+}
+
 .checkbox:checked {
   border: none;
 }
@@ -303,7 +308,6 @@ nav .startprofile, .nav-link:nth-child(5):hover~.animation {
   fill: var(--red);
   position: absolute;
 }
-
 .con-like .filled {
   animation: kfr-filled 0.5s;
   display: none;
@@ -349,7 +353,7 @@ nav .startprofile, .nav-link:nth-child(5):hover~.animation {
   50% {
     opacity: 0.8;
   }
-
+  
   100% {
     transform: scale(1.2);
     opacity: 0;
