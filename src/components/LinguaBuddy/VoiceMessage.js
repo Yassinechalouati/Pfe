@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { FaMicrophone, FaMicrophoneSlash } from 'react-icons/fa';
 
-function VoiceMessage(props) {
+function VoiceMessage({ setText }) {
     const [listening, setListening] = useState(false);
     const recognition = useRef(null);
 
@@ -18,18 +18,34 @@ function VoiceMessage(props) {
 
         recognition.current.onresult = (event) => {
             const transcript = event.results[0][0].transcript;
-            props.setText(transcript);
+            setText(transcript);
             setListening(false);
         };
 
         recognition.current.onerror = (event) => {
             console.error('Speech recognition error', event);
+            alert('Speech recognition error: ' + event.error);
             setListening(false);
         };
 
-    }, []);
+    }, [setText]);
 
-    const toggleListening = () => {
+    const checkMicrophoneAccess = async () => {
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            stream.getTracks().forEach(track => track.stop()); // Stop the stream after the test
+            return true;
+        } catch (err) {
+            console.error('Microphone is not accessible', err);
+            alert('Please allow access to the microphone and ensure it is connected properly.');
+            return false;
+        }
+    };
+
+    const toggleListening = async () => {
+        const hasAccess = await checkMicrophoneAccess();
+        if (!hasAccess) return;
+
         if (listening) {
             recognition.current.stop();
         } else {

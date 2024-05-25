@@ -34,7 +34,7 @@ def chat(request):
     if request.method == 'POST':
         data = json.loads(request.body.decode("utf-8"))
         print("data:", data)
-        text = data.get('messages')[-1] if data.get('messages') else f"You are a helpful teacher. I will talk with you in {data.get('language')} language about the topic {data.get('topic')}. Starting from now, you will only answer in {data.get('language')} and always keep in mind my grammatical errors and point them out to me. Now, tell me that you understood me and wait for me."
+        text = data.get('messages')[-1] if data.get('messages') else f"You are a helpful teacher. I will talk with you in {data.get('language')} about the topic of {data.get('topic')}. Starting from now, you will only answer in {data.get('language')} and always keep in mind my grammatical errors and point them out to me. Now, tell me that you understood me and wait for me."
         model = genai.GenerativeModel("gemini-pro")
         if(data.get('messages')):
             history = [
@@ -47,7 +47,7 @@ def chat(request):
             ]
         else:
             history = []
-        for i in range(1, len(data.get('messages'))-1):
+        for i in range(0, len(data.get('messages'))-1):
             if(i%2 ==0 ):
                 history.append(
                     glm.Content(

@@ -25,12 +25,12 @@ function ShowMoreTutors(props) {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('accesstoken')}`
                 }
-            });
-            if(!response.data.message ){//no error
-                dispatch(appendTutorSearchList(response.data.tutorsList))
-                dispatch(incrementPageNumber())
-                dispatch(setMaxPageNumber(response.data.tutorsNumber))
-            }
+            })
+            console.log('showMore: ', response.data.tutorsList);
+            dispatch(appendTutorSearchList(response.data.tutorsList))
+            dispatch(incrementPageNumber())
+            dispatch(setMaxPageNumber(response.data.tutorsNumber))
+
             setLoading(false)
         }catch(err) {
             console.log(err)

@@ -1,4 +1,3 @@
-import VoiceMessage from "../../../components/LinguaBuddy/VoiceMessage";
 
 
 function CoursesSearch() {

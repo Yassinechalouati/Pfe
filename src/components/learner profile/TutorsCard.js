@@ -1,7 +1,24 @@
+import { useEffect, useState } from "react";
 import Card from "./Card";
 import Tutor from "./Tutor";
+import axiosInstance from "../../interceptors/axiosInterceptor";
 
 function TutorsCard(props) {
+    const [recommendedTutors, setRecommendedTutors] = useState([])
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await axiosInstance.post('http://localhost:5000/learner/RecommendedTutors', {})
+                console.log("response: ", response.data);
+                setRecommendedTutors(response.data)
+            }catch(err) {
+                console.log(err);
+            }
+        }
+
+        fetchData()
+    }, [])
     
     const content =[
         <div key="0" className="flex w-full justify-between  items-center">
@@ -10,11 +27,13 @@ function TutorsCard(props) {
             </span>
             <button className="border border-button text-button rounded-2xl h-10 bg-lightbutton px-3 flex justify-center items-center text-sm font-bold">See all</button>
         </div>,
-        <hr key="1" className="h-1 w-full"></hr>,
+        <hr key="Lineee" className="h-1 w-full"></hr>,
         <div key="2" className="grid grid-cols-1 md:grid-cols-3 gap-5 w-full">
-            <Tutor></Tutor>
-            <Tutor></Tutor>
-            <Tutor></Tutor>
+            {
+                recommendedTutors.map((tutor, index) => {
+                    return <Tutor key={index} tutor={tutor}></Tutor>
+                })
+            }
         </div>
 
     ]

@@ -15,6 +15,7 @@ import { MdDateRange } from "react-icons/md";
 import LikeButton from "./LikeButton";
 import FollowTutor from "./FollowTutor"
 import ScheduleLessonFromTutorProfile from "./ScheduleLessonFromTutorProfile";
+import { setLikedTutors } from "../../state/slices/likedTutorSlice";
 
 function TutorProfile(props) {
 
@@ -38,6 +39,21 @@ function TutorProfile(props) {
         // Scroll to the component using its ref
         scheduleRef.current.scrollIntoView({ behavior: 'smooth' });
     };
+
+    useEffect(() => {
+        const fetchLikedTutors = async () => {
+            try {
+                const response = await axiosInstance.post('http://localhost:5000/learner/LikedTutors', {})
+                
+                dispatch(setLikedTutors(response.data.message))
+                
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        fetchLikedTutors()
+    }, [])
+
 
 
 
@@ -156,7 +172,7 @@ function TutorProfile(props) {
                             </button>
                             <div className="flex items-center justify-evenly w-full">
                                 <div className="flex flex-col justify-center items-center space-y-1">
-                                    <LikeButton></LikeButton>
+                                    <LikeButton id={selectedTutorData.id} ></LikeButton>
                                     <span className="text-black text-sm text-center ">
                                         Like
                                     </span>

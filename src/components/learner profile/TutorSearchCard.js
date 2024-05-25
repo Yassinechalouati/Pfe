@@ -4,12 +4,14 @@ import { useEffect, useState } from 'react'
 import { fetchCountryData, fetchFile } from "../Global/functions";
 import { NavLink } from "react-router-dom"
 import axiosInstance from "../../interceptors/axiosInterceptor";
+import {useDispatch, useSelector} from 'react-redux'
+import { appendItem, removeItem } from "../../state/slices/likedTutorSlice";
 
 
 function TutorSearchCard(props) {
 
     //controlling wether the user liked this tutor or not
-    const [liked, setLiked] = useState(false)
+    const [liked, setLiked] = useState(props.liked)
 
     //tutor profile picture
     const [imageData, setImageData] = useState()
@@ -17,28 +19,68 @@ function TutorSearchCard(props) {
     //flag image of the tutor's country
     const [countryData, setCountryData] = useState(null);
 
+    const learnerId = useSelector(state => state.userData.id)
+
+    const dispatch = useDispatch()
+
+
 
 
     const handleLike = async () => {
         if(!liked){//liking the tutor
             try {
-                const response = await axiosInstance('http://localhost:5000/learner/Like', {
-                    tutorId: props.tutorid,
+                console.log("tutorId:", props.tutor.id);
+                const response = await axiosInstance.post('http://localhost:5000/learner/Like', {
+                    tutorId: props.tutor.id,
                     action: 'Like'
                 })
-                console.log(response);
-                
+                //generating current date object
+                const currentDate = new Date();
+
+                // Extract individual components of the date and time
+                const year = currentDate.getFullYear();
+                const month = String(currentDate.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed, so we add 1
+                const day = String(currentDate.getDate()).padStart(2, '0');
+                const hours = String(currentDate.getHours()).padStart(2, '0');
+                const minutes = String(currentDate.getMinutes()).padStart(2, '0');
+                const seconds = String(currentDate.getSeconds()).padStart(2, '0');
+
+
+                dispatch(appendItem({
+                    likeId: response.data.message,
+                    id: props.tutor.id,
+                    learnerId: learnerId,
+                    LikeDate: `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`,
+                    lastname: props.tutor.lastname,
+                    firstname: props.tutor.firstname,
+                    email: props.tutor.email,
+                    pfp: props.tutor.pfp,
+                    country: props.tutor.Country, 
+                    tel: props.tutor.tel,
+                    Birthday: props.tutor.Birthday,
+                    introductionVideo: props.tutor.introductionVideo,
+                    description: props.tutor.description, 
+                    teachingStyle: props.tutor.teachingStyle,
+                    AboutMe: props.tutor.AboutMe,
+                    Languages: props.tutor.Languages,
+                    WorkExperience: props.tutor.WorkExperience, 
+                    Education: props.tutor.Education,
+                    uuid: props.tutor.uuid,
+                }))
+
             } catch (error) {
                 console.log(error);
             }
         }else {//disliking the tutor
             try {
-                const response = await axiosInstance('http://localhost:5000/learner/Like', {
-                    tutorId: props.tutorid,
+                console.log("tutorId:", props.tutor.id);
+
+                await axiosInstance.post('http://localhost:5000/learner/Like', {
+                    tutorId: props.tutor.id,
                     action: 'Dislike'
                 })
-                console.log(response);
-                
+                dispatch(removeItem(props.tutor.id))
+
             } catch (error) {
                 console.log(error);
             }

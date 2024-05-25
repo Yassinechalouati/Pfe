@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import TutorSearchCard from "../../../components/learner profile/TutorSearchCard";
-import { resetFilterOptions, setMaxPageNumber, setTutorSearchList } from "../../../state/slices/userSlice";
+import { resetFilterOptions, resetPageNumber, setMaxPageNumber, setTutorSearchList } from "../../../state/slices/userSlice";
 import axiosInstance from "../../../interceptors/axiosInterceptor";
 import { useDispatch, useSelector } from "react-redux";
 import Loading from '../../../components/Global/Loading'
@@ -9,6 +9,7 @@ import SearchTutors from "../../../components/learner profile/TutorFilterOption/
 import LanguageSelection from "../../../components/learner profile/TutorFilterOption/LanguageSelection";
 import Availability from '../../../components/learner profile/TutorFilterOption/Availability'
 import Proficiency from "../../../components/learner profile/TutorFilterOption/Proficiency";
+import { setLikedTutors } from "../../../state/slices/likedTutorSlice";
 
 
 
@@ -19,6 +20,8 @@ function TutorsSearch(props) {
     
     const [date, setDate ]= useState() 
 
+    const [selectedOption, setSelectedOption] = useState('All')
+
     const [loading, setLoading] = useState(false)
 
     const learnerData = useSelector(state => state.userData)
@@ -27,10 +30,28 @@ function TutorsSearch(props) {
 
     const maxPageNumber = useSelector(state => state.userData.maxPageNumber)
 
+    const likedTutors = useSelector(state => state.likedTutors.likedTutors)
+    
+
+
+    useEffect(() => {
+        const fetchLikedTutors = async () => {
+            try {
+                const response = await axiosInstance.post('http://localhost:5000/learner/LikedTutors', {})
+                
+                dispatch(setLikedTutors(response.data.message))
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        fetchLikedTutors()
+    }, [])
+
 
     //getting tutors from the database
     async function fetchData (filterOption) {
         try {
+                dispatch(resetPageNumber())
                 setLoading(true)
                 const response = await axiosInstance.post('http://localhost:5000/SearchTutors', {
                     page: 1,
@@ -74,46 +95,68 @@ function TutorsSearch(props) {
             <div className="flex flex-col space-y-4 w-full h-[90%] overflow-y-auto px-2 sm:px-15 lg:px-28 py-7">
                 <div className="flex w-full items-center space-x-8 ">
                     <span className="font-bold text-2xl text-center"> Find a Tutor</span>
-                    <span className="cursor-pointer">All</span>
-                    <span className="cursor-pointer">Favorites</span>
-                </div>
-                <SearchTutors fetchData={fetchData}></SearchTutors>
-                <Proficiency fetchData={fetchData}></Proficiency>
-                <hr className="h-1"></hr>
-                <div className="w-full flex items-center space-x-3 h-auto flex-wrap"> 
-                    <span className="">Filter by:</span>
-                    <Availability date={date} setDate={setDate} fetchData={fetchData}></Availability>
-                    <LanguageSelection fetchData={fetchData}></LanguageSelection>
-                    <div className="flex-grow hidden lg:block"></div>
-                    {
-                        filterOptions.language || filterOptions.proficiency || filterOptions.availability?
-                            <div onClick={handleReset} className=" transition-all duration-200 py-[6px] px-9 rounded-lg cursor-pointer button bg-darkg text-white">Clear</div>
-                        :
-                            null
-                    }
+                    <span onClick={()=> setSelectedOption("All")} className={`cursor-pointer ${selectedOption === "All"? "border-b-button border-b-2 text-button font-bold": ""} px-2`}>All</span>
+                    <span onClick={() => setSelectedOption("Favorites")} className={`${selectedOption === "Favorites"? "border-b-button border-b-2 text-button font-bold": ""} cursor-pointer px-2`}>Favorites</span>
                 </div>
                 {
-                    loading? 
-                    <Loading></Loading>
+                    selectedOption === "All"?
+                    <>
+                        <SearchTutors fetchData={fetchData}></SearchTutors>
+                        <Proficiency fetchData={fetchData}></Proficiency>
+                        <hr className="h-1"></hr>
+                        <div className="w-full flex items-center space-x-3 h-auto flex-wrap"> 
+                            <span className="">Filter by:</span>
+                            <Availability date={date} setDate={setDate} fetchData={fetchData}></Availability>
+                            <LanguageSelection fetchData={fetchData}></LanguageSelection>
+                            <div className="flex-grow hidden lg:block"></div>
+                            {
+                                filterOptions.language || filterOptions.proficiency || filterOptions.availability?
+                                    <div onClick={handleReset} className=" transition-all duration-200 py-[6px] px-9 rounded-lg cursor-pointer button bg-darkg text-white">Clear</div>
+                                :
+                                    null
+                            }
+                        </div>
+                        {
+                            loading? 
+                            <Loading></Loading>
+                            :
+                            <>
+                                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 w-full gap-5 ">
+                                    {
+                                        learnerData.tutorSearchList && likedTutors? 
+                                        learnerData.tutorSearchList.map((tutor, index) => {
+                                            const liked= likedTutors.find(item => item.id === tutor.id)
+                                            
+                                            return <TutorSearchCard liked={liked} key={index} tutor={tutor}></TutorSearchCard>
+                                        })
+                                        :
+                                        null
+                                    }
+                                </div>
+                                {
+                                    learnerData.tutorSearchList && (maxPageNumber !== learnerData.tutorSearchList.length)?
+                                    <ShowMoreTutors></ShowMoreTutors>
+                                    :
+                                    null
+        
+                                }
+                            </>
+        
+                        }
+                    </>
                     :
                     <>
                         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 w-full gap-5 ">
                             {
-                                learnerData.tutorSearchList? 
-                                learnerData.tutorSearchList.map((tutor, index) => {
-                                    return <TutorSearchCard key={index} tutor={tutor}></TutorSearchCard>
+                                learnerData.tutorSearchList && likedTutors? 
+                                likedTutors.map((tutor, index) => {
+                                    
+                                    return <TutorSearchCard liked={1} key={index} tutor={tutor}></TutorSearchCard>
                                 })
                                 :
                                 null
                             }
                         </div>
-                        {
-                            learnerData.tutorSearchList && (maxPageNumber !== learnerData.tutorSearchList.length)?
-                            <ShowMoreTutors></ShowMoreTutors>
-                            :
-                            null
-
-                        }
                     </>
 
                 }

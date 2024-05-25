@@ -1,11 +1,55 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux'
+import axiosInstance from '../../interceptors/axiosInterceptor';
 
-const LikeButton = () => {
-  const [isChecked, setIsChecked] = useState(false);
+const LikeButton = (props) => {
+  const [isChecked, setIsChecked] = useState(false)
+  const likedTutors = useSelector(state => state.likedTutors.likedTutors)
 
-  const handleCheckboxChange = () => {
-    setIsChecked(!isChecked);
+
+  const handleCheckboxChange = async () => {
+      if(!isChecked) {//liking tutor
+        try {
+            await axiosInstance.post('http://localhost:5000/learner/Like', {
+              tutorId: props.id,
+              action: 'Like'
+            })
+        } catch (error) {
+          console.log(error)
+        }
+      }else {//disliking tutor
+        try {
+            await axiosInstance.post('http://localhost:5000/learner/Like', {
+                tutorId: props.id,
+                action: 'Dislike'
+            }) 
+        } catch (error) {
+          console.log(error);
+        }
+
+      }
+
+      setIsChecked(!isChecked);
   };
+
+  useEffect(() => {
+    if(likedTutors) {
+        const fetchLikedTutors = async () => {
+            try {
+                await axiosInstance.post('http://localhost:5000/learner/LikedTutors', {})
+                const liked= likedTutors.find(item => item.id === props.id)
+                setIsChecked(liked)
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        fetchLikedTutors()
+    }
+  }, [likedTutors])
+
+
+
+  
 
   return (
     <div className="con-like">

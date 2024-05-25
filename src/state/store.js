@@ -8,6 +8,7 @@ import scheduleReducer from './slices/Schedule'
 import showMoreReducer from './slices/ShowMore'
 import lessonsListReducer from './slices/lessonsList'
 import notificationsReducer from './slices/NotificationSlice'
+import likedTutorReducer from './slices/likedTutorSlice'
 import {
   createStateSyncMiddleware,
   initMessageListener,
@@ -26,6 +27,7 @@ const store = configureStore({
     showMoreData:  showMoreReducer, //contains the data concering the show more modal
     lessonsList: lessonsListReducer, //contains the lessons
     notificationsData: notificationsReducer, //contains the notifications
+    likedTutors: likedTutorReducer
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(createStateSyncMiddleware({

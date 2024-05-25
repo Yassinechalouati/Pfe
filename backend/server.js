@@ -90,6 +90,9 @@ const deleteLearnerAccount = require('./routes/deleteLearnerAccount')
 const deleteTutorAccount = require('./routes/deleteTutorAccount')
 const chatBot = require('./routes/chatBot')
 const likeTutors = require('./routes/likeTutor')
+const getLikedTutors = require('./routes/GetLikedTutors')
+const RecommendedTutors = require('./routes/RecommendedTutors')
+
 
 //apis
 app.use('/', googleSignupRouter)
@@ -140,6 +143,8 @@ app.use('/tutor', deleteTutorAccount)
 app.use('/learner', deleteLearnerAccount)
 app.use('/user', chatBot)
 app.use('/learner', likeTutors)
+app.use('/learner', getLikedTutors)
+app.use('/learner', RecommendedTutors)
 
 // Socket.io logic
 require('./helpers/socketHandler')(io);//non authenticated 
