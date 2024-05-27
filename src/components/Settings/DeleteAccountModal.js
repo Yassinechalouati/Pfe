@@ -82,8 +82,8 @@ function DeleteAccountModal(props) {
 
                 :
                 <div className="flex justify-center items-center space-x-3">
-                    <button onClick={handleDelete} className="text-white px-4 py-2 bg-errortext rounded-md">Delete</button>
-                    <button onClick={() => props.setVisibility(false)} className="py-2 px-4 text-white border bg-elements rounded-md">Cancel</button>
+                    <button onClick={handleDelete} className="text-white px-4 py-2 hover:shadow-xl bg-errortext rounded-md">Delete</button>
+                    <button onClick={() => props.setVisibility(false)} className="py-2 hover:shadow-xl px-4 text-white border bg-elements rounded-md">Cancel</button>
                 </div>
             }
             

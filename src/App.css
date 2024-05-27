@@ -2,11 +2,11 @@
   font-family: 'Nunito';
 }
 
-iframe
+/*iframe
 {
     display: none;
 }
-
+*/
 .checkbox:checked {
   border: none;
 }

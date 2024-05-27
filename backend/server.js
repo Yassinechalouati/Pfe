@@ -92,7 +92,10 @@ const chatBot = require('./routes/chatBot')
 const likeTutors = require('./routes/likeTutor')
 const getLikedTutors = require('./routes/GetLikedTutors')
 const RecommendedTutors = require('./routes/RecommendedTutors')
-
+const createCourse = require('./routes/CreateCourse')
+const getMyCourses = require('./routes/getCourses')
+const deleteCourse = require('./routes/deleteCourse')
+const getAllCourses = require('./routes/getAllCourses')
 
 //apis
 app.use('/', googleSignupRouter)
@@ -145,6 +148,10 @@ app.use('/user', chatBot)
 app.use('/learner', likeTutors)
 app.use('/learner', getLikedTutors)
 app.use('/learner', RecommendedTutors)
+app.use('/tutor', createCourse)
+app.use('/tutor', getMyCourses)
+app.use('/tutor', deleteCourse)
+app.use('/learner', getAllCourses)
 
 // Socket.io logic
 require('./helpers/socketHandler')(io);//non authenticated 

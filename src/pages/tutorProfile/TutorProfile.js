@@ -62,8 +62,7 @@ function TutorProfile() {
      const currentDayLesson = useSelector(state => state.lessonsList.currentDayLesson)
 
      const videoCallModalVisibility = useSelector(state => state.lessonsList.videoCallModalVisibility)
-    
-     console.log("path: ", path);
+
 
     
     useEffect(() => {
@@ -120,7 +119,6 @@ function TutorProfile() {
                         imageUrl = await fetchFile(response.data.message.pfp, "images", "tutor", response.data.message.id);
                     }
                 }
-                console.log("image: ", imageUrl);
                 await Promise.all([
                     dispatch(setDisplayableImage(imageUrl)),
                 ])
@@ -151,7 +149,6 @@ function TutorProfile() {
                         'Authorization': `Bearer ${localStorage.getItem('accesstoken')}`
                     }
                 })
-                console.log("data: ", response.data.unreadNotifs);
                 dispatch(setUnreadNotifications(response.data.unreadNotifs))
                 
             }catch(err) {
@@ -262,7 +259,6 @@ function TutorProfile() {
                     }
                 })
                 const lessons = response.data.result
-                console.log("today's lessons: ", lessons)
 
                 dispatch(setCurrentDayLessons(lessons))
             }catch(err) {

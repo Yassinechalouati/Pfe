@@ -13,7 +13,6 @@ const storage = multer.diskStorage({
         const userId = req.user.id;
         const userRole = req.user.role;
         console.log("body: ", req.body);
-        const type =req.body.type
         
         // Determine the directory based on file type
         let directory;
@@ -23,6 +22,8 @@ const storage = multer.diskStorage({
         } else if (file.mimetype.startsWith('video')) {
             directory = `./uploads/videos/${req.user.role}/${userId}`;
             deleteExistingFileFromDB(userId, userRole, "video", directory)
+        } else if (file.mimetype === 'application/pdf') {
+            directory = `./uploads/courses/tutor/${userId}`
         } else {
             return cb({ message: 'Unsupported file type' }, false);
         }

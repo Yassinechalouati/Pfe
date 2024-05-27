@@ -219,3 +219,35 @@ export function NotificationLoading() {
         </div>
     </div>)
 }
+
+
+export function CourseLoading() {
+    return (
+        <div className="flex flex-col h-72 space-y-6 pb-3 w-40 rounded-3xl border hover:bg-lightg">
+            <div className="w-full h-36 object-cover rounded-t-3xl bg-darkg"></div>
+            <div className="flex flex-col space-y-3 px-5 cursor-pointer">
+                <div className="animate-pulse flex items-center space-x-4">
+                    <div className="flex-1 space-y-6 py-1">
+                        <div className="space-y-2">
+                            <div className="h-2 bg-darkg rounded"></div>
+                        </div>
+                    </div>
+                </div>
+                <div className="animate-pulse flex items-center space-x-1">
+                    <div className="flex-1 space-y-6 py-1">
+                        <div className="space-y-2">
+                            <div className="h-2 bg-darkg rounded"></div>
+                        </div>
+                    </div>
+                </div>
+                <div className="animate-pulse flex items-center space-x-1">
+                    <div className="flex-1 space-y-6 py-1">
+                        <div className="space-y-2">
+                            <div className="h-2 bg-darkg rounded"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    )
+}

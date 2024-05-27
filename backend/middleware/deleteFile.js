@@ -17,6 +17,8 @@ const deleteExistingFileFromDB = async (userId, userRole, type, directory) => {
          }else {
              return
          }
+     }else if(type ==="course") {
+        query = "select Course as file from course where id = ?"
      }
  
      console.log("query: ", query);
