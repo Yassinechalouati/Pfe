@@ -4,6 +4,7 @@ import Course from "../../../components/LearnerCourses/Course";
 import { useDispatch, useSelector } from "react-redux";
 import axiosInstance from "../../../interceptors/axiosInterceptor";
 import { setListOfCourses } from "../../../state/slices/CourseSlice";
+import { fetchFile } from "../../../components/Global/functions";
 
 
 function CoursesSearch() {
@@ -67,6 +68,8 @@ function CoursesSearch() {
         }
     }
 
+
+
     return (
         <div className="grid grid-cols-1 md:grid-cols-3 w-full h-[90%] overflow-y-auto px-2 sm:px-15 lg:px-16 py-7 gap-5">
             <div className="flex flex-col w-auto justify-start items-start space-y-1 border-r-[1px] border-darkg">
@@ -93,7 +96,7 @@ function CoursesSearch() {
                                 <CourseLoading></CourseLoading>
                             </>
                             :
-                            (!isEmpty?
+                            (!isEmpty? 
                                 list.map((course, index) => {
                                     return <>
                                         <Course key={index} course={course}></Course>
