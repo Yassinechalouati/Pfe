@@ -1,43 +1,14 @@
-import { fetchFile, handleLessonDifficultyColor } from "../Global/functions";
+import { NavLink } from "react-router-dom";
+import { handleLessonDifficultyColor } from "../Global/functions";
 
 
 function Course(props) {
 
-    const handleDownload= () => {
-        const fetchData = async () => {
-            try {
-                const response = await fetchFile(props.course.Course, "courses", "tutor", props.course.tutorId)
-                const byteCharacters = atob(response.split(',')[1]);
-                const byteNumbers = new Array(byteCharacters.length);
-                for (let i = 0; i < byteCharacters.length; i++) {
-                    byteNumbers[i] = byteCharacters.charCodeAt(i);
-                }
-                const byteArray = new Uint8Array(byteNumbers);
-
-                // Create a Blob from the byteArray
-                const blob = new Blob([byteArray], { type: 'application/pdf' });
-
-                // Create a link element and trigger the download
-                const link = document.createElement('a');
-                const url = window.URL.createObjectURL(blob);
-                link.href = url;
-                link.setAttribute('download', `${props.course.title}.pdf`); // Set the file name
-                document.body.appendChild(link);
-                link.click();
-
-                // Clean up
-                link.parentNode.removeChild(link);
-                window.URL.revokeObjectURL(url);
-            } catch (error) {   
-                console.log(error);
-            }
-        }
-
-        fetchData()
-    }
 
     return (
-        <div className="relative group flex flex-col w-56 min-h-[450px] max-h-[450px] space-y-6 pb-3 rounded-3xl border hover:bg-lightg">
+        <NavLink
+            to={`/learner/profile/Courses/${props.course.uuid}`}
+            className="relative group flex flex-col w-56 min-h-96 max-h-96 space-y-6 pb-3 rounded-3xl bg-white border hover:bg-lightg">
             <img 
                 src={`/coursecovers/${props.course.courseCover}`} 
                 alt={props.course.courseCover} 
@@ -67,12 +38,7 @@ function Course(props) {
                     {props.course.description}
                 </span>
             </div>
-            <div className="flex justify-center mt-36 items-center">
-                <button onClick={handleDownload} className="px-4 py-1 text-white text-sm rounded-md text-center bg-elements">
-                    Download
-                </button>
-            </div>
-        </div>
+        </NavLink>
     );
 }
 

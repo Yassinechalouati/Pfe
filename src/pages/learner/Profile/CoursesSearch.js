@@ -21,9 +21,11 @@ function CoursesSearch() {
         "Financial Language Skills",
         "Marketing and Sales Language Skills",
     ]
-    const [selectedCategory, setSelectedCategory] = useState('')
+    const [selectedCategory, setSelectedCategory] = useState('All')
     const [isEmpty, setIsEmpty] = useState(false)
     const [loading, setLoading] = useState(false)
+    const [filter, setFilter] = useState()
+
     const [list, setList] = useState([])
 
     const dispatch = useDispatch()
@@ -68,7 +70,19 @@ function CoursesSearch() {
         }
     }
 
+    const handleFilterChange = (e) => {
+        setFilter(e.target.value)
+        const filteredProducts = AllCoursesList.filter((item) => {
+            return (
+              item.title.toLowerCase().includes(e.target.value.toLowerCase()) && (selectedCategory === "All"? true: item.Category===selectedCategory) 
+            );
+          });
+          setList(filteredProducts)
+    }
 
+
+
+    console.log("list :", list);
 
     return (
         <div className="grid grid-cols-1 md:grid-cols-3 w-full h-[90%] overflow-y-auto px-2 sm:px-15 lg:px-16 py-7 gap-5">
@@ -84,8 +98,15 @@ function CoursesSearch() {
                     })
                 }
             </div>
-            
-            <div className="w-full grid col-span-2 md:grid-cols-3 grid-cols-1 gap-4">
+            <div className="flex flex-col space-y-5 col-span-2 w-full items-center ">
+                <input
+                    type="search"
+                    onChange={handleFilterChange}
+                    value={filter}
+                    placeholder="Search for course..."
+                    className="w-full px-4 py-2 border rounded-xl focus:outline-none focus:border-elements transition-colors duration-300"
+                    />
+                <div className="w-full grid col-span-2 md:grid-cols-2 xl:grid-cols-3 grid-cols-1 gap-4">
                     {
                             loading? 
                             <>
@@ -96,15 +117,18 @@ function CoursesSearch() {
                                 <CourseLoading></CourseLoading>
                             </>
                             :
-                            (!isEmpty? 
-                                list.map((course, index) => {
-                                    return <>
-                                        <Course key={index} course={course}></Course>
-                                    </> 
-                                })
-                                :
-                                null
-                            )
+                            <>
+                               { (!isEmpty? 
+                                    list.map((course, index) => {
+                                        return <>
+                                            <Course key={index} course={course}></Course>
+                                        </> 
+                                    })
+                                    :
+                                    null
+                                )}
+                            
+                            </>
                     }
                 </div>
                 
@@ -117,6 +141,8 @@ function CoursesSearch() {
                     :
                     null
                 }
+            </div>
+            
         </div>
     )
 };

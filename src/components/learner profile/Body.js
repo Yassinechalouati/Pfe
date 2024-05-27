@@ -7,9 +7,26 @@ import TutorsCard from "./TutorsCard";
 import CoursesCard from "./CoursesCard";
 import { useSelector } from "react-redux";
 import { ColumnLoading, ColumnRowLoading, RowCardsLoading, RowLoading } from "../Global/LoadingCards";
+import { useEffect, useState } from "react";
+import axiosInstance from "../../interceptors/axiosInterceptor";
 
 function Body() {
     const learnerData = useSelector(state => state.userData)
+
+    const [courses, setCourses] = useState([])
+
+    useEffect(() =>{
+        const fetchData = async () => {
+            try {
+                const response = await axiosInstance.post('http://localhost:5000/learner/getRecommendedCourses')
+                setCourses(response.data.result)
+                console.log("course recommendation: ", response.data.result)
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        fetchData()
+    }, [])
 
     const welcomeContent = [
         <img key="0" referrerPolicy="no-referrer" src={`${learnerData.pic==="user.png" ? "/" +learnerData.pic: learnerData.pic }`} alt="profilepicture"  className="w-20 h-20 object-cover rounded-full"></img>,
@@ -29,7 +46,7 @@ function Body() {
             <div key="rightpart" className="flex flex-col col-span-1 md:col-span-2 h-auto space-y-5">
                 <StartedCard></StartedCard>  
                 <TutorsCard></TutorsCard>
-                <CoursesCard></CoursesCard>
+                <CoursesCard courses={courses}></CoursesCard>
             </div>
         </div>
     ]

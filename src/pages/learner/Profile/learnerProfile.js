@@ -21,6 +21,7 @@ import LessonReminderModal from "../../../components/Global/lessonReminderModal"
 import ProfileChange from '../../../components/Settings/ProfileChange'
 import Account from '../../../components/Settings/Account'
 import Subscription from "../../../components/Settings/Subscription";
+import CoursePage from "../../../components/LearnerCourses/CoursePage";
 
 
 
@@ -215,7 +216,8 @@ function LearnerProfile() {
         Notifications: <NotificationsPage></NotificationsPage>,
         studentProfile: <ProfileChange></ProfileChange>,
         informationChange: <Account></Account>,
-        subscription: <Subscription></Subscription>
+        subscription: <Subscription></Subscription>,
+        coursePage: <CoursePage></CoursePage>
 
     }
     //knowing whether it's a tutor or learner signing up
@@ -248,6 +250,8 @@ function LearnerProfile() {
             return bodyContent.informationChange
         }else if(path ==="/learner/profile/Settings/subscription") {
             return bodyContent.subscription
+        }else if(location.pathname.startsWith('/learner/profile/Courses/')) {
+            return bodyContent.coursePage
         }
     }
 

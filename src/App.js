@@ -57,6 +57,7 @@ function App() {
         <Route path="/tutor/profile/Settings/account" element={<TutorProfile></TutorProfile>}></Route>
         <Route path="/tutor/profile/Settings/subscription" element={<TutorProfile></TutorProfile>}></Route>
         <Route path="/users/profile/Settings/verifyEmail/:token" element={<VerifyEmail></VerifyEmail>}></Route>
+        <Route path="/learner/profile/Courses/:uuid" element={<LearnerProfile></LearnerProfile>}></Route>
         <Route index element={<Landingpage></Landingpage>}></Route>
       </Routes>
     </Router>
