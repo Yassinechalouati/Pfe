@@ -10,6 +10,14 @@ import Drawer from "./Drawer";
 function NavBar() {
     //handle drawer visibility
     const [isOpen, setIsOpen] =useState(false)
+
+    
+    const path = window.location.pathname;
+
+    // Split the path by "/"
+    const segments = path.split('/');
+
+    console.log("path: ", path, "segments: ", segments);
     
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
@@ -29,39 +37,55 @@ function NavBar() {
     return (
         <>
             <div className="h-[10%] w-full bg-backg z-10 flex items-center space-x-8 pr-10 pl-10 md:pr-10 ">
-                    <NavLink to="/landingpage"
+                {
+                    path ==="/"?
+                    <NavLink to="/"
                         className="flex lg:hidden justify-center nav-link items-center h-full w-[150px] space-x-2"
                     >
                         <img src="/e-learningLogo.png" alt="logo" className="w-12 h-12 object-cover"></img>
                         <div className="font-bold text-xl ">LINGUIFY</div>
                     </NavLink>
+                    :
+                    <NavLink to="/landingpage"
+                    className="flex lg:hidden justify-center nav-link items-center h-full w-[150px] space-x-2"
+                    >
+                        <img src="/e-learningLogo.png" alt="logo" className="w-12 h-12 object-cover"></img>
+                        <div className="font-bold text-xl ">LINGUIFY</div>
+                    </NavLink>
+                }
                     <nav className="justify-center relative hidden lg:flex items-center w-auto h-full">
-                        <NavLink to="/landingpage"
-                            className="flex justify-center nav-link items-center h-full w-[150px] space-x-2"
-                        >
-                            <img src="/e-learningLogo.png" alt="logo" className="w-12 h-12 object-cover"></img>
-                            <div className="font-bold text-xl ">LINGUIFY</div>
-                        </NavLink>
+                        {
+                            path ==="/"?
+                            <NavLink to="/"
+                                className="flex justify-center nav-link items-center h-full w-[150px] space-x-2"
+                            >
+                                <img src="/e-learningLogo.png" alt="logo" className="w-12 h-12 object-cover"></img>
+                                <div className="font-bold text-xl ">LINGUIFY</div>
+                            </NavLink>
+                            :
+                            <NavLink to="/landingpage"
+                                className="flex justify-center nav-link items-center h-full w-[150px] space-x-2"
+                            >
+                                <img src="/e-learningLogo.png" alt="logo" className="w-12 h-12 object-cover"></img>
+                                <div className="font-bold text-xl ">LINGUIFY</div>
+                            </NavLink>
+
+
+                        }
                         <NavLink
-                            to="/learner/profile/Tutors"
+                            to="/landingpage/Tutors"
                             className="flex nav-link w-[80px] h-full no-underline justify-center cursor-pointer items-center"
                         >
                             <span className="text-darkg">Tutors</span>
                         </NavLink>
                         <NavLink
-                            to="/learner/profile/Courses"
+                            to="/landingpage/Courses"
                             className="flex nav-link w-[80px] h-full no-underline justify-center cursor-pointer items-center"
                         >
                             <span className="text-darkg">Courses</span>
                         </NavLink>
                         <NavLink
-                            to="/learner/profile/Classrooms"
-                            className="flex nav-link no-underline h-full w-[100px] justify-center cursor-pointer items-center"
-                        >
-                            <span className="text-darkg">Classrooms</span>
-                        </NavLink>
-                        <NavLink
-                            to="/learner/profile/LinguaBuddy"
+                            to="/landingpage/LinguaBuddy"
                             className="flex nav-link no-underline h-full w-[140px] justify-center cursor-pointer items-center space-x-2"
                         >
                             <BsRobot color="#F28585" size="22"></BsRobot>
@@ -71,21 +95,6 @@ function NavBar() {
                     </nav>
                     <div className="flex-grow"></div>
                     <div className=" ml-auto flex items-center w-auto h-full space-x-2 lg:space-x-6">
-                        {/* Language dropdown */}
-                        <div className="border relative  border-darkg rounded-full hover:shadow-md">
-                          <select className="appearance-none bg-transparent border-none text-darkg px-6 py-2 rounded-full focus:outline-none">
-                            <option value="english">English</option>
-                            <option value="french">French</option>
-                            <option value="italian">Italian</option>
-                            <option value="german">German</option>
-                            <option value="arabic">Spanish</option>
-                          </select>
-                          <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
-                            <svg className="h-4 w-4 fill-current text-darkg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                              <path d="M10 12l-7-7 1.5-1.5L10 9l5.5-5.5L17 5z" />
-                            </svg>
-                          </div>
-                        </div>
                         {/* Buttons */}
                         <div className="hidden lg:flex">
                           <NavLink to="/learner/signin" className="text-elements font-bold py-2 px-8 mr-2 rounded-full border border-elements hover:shadow-md">

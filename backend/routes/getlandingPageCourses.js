@@ -3,12 +3,14 @@ const router = express.Router()
 const mysql = require('../helpers/Sql_connection')
 
 
-router.post('/getAllCourses', (req, res)=> {
+router.post('/getCoursesLP', (req, res)=> {
 
     //getting courses from newest to oldest
     const query = `SELECT *
     FROM course
-    ORDER BY created_at DESC`
+    ORDER BY created_at DESC
+    limit 15
+    `
 
     mysql.query(query, (err, result) => {
         if(err) {

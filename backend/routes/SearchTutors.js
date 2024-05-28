@@ -1,11 +1,9 @@
 const express = require('express');
 const router = express.Router()
-const auth = require('../middleware/auth')
-const roleCheck = require('../middleware/roleCheck')
 const mysql = require('../helpers/Sql_connection')
 
  
-router.post('/SearchTutors', auth, roleCheck(["Learner"]), (req, res) => {
+router.post('/SearchTutors', (req, res) => {
     const {
         page, 
         pageSize,

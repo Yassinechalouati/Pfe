@@ -1,9 +1,7 @@
-const express = require('express');
-const auth = require('./auth');
-
+const express = require('express')
 const router = express.Router();
 
-router.use('/api/uploads',auth, (req, res, next) => {
+router.use('/api/uploads', (req, res, next) => {
     const role = req.query.role;
     const fileType = req.query.fileType;
     const id = req.query.id;

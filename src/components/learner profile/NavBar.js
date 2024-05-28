@@ -62,12 +62,6 @@ function NavBar() {
                             <span className="text-darkg">Courses</span>
                         </NavLink>
                         <NavLink
-                            to="/learner/profile/Classrooms"
-                            className="flex nav-link no-underline h-full w-[100px] justify-center cursor-pointer items-center"
-                        >
-                            <span className="text-darkg">Classrooms</span>
-                        </NavLink>
-                        <NavLink
                             to="/learner/profile/LinguaBuddy"
                             className="flex nav-link no-underline h-full w-[140px] justify-center cursor-pointer items-center space-x-2"
                         >

@@ -4,7 +4,6 @@ import Course from "../../../components/LearnerCourses/Course";
 import { useDispatch, useSelector } from "react-redux";
 import axiosInstance from "../../../interceptors/axiosInterceptor";
 import { setListOfCourses } from "../../../state/slices/CourseSlice";
-import { fetchFile } from "../../../components/Global/functions";
 
 
 function CoursesSearch() {

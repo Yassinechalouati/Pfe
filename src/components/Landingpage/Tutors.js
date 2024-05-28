@@ -1,45 +1,31 @@
-import React from 'react';
+import axios from "axios";
+import { useEffect, useState } from "react";
+import Tutor from "./Tutor";
 
-const StarRating = ({ rating }) => {
-  return (
-    <div className="flex items-center ml-auto ">
-      <span className="text-2xl text-yellow-400">&#9733;</span> 
-      <span className="ml-1 text-base">{rating}</span>
-    </div>
-  );
-};
 
 const Tutors = () => {
-  // Assuming ratings for each tutor
-  const tutorRatings = [
-    { name: "Tutor 1", rating: 4.9 },
-    { name: "Tutor 2", rating: 3.5 },
-    { name: "Tutor 3", rating: 4.2 },
-    { name: "Tutor 4", rating: 2.8 }
-  ];
+  const [tutors, setTutors] = useState([])
+
+
+  useEffect(() => {
+    const fetchData = async () => {
+        const response = await axios.post('http://localhost:5000/visitor/getTutorinfoLandingPage')
+        setTutors(response.data.result)
+        console.log("tutors: ", response.data.result) 
+    }
+    fetchData()
+  }, [])
+
 
   return (
-    <div>
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 p-4 px-[20px] lg:px-[120px] py-8" >
-        {/* Mapping through tutorRatings array to render each tutor card */}
-        {tutorRatings.map((tutor, index) => (
-          <div key={index} className="bg-white p-4 rounded-lg shadow-md flex flex-col">
-            <video controls className="w-full h-auto rounded-lg mb-2">
-              <source src={`vid${index+1}.mp4`} type="video/mp4" />
-              Your browser does not support the video tag.
-            </video>
-            <div className="flex items-center justify-between">
-              <div className="text-black font-bold">
-                {tutor.name} {/* Tutor name */}
-              </div>
-              {/* Displaying star rating on the same line as tutor name */}
-              <StarRating rating={tutor.rating} />
+    <>
+      <div className="flex justify-center items-center w-full">
+            <div className="flex items-center justify-center flex-wrap w-full gap-4 p-4 px-[20px] lg:px-[120px] py-8">
+                {tutors.map((tutor, index) => (
+                    <Tutor key={index} tutor={tutor}></Tutor>
+                ))}
             </div>
-            <div className="text-gray-500 text-sm mb-1">Subject: {index % 2 === 0 ? 'Math' : 'English'}</div>
-            <div className="text-black text-sm">Experience: {index + 2} years</div>
-          </div>
-        ))}
-      </div>
+        </div>
 
       {/* Additional Content */}
       <div className="text-center mt-8 bg-backg">
@@ -47,7 +33,7 @@ const Tutors = () => {
         <p className="text-gray-500 text-lg mb-8">Choose the tutor with the personality, professional experience, or area of interest you need!</p>
         <button className="bg-button2 hover:bg-[#DA7878] text-white font-bold py-4 px-28 lg:px-44 rounded-full mb-20">Start Learning</button>
       </div>
-    </div>
+    </>
   );
 };
 

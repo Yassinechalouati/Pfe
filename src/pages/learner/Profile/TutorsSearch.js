@@ -31,8 +31,10 @@ function TutorsSearch(props) {
     const maxPageNumber = useSelector(state => state.userData.maxPageNumber)
 
     const likedTutors = useSelector(state => state.likedTutors.likedTutors)
-    
 
+    
+    const path = window.location.pathname;
+    
 
     useEffect(() => {
         const fetchLikedTutors = async () => {
@@ -96,7 +98,12 @@ function TutorsSearch(props) {
                 <div className="flex w-full items-center space-x-8 ">
                     <span className="font-bold text-2xl text-center"> Find a Tutor</span>
                     <span onClick={()=> setSelectedOption("All")} className={`cursor-pointer ${selectedOption === "All"? "border-b-button border-b-2 text-button font-bold": ""} px-2`}>All</span>
-                    <span onClick={() => setSelectedOption("Favorites")} className={`${selectedOption === "Favorites"? "border-b-button border-b-2 text-button font-bold": ""} cursor-pointer px-2`}>Favorites</span>
+                    {
+                        path !=="/landingpage/Tutors"?
+                        <span onClick={() => setSelectedOption("Favorites")} className={`${selectedOption === "Favorites"? "border-b-button border-b-2 text-button font-bold": ""} cursor-pointer px-2`}>Favorites</span>
+                        :
+                        null
+                    }
                 </div>
                 {
                     selectedOption === "All"?
@@ -134,7 +141,7 @@ function TutorsSearch(props) {
                                     }
                                 </div>
                                 {
-                                    learnerData.tutorSearchList && (maxPageNumber !== learnerData.tutorSearchList.length)?
+                                    (learnerData.tutorSearchList && learnerData.tutorSearchList.length && (maxPageNumber !== learnerData.tutorSearchList.length))?
                                     <ShowMoreTutors></ShowMoreTutors>
                                     :
                                     null

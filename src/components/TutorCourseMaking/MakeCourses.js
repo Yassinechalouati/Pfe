@@ -5,7 +5,7 @@ import Language from "./Language";
 import Level from "./Level";
 import Description from "./Description";
 import Type from "./Type";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { appendListOfCourses, resetCourseData, setFormError, setLoading } from "../../state/slices/CourseSlice";
 import axiosInstance from "../../interceptors/axiosInterceptor";
@@ -20,6 +20,9 @@ function MakeCourses(props) {
     const imageFiles = [
         '1.JPG', '2.jpg', '3.jpg', '4.png', '5.png', '6.png', '7.png'
       ];
+    const inputRef = useRef(null)
+
+
 
     //generating random image for courses
     const getRandomImage = () => {
@@ -76,7 +79,7 @@ function MakeCourses(props) {
                     Level: courseData.level,
                     Type: courseData.type,
                     description: courseData.description,
-                    numberOfpages: courseData.numberOfpages,
+                    numberOfPages: courseData.numberOfpages,
                     Course: response.data.fileName,
                     courseCover: randomImage,
                     created_at: `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`
@@ -86,6 +89,7 @@ function MakeCourses(props) {
                     setSuccess('')
                 }, 2000)
                 dispatch(resetCourseData())
+                inputRef.current.value = ''
                 setFile(null)
             } catch (error) {
                 console.log(error);
@@ -129,6 +133,7 @@ function MakeCourses(props) {
             <UploadPDF
             setFile={setFile}
             file = {file}
+            inputRef = {inputRef}
             ></UploadPDF>
         </form>
     );

@@ -98,7 +98,7 @@ const LinguaBuddy = () => {
     }, [messagesArray, loading]);
 
     return (
-        <form onSubmit={handleSendText} className="flex-1 h-[90%] p-2 lg:p-10 justify-between flex flex-col bg-white">
+        <form onSubmit={handleSendText} className={`flex-1 h-[90%] p-2 lg:p-10 justify-between flex flex-col ${path ==="/landingpage/LinguaBuddy"? "bg-backg" : "bg-white"}`}>
             <div id="messages" className="flex flex-col space-y-4 p-3 overflow-y-auto scrollbar-thumb-blue scrollbar-thumb-rounded scrollbar-track-blue-lighter scrollbar-w-2 scrolling-touch">
                 {
                     topic && language?
@@ -136,36 +136,41 @@ const LinguaBuddy = () => {
                     }
                 <div ref={messagesEndRef} />
             </div>
-            <div className="border-t-2 border-gray-200 px-4 pt-4 mb-2 sm:mb-0">
-                <div className="relative flex">
-                    <div className="absolute left-2 items-center inset-y-0 hidden sm:flex">
-                        {
-                            !(messagesArray.length ===0 || (messagesArray.length-1)%2 ===1 || !topic || !language)?
-                            <VoiceMessage setText={setText}></VoiceMessage>
-                            :
-                            null
-                        }
-                    </div>
-                    <input
-                        type="text"
-                        placeholder="Say something..."
-                        autoComplete="off"
-                        autoFocus={true}
-                        onChange={handleChange}
-                        value={text}
-                        disabled={messagesArray.length ===0 || (messagesArray.length-1)%2 ===1 || !topic || !language}//disabled if last text was from user not the chatbot
-                        className={`text-md w-full focus:outline-none focus:placeholder-gray-400 text-gray-600 placeholder-gray-600 ${!(messagesArray.length ===0 || (messagesArray.length-1)%2 ===1 || !topic || !language)? "pl-10" : "pl-6"} pr-16 bg-gray-100 border-2 border-gray-200 focus:border-button2 transition-colors duration-200 rounded-full py-2`}
-                    />
-                    <div className="absolute right-2 items-center inset-y-0 hidden sm:flex">
-                        <button
-                            type="submit"
-                            className="inline-flex items-center justify-center rounded-full p-2 transition duration-200 ease-in-out text-white bg-button2 hover:bg-button2 focus:outline-none"
-                        >
-                        <IoIosArrowForward />
-                        </button>
+            {
+                path !=="/landingpage/LinguaBuddy"?
+                <div className="border-t-2 border-gray-200 px-4 pt-4 mb-2 sm:mb-0">
+                    <div className="relative flex">
+                        <div className="absolute left-2 items-center inset-y-0 hidden sm:flex">
+                            {
+                                !(messagesArray.length ===0 || (messagesArray.length-1)%2 ===1 || !topic || !language)?
+                                <VoiceMessage setText={setText}></VoiceMessage>
+                                :
+                                null
+                            }
+                        </div>
+                        <input
+                            type="text"
+                            placeholder="Say something..."
+                            autoComplete="off"
+                            autoFocus={true}
+                            onChange={handleChange}
+                            value={text}
+                            disabled={messagesArray.length ===0 || (messagesArray.length-1)%2 ===1 || !topic || !language}//disabled if last text was from user not the chatbot
+                            className={`text-md w-full focus:outline-none focus:placeholder-gray-400 text-gray-600 placeholder-gray-600 ${!(messagesArray.length ===0 || (messagesArray.length-1)%2 ===1 || !topic || !language)? "pl-10" : "pl-6"} pr-16 bg-gray-100 border-2 border-gray-200 focus:border-button2 transition-colors duration-200 rounded-full py-2`}
+                        />
+                        <div className="absolute right-2 items-center inset-y-0 hidden sm:flex">
+                            <button
+                                type="submit"
+                                className="inline-flex items-center justify-center rounded-full p-2 transition duration-200 ease-in-out text-white bg-button2 hover:bg-button2 focus:outline-none"
+                            >
+                            <IoIosArrowForward />
+                            </button>
+                        </div>
                     </div>
                 </div>
-            </div>
+                :
+                null
+            }
         </form>
     );
 };

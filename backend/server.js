@@ -98,6 +98,8 @@ const deleteCourse = require('./routes/deleteCourse')
 const getAllCourses = require('./routes/getAllCourses')
 const getCourseInformation = require('./routes/getCourseInformation')
 const getRecommendedCourses = require('./routes/getRecommendedCourses')
+const tutorForLandingPage = require('./routes/tutorForLandingPage')
+const getCoursesLP = require('./routes/getlandingPageCourses')
 
 //apis
 app.use('/', googleSignupRouter)
@@ -156,6 +158,8 @@ app.use('/tutor', deleteCourse)
 app.use('/learner', getAllCourses)
 app.use('/learner', getCourseInformation)
 app.use('/learner', getRecommendedCourses)
+app.use('/visitor', tutorForLandingPage)
+app.use('/visitor', getCoursesLP)
 
 // Socket.io logic
 require('./helpers/socketHandler')(io);//non authenticated 

@@ -23,14 +23,14 @@ function Drawer(props) {
                     <nav className="flex flex-col relative w-full px-4">
                         
                         <NavLink 
-                            to="/learner/profile/Tutors" 
+                            to="/landingpage/Tutors" 
                             className="flex h-10 drawerNav items-center w-full space-x-4"
                             >
                             <FaChalkboardTeacher size="25" color="#767676"></FaChalkboardTeacher>
                             <span className="">Tutors</span>
                         </NavLink>
                         <NavLink
-                            to="/learner/profile/Courses"
+                            to="/landingpage/Courses"
                             className="flex h-10 drawerNav items-center w-full space-x-4"
                             >
                             <FaBook size="25" color="#767676"
@@ -38,14 +38,7 @@ function Drawer(props) {
                             <span className="">Courses</span>
                         </NavLink>
                         <NavLink
-                            to="/learner/profile/Classrooms"
-                            className="flex h-10 drawerNav items-center w-full space-x-4"
-                            >
-                            <SiGoogleclassroom size="25" color="#767676"></SiGoogleclassroom>
-                            <span className="">Classrooms</span>
-                        </NavLink>
-                        <NavLink
-                            to="/learner/profile/LinguaBuddy"
+                            to="/landingpage/LinguaBuddy"
                             className="flex h-10 mb-7 drawerNav items-center w-full space-x-4"
                             >
                             <BsRobot size="25" color="#767676"></BsRobot>

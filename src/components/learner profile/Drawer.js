@@ -86,13 +86,6 @@ function Drawer(props) {
                                     <span className="">Courses</span>
                                 </NavLink>
                                 <NavLink
-                                    to="/learner/profile/Classrooms"
-                                    className="flex h-10 drawerNav items-center w-full space-x-4"
-                                    >
-                                    <SiGoogleclassroom size="25" color="#767676"></SiGoogleclassroom>
-                                    <span className="">Classrooms</span>
-                                </NavLink>
-                                <NavLink
                                     to="/learner/profile/LinguaBuddy"
                                     className="flex h-10 mb-7 drawerNav items-center w-full space-x-4"
                                     >
@@ -102,13 +95,6 @@ function Drawer(props) {
                             </>
                             :
                             <>
-                                <NavLink 
-                                    to="/tutor/profile/Exams" 
-                                    className="flex h-10 drawerNav items-center w-full space-x-4"
-                                    >
-                                    <FaChalkboardTeacher size="25" color="#767676"></FaChalkboardTeacher>
-                                    <span className="">Exams</span>
-                                </NavLink>
                                 <NavLink
                                     to="/tutor/profile/Courses"
                                     className="flex h-10 drawerNav items-center w-full space-x-4"
@@ -116,13 +102,6 @@ function Drawer(props) {
                                     <FaBook size="25" color="#767676"
                                     ></FaBook>
                                     <span className="">Courses</span>
-                                </NavLink>
-                                <NavLink
-                                    to="/tutor/profile/Classrooms"
-                                    className="flex h-10 drawerNav items-center w-full space-x-4"
-                                    >
-                                    <SiGoogleclassroom size="25" color="#767676"></SiGoogleclassroom>
-                                    <span className="">Classrooms</span>
                                 </NavLink>
                                 <NavLink
                                     to="/tutor/profile/LinguaBuddy"

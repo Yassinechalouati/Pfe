@@ -3,8 +3,7 @@ import TutorNavBar from "../../components/tutor profile/NavBar";
 import LinguaBuddy from "../learner/Profile/LinguaBuddy";
 import axiosInstance from '../../interceptors/axiosInterceptor'
 import { useEffect} from "react"; 
-import { useDispatch, useSelector } from "react-redux";
-import Classrooms from "./Classrooms";
+import { useDispatch, useSelector } from "react-redux"
 import Courses from "./Courses";
 import Exams from "./Exams";
 import Feed from "./Feed";
@@ -202,7 +201,6 @@ function TutorProfile() {
     const bodyContent = {
         Courses: <Courses></Courses>,
         Profile: <Feed></Feed>,
-        Classrooms: <Classrooms></Classrooms>,
         ChatBot: <LinguaBuddy></LinguaBuddy>,
         Settings: <Settings userData={tutorData}></Settings>,
         Exams: <Exams></Exams>,
@@ -225,8 +223,6 @@ function TutorProfile() {
             return bodyContent.Exams
         }else if(path === '/tutor/profile/Courses') {
             return bodyContent.Courses
-        }else if(path === '/tutor/profile/Classrooms') {
-            return bodyContent.Classrooms
         }else if(path === '/tutor/profile/Settings') {
             return bodyContent.Settings
         }else if(path ==='/tutor/profile/Notifications'){

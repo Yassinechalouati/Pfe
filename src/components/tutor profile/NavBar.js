@@ -40,39 +40,27 @@ function NavBar() {
         <>
             <div className="h-[10%] w-full bg-white z-10 shadow flex items-center space-x-8 pr-10 pl-10 md:pr-10 ">
                     <NavLink to="/tutor/profile"
-                        className="flex lg:hidden justify-center nav-link items-center h-full w-[150px] space-x-2"
+                        className="flex lg:hidden justify-center nav-linkTutor items-center h-full w-[150px] space-x-2"
                     >
                         <img src="/e-learningLogo.png" alt="logo" className="w-12 h-12 object-cover"></img>
                         <div className="font-bold text-xl ">LINGUIFY</div>
                     </NavLink>
                     <nav className="justify-center relative hidden lg:flex items-center w-auto h-full">
                         <NavLink to="/tutor/profile"
-                            className="flex justify-center nav-link items-center h-full w-[150px] space-x-2"
+                            className="flex justify-center nav-linkTutor items-center h-full w-[150px] space-x-2"
                         >
                             <img src="/e-learningLogo.png" alt="logo" className="w-12 h-12 object-cover"></img>
                             <div className="font-bold text-xl ">LINGUIFY</div>
                         </NavLink>
                         <NavLink
-                            to="/tutor/profile/Exams"
-                            className="flex nav-link w-[80px] h-full no-underline justify-center cursor-pointer items-center"
-                        >
-                            <span className="text-darkg">Exams</span>
-                        </NavLink>
-                        <NavLink
                             to="/tutor/profile/Courses"
-                            className="flex nav-link w-[80px] h-full no-underline justify-center cursor-pointer items-center"
+                            className="flex nav-linkTutor w-[80px] h-full no-underline justify-center cursor-pointer items-center"
                         >
                             <span className="text-darkg">Courses</span>
                         </NavLink>
                         <NavLink
-                            to="/tutor/profile/Classrooms"
-                            className="flex nav-link no-underline h-full w-[100px] justify-center cursor-pointer items-center"
-                        >
-                            <span className="text-darkg">Classrooms</span>
-                        </NavLink>
-                        <NavLink
                             to="/tutor/profile/LinguaBuddy"
-                            className="flex nav-link no-underline h-full w-[140px] justify-center cursor-pointer items-center space-x-2"
+                            className="flex nav-linkTutor no-underline h-full w-[140px] justify-center cursor-pointer items-center space-x-2"
                         >
                             <BsRobot color="#F28585" size="22"></BsRobot>
                             <span className="text-darkg">LinguaBuddy</span>

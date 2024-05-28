@@ -58,6 +58,9 @@ function App() {
         <Route path="/tutor/profile/Settings/subscription" element={<TutorProfile></TutorProfile>}></Route>
         <Route path="/users/profile/Settings/verifyEmail/:token" element={<VerifyEmail></VerifyEmail>}></Route>
         <Route path="/learner/profile/Courses/:uuid" element={<LearnerProfile></LearnerProfile>}></Route>
+        <Route path ="/landingpage/Courses" element={<Landingpage></Landingpage>}></Route>
+        <Route path ="/landingpage/Tutors" element={<Landingpage></Landingpage>}></Route>
+        <Route path ="/landingpage/LinguaBuddy" element={<Landingpage></Landingpage>}></Route>
         <Route index element={<Landingpage></Landingpage>}></Route>
       </Routes>
     </Router>

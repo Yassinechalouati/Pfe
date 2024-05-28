@@ -1,14 +1,15 @@
-import React from 'react';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 
-const Card = ({ image, title, subtitle1, subtitle2, rotation }) => {
+const Card = (props) => {
   return (
-    <div className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/6 p-2" style={{ transform: `rotate(${rotation}deg)` }}>
-      <div className="bg-white rounded-lg overflow-hidden shadow-lg">
-        <img src={image} alt={title} className="w-full h-32 object-cover" />
+    <div className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/6 p-2" style={{ transform: `rotate(${props.rotation}deg)` }}>
+      <div className="bg-white w-40 rounded-lg overflow-hidden shadow-lg">
+        <img src={`/coursecovers/${props.courseCover}`} alt={props.courseCover} className="w-full h-32 object-cover" />
         <div className="p-4">
-          <h2 className="font-bold text-black mb-2">{title}</h2>
-          <p className="text-darkg mb-1">{subtitle1}</p>
-          <p className="text-darkg">{subtitle2}</p>
+          <h2 className="font-bold text-black mb-2">{props.title}</h2>
+          <p className="text-darkg mb-1">{props.Category}</p>
+          <p className="text-darkg">{props.level}</p>
         </div>
       </div>
     </div>
@@ -16,65 +17,49 @@ const Card = ({ image, title, subtitle1, subtitle2, rotation }) => {
 };
 
 const CardList = ({ data }) => {
-  const getRandomRotation = () => {
-    // Generate a random number between -10 and 10 for rotation
-    return Math.floor(Math.random() * 21) - 10;
-  };
+      // Helper function to generate rotation angles
+      const generateRotations = (count) => {
+        const rotations = [];
+        const angle = 10; // Define a base angle for rotation
+        for (let i = 0; i < count; i++) {
+          rotations.push(i % 2 === 0 ? angle : -angle);
+        }
+        return rotations;
+      };
+
+      const rotations = generateRotations(data.length);
 
   return (
     <div className="flex overflow-y-hidden w-full px-4 overflow-x-auto py-4" style={{ scrollbarWidth: 'none' }}>
       {data.map((item, index) => (
-        <Card key={index} {...item} rotation={getRandomRotation()} />
+        <Card key={index} {...item} rotation={rotations[index]} />
       ))}
     </div>
   );
 };
 
 const App = () => {
-  // Example data for cards
-  const cardsData = [
-    {
-      image: 'random.jpg',
-      title: 'Intermediate Conversation Topics',
-      subtitle1: 'INTERMEDIATE',
-      subtitle2: '10 LESSONS',
-    },
-    {
-      image: 'random.jpg',
-      title: 'Intermediate Conversation Topics',
-      subtitle1: 'INTERMEDIATE',
-      subtitle2: '10 LESSONS',
-    },
-    {
-      image: 'random.jpg',
-      title: 'Intermediate Conversation Topics',
-      subtitle1: 'INTERMEDIATE',
-      subtitle2: '10 LESSONS',
-    },
-    {
-      image: 'random.jpg',
-      title: 'Intermediate Conversation Topics',
-      subtitle1: 'INTERMEDIATE',
-      subtitle2: '10 LESSONS',
-    },
-    {
-      image: 'random.jpg',
-      title: 'Intermediate Conversation Topics',
-      subtitle1: 'INTERMEDIATE',
-      subtitle2: '10 LESSONS',
-    },
-    {
-      image: 'random.jpg',
-      title: 'Intermediate Conversation Topics',
-      subtitle1: 'INTERMEDIATE',
-      subtitle2: '10 LESSONS',
-    },
-    // Add more card data as needed
-  ];
+  
+  const [courseData, setCourseData] = useState([])
+
+  useEffect(() => {
+    const fetchCourses = async () =>  {
+      try {
+        const response = await axios.post('http://localhost:5000/visitor/getCoursesLP')
+        console.log("courses: ", response.data);
+        setCourseData(response.data.result)
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    fetchCourses()
+  }, [])
+  
 
   return (
     <div className="container text-center mx-auto px-[20px] lg:px-[120px] py-8">
-      <CardList data={cardsData} />
+      <CardList data={courseData} />
       <div className="text-center text-button2 text-3xl mt-24" style={{ fontFamily: 'Holtwood One SC' }}>
         Courses for every skill level and interest
       </div>

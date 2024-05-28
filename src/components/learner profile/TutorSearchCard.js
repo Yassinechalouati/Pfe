@@ -23,6 +23,10 @@ function TutorSearchCard(props) {
 
     const dispatch = useDispatch()
 
+    
+    const path = window.location.pathname;
+
+
 
 
 
@@ -131,14 +135,19 @@ function TutorSearchCard(props) {
                         <span className="text-darkg">{props.tutor.Country}</span>
                     </div>                
                 </div>
-                <div onClick={handleLike} className="rounded-full self-start flex p-1 hover:bg-lightg justify-center items-center">
-                    {
-                        liked?
-                        <IoIosHeart size="22" color="red"></IoIosHeart>
-                        :
-                        <IoIosHeartEmpty size="22" color=""></IoIosHeartEmpty>
-                    }
-                </div>
+                {
+                    path!=="/landingpage/Tutors"?
+                    <div onClick={handleLike} className="rounded-full self-start flex p-1 hover:bg-lightg justify-center items-center">
+                        {
+                            liked?
+                            <IoIosHeart size="22" color="red"></IoIosHeart>
+                            :
+                            <IoIosHeartEmpty size="22" color=""></IoIosHeartEmpty>
+                        }
+                    </div>
+                    :
+                    null
+                }
             </div>
             <hr key="1" className="h-1 w-full"></hr>
             <div className="flex flex-col w-full h-full overflow-y-auto break-before-avoid scrollbar-hidden"  style={{ scrollbarWidth: 'none',}}>
@@ -147,18 +156,23 @@ function TutorSearchCard(props) {
                 </span>
                 <span className="text-darkg w-full h-full text-sm">{props.tutor.description}</span>
             </div>
-            <div className="flex space-x-3 self-end">
-                    <button
-                    className={`bg-button2 border border-button2 flex justify-center items-center text-center font-semibold px-4 py-2 rounded-full text-white hover:shadow`}>
-                    Text</button>
-                    {/*navigating to tutor profile*/}
-                    <NavLink      
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    to={`/learner/profile/Tutor/${props.tutor.uuid}`}
-                    className={`bg-backg  border border-button2 flex justify-center items-center text-center font-semibold px-4 py-2 rounded-full text-button2 hover:shadow`}>
-                    Profile</NavLink>
-            </div>
+            {
+                path !=="/landingpage/Tutors"?
+                <div className="flex space-x-3 self-end">
+                        <button
+                        className={`bg-button2 border border-button2 flex justify-center items-center text-center font-semibold px-4 py-2 rounded-full text-white hover:shadow`}>
+                        Text</button>
+                        {/*navigating to tutor profile*/}
+                        <NavLink      
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        to={`/learner/profile/Tutor/${props.tutor.uuid}`}
+                        className={`bg-backg  border border-button2 flex justify-center items-center text-center font-semibold px-4 py-2 rounded-full text-button2 hover:shadow`}>
+                        Profile</NavLink>
+                </div>
+                :
+                null
+            }
         </div>
     );
 }

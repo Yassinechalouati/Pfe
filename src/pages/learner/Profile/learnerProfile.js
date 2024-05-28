@@ -5,7 +5,6 @@ import { setId, setIsLoading, setBirthday, setCountry, setEmail, setFirstName, s
 import { useDispatch, useSelector } from "react-redux";
 import CoursesSearch from "./CoursesSearch";
 import TutorsSearch from "./TutorsSearch";
-import ClassroomsSearch from './ClassroomsSearch'
 import Body from '../../../components/learner profile/Body'
 import LinguaBuddy from "./LinguaBuddy";
 import Settings from "../../../components/Global/Settings";
@@ -209,7 +208,6 @@ function LearnerProfile() {
         TutorsSearch: <TutorsSearch></TutorsSearch>,
         TutorProfile: <TutorProfile></TutorProfile>,
         Profile: <Body></Body>,
-        ClassroomsSearch: <ClassroomsSearch></ClassroomsSearch>,
         ChatBot: <LinguaBuddy></LinguaBuddy>,
         Settings: <Settings userData={learnerData}></Settings>,
         calendar: <BigCalendar></BigCalendar>,
@@ -234,8 +232,6 @@ function LearnerProfile() {
             return bodyContent.ChatBot
         }else if(path === '/learner/profile/Courses') {
             return bodyContent.CoursesSearch
-        }else if(path === '/learner/profile/Classrooms') {
-            return bodyContent.ClassroomsSearch
         }else if(path === '/learner/profile/Settings') {
             return bodyContent.Settings
         }else if (path === '/learner/profile/Calendar') {
