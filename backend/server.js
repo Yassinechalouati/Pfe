@@ -100,6 +100,11 @@ const getCourseInformation = require('./routes/getCourseInformation')
 const getRecommendedCourses = require('./routes/getRecommendedCourses')
 const tutorForLandingPage = require('./routes/tutorForLandingPage')
 const getCoursesLP = require('./routes/getlandingPageCourses')
+const getMessagesTutor = require('./routes/getMessagesTutor')
+const getMessagesLearner = require('./routes/getMessagesLearner')
+const saveTutorMessages = require('./routes/saveMessageTutor')
+const saveLearnerMessages = require('./routes/saveMessageLearner')
+const getLearner = require('./routes/SeletedLearner')
 
 //apis
 app.use('/', googleSignupRouter)
@@ -160,6 +165,11 @@ app.use('/learner', getCourseInformation)
 app.use('/learner', getRecommendedCourses)
 app.use('/visitor', tutorForLandingPage)
 app.use('/visitor', getCoursesLP)
+app.use('/learner', getMessagesLearner)
+app.use('/learner', saveLearnerMessages)
+app.use('/tutor', saveTutorMessages)
+app.use('/tutor', getMessagesTutor)
+app.use('/tutor', getLearner)
 
 // Socket.io logic
 require('./helpers/socketHandler')(io);//non authenticated 

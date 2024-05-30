@@ -61,6 +61,8 @@ function App() {
         <Route path ="/landingpage/Courses" element={<Landingpage></Landingpage>}></Route>
         <Route path ="/landingpage/Tutors" element={<Landingpage></Landingpage>}></Route>
         <Route path ="/landingpage/LinguaBuddy" element={<Landingpage></Landingpage>}></Route>
+        <Route path = "/learner/profile/Chat/:uuid" element={<LearnerProfile></LearnerProfile>}></Route>
+        <Route path = "/tutor/profile/Chat/:uuid" element={<TutorProfile></TutorProfile>}></Route>
         <Route index element={<Landingpage></Landingpage>}></Route>
       </Routes>
     </Router>

@@ -21,6 +21,8 @@ import ProfileChange from '../../../components/Settings/ProfileChange'
 import Account from '../../../components/Settings/Account'
 import Subscription from "../../../components/Settings/Subscription";
 import CoursePage from "../../../components/LearnerCourses/CoursePage";
+import Chat from "../../Chat";
+import { appendMessage } from "../../../state/slices/chatSlice";
 
 
 
@@ -215,7 +217,8 @@ function LearnerProfile() {
         studentProfile: <ProfileChange></ProfileChange>,
         informationChange: <Account></Account>,
         subscription: <Subscription></Subscription>,
-        coursePage: <CoursePage></CoursePage>
+        coursePage: <CoursePage></CoursePage>,
+        Chat: <Chat></Chat>
 
     }
     //knowing whether it's a tutor or learner signing up
@@ -248,6 +251,8 @@ function LearnerProfile() {
             return bodyContent.subscription
         }else if(location.pathname.startsWith('/learner/profile/Courses/')) {
             return bodyContent.coursePage
+        }else if(location.pathname.startsWith('/learner/profile/Chat/')){
+            return bodyContent.Chat
         }
     }
 
@@ -321,6 +326,32 @@ function LearnerProfile() {
         };
         
     }, [currentDayLessons])
+
+    const handleReceiveMessage = (data) => {
+        dispatch(appendMessage(data))
+
+    }
+
+    useEffect(() => {
+        if(learnerId) {
+            const socket = io('http://localhost:5000', {
+            auth: {
+                token: localStorage.getItem('accesstoken')
+            }
+            })
+
+            console.log("learnerId: ", learnerId)
+            socket.emit('createRoom', learnerId)
+            // Listeners for incoming notifications
+            
+            //reject lesson error notification listener 
+            socket.on('recieve_message', handleReceiveMessage)
+
+            return () => {
+                socket.disconnect();
+              }
+        }
+    }, [learnerId])
 
     return (
         <div className="w-screen h-screen bg-backg flex flex-col">

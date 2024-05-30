@@ -113,6 +113,38 @@ const socketHandler = (io) => {
 
         })
 
+        socket.on("send_message", (data) => {
+            let query 
+            if(data.Sender === "Learner"){
+                query = "select id from tutor where uuid = ?"
+            }
+            else {
+                query = "select id from learner where uuid = ?"
+            }
+            console.log("MESSAGE", query)
+            mysql.query(query, [data.friendUuid], (err, result) => {
+                if(err) {
+                console.log(err)
+             }else {
+                console.log("RESULTAT", result[0])
+               const friendId = result[0].id
+               const message = {
+               TextID: data.TextId, 
+                id: result[0].id,
+                Sender: data.Sender,
+                message: data.message,
+                MessageTime: data.MessageTime,
+                IdLearner: data.Sender === "Learner"? data.myId : result[0].id,
+                IdTutor : data.Sender === "Tutor" ? data.myId : result[0].id,
+                lastname: data.lastname,
+                firstname: data.firstname,
+                pfp: data.pfp
+             }
+             socket.to(friendId).emit("recieve_message", message);
+             }
+             })
+        });
+
         socket.on('disconnect', () => {
             console.log('User disconnected');
         });

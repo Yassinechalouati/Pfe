@@ -159,9 +159,12 @@ function TutorSearchCard(props) {
             {
                 path !=="/landingpage/Tutors"?
                 <div className="flex space-x-3 self-end">
-                        <button
+                        <NavLink
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        to={`/learner/profile/Chat/${props.tutor.uuid}`}
                         className={`bg-button2 border border-button2 flex justify-center items-center text-center font-semibold px-4 py-2 rounded-full text-white hover:shadow`}>
-                        Text</button>
+                        Text</NavLink>
                         {/*navigating to tutor profile*/}
                         <NavLink      
                         target="_blank" 

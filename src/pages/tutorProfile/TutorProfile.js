@@ -42,6 +42,9 @@ import LessonReminderModal from "../../components/Global/lessonReminderModal";
 import Account from "../../components/Settings/Account"
 import Subscription from "../../components/Settings/Subscription"
 import ProfileChange from "../../components/Settings/ProfileChange";
+import Chat from "../Chat";
+import { useLocation } from "react-router-dom";
+import { appendMessage } from "../../state/slices/chatSlice";
 
 function TutorProfile() {
 
@@ -61,6 +64,10 @@ function TutorProfile() {
      const currentDayLesson = useSelector(state => state.lessonsList.currentDayLesson)
 
      const videoCallModalVisibility = useSelector(state => state.lessonsList.videoCallModalVisibility)
+
+    
+    const location = useLocation();
+
 
 
     
@@ -208,7 +215,8 @@ function TutorProfile() {
         Calendar: <BigCalendar></BigCalendar>,
         tutorProfile: <ProfileChange></ProfileChange>,
         informationChange: <Account></Account>,
-        subscription: <Subscription></Subscription>
+        subscription: <Subscription></Subscription>,
+        Chat: <Chat></Chat>
     }
 
 
@@ -235,6 +243,8 @@ function TutorProfile() {
             return bodyContent.informationChange
         }else if(path ==="/tutor/profile/Settings/subscription"){
             return bodyContent.subscription
+        }else if(location.pathname.startsWith('/tutor/profile/Chat/')){
+            return bodyContent.Chat
         }
     }
 
@@ -307,6 +317,33 @@ function TutorProfile() {
         };
         
     }, [currentDayLessons])
+
+    const handleReceiveMessage = (data) => {
+        console.log("receiving message: ", data);
+        dispatch(appendMessage(data))
+        
+    }
+
+    useEffect(() => {
+        if(tutorData.id) {
+            const socket = io('http://localhost:5000', {
+            auth: {
+                token: localStorage.getItem('accesstoken')
+            }
+            })
+
+            console.log("learnerId: ", tutorData.id)
+            socket.emit('createRoom', tutorData.id)
+            // Listeners for incoming notifications
+            
+            //reject lesson error notification listener 
+            socket.on('recieve_message', handleReceiveMessage)
+
+            return () => {
+                socket.disconnect();
+              }
+        }
+    }, [tutorData.id])
 
     return (
         <div className="w-screen h-screen bg-backg flex flex-col">
