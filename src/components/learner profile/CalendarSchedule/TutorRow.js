@@ -117,6 +117,26 @@ function TutorRow(props) {
                     ReadByLearner: 0
 
                 }
+
+                const currentDayLessonsData = {
+                    lesson_id: response.data.lesson_id,
+                    tutor_id: location.pathname.startsWith('/learner/profile/Tutor/')? selectedTutorData.id: props.tutor.id,
+                    start_time: response.data.start_time,
+                    end_time: response.data.end_time,
+                    lesson_topic: scheduleData.lessonTopic,
+                    lesson_difficulty: scheduleData.lessonDifficulty,
+                    duration: scheduleData.lessonLength,
+                    Accepted: -1,
+                    language: scheduleData.language,
+                    pfp: location.pathname.startsWith('/learner/profile/Tutor/')? selectedTutorData.pfp: props.tutor.pfp,
+                    firstname: location.pathname.startsWith('/learner/profile/Tutor/')? selectedTutorData.firstname: props.tutor.firstname,
+                    lastname: location.pathname.startsWith('/learner/profile/Tutor/')? selectedTutorData.lastname: props.tutor.lastname,
+                    scheduling_date: currentDateTimeString,
+                    private_learner_id: learnerData.id,
+                    ReadByTutor: 0,
+                    ReadByLearner: 0
+
+                }
                 socket.current = io('http://localhost:5000', {
                     auth: {
                     token: localStorage.getItem('accesstoken')
@@ -127,7 +147,7 @@ function TutorRow(props) {
 
                 console.log("socket: ", socket.current);
 
-                dispatch(addNotification(data))
+                dispatch(addNotification(currentDayLessonsData))
  
                 
 
@@ -180,35 +200,17 @@ function TutorRow(props) {
 
                 //if there's no lessons in that day we show it in the calendar
                 if(!test) {
-                    dispatch(appendLesson(data))
+                    dispatch(appendLesson(currentDayLessonsData))
                 }else {
                     if(index >= 0){
                         console.log("replaceFirstLessonItem Worked");
-                        dispatch(replaceFirstLessonItem({data, index}))
+                        dispatch(replaceFirstLessonItem({currentDayLessonsData, index}))
                     }
                 }
                 //adding it to the list containing all lessons
-                dispatch(Addlesson(data))
+                dispatch(Addlesson(currentDayLessonsData))
 
-                const currentDayLessonsData = {
-                    lesson_id: response.data.lesson_id,
-                    tutor_id: location.pathname.startsWith('/learner/profile/Tutor/')? selectedTutorData.id: props.tutor.id,
-                    start_time: response.data.start_time,
-                    end_time: response.data.end_time,
-                    lesson_topic: scheduleData.lessonTopic,
-                    lesson_difficulty: scheduleData.lessonDifficulty,
-                    duration: scheduleData.lessonLength,
-                    Accepted: -1,
-                    language: scheduleData.language,
-                    pfp: location.pathname.startsWith('/learner/profile/Tutor/')? selectedTutorData.pfp: props.tutor.pfp,
-                    firstname: location.pathname.startsWith('/learner/profile/Tutor/')? selectedTutorData.firstname: props.tutor.firstname,
-                    lastname: location.pathname.startsWith('/learner/profile/Tutor/')? selectedTutorData.lastname: props.tutor.lastname,
-                    scheduling_date: currentDateTimeString,
-                    private_learner_id: learnerData.id,
-                    ReadByTutor: 0,
-                    ReadByLearner: 0
-
-                }
+                
 
                 dispatch(addLessontoCurrentDayLessons(currentDayLessonsData))
 

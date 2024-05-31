@@ -8,6 +8,7 @@ import { useSelector } from "react-redux"
 import { NavLink } from 'react-router-dom'
 import DropdownMenu from "../learner profile/DropdownMenu"
 import Notifications from "../Global/Notifications"
+import MessagesNotif from "../Global/MessagesNotif"
 
 
 
@@ -72,7 +73,7 @@ function NavBar() {
                         <div className="py-2 lg:hidden cursor-pointer px-2 flex justify-center items-center bg-button rounded-full">
                             <IoMenu onClick={handleDrawer} size="22" color="white"></IoMenu>
                         </div>
-                        <IoChatbubbles className="cursor-pointer text-darkg hidden lg:block" size="22"></IoChatbubbles>
+                        <MessagesNotif></MessagesNotif>
                         <Notifications role ="Learner"></Notifications>
                         <NavLink to="/tutor/profile/Calendar">
                             <IoMdCalendar className="cursor-pointer hidden lg:block text-darkg" size="22"></IoMdCalendar>

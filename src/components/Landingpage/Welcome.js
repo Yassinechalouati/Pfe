@@ -8,7 +8,7 @@ export default function Welcome() {
         <div className="text-2xl text-center lg:text-left lg:text-6xl font-extrabold">
           BUILD YOUR SKILLS WITH OUR ONLINE COURSES
         </div>
-        <div className="text-lg text-center lg:text-left text-gray-500">Lorem ipsum dolor sit amet consectetur. Egestas aliquam volutpat rutrum praesent varius enim enim.</div>
+        <div className="text-lg text-center lg:text-left text-gray-500">Learn from expert instructors through interactive, real-world exercises and flexible schedules. Start mastering the language skills essential for your profession today and unlock global opportunities with confidence. Sign up now and transform your professional communication!</div>
       </div>
     </div>
   );

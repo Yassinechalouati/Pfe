@@ -44,7 +44,7 @@ import Subscription from "../../components/Settings/Subscription"
 import ProfileChange from "../../components/Settings/ProfileChange";
 import Chat from "../Chat";
 import { useLocation } from "react-router-dom";
-import { appendMessage } from "../../state/slices/chatSlice";
+import { addChatNotification } from "../../state/slices/chatSlice";
 
 function TutorProfile() {
 
@@ -320,7 +320,7 @@ function TutorProfile() {
 
     const handleReceiveMessage = (data) => {
         console.log("receiving message: ", data);
-        dispatch(appendMessage(data))
+        dispatch(addChatNotification(data))
         
     }
 

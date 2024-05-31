@@ -22,7 +22,7 @@ import Account from '../../../components/Settings/Account'
 import Subscription from "../../../components/Settings/Subscription";
 import CoursePage from "../../../components/LearnerCourses/CoursePage";
 import Chat from "../../Chat";
-import { appendMessage } from "../../../state/slices/chatSlice";
+import { addChatNotification } from "../../../state/slices/chatSlice";
 
 
 
@@ -328,7 +328,7 @@ function LearnerProfile() {
     }, [currentDayLessons])
 
     const handleReceiveMessage = (data) => {
-        dispatch(appendMessage(data))
+        dispatch(addChatNotification(data))
 
     }
 

@@ -138,7 +138,9 @@ const socketHandler = (io) => {
                 IdTutor : data.Sender === "Tutor" ? data.myId : result[0].id,
                 lastname: data.lastname,
                 firstname: data.firstname,
-                pfp: data.pfp
+                pfp: data.pfp,
+                uuid: data.friendUuid,
+                otherUuid: data.otherUuid
              }
              socket.to(friendId).emit("recieve_message", message);
              }

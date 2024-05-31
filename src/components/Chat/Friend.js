@@ -37,9 +37,12 @@ export default function Friend() {
                     dispatch(setSelectedTutor(response.data.message))
 
                     setName(response.data.message.firstname + " "+ response.data.message.lastname)
+
       
                     //fetching the image from database
                     let imageUrl = response.data.message.pfp
+
+
                     if(!isGoogleProfilePicture(imageUrl)) {
                         const image = await  fetchFile(response.data.message.pfp, "images", "tutor", response.data.message.id)
                         imageUrl = image
@@ -64,19 +67,22 @@ export default function Friend() {
                         }
                     })
       
+                    
                     setName(response.data.firstname + " "+ response.data.lastname)
-
+                    console.log("getting Name:", response.data);
                     //fetching the image from database
                     let imageUrl = response.data.pfp
-                    if(!isGoogleProfilePicture(imageUrl)) {
-                        const image = await  fetchFile(response.data.pfp, "images", "learner", response.data.id)
-                        imageUrl = image
-                    }
 
+                    if(imageUrl!=="user.png") {
+                        if(!isGoogleProfilePicture(imageUrl)) {
+                            const image = await  fetchFile(response.data.message.pfp, "images", "tutor", response.data.message.id)
+                            imageUrl = image
+                        }
+    
+                    }
                     //storing the img
                     setImgUrl(imageUrl)
                         
-
                     //fetching the country's flag
                     const flag = await fetchCountryData(response.data.country)
                     setCountryFlag(flag)
@@ -95,7 +101,11 @@ return (<div
         >
           <div className="h-20 w-20 rounded-full border overflow-hidden">
             <img
-              src={imgUrl}
+              src={
+                imgUrl === "user.png"?
+                "/user.png"
+                :
+                imgUrl}
               alt="Avatar"
               className="h-full object-cover w-full"
             />
