@@ -1,4 +1,3 @@
-import { IoChatbubbles } from "react-icons/io5"
 import { IoMdCalendar } from "react-icons/io";
 import { BsRobot } from "react-icons/bs";
 import { IoMenu } from "react-icons/io5";
@@ -9,6 +8,7 @@ import { NavLink } from 'react-router-dom';
 import DropdownMenu from "./DropdownMenu";
 import Notifications from "./LessonNotifications";
 import MessagesNotif from "../Global/MessagesNotif";
+import SubscriptionPlan from "../Subscription/SubscriptionPlan";
 
 
  
@@ -18,6 +18,8 @@ function NavBar() {
     const [isOpen, setIsOpen] =useState(false)
     
     const [isDropdownOpen, setIsDropdownOpen] = useState(false)
+
+    const [paymentVisiblity, setPaymentVisibility] = useState(false)
 
     const pfpRef = useRef(null)
 
@@ -73,7 +75,7 @@ function NavBar() {
                     </nav>
                     <div className="flex-grow"></div>
                     <div className=" ml-auto flex items-center w-auto h-full space-x-2 lg:space-x-6">
-                        <button className="bg-elements text-white font-bold py-2 px-8 rounded-full hover:shadow-md">
+                        <button onClick={() => setPaymentVisibility(true)} className="bg-elements text-white font-bold py-2 px-8 rounded-full hover:shadow-md">
                             Subscribe
                         </button>
                         <div className="py-2 lg:hidden cursor-pointer px-2 flex justify-center items-center bg-button rounded-full">
@@ -104,6 +106,7 @@ function NavBar() {
                     </div>
                 </div>
                 <Drawer userData={learnerData} role="learner" isOpen={isOpen} closeDrawer={() => setIsOpen(!isOpen)}/>
+                <SubscriptionPlan visibility={paymentVisiblity} setVisibility={setPaymentVisibility}></SubscriptionPlan>
         </>
     );
 }

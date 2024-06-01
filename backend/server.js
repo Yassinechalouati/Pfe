@@ -107,6 +107,7 @@ const saveLearnerMessages = require('./routes/saveMessageLearner')
 const getLearner = require('./routes/SeletedLearner')
 const getLatestMessagesTutor = require('./routes/getLatestMessagesforTutor')
 const getLatestMessagesLearner = require('./routes/getLatestMessagesLearner')
+const paymentRouter = require('./routes/payment')
 
 //apis
 app.use('/', googleSignupRouter)
@@ -174,6 +175,7 @@ app.use('/tutor', getMessagesTutor)
 app.use('/tutor', getLearner)
 app.use('/tutor', getLatestMessagesTutor)
 app.use('/learner', getLatestMessagesLearner)
+app.use('/learner', paymentRouter)
 
 // Socket.io logic
 require('./helpers/socketHandler')(io);//non authenticated 

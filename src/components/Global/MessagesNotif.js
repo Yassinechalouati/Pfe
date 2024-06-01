@@ -4,7 +4,7 @@ import { IoChatbubbles } from "react-icons/io5"
 import axiosInstance from "../../interceptors/axiosInterceptor"
 import Message from "./Message"
 import { NotificationLoading } from "./LoadingCards"
-import { setChatNotification } from "../../state/slices/chatSlice"
+import { setChatNotification, setNewMessages } from "../../state/slices/chatSlice"
 
 
 function MessagesNotif(props) {
@@ -12,6 +12,7 @@ function MessagesNotif(props) {
     const dispatch = useDispatch()
     const [modalVisibility, setModalVisibility] = useState(false)
     const messages = useSelector(state => state.chatData.Notifications)
+    const newMessages = useSelector(state => state.chatData.newMessages)
     const [loading, setLoading] = useState(false)
 
     const path = window.location.pathname
@@ -25,7 +26,6 @@ function MessagesNotif(props) {
     const handleOutsideClick = (event) => {
         if (notifRef.current && !notifRef.current.contains(event.target)) {
             setModalVisibility(false)
-            console.log("Messages: ", modalVisibility);
         }
     }
 
@@ -42,15 +42,19 @@ function MessagesNotif(props) {
     //handle notifications visibility and api calls 
     const handleNotifications = async () => {
         try {
-            setLoading(true)
-            const response = await axiosInstance.post(`http://localhost:5000/${segments[1]}/getLatestMessages`)
-            console.log("message: ", response)
-            dispatch(setChatNotification(response.data))
-            setLoading(false)
-            
+            if(!modalVisibility){
+                setLoading(true)
+                const response = await axiosInstance.post(`http://localhost:5000/${segments[1]}/getLatestMessages`)
+                console.log("message: ", response)
+                dispatch(setChatNotification(response.data))
+                setLoading(false)
+            }
         } catch (error) {
             console.log(error);
             setLoading(false)
+        }
+        if(newMessages){
+            dispatch(setNewMessages(false))
         }
         setModalVisibility(prevValue => !prevValue)
     }
@@ -74,16 +78,15 @@ function MessagesNotif(props) {
       
     return (
         <div ref={notifRef} className="relative py-1">
-            <div className="cursor-pointer" onClick={() => handleNotifications("")}>
-                {/*
-                    UnreadNotifications>0?
+            <div className="cursor-pointer" onClick={() => handleNotifications()}>
+                {
+                    newMessages?
                     <span className="absolute hidden lg:flex h-3 w-3 top-0 right-0">
                         <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-elements opacity-75"></span>
                         <span className="relative inline-flex rounded-full h-3 w-3 bg-elements"></span>
                     </span>
                     :
                     null
-                */
                 }
                 
                 <IoChatbubbles className="cursor-pointer text-darkg hidden lg:block" size="22"></IoChatbubbles>

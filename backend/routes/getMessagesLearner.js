@@ -19,7 +19,7 @@ router.post( '/getMessages', auth, roleCheck(['Learner']), (req, res) =>{
         }
         else { 
             const tutorId = resul[0].id;
-            const query ="SELECT TextID, IdTutor, IdLearner, message, messageTime, Sender, firstname, lastname, tutor.id, pfp from convo, tutor where convo.IdTutor=tutor.id and ?=IdLearner and ?=IdTutor ORDER BY MessageTime ASC";
+            const query ="SELECT TextID, IdTutor, IdLearner, message, MessageTime, Sender, firstname, lastname, tutor.id, pfp from convo, tutor where convo.IdTutor=tutor.id and ?=IdLearner and ?=IdTutor ORDER BY MessageTime ASC";
             mysql.query(query, [userId,tutorId], (error, result)=> {
                 if (error) {
                     console.log(error);

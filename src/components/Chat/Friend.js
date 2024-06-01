@@ -97,7 +97,7 @@ export default function Friend() {
         fetchData()
     }, [])
 return (<div
-          className="flex flex-col items-center bg-indigo-100 border border-gray-200 mt-4 w-full py-6 px-4 rounded-lg"
+          className="flex flex-col space-y-2 h-full items-center justify-center bg-gray-100 border border-200 w-full py-6 px-4 rounded-lg"
         >
           <div className="h-20 w-20 rounded-full border overflow-hidden">
             <img
@@ -110,10 +110,10 @@ return (<div
               className="h-full object-cover w-full"
             />
           </div>
-          <div className="items-center flex justify-center space-x-2 w-full m-auto">
+          <div className="items-center flex justify-center space-x-2 w-full">
             <div key="Country" className="flex items-center space-x-2">
                 {countryFlag && countryFlag[0]?.flags && (
-                    <img className="rounded-lg w-8 h-8 object-cover" src={countryFlag[0].flags.png} alt="Country" />
+                    <img className="rounded-lg w-5 h-5 object-cover" src={countryFlag[0].flags.png} alt="Country" />
                 )}
             </div>
             <div className="text-sm font-semibold mt-2">{name}</div>

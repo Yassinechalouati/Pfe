@@ -2,7 +2,8 @@ import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
     convo: [],
-    Notifications: []
+    Notifications: [],
+    newMessages: false
   }
 
 
@@ -62,6 +63,9 @@ export const chatSlice = createSlice({
         },
         setChatNotification: (state, action) => {
             state.Notifications = action.payload
+        },
+        setNewMessages: (state, action )=> {
+            state.newMessages = action.payload
         }
     }
 })
@@ -70,6 +74,7 @@ export const {
     setConvo,
     appendMessage,
     addChatNotification,
-    setChatNotification
+    setChatNotification,
+    setNewMessages
 } = chatSlice.actions
 export default chatSlice.reducer
