@@ -21,6 +21,8 @@ function TutorSearchCard(props) {
 
     const learnerId = useSelector(state => state.userData.id)
 
+    const learnerData = useSelector(state => state.userData)
+
     const dispatch = useDispatch()
 
     
@@ -158,21 +160,38 @@ function TutorSearchCard(props) {
             </div>
             {
                 path !=="/landingpage/Tutors"?
-                <div className="flex space-x-3 self-end">
-                        <NavLink
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        to={`/learner/profile/Chat/${props.tutor.uuid}`}
-                        className={`bg-button2 border border-button2 flex justify-center items-center text-center font-semibold px-4 py-2 rounded-full text-white hover:shadow`}>
-                        Text</NavLink>
-                        {/*navigating to tutor profile*/}
+                (
+                    learnerData.firstname?
+                    (
+                        learnerData.subscribed?
+                        <div className="flex space-x-3 self-end">
+                            <NavLink
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            to={`/learner/profile/Chat/${props.tutor.uuid}`}
+                            className={`bg-button2 border border-button2 flex justify-center items-center text-center font-semibold px-4 py-2 rounded-full text-white hover:shadow`}>
+                            Text</NavLink>
+                            {/*navigating to tutor profile*/}
+                            <NavLink      
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            to={`/learner/profile/Tutor/${props.tutor.uuid}`}
+                            className={`bg-backg  border border-button2 flex justify-center items-center text-center font-semibold px-4 py-2 rounded-full text-button2 hover:shadow`}>
+                            Profile</NavLink>
+                        </div>
+                        :
                         <NavLink      
                         target="_blank" 
                         rel="noopener noreferrer"
                         to={`/learner/profile/Tutor/${props.tutor.uuid}`}
                         className={`bg-backg  border border-button2 flex justify-center items-center text-center font-semibold px-4 py-2 rounded-full text-button2 hover:shadow`}>
                         Profile</NavLink>
-                </div>
+                      
+                    )
+                    :
+                    null
+                )
+                
                 :
                 null
             }

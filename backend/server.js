@@ -10,7 +10,7 @@ const app = express();
 const server = http.createServer(app);
 const io = socketIo(server, {
   cors: { 
-    origin: 'http://localhost:3000',
+    origin: 'https://localhost:3000',
     methods: ['GET', 'POST'],
     allowedHeaders: ['Authorization', 'Content-Type'],
     credentials: true
@@ -20,7 +20,7 @@ const io = socketIo(server, {
 
 // Middleware for parsing multipart/form-data
 app.use(cors({
-    origin: "http://localhost:3000"
+    origin: "https://localhost:3000"
 }))
 
 //port
@@ -108,6 +108,7 @@ const getLearner = require('./routes/SeletedLearner')
 const getLatestMessagesTutor = require('./routes/getLatestMessagesforTutor')
 const getLatestMessagesLearner = require('./routes/getLatestMessagesLearner')
 const paymentRouter = require('./routes/payment')
+const getSubscriptionHistory = require('./routes/getSubscriptionHistory')
 
 //apis
 app.use('/', googleSignupRouter)
@@ -176,6 +177,7 @@ app.use('/tutor', getLearner)
 app.use('/tutor', getLatestMessagesTutor)
 app.use('/learner', getLatestMessagesLearner)
 app.use('/learner', paymentRouter)
+app.use('/learner', getSubscriptionHistory)
 
 // Socket.io logic
 require('./helpers/socketHandler')(io);//non authenticated 

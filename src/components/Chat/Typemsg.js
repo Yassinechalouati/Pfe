@@ -116,61 +116,132 @@ export default function Voicemsg() {
   }, [showEmojiPicker]);
 
 
-return (
-
-<form 
-onSubmit={handleSubmit}
-            className="flex flex-row items-center h-16 rounded-xl bg-white w-full px-4"
-          >
-            <div className="flex-grow ml-4">
-                <div className="relative w-full">
-                    <input
-                      onChange={handleChange}
-                      value={text}
-                      placeholder="Type..."
-                      type="text"
-                      className="flex w-full border rounded-xl focus:outline-none focus:border-indigo-300 pl-4 h-10"
-                    />
-                    <button
-                      type='button'
-                      onClick={() => setShowEmojiPicker(!showEmojiPicker)}
-                      className="text-2xl absolute right-1 top-1"
-                    >
-                      😀
-                    </button>
-                    {showEmojiPicker && (
-                      <div ref={pickerRef}  className="absolute bottom-14 right-4">
-                          <Picker 
-                          data={data} 
-                          theme="light"
-                          onEmojiSelect={handleEmojiSelect} />
-                      </div>
-                    )}
-                </div>
-            </div>
-            <div className="ml-4">
-              <button
-                className="flex items-center justify-center bg-button2 hover:bg-button rounded-xl text-white px-4 py-1 flex-shrink-0" 
-                type= "submit" 
+return (<>
+  {
+    segments[1] === "learner"?
+    (
+      learnerData.firstname?
+      (
+        learnerData.subscribed?
+        <form 
+          onSubmit={handleSubmit}
+                className="flex flex-row items-center h-16 rounded-xl bg-white w-full px-4"
               >
-                <span>Send</span>
-                <span className="ml-2">
-                  <svg
-                    className="w-4 h-4 transform rotate-45 -mt-px"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
+          <div className="flex-grow ml-4">
+              <div className="relative w-full">
+                  <input
+                    onChange={handleChange}
+                    value={text}
+                    placeholder="Type..."
+                    type="text"
+                    className="flex w-full border rounded-xl focus:outline-none focus:border-indigo-300 pl-4 h-10"
+                  />
+                  <button
+                    type='button'
+                    onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+                    className="text-2xl absolute right-1 top-1"
                   >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
-                    ></path>
-                  </svg>
-                </span>
-              </button>
-            </div>
-          </form>
+                    😀
+                  </button>
+                  {showEmojiPicker && (
+                    <div ref={pickerRef}  className="absolute bottom-14 right-4">
+                        <Picker 
+                        data={data} 
+                        theme="light"
+                        onEmojiSelect={handleEmojiSelect} />
+                    </div>
+                  )}
+              </div>
+          </div>
+          <div className="ml-4">
+            <button
+              className="flex items-center justify-center bg-button2 hover:bg-button rounded-xl text-white px-4 py-1 flex-shrink-0" 
+              type= "submit" 
+            >
+              <span>Send</span>
+              <span className="ml-2">
+                <svg
+                  className="w-4 h-4 transform rotate-45 -mt-px"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
+                  ></path>
+                </svg>
+              </span>
+            </button>
+          </div>
+        </form>
+        :
+        <span className="w-full text-center">Subscribe to get access to chat!</span>
+      )
+      :
+      null
+    )
+    :
+    <form 
+    onSubmit={handleSubmit}
+                className="flex flex-row items-center h-16 rounded-xl bg-white w-full px-4"
+              >
+                <div className="flex-grow ml-4">
+                    <div className="relative w-full">
+                        <input
+                          onChange={handleChange}
+                          value={text}
+                          placeholder="Type..."
+                          type="text"
+                          className="flex w-full border rounded-xl focus:outline-none focus:border-indigo-300 pl-4 h-10"
+                        />
+                        <button
+                          type='button'
+                          onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+                          className="text-2xl absolute right-1 top-1"
+                        >
+                          😀
+                        </button>
+                        {showEmojiPicker && (
+                          <div ref={pickerRef}  className="absolute bottom-14 right-4">
+                              <Picker 
+                              data={data} 
+                              theme="light"
+                              onEmojiSelect={handleEmojiSelect} />
+                          </div>
+                        )}
+                    </div>
+                </div>
+                <div className="ml-4">
+                  <button
+                    className="flex items-center justify-center bg-button2 hover:bg-button rounded-xl text-white px-4 py-1 flex-shrink-0" 
+                    type= "submit" 
+                  >
+                    <span>Send</span>
+                    <span className="ml-2">
+                      <svg
+                        className="w-4 h-4 transform rotate-45 -mt-px"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
+                        ></path>
+                      </svg>
+                    </span>
+                  </button>
+                </div>
+              </form>
+
+  }
+  </>
+
           )}

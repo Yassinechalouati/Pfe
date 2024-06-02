@@ -3,9 +3,10 @@ const router = express.Router()
 const auth = require('../middleware/auth')
 const roleCheck = require('../middleware/roleCheck')
 const mysql = require('../helpers/Sql_connection')
+const isSubscribed = require('../middleware/checkSubscription')
 const { v4: uuidv4 } = require('uuid');
 
-router.post( '/saveMessages', auth, roleCheck(['Learner']), (req, res) =>{
+router.post( '/saveMessages', auth, roleCheck(['Learner']), isSubscribed, (req, res) =>{
     const userId = req.user.id;
     const role = req.user.role;
     const {

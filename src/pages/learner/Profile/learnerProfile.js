@@ -1,7 +1,7 @@
 import NavBar from "../../../components/learner profile/NavBar";
 import axiosInstance from "../../../interceptors/axiosInterceptor";
 import { useEffect} from "react";
-import { setId, setIsLoading, setBirthday, setCountry, setEmail, setFirstName, setHasPassword, setLastName, setPic, setTel, setUuid, setCreatedAt, setIsVerified, setProficiency, changeGoals, changeTopics } from "../../../state/slices/userSlice";
+import { setId, setIsLoading, setBirthday, setCountry, setEmail, setFirstName, setSubscribed, setLastName, setPic, setTel, setUuid, setCreatedAt, setIsVerified, setProficiency, changeGoals, changeTopics } from "../../../state/slices/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import CoursesSearch from "./CoursesSearch";
 import TutorsSearch from "./TutorsSearch";
@@ -68,7 +68,7 @@ function LearnerProfile() {
                     dispatch(setLastName(response.data.message.lastname)),
                     dispatch(setIsVerified(response.data.message.isVerified)),
                     dispatch(setEmail(response.data.message.email)),
-                    dispatch(setHasPassword(response.data.message.hasPassword)),
+                    dispatch(setSubscribed(response.data.message.isSubscribed)),
                     dispatch(setCountry(response.data.message.country)),
                     dispatch(setTel(response.data.message.tel)),
                     dispatch(changeGoals(JSON.parse(response.data.message.learning_goals))),

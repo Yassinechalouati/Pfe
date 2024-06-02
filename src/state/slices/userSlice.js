@@ -5,7 +5,7 @@ const initialState = {
   uuid: '',
   firstname: '',
   lastname: '',
-  hasPassword: '', // this indicates whether the learner is signed up using gmail or not
+  subscribed: false,
   country:'', 
   tel: '', 
   Birthday: '',
@@ -116,8 +116,8 @@ export const userSlice = createSlice({
     setBirthday: (state, action) => {
       state.Birthday = action.payload
     },
-    setHasPassword: (state, action) => {
-      state.hasPassword = action.payload
+    setSubscribed: (state, action) => {
+      state.subscribed = action.payload
     },
     setTutorSearchList: (state, action) => {
       state.tutorSearchList = action.payload
@@ -184,7 +184,7 @@ export const {
   setBirthday, 
   setCountry, 
   setFirstName, 
-  setHasPassword, 
+  setSubscribed, 
   setLastName, 
   setTel, 
   setTutorSearchList,

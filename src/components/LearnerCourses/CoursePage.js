@@ -5,12 +5,14 @@ import { IoIosArrowBack } from "react-icons/io";
 import CourseMaker from "./courseMaker";
 import { fetchFile } from "../Global/functions";
 import ReactLoading from 'react-loading';
+import { useSelector } from "react-redux";
 
 function CoursePage(props) {
     //getting the uuid from the url
     const param = useParams()
     const [loading, setLoading] = useState(false)
     const [courseInfo, setCourseInfo] = useState([]) 
+    const learnerData = useSelector(state => state.userData)
 
 
 
@@ -92,9 +94,14 @@ function CoursePage(props) {
                                 <ReactLoading type="spin" color="#FFA447" height={'50px'} width={'50px'} />
                             </div>
                             :
-                            <button onClick={handleDownload} className="w-full rounded-lg hover:bg-green-900 bg-elements px-4 py-2 text-white">
-                                Download
-                            </button>
+                            (
+                                learnerData.subscribed?
+                                <button onClick={handleDownload} className="w-full rounded-lg hover:bg-green-900 bg-elements px-4 py-2 text-white">
+                                    Download
+                                </button>
+                                :
+                                null
+                            )
 
                         }
                     </div>

@@ -156,7 +156,8 @@ function TutorProfile(props) {
                         {
                             videoUrl?
                             <video
-                            className="object-fill mt-4 w-[70%] flex justify-center items-center rounded-xl"
+                            poster={imgUrl}
+                            className="object-cover h-[500px] mt-4 w-[70%] flex justify-center items-center rounded-xl"
                             controls
                             muted
                             >

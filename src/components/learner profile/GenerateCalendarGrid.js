@@ -23,6 +23,7 @@ const GenerateCalendarGrid = (props) => {
     const showMoreRef = useRef(null)
     const visibility = useSelector(state => state.showMoreData.visibility)
     const lessonList = useSelector(state => state.lessonsList.firstlessonList)
+    const learnerData = useSelector(state => state.userData)
     
     //knowing whether it's a tutor or learner signing up
     const path = window.location.pathname;
@@ -176,9 +177,14 @@ const GenerateCalendarGrid = (props) => {
                     </span>
                     {
                         firstSegment ==="learner"?
-                        <div className="flex flex-col m-auto w-full items-center justify-center space-y-2">
-                            <button  onClick={(event) => handleCellClick(event, day)} className="rounded-lg cursor-pointer w-full text-center p-1 text-xs bg-lightbutton border border-button text-button">Add</button>
-                        </div>
+                        (
+                            learnerData.subscribed?
+                            <div className="flex flex-col m-auto w-full items-center justify-center space-y-2">
+                                <button  onClick={(event) => handleCellClick(event, day)} className="rounded-lg cursor-pointer w-full text-center p-1 text-xs bg-lightbutton border border-button text-button">Add</button>
+                            </div>
+                            :
+                            null
+                        )
                         :
                         <div className="flex-grow"></div>
                     }

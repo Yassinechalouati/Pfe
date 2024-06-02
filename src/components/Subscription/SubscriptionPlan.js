@@ -1,13 +1,13 @@
 import axios from "axios";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState} from "react";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import ReactLoading from 'react-loading';
 
 
 function SubscriptionPlan(props) {
     const modalRef = useRef(null)
     const learnerData = useSelector(state => state.userData)
-    const navigate = useNavigate()
+    const [loading, setLoading] = useState(false)
 
      //when clicking outside of the modal we check if the list is saved or not, if it's saved w return the state of the final correct list else we reset the list
      const handleOutsideClick = (event) => {
@@ -28,6 +28,7 @@ function SubscriptionPlan(props) {
 
     const handleSubscribe = async () => {
         try {
+            setLoading(true)
             const response = await axios.post('https://sandbox.paymee.tn/api/v2/payments/create', {
                 amount: process.env.REACT_APP_AMOUNT,
                 note: "Linguify Subscription payment",
@@ -35,13 +36,17 @@ function SubscriptionPlan(props) {
                 last_name: learnerData.lastname,
                 email: learnerData.email,
                 phone: learnerData.tel,
-                order_id: 244557
+                return_url: `${process.env.REACT_APP_FRONTSERVER_URL}/learner/profile`,
+                cancel_url: `${process.env.REACT_APP_FRONTSERVER_URL}/learner/profile`,
+                webhook_url: `${process.env.REACT_APP_TUNNELED_SERVER_ADDRESS}/learner/payment`,
+                order_id: learnerData.uuid
             }, {
                 headers: {
                     'Authorization': `Token ${process.env.REACT_APP_SECRETPAYMEE}`
                 }
             })
             console.log(response.data);
+            setLoading(false)
             if (response.data && response.data.data.payment_url) {
                 window.location.href = response.data.data.payment_url;
             } else {
@@ -49,6 +54,7 @@ function SubscriptionPlan(props) {
             }
         } catch (error) {
             console.error(error);
+            setLoading(false)
         }
     }
 
@@ -103,7 +109,13 @@ function SubscriptionPlan(props) {
                             <p className="text-sm text-gray-700">
                                 <span className="font-bold text-lg">50 TND</span>/month
                             </p>
-                            <button onClick={handleSubscribe} className="bg-elements text-white px-6 py-3 rounded-full hover:bg-[#6C871B] focus:outline-none">Subscribe</button>
+                            {
+                                loading?
+                                <ReactLoading type="spin" color="#FFA447" height={'50px'} width={'50px'} />
+                                :
+                                <button onClick={handleSubscribe} className="bg-elements text-white px-6 py-3 rounded-full hover:bg-[#6C871B] focus:outline-none">Subscribe</button>
+                                
+                            }
                         </div>
                     </div>
                 </div>

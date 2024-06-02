@@ -70,7 +70,7 @@ function Settings(props) {
                         icon={<MdPayment size="25" className="text-black"></MdPayment>}
                         title="Subscription"
                         next={<MdOutlineNavigateNext size="25" className=""></MdOutlineNavigateNext>}
-                        description="Handle your subscription and see yout payement history." 
+                        description="Handle your subscription and see your payement history." 
                         role={firstSegment}
                         route="subscription"
                     ></Card>

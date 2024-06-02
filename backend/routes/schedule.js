@@ -5,8 +5,9 @@ const auth = require('../middleware/auth');
 const roleCheck = require('../middleware/roleCheck');
 const {formatTime} = require('../helpers/Functions')
 const { v4: uuidv4 } = require('uuid');
+const isSubscribed = require('../middleware/checkSubscription');
 
-router.post('/scheduleLesson', auth, roleCheck(["Learner"]), (req, res) => {
+router.post('/scheduleLesson', auth, roleCheck(["Learner"]), isSubscribed, (req, res) => {
     //generating unique key for lesson
     const uuid = uuidv4()
 
