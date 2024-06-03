@@ -1,7 +1,7 @@
 import { IoIosHeart } from "react-icons/io";
 import { IoIosHeartEmpty } from "react-icons/io";
 import { useEffect, useState } from 'react'
-import { fetchCountryData, fetchFile } from "../Global/functions";
+import { fetchCountryData, fetchFile, isGoogleProfilePicture } from "../Global/functions";
 import { NavLink } from "react-router-dom"
 import axiosInstance from "../../interceptors/axiosInterceptor";
 import {useDispatch, useSelector} from 'react-redux'
@@ -98,13 +98,17 @@ function TutorSearchCard(props) {
     //fetching tutor profile picture from backend
     async function fetchData () {
         if(props.tutor.pfp && props.tutor.id){
-            fetchFile(props.tutor.pfp, "images", "Tutor", props.tutor.id)
-            .then(response => {
-                setImageData(response)
-            })
-            .catch(error => {
-                console.log(error);
-            })
+            if(!isGoogleProfilePicture(props.tutor.pfp)){
+                fetchFile(props.tutor.pfp, "images", "Tutor", props.tutor.id)
+                .then(response => {
+                    setImageData(response)
+                })
+                .catch(error => {
+                    console.log(error);
+                })
+            }else {
+                setImageData(props.tutor.pfp)
+            }
         }
     }
 
@@ -125,7 +129,11 @@ function TutorSearchCard(props) {
     return (
         <div className="cursor-pointer hover:bg-lightButton2 transition-colors duration-300 min-h-72 max-h-72 rounded-2xl flex flex-col space-y-3 shadow-lg px-5 py-2 bg-white border-darkg border" >
             <div className="flex w-full items-center space-x-3">
-                <img src={imageData} alt="prolfiepicture" className="rounded-3xl min-w-24 max-w-24 h-24 object-cover"></img>
+                <img 
+                referrerPolicy="no-referrer"
+                src={imageData} 
+                alt="prolfiepicture" 
+                className="rounded-3xl min-w-24 max-w-24 h-24 object-cover"></img>
                 <div className="flex flex-col space-y-2 w-full h-full truncate">
                     <span className="text-lg truncate">
                         {props.tutor.firstname && props.tutor.lastname ? props.tutor.firstname + " " + props.tutor.lastname : props.tutor.email}

@@ -66,14 +66,20 @@ function Settings(props) {
                         role={firstSegment}
                         route="account"
                     ></Card>
-                    <Card 
-                        icon={<MdPayment size="25" className="text-black"></MdPayment>}
-                        title="Subscription"
-                        next={<MdOutlineNavigateNext size="25" className=""></MdOutlineNavigateNext>}
-                        description="Handle your subscription and see your payement history." 
-                        role={firstSegment}
-                        route="subscription"
-                    ></Card>
+                    {
+                        firstSegment === "learner"?
+                        <Card 
+                            icon={<MdPayment size="25" className="text-black"></MdPayment>}
+                            title="Subscription"
+                            next={<MdOutlineNavigateNext size="25" className=""></MdOutlineNavigateNext>}
+                            description="Handle your subscription and see your payement history." 
+                            role={firstSegment}
+                            route="subscription"
+                        ></Card>
+                        :
+                        null
+
+                    }
                 </div>
                 <div className="justify-center flex flex-col items-center  space-y-3">
                     <span className="">

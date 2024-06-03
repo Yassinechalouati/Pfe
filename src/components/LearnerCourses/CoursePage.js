@@ -95,7 +95,7 @@ function CoursePage(props) {
                             </div>
                             :
                             (
-                                learnerData.subscribed?
+                                learnerData.subscribed || courseInfo.Type==="Free" ?
                                 <button onClick={handleDownload} className="w-full rounded-lg hover:bg-green-900 bg-elements px-4 py-2 text-white">
                                     Download
                                 </button>

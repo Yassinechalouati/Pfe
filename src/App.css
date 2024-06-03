@@ -8,9 +8,9 @@
 }
 */
 
-/*iframe#webpack-dev-server-client-overlay {
+iframe#webpack-dev-server-client-overlay {
   display: none;
-}*/
+}
 
 .checkbox:checked {
   border: none;

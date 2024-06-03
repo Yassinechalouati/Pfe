@@ -4,7 +4,7 @@ import axiosInstance from "../../interceptors/axiosInterceptor";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector} from 'react-redux'
 import { setSelectedTutor } from "../../state/slices/userSlice";
-import { fetchFile, fetchCountryData, timeFormatter} from "../Global/functions";
+import { fetchFile, fetchCountryData, timeFormatter, isGoogleProfilePicture} from "../Global/functions";
 import { IoMdCalendar } from "react-icons/io";
 import { FaChalkboardTeacher } from "react-icons/fa";
 import { IoIosInformationCircle } from "react-icons/io";
@@ -77,29 +77,37 @@ function TutorProfile(props) {
                 //storing the tutor data
                 dispatch(setSelectedTutor(response.data.message))
 
-                //fetching the image from database
-                fetchFile(response.data.message.pfp, "images", "tutor", response.data.message.id)
-                .then(async (resp )=> {
-                    console.log(response.data.message);
-                    
-                    //storing the img
-                    setImgUrl(resp)
-
-                    //fetching the video from database
+                if(!isGoogleProfilePicture(response.data.message.pfp)){
+                    //fetching the image from database
+                    fetchFile(response.data.message.pfp, "images", "tutor", response.data.message.id)
+                    .then(async (resp )=> {
+                        console.log(response.data.message);
+                        
+                        //storing the img
+                        setImgUrl(resp)
+    
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    })
+                }else {
+                    setImgUrl(response.data.message.pfp)
+                }
+                //fetching the video from database
+                if(response.data.message.introductionVideo) {
                     const data = await fetchFile(response.data.message.introductionVideo, "videos", "tutor", response.data.message.id)
+                    //storing the video
+                    setVideoUrl(data)
+                }
 
+                if(response.data.message.country){
                     //fetching the country's flag
                     const flag = await fetchCountryData(response.data.message.country)
                     setCountryFlag(flag)
+                }
 
-                    //storing the video
-                    setVideoUrl(data)
+                setIsLoading(false)
 
-                    setIsLoading(false)
-                })
-                .catch(err => {
-                    console.log(err);
-                })
             }catch(err) {
                 console.log(err)
             }
@@ -142,7 +150,10 @@ function TutorProfile(props) {
                             <img src="https://vojislavd.com/ta-template-demo/assets/img/profile-background.jpg" className="w-full h-full rounded-tl-lg rounded-tr-lg"></img>
                         </div>
                         <div className="flex flex-col items-center -mt-20">
-                            <img src={imgUrl} className="min-w-40 max-w-40 min-h-40 max-h-40 object-cover border-4 border-white rounded-full" alt="Profile" />
+                            <img 
+                            referrerPolicy="no-referrer"
+                            src={imgUrl} 
+                            className="min-w-40 max-w-40 min-h-40 max-h-40 object-cover border-4 border-white rounded-full" alt="Profile" />
                             <div className="flex items-center space-x-2 mt-2">
                                 <span className="text-2xl">{selectedTutorData.firstname+" "+selectedTutorData.lastname}</span>
                             </div>

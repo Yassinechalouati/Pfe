@@ -10,13 +10,13 @@ function Tutor(props) {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                let imageUrl = props.tutor.pfp
-                if(imageUrl) {
-                    if (!isGoogleProfilePicture(imageUrl)) {
-                        imageUrl = await fetchFile(imageUrl, "images", "tutor", props.tutor.tutor_id);
+                console.log("COuntry: ", props.tutor);
+                if(props.tutor.pfp) {
+                    if (!isGoogleProfilePicture(props.tutor.pfp)) {
+                        props.tutor.pfp = await fetchFile(props.tutor.pfp, "images", "tutor", props.tutor.tutor_id);
                     }
                 }
-                setImgUrl(imageUrl)
+                setImgUrl(props.tutor.pfp)
                 const data = await fetchCountryData(props.tutor.country)
                 setCountryData(data)
 
@@ -27,7 +27,7 @@ function Tutor(props) {
 
         fetchData()
 
-    }, [])
+    }, [props.tutor])
 
     const handleTimeFormat = () => {
         const createdAt = new Date(props.tutor.created_at)
@@ -38,7 +38,9 @@ function Tutor(props) {
 
     return (
         <div key={props.tutor.tutor_id} className="flex flex-col space-y-6 pb-3 rounded-3xl border hover:bg-lightg">
-            <img src={imgUrl} alt="tutorvideo" className="w-full min-h-36 max-h-36 object-cover rounded-t-3xl"></img> 
+            <img src={imgUrl}
+            referrerPolicy="no-referrer"
+             alt="tutorvideo" className="w-full min-h-36 max-h-36 object-cover rounded-t-3xl"></img> 
             <div className="flex flex-col px-5 w-full space-y-2 h-full cursor-pointer">
                 <div className="flex justify-between items-start w-full">
                     <span className="font-bold">{props.tutor.firstname+ " "+ props.tutor.lastname}</span>

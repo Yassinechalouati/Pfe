@@ -96,10 +96,11 @@ router.post('/RecommendedTutors', auth, roleCheck(["Learner"]), (req, res) => {
             if (tutorResults.length <= 0) {
                 const getQuery = `
                     SELECT 
+                        t.id AS tutor_id,
                         t.firstname, 
                         t.lastname, 
                         t.pfp,
-                        t.Country,
+                        t.country,
                         t.created_at,
                         t.uuid
                     FROM 
