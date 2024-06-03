@@ -13,6 +13,8 @@ import ForgotPasswordContent from './components/sign_in/ForgotPasswordContent'
 import Landingpage from './pages/Landingpage';
 import VideoCall from './components/Global/VideoCall';
 import VerifyEmail from './components/Settings/VerifyEmail';
+import Admin from './pages/admin/Admin';
+import LogIn from './pages/admin/LogIn';
 function App() {
   return (
     <Router>
@@ -63,6 +65,10 @@ function App() {
         <Route path ="/landingpage/LinguaBuddy" element={<Landingpage></Landingpage>}></Route>
         <Route path = "/learner/profile/Chat/:uuid" element={<LearnerProfile></LearnerProfile>}></Route>
         <Route path = "/tutor/profile/Chat/:uuid" element={<TutorProfile></TutorProfile>}></Route>
+        <Route path ="/admin/Dashboard" element={<Admin></Admin>}></Route>
+        <Route path ="/admin/Profile" element={<Admin></Admin>}></Route>
+        <Route path ="/admin/CreateAdmin" element={<Admin></Admin>}></Route>
+        <Route path ="/backOffice/admin/login" element={<LogIn></LogIn>}></Route>
         <Route index element={<Landingpage></Landingpage>}></Route>
       </Routes>
     </Router>

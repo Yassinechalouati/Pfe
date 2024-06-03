@@ -6,8 +6,9 @@ const mysql = require('../helpers/Sql_connection')
 router.post('/getAllCourses', (req, res)=> {
 
     //getting courses from newest to oldest
-    const query = `SELECT *
-    FROM course
+    const query = `SELECT c.*, t.firstname, t.lastname, t.pfp, t.id as tutorId
+    FROM course c, tutor t
+    where tutorId = t.id
     ORDER BY created_at DESC`
 
     mysql.query(query, (err, result) => {

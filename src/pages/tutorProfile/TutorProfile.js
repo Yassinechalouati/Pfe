@@ -5,7 +5,6 @@ import axiosInstance from '../../interceptors/axiosInterceptor'
 import { useEffect} from "react"; 
 import { useDispatch, useSelector } from "react-redux"
 import Courses from "./Courses";
-import Exams from "./Exams";
 import Feed from "./Feed";
 import { fetchCountryData, isGoogleProfilePicture } from "../../components/Global/functions"
 import {
@@ -210,7 +209,6 @@ function TutorProfile() {
         Profile: <Feed></Feed>,
         ChatBot: <LinguaBuddy></LinguaBuddy>,
         Settings: <Settings userData={tutorData}></Settings>,
-        Exams: <Exams></Exams>,
         Notifications: <NotificationsPage></NotificationsPage>,
         Calendar: <BigCalendar></BigCalendar>,
         tutorProfile: <ProfileChange></ProfileChange>,

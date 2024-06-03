@@ -11,6 +11,7 @@ import notificationsReducer from './slices/NotificationSlice'
 import likedTutorReducer from './slices/likedTutorSlice'
 import courseReducer from './slices/CourseSlice'
 import chatReducer from './slices/chatSlice'
+import adminReducer from './slices/adminSlice'
 import {
   createStateSyncMiddleware,
   initMessageListener,
@@ -31,7 +32,8 @@ const store = configureStore({
     notificationsData: notificationsReducer, //contains the notifications
     likedTutors: likedTutorReducer,
     courseData: courseReducer,
-    chatData: chatReducer
+    chatData: chatReducer,
+    adminData: adminReducer
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(createStateSyncMiddleware({

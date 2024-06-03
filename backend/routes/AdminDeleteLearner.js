@@ -8,15 +8,16 @@ const deleteExistingFileFromDB = require('../middleware/deleteFile')
 
 
 
-router.post('/DeleteAccount', auth, roleCheck(["Tutor"]), (req, res) => {
-    const userId = req.user.id
+router.post('/DeleteAccount', auth, roleCheck(["Admin"]), (req, res) => {
+    const {
+        userId
+    } = req.body
 
-    const query = `delete from tutor where id = ?`
-    const directory = `./uploads/images/Tutor/${userId}`
-    deleteExistingFileFromDB(userId, "Tutor", "image", directory)
-    const dir =  `./uploads/videos/Tutor/${userId}`
-    deleteExistingFileFromDB(userId, "Tutor", "video", dir)
-    mysql.query(query, [userId], (err, aresult)=> {
+    const directory = `./uploads/images/Learner/${userId}`
+    deleteExistingFileFromDB(userId, "Learner", "image", directory)
+    const query = `delete from learner where id = ?`
+
+    mysql.query(query, [userId], (err, result)=> {
         if(err) {
             console.log(err)
             res.status(500).json({message: "Internal Server Error"})

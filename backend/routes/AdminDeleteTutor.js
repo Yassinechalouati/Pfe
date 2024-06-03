@@ -7,11 +7,13 @@ const deleteExistingFileFromDB = require('../middleware/deleteFile')
 
 
 
-
-router.post('/DeleteAccount', auth, roleCheck(["Tutor"]), (req, res) => {
-    const userId = req.user.id
+router.post('/DeleteTutor', auth, roleCheck(["Admin"]), (req, res) => {
+    const {
+        userId
+    } = req.body
 
     const query = `delete from tutor where id = ?`
+
     const directory = `./uploads/images/Tutor/${userId}`
     deleteExistingFileFromDB(userId, "Tutor", "image", directory)
     const dir =  `./uploads/videos/Tutor/${userId}`

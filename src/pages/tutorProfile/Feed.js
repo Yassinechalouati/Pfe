@@ -2,8 +2,7 @@ import { useSelector } from "react-redux";
 import {ColumnLoading, RowLoading, RowCardsLoading, ColumnRowLoading} from '../../components/Global/LoadingCards'
 import Card from "../../components/learner profile/Card";
 import InformationalCard from "../../components/tutor profile/FollowersCard";
-import Calendar from "../../components/tutor profile/Calendar";
-import TopComments from "../../components/tutor profile/TopComments";
+import Calendar from "../../components/tutor profile/Calendar"
 import Revenue from "../../components/tutor profile/Revenue"
 
 function Feed(props) {
@@ -34,7 +33,6 @@ function Feed(props) {
             </div>
             <div key="rightpart" className="flex flex-col col-span-1 md:col-span-2 h-auto space-y-5">
                 <Calendar></Calendar>
-                <TopComments></TopComments>
             </div>
         </div>
     ]
