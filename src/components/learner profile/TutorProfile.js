@@ -16,6 +16,7 @@ import LikeButton from "./LikeButton";
 import FollowTutor from "./FollowTutor"
 import ScheduleLessonFromTutorProfile from "./ScheduleLessonFromTutorProfile";
 import { setLikedTutors } from "../../state/slices/likedTutorSlice";
+import Footer from "../Global/Footer";
 
 function TutorProfile(props) {
 
@@ -188,8 +189,7 @@ function TutorProfile(props) {
                                     <span className="text-black text-sm text-center ">
                                         Like
                                     </span>
-                                </div> 
-                                <FollowTutor></FollowTutor>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -276,6 +276,7 @@ function TutorProfile(props) {
                 null
 
             }
+            <Footer></Footer>
         </div>
     );
 }

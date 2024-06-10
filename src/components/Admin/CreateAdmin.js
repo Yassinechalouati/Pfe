@@ -10,6 +10,7 @@ function CreateAdmin(props) {
         password: '',
         confPass: '',
         phoneNumber: '',
+        CIN:''
       });
 
       const [error, setError] = useState(false)
@@ -39,7 +40,8 @@ function CreateAdmin(props) {
                 password: formData.password,
                 firstname: formData.firstName, 
                 lastname: formData.lastName,
-                tel: formData.phoneNumber
+                tel: formData.phoneNumber,
+                CIN: formData.CIN
             })
             setLoading(false)
             setSuccess(true)
@@ -50,13 +52,16 @@ function CreateAdmin(props) {
                 password: '',
                 confPass: '',
                 phoneNumber: '',
+                CIN: ''
               })
         } catch (error) {
             console.log(error);
             setLoading(false)
             setError(true)
         }
-      };
+      }
+
+      console.log("formdata:" ,formData);
     return (
         <div className="max-w-md mx-auto bg-white shadow-lg rounded-lg p-6 mt-5">
       <h2 className="text-2xl font-bold mb-3 text-gray-800">Create Admin</h2>
@@ -70,7 +75,7 @@ function CreateAdmin(props) {
             onChange={handleChange}
             placeholder='Email'
             pattern="[^\s@]+@[^\s@]+\.[^\s@]+"
-            className="w-full px-4 py-2 mt-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-600"
+            className="w-full px-4 py-2 mt-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-elements"
             required
           />
         </div>
@@ -82,7 +87,7 @@ function CreateAdmin(props) {
             value={formData.firstName}
             onChange={handleChange}
             placeholder='First Name'
-            className="w-full px-4 py-2 mt-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-600"
+            className="w-full px-4 py-2 mt-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-elements"
             required
           />
         </div>
@@ -94,7 +99,7 @@ function CreateAdmin(props) {
             value={formData.lastName}
             onChange={handleChange}
             placeholder='Last Name'
-            className="w-full px-4 py-2 mt-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-600"
+            className="w-full px-4 py-2 mt-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-elements"
             required
           />
         </div>
@@ -110,7 +115,7 @@ function CreateAdmin(props) {
             pattern="^(?=.*[A-Z])(?=.*[0-9])[A-Za-z0-9]+$" // assuring the password contains at least one uppercase letter and one digit
             title={`${formData.password.length<8? `Contains at least 8 characters (currently at ${formData.password.length} characters), `:""}Contains at least an UpperCase letter and a digit`}
             onChange={handleChange}
-            className="w-full px-4 py-2 mt-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-600"
+            className="w-full px-4 py-2 mt-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-elements"
             required
           />
         </div>
@@ -123,7 +128,7 @@ function CreateAdmin(props) {
             pattern={formData.password}
             onChange={handleChange}
             placeholder='Password'
-            className="w-full px-4 py-2 mt-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-600"
+            className="w-full px-4 py-2 mt-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-elements"
             required
           />
         </div>
@@ -132,10 +137,26 @@ function CreateAdmin(props) {
           <input
             type="tel"
             name="phoneNumber"
+            minLength={8}
+            maxLength={8}
             value={formData.phoneNumber}
             onChange={handleChange}
             placeholder='Phone Number'
-            className="w-full px-4 py-2 mt-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-600"
+            className="w-full px-4 py-2 mt-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-elements"
+            required
+          />
+        </div>
+        <div>
+          <label className="block text-gray-700">CIN</label>
+          <input
+            type="number"
+            minLength={8}
+            maxLength={8}
+            name="CIN"
+            value={formData.CIN}
+            onChange={handleChange}
+            placeholder='CIN'
+            className="w-full px-4 py-2 mt-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-elements"
             required
           />
         </div>
@@ -167,7 +188,7 @@ function CreateAdmin(props) {
             :
             <button
             type="submit"
-            className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50"
+            className="w-full bg-elements text-white py-2 px-4 rounded-lg hover:shadow-md focus:outline-none focus:ring-2 focus:ring-elements focus:ring-opacity-50"
             >
             Create
             </button>

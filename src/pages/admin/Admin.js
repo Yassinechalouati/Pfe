@@ -54,7 +54,7 @@ function Admin(props) {
   
     return (
         <div x-data="setup()">
-        <div className="min-h-screen flex flex-col flex-auto flex-shrink-0 antialiased bg-white dark:bg-gray-700 text-black dark:text-white">
+        <div className="min-h-screen flex flex-col flex-auto flex-shrink-0 antialiased bg-backg dark:bg-gray-700 text-black dark:text-white">
           <NavBar></NavBar>
           <SideBar></SideBar>
           <div className="h-full ml-14 mt-14 mb-10 md:ml-64">

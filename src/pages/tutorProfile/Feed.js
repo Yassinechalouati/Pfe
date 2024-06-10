@@ -4,6 +4,7 @@ import Card from "../../components/learner profile/Card";
 import InformationalCard from "../../components/tutor profile/FollowersCard";
 import Calendar from "../../components/tutor profile/Calendar"
 import Revenue from "../../components/tutor profile/Revenue"
+import Footer from "../../components/Global/Footer";
 
 function Feed(props) {
 
@@ -34,6 +35,7 @@ function Feed(props) {
             <div key="rightpart" className="flex flex-col col-span-1 md:col-span-2 h-auto space-y-5">
                 <Calendar></Calendar>
             </div>
+            <Footer></Footer>
         </div>
     ]
 

@@ -7,6 +7,7 @@ import { useSelector } from "react-redux";
 import { ColumnLoading, ColumnRowLoading, RowCardsLoading, RowLoading } from "../Global/LoadingCards";
 import { useEffect, useState } from "react";
 import axiosInstance from "../../interceptors/axiosInterceptor";
+import Footer from "../Global/Footer";
 
 function Body() {
     const learnerData = useSelector(state => state.userData)
@@ -44,6 +45,7 @@ function Body() {
                 <TutorsCard></TutorsCard>
                 <CoursesCard courses={courses}></CoursesCard>
             </div>
+            <Footer></Footer>
         </div>
     ]
 

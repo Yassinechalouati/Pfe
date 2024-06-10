@@ -6,6 +6,7 @@
 .pnp.js
 .env
 /Service/Service
+/backend/.env
 
 /public/vid2.mp4
 

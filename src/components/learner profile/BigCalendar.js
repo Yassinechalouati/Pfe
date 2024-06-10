@@ -6,6 +6,7 @@ import { setFirstLessonList } from '../../state/slices/lessonsList';
 import GenerateCalendarGrid from './GenerateCalendarGrid';
 import axiosInstance from '../../interceptors/axiosInterceptor'
 import { useLocation } from 'react-router-dom';
+import Footer from '../Global/Footer';
 
 
 function BigCalendar() {
@@ -122,6 +123,12 @@ function BigCalendar() {
                 <div className="rounded-lg bg-lightg py-2 text-center text-black font-bold ">Sat</div>
                 <GenerateCalendarGrid month={month} year={year}></GenerateCalendarGrid>
             </div>
+            {
+                path ==="/learner/profile/Calendar" || path === "/tutor/profile/Calendar"?
+                <Footer></Footer>
+                :
+                null
+            }
         </div>
     );
 }

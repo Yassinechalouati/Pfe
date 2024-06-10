@@ -5,9 +5,9 @@ const mysql= require('../helpers/Sql_connection')
 
 router.post('/signup', async (req, res) => {
     const {
-        email, password, firstname, lastname, tel
+        email, password, firstname, lastname, tel, CIN
     } = req.body
-    if(!email || !password || !firstname || !lastname || !tel) {
+    if(!email || !password || !firstname || !lastname || !tel || !CIN) {
         res.status(400).json({message:"No input!"})
         return
     }
@@ -36,10 +36,10 @@ router.post('/signup', async (req, res) => {
         }else if(result.length >0) {
             res.status(409).json({message:"Email Already exits!"})
         }else {
-            const insertQuery = "insert into Administrator(email, firstname, lastname, tel, pword) Values(? ,?, ?, ?, ?)"
+            const insertQuery = "insert into Administrator(email, firstname, lastname, tel, pword, CIN) Values(? ,?, ?, ?, ?, ?)"
             try {
                 const hash = await bcrypt.hash(password, 10);
-                mysql.query(insertQuery, [email, firstname, lastname, tel, hash], (insertErr, insertResult) => {
+                mysql.query(insertQuery, [email, firstname, lastname, tel, hash, CIN], (insertErr, insertResult) => {
                     if(insertErr) {
                         console.log(insertErr)
                         res.status(500).json({message: "Internal Server Error!"})

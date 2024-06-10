@@ -1,3 +1,4 @@
+import Footer from "../../components/Global/Footer";
 import MakeCourses from "../../components/TutorCourseMaking/MakeCourses";
 import MyCourses from "../../components/TutorCourseMaking/MyCourses";
 import Welcome from "../../components/TutorCourseMaking/Welcome";
@@ -14,6 +15,7 @@ function Courses(props) {
             <div key="belowpart" className="flex flex-col col-span-1 md:col-span-3 h-auto space-y-5">
                 <MyCourses></MyCourses>
             </div> 
+            <Footer></Footer>
         </div>
     );
 }

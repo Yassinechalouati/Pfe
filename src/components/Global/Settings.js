@@ -7,6 +7,7 @@ import { MdPayment } from "react-icons/md";
 import Card from "../Settings/Card";
 import { useState } from "react";
 import DeleteAccountModal from "../Settings/DeleteAccountModal";
+import Footer from "./Footer";
 
 
 
@@ -87,7 +88,7 @@ function Settings(props) {
                     </span>
                     <button onClick={() => setDeleteAccountModal(true)} className="px-4 cursor-pointer py-3 bg-errortext hover:border hover:border-errortext hover:bg-errorbg hover:text-errortext transition-colors duration-200 text-white rounded-md">Click here</button>
                 </div>
-                
+                <Footer></Footer>
             </div>
             {
                 deleteAccountModal?

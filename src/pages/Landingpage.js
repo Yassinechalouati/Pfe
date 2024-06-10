@@ -7,6 +7,7 @@ import Features from "../components/Landingpage/Features"
 import TutorsSearch from "./learner/Profile/TutorsSearch"
 import CoursesSearch from "./learner/Profile/CoursesSearch"
 import LinguaBuddy from "./learner/Profile/LinguaBuddy"
+import Footer from "../components/Global/Footer"
 
 export default function Landingpage() {
   
@@ -23,6 +24,7 @@ export default function Landingpage() {
             <Features />
             <Subscription />
             <Suite />
+            <Footer></Footer>
           </>
         );
       } else if (path === "/landingpage/Tutors") {

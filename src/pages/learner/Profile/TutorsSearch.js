@@ -10,18 +10,16 @@ import LanguageSelection from "../../../components/learner profile/TutorFilterOp
 import Availability from '../../../components/learner profile/TutorFilterOption/Availability'
 import Proficiency from "../../../components/learner profile/TutorFilterOption/Proficiency";
 import { setLikedTutors } from "../../../state/slices/likedTutorSlice";
-
-
-
+import Footer from "../../../components/Global/Footer";
 
 function TutorsSearch(props) {
 
     const dispatch = useDispatch()
     
-    const [date, setDate ]= useState() 
+    const [date, setDate] = useState() 
 
     const [selectedOption, setSelectedOption] = useState('All')
-
+    const tutorSearchList = useSelector(state => state.userData.tutorSearchList);
     const [loading, setLoading] = useState(false)
 
     const learnerData = useSelector(state => state.userData)
@@ -31,10 +29,8 @@ function TutorsSearch(props) {
     const maxPageNumber = useSelector(state => state.userData.maxPageNumber)
 
     const likedTutors = useSelector(state => state.likedTutors.likedTutors)
-
     
     const path = window.location.pathname;
-    
 
     useEffect(() => {
         const fetchLikedTutors = async () => {
@@ -48,7 +44,6 @@ function TutorsSearch(props) {
         }
         fetchLikedTutors()
     }, [])
-
 
     //getting tutors from the database
     async function fetchData (filterOption) {
@@ -92,7 +87,6 @@ function TutorsSearch(props) {
         fetchData(filterOptions)
     }, [])
 
-
     return (
             <div className="flex flex-col space-y-4 w-full h-[90%] overflow-y-auto px-2 sm:px-15 lg:px-28 py-7">
                 <div className="flex w-full items-center space-x-8 ">
@@ -128,45 +122,43 @@ function TutorsSearch(props) {
                             <Loading></Loading>
                             :
                             <>
-                                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 w-full gap-5 ">
-                                    {
-                                        learnerData.tutorSearchList && likedTutors? 
-                                        learnerData.tutorSearchList.map((tutor, index) => {
-                                            const liked= likedTutors.find(item => item.id === tutor.id)
-                                            
-                                            return <TutorSearchCard liked={liked} key={index} tutor={tutor}></TutorSearchCard>
-                                        })
-                                        :
-                                        null
-                                    }
-                                </div>
+                                {learnerData.tutorSearchList && learnerData.tutorSearchList.length > 0 ? (
+                                    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 w-full gap-5 ">
+                                        {
+                                            learnerData.tutorSearchList.map((tutor, index) => {
+                                                const liked = likedTutors.find(item => item.id === tutor.id)
+                                                return <TutorSearchCard liked={liked} key={index} tutor={tutor}></TutorSearchCard>
+                                            })
+                                        }
+                                    </div>
+                                ) : (
+                                    <div className="w-full text-center text-gray-500">No tutors found</div>
+                                )}
                                 {
-                                    (learnerData.tutorSearchList && learnerData.tutorSearchList.length && (maxPageNumber !== learnerData.tutorSearchList.length))?
+                                    (learnerData.tutorSearchList && learnerData.tutorSearchList.length > 0 && (maxPageNumber !== learnerData.tutorSearchList.length))?
                                     <ShowMoreTutors></ShowMoreTutors>
                                     :
                                     null
-        
                                 }
                             </>
-        
                         }
                     </>
                     :
                     <>
-                        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 w-full gap-5 ">
-                            {
-                                learnerData.tutorSearchList && likedTutors? 
-                                likedTutors.map((tutor, index) => {
-                                    
-                                    return <TutorSearchCard liked={1} key={index} tutor={tutor}></TutorSearchCard>
-                                })
-                                :
-                                null
-                            }
-                        </div>
+                        {likedTutors && likedTutors.length > 0 ? (
+                            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 w-full gap-5 ">
+                                {
+                                    likedTutors.map((tutor, index) => {
+                                        return <TutorSearchCard liked={1} key={index} tutor={tutor}></TutorSearchCard>
+                                    })
+                                }
+                            </div>
+                        ) : (
+                            <div className="w-full text-center text-gray-500">No favorite tutors liked yet , like to view here !</div>
+                        )}
                     </>
-
                 }
+                <Footer></Footer>
             </div>
     );
 }

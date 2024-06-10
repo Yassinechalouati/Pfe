@@ -38,7 +38,7 @@ function DeleteLearner(props) {
             <h3 className="font-semibold text-base text-gray-900 dark:text-gray-50">Delete learner</h3>
         </div>
         </div>
-        <div className="block w-full max-h-80 overflow-x-auto shadow-lg rounded-lg" style={{ scrollbarWidth: 'none',}}>
+        <div className="block bg-white w-full max-h-80 overflow-x-auto shadow-lg rounded-lg" style={{ scrollbarWidth: 'none',}}>
         <table className="items-center w-full bg-transparent border-collapse" >
             <thead>
             <tr>

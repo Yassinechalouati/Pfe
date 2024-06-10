@@ -10,7 +10,7 @@ const app = express();
 const server = http.createServer(app);
 const io = socketIo(server, {
   cors: { 
-    origin: 'https://localhost:3000',
+    origin: 'http://localhost:3000',
     methods: ['GET', 'POST'],
     allowedHeaders: ['Authorization', 'Content-Type'],
     credentials: true
@@ -20,7 +20,7 @@ const io = socketIo(server, {
 
 // Middleware for parsing multipart/form-data
 app.use(cors({
-    origin: "https://localhost:3000"
+    origin: "http://localhost:3000"
 }))
 
 //port

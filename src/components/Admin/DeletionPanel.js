@@ -74,7 +74,7 @@ function DeletionPanel(props) {
                 <h3 className="font-semibold text-base text-gray-900 dark:text-gray-50">Delete Courses</h3>
             </div>
             </div>
-            <div className="block max-h-80 w-full overflow-x-auto shadow-lg rounded-lg"  style={{ scrollbarWidth: 'none',}}>
+            <div className="block max-h-80 bg-white w-full overflow-x-auto shadow-lg rounded-lg"  style={{ scrollbarWidth: 'none',}}>
             <table className="items-center w-full bg-transparent border-collapse">
                 <thead>
                 <tr>

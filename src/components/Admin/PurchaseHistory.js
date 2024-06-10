@@ -37,7 +37,7 @@ function PurchaseHistory(props) {
               <tbody className="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
                 {
                   history.map((item, index) =>{
-                    return <tr key={index} className="bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-900 text-gray-700 dark:text-gray-400">
+                    return <tr key={index} className="bg-white dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-900 text-gray-700 dark:text-gray-400">
                     
                     <td className="px-4 py-3 text-sm">{item.SubId}</td>
                     <td className="px-4 py-3 text-sm">{item.firstname + " "+ item.lastname}</td>
